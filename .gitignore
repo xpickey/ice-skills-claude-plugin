@@ -6,3 +6,8 @@
 node_modules/
 **/*.tflite
 .DS_Store
+
+# backup files — never commit
+*.bak
+*.bak.*
+**/*.bak
