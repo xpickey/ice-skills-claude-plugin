@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "iCE Compass.Next — Status Ledger",
+  "description": "Central status ledger — Compass writes (every stage/artifact), Kim reads (with freshness check). Convergence point for Compass + Kim + L0-direct (all paths sync back). Location: /Users/xpickey/Documents/Claude/_status-ledger.json + mirror Drive /iCE-Sales/",
+  "type": "object",
+  "properties": {
+    "ledger_version": { "type": "string", "const": "V01R01" },
+    "last_global_update": { "type": "string", "description": "ISO timestamp ของ update ล่าสุด (any project)" },
+    "opportunities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["customer", "opportunity", "phase", "stage", "last_updated"],
+        "properties": {
+          "customer": { "type": "string", "description": "เช่น TQR" },
+          "opportunity": { "type": "string", "description": "เช่น 26-Oracle-ERP-Modernization" },
+          "phase": { "type": "string", "enum": ["Pre-Sale", "Deal", "Customer"] },
+          "stage": { "type": "string", "description": "Prospect|Discovery|Qualify|Solution|Proposal|Negotiation|Close|Handover|Onboarding|QBR|Renewal|Expansion" },
+          "last_updated": { "type": "string", "description": "ISO timestamp — Kim เทียบกับ file mtime จริงใน /Projects/{customer}/ (freshness check)" },
+          "updated_by": { "type": "string", "description": "iCE-Compass.Next | kim-assistant | L0-direct" },
+          "folder_path": { "type": "string", "description": "/Projects/{customer}/{opportunity}/ — Kim ใช้เทียบ mtime" },
+          "artifacts_done": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "type": { "type": "string", "enum": ["proposal", "sow", "roi", "fit-gap", "meddpicc", "business-case", "deck", "report", "other"] },
+                "version": { "type": "string", "description": "V##R##" },
+                "date": { "type": "string" },
+                "path": { "type": "string" }
+              }
+            }
+          },
+          "artifacts_pending": {
+            "type": "array",
+            "items": { "type": "string", "description": "เอกสารที่ยังไม่เสร็จ/รอทำ" }
+          },
+          "next_actions": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "blockers": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "_freshness_check_rule": "Kim: เทียบ opportunity.last_updated กับ newest file mtime ใน folder_path. ถ้า file ใหม่กว่า ledger → เตือน User 'ข้อมูลอาจไม่ล่าสุด มี activity ใหม่ ขอ refresh จาก Compass?'",
+  "_write_rule": "ทุก path ที่สร้าง/แก้เอกสารต้อง sync ledger: Compass (job 6) · Kim · L0-direct (BR-12). ledger = convergence point.",
+  "_example": {
+    "ledger_version": "V01R01",
+    "last_global_update": "2026.06.01T10:00:00",
+    "opportunities": [
+      {
+        "customer": "TQR",
+        "opportunity": "26-Oracle-ERP-Modernization",
+        "phase": "Customer",
+        "stage": "Close-Won",
+        "last_updated": "2026.05.31T17:00:00",
+        "updated_by": "iCE-Compass.Next",
+        "folder_path": "/Users/xpickey/Documents/Claude/Projects/TQR/26-ERP/",
+        "artifacts_done": [
+          { "name": "TQR_Proposal_Oracle_NetSuite_ERP_by_iCE", "type": "proposal", "version": "V03R06", "date": "2026.05.31", "path": "40 - Present Proposal/..." }
+        ],
+        "artifacts_pending": [],
+        "next_actions": ["Contract signature workflow"],
+        "blockers": []
+      }
+    ]
+  }
+}
