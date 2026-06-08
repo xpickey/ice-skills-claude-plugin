@@ -1,0 +1,46 @@
+{
+  "name": "signal-magenta",
+  "displayName": "Signal Magenta",
+  "category": "industry",
+  "description": "Bold, contemporary, signal-of-now. Media and telco audiences expect higher visual production value than B2B average. Features layered text and image, occasional full-bleed photography, and motion-friendly composition that exports cleanly to video. Supports both light and dark backgrounds. Use when the customer is a telco, broadcaster, media group, or advertising platform.",
+  "colors": {
+    "primary": "#C026D3",
+    "secondary": "#F5F3FF",
+    "accent": "#FACC15",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#94A3B8"
+  },
+  "darkMode": {
+    "primary": "#C026D3",
+    "secondary": "#F5F3FF",
+    "accent": "#FACC15",
+    "background": "#0F0F12",
+    "text": "#F5F3FF",
+    "muted": "#94A3B8"
+  },
+  "fonts": {
+    "headerEN": "Bricolage Grotesque",
+    "bodyEN": "Inter",
+    "headerTH": "Prompt",
+    "bodyTH": "IBM Plex Sans Thai",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "bold-contemporary",
+  "cornerRadius": 2,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#C026D3",
+    "#7A0FA3",
+    "#F5F3FF",
+    "#FACC15",
+    "#94A3B8",
+    "#E8E6F7"
+  ],
+  "useDarkMode": true
+}

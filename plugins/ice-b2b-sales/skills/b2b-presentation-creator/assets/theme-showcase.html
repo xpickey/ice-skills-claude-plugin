@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>b2b-presentation-creator — Theme Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f9fafb;
+            color: #1f2937;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+            color: #111827;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .theme-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .theme-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .color-swatches {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            height: 40px;
+        }
+
+        .swatch {
+            flex: 1;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+        }
+
+        .font-samples {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+
+        .json-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .json-button:hover {
+            background: #2563eb;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-content h4 {
+            margin-bottom: 16px;
+            font-size: 18px;
+        }
+
+        .modal-content pre {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+        }
+
+        .close {
+            color: #6b7280;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #111827;
+        }
+
+        footer {
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .theme-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>b2b-presentation-creator — Theme Showcase</h1>
+        <div class="theme-grid">
+            
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>calm-teal</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #028090;" title="Primary: #028090"></div>
+            <div class="swatch" style="background-color: #E8F1F2;" title="Secondary: #E8F1F2"></div>
+            <div class="swatch" style="background-color: #F08C5E;" title="Accent: #F08C5E"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #102F33;" title="Text: #102F33"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('calm-teal')">View JSON</button>
+
+        <div id="calm-teal" class="modal" onclick="closeModal('calm-teal')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('calm-teal')">&times;</span>
+                <h4>calm-teal</h4>
+                <pre>{
+  "name": "calm-teal",
+  "displayName": "Calm Teal",
+  "category": "industry",
+  "description": "Clinical clarity, calm, trustworthy. Designed for hospital and pharma audiences who interpret aggressive marketing as risky. Features rounded corners, soft shadows, and human-centered photography in moderation. Warm coral accents for human moments. Use when the customer is a hospital, clinic, pharma, medical device maker, or health insurer.",
+  "colors": {
+    "primary": "#028090",
+    "secondary": "#E8F1F2",
+    "accent": "#F08C5E",
+    "background": "#FFFFFF",
+    "text": "#102F33",
+    "muted": "#5C7174"
+  },
+  "darkMode": {
+    "primary": "#028090",
+    "secondary": "#E8F1F2",
+    "accent": "#F08C5E",
+    "background": "#0F1A1C",
+    "text": "#E8F1F2",
+    "muted": "#A0A8AA"
+  },
+  "fonts": {
+    "headerEN": "Inter",
+    "bodyEN": "Lora",
+    "headerTH": "IBM Plex Sans Thai",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "clinical-clarity",
+  "cornerRadius": 4,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#028090",
+    "#004453",
+    "#E8F1F2",
+    "#F08C5E",
+    "#5C7174",
+    "#B8DFE3"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>civic-indigo</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #1A3D8F;" title="Primary: #1A3D8F"></div>
+            <div class="swatch" style="background-color: #E5E8EE;" title="Secondary: #E5E8EE"></div>
+            <div class="swatch" style="background-color: #C8A951;" title="Accent: #C8A951"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('civic-indigo')">View JSON</button>
+
+        <div id="civic-indigo" class="modal" onclick="closeModal('civic-indigo')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('civic-indigo')">&times;</span>
+                <h4>civic-indigo</h4>
+                <pre>{
+  "name": "civic-indigo",
+  "displayName": "Civic Indigo",
+  "category": "industry",
+  "description": "Authoritative, restrained, accountable. Designed to read clearly in printed RFP responses and on government projection screens. Features classical proportions, generous margins, and headers underlined in subtle gold. Use when the customer is a ministry, state enterprise, local authority, or government agency seeking official credibility.",
+  "colors": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#C8A951",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#C8A951",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Source Sans 3",
+    "bodyEN": "Source Serif 4",
+    "headerTH": "Sarabun",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "authoritative-restraint",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#1A3D8F",
+    "#0D1F5A",
+    "#E5E8EE",
+    "#C8A951",
+    "#5C5C5C",
+    "#C5CBD7"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>future-slate</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #0F172A;" title="Primary: #0F172A"></div>
+            <div class="swatch" style="background-color: #94A3B8;" title="Secondary: #94A3B8"></div>
+            <div class="swatch" style="background-color: #22D3EE;" title="Accent: #22D3EE"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #0F172A;" title="Text: #0F172A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('future-slate')">View JSON</button>
+
+        <div id="future-slate" class="modal" onclick="closeModal('future-slate')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('future-slate')">&times;</span>
+                <h4>future-slate</h4>
+                <pre>{
+  "name": "future-slate",
+  "displayName": "Future Slate",
+  "category": "industry",
+  "description": "Modern, technically credible, design-forward. Designed for audiences that have seen every SaaS pitch and notice when something looks AI-generated. Features generous whitespace, monospaced code blocks, and subtle gradient overlays only on hero slides. Dark-mode-friendly. Use when the customer is a tech company, SaaS platform, cloud-native startup, or ISV seeking contemporary technical credibility.",
+  "colors": {
+    "primary": "#0F172A",
+    "secondary": "#94A3B8",
+    "accent": "#22D3EE",
+    "background": "#FFFFFF",
+    "text": "#0F172A",
+    "muted": "#64748B"
+  },
+  "darkMode": {
+    "primary": "#0F172A",
+    "secondary": "#94A3B8",
+    "accent": "#22D3EE",
+    "background": "#0F172A",
+    "text": "#F8FAFC",
+    "muted": "#94A3B8"
+  },
+  "fonts": {
+    "headerEN": "Inter Tight",
+    "bodyEN": "Inter",
+    "headerTH": "IBM Plex Sans Thai",
+    "bodyTH": "IBM Plex Sans Thai",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "modern-technical",
+  "cornerRadius": 4,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#0F172A",
+    "#070B15",
+    "#94A3B8",
+    "#22D3EE",
+    "#64748B",
+    "#D4DDE7"
+  ],
+  "useDarkMode": true
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>heritage-burgundy</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #6D2E46;" title="Primary: #6D2E46"></div>
+            <div class="swatch" style="background-color: #ECE2D0;" title="Secondary: #ECE2D0"></div>
+            <div class="swatch" style="background-color: #A26769;" title="Accent: #A26769"></div>
+            <div class="swatch" style="background-color: #FBFAF6;" title="Background: #FBFAF6"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('heritage-burgundy')">View JSON</button>
+
+        <div id="heritage-burgundy" class="modal" onclick="closeModal('heritage-burgundy')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('heritage-burgundy')">&times;</span>
+                <h4>heritage-burgundy</h4>
+                <pre>{
+  "name": "heritage-burgundy",
+  "displayName": "Heritage Burgundy",
+  "category": "industry",
+  "description": "Establishment, premium, considered. Audiences in premium services associate restraint with quality. Features generous margins, classical proportions, and monogram/initial-letter accents. Small typographic details like small caps and oldstyle figures are appropriate. Use when the customer is a law firm, consultancy, premium real estate advisor, or private banking firm.",
+  "colors": {
+    "primary": "#6D2E46",
+    "secondary": "#ECE2D0",
+    "accent": "#A26769",
+    "background": "#FBFAF6",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#6D2E46",
+    "secondary": "#ECE2D0",
+    "accent": "#A26769",
+    "background": "#1A1A1A",
+    "text": "#ECE2D0",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Playfair Display",
+    "bodyEN": "Lora",
+    "headerTH": "Noto Serif Thai",
+    "bodyTH": "Noto Serif Thai",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "establishment-premium",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#6D2E46",
+    "#481B2C",
+    "#ECE2D0",
+    "#A26769",
+    "#5C5C5C",
+    "#DBD1BF"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>microsoft-accent</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #1A3D8F;" title="Primary: #1A3D8F"></div>
+            <div class="swatch" style="background-color: #E5E8EE;" title="Secondary: #E5E8EE"></div>
+            <div class="swatch" style="background-color: #0078D4;" title="Accent: #0078D4"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('microsoft-accent')">View JSON</button>
+
+        <div id="microsoft-accent" class="modal" onclick="closeModal('microsoft-accent')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('microsoft-accent')">&times;</span>
+                <h4>microsoft-accent</h4>
+                <pre>{
+  "name": "microsoft-accent",
+  "displayName": "Microsoft Accent",
+  "category": "vendor",
+  "description": "Civic Indigo base with Microsoft blue accent. Microsoft's identity is deliberately multi-colored; deploy blue sparingly for CTAs and high-impact stats only. Features authoritative government aesthetic with Microsoft blue reserved for specific moments of emphasis. Use when pitching Dynamics 365, Power Platform, or Azure to enterprise buyers.",
+  "colors": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#0078D4",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#0078D4",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Source Sans 3",
+    "bodyEN": "Source Serif 4",
+    "headerTH": "Sarabun",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "authoritative-restraint",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#1A3D8F",
+    "#0D1F5A",
+    "#E5E8EE",
+    "#0078D4",
+    "#5C5C5C",
+    "#C5CBD7"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>netsuite-accent</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #1A2647;" title="Primary: #1A2647"></div>
+            <div class="swatch" style="background-color: #94A3B8;" title="Secondary: #94A3B8"></div>
+            <div class="swatch" style="background-color: #5B7DB1;" title="Accent: #5B7DB1"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('netsuite-accent')">View JSON</button>
+
+        <div id="netsuite-accent" class="modal" onclick="closeModal('netsuite-accent')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('netsuite-accent')">&times;</span>
+                <h4>netsuite-accent</h4>
+                <pre>{
+  "name": "netsuite-accent",
+  "displayName": "NetSuite Accent",
+  "category": "vendor",
+  "description": "Standalone NetSuite navy base with slate-blue accents. NetSuite is technically Oracle-owned but maintains distinct visual identity \u2014 darker, more conservative, finance-focused. Features navy for consolidation workflows, multi-subsidiary reporting, and close process improvements. Use when pitching NetSuite (ERP, Financials, Planning) to finance-centric enterprise buyers.",
+  "colors": {
+    "primary": "#1A2647",
+    "secondary": "#94A3B8",
+    "accent": "#5B7DB1",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#1A2647",
+    "secondary": "#94A3B8",
+    "accent": "#5B7DB1",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Source Sans 3",
+    "bodyEN": "Source Serif 4",
+    "headerTH": "Sarabun",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "authoritative-restraint",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#1A2647",
+    "#0D1528",
+    "#94A3B8",
+    "#5B7DB1",
+    "#5C5C5C",
+    "#C5CBD7"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>oracle-accent</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #1A3D8F;" title="Primary: #1A3D8F"></div>
+            <div class="swatch" style="background-color: #E5E8EE;" title="Secondary: #E5E8EE"></div>
+            <div class="swatch" style="background-color: #C74634;" title="Accent: #C74634"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('oracle-accent')">View JSON</button>
+
+        <div id="oracle-accent" class="modal" onclick="closeModal('oracle-accent')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('oracle-accent')">&times;</span>
+                <h4>oracle-accent</h4>
+                <pre>{
+  "name": "oracle-accent",
+  "displayName": "Oracle Accent",
+  "category": "vendor",
+  "description": "Civic Indigo base with controlled Oracle red accent. Oracle's brand identity is built on restraint \u2014 the red appears in specific, high-contrast moments only. Features authoritative government aesthetic with Oracle red reserved for CTAs, high-stakes stat callouts, and 'Why Oracle?' positioning. Use when pitching Oracle Cloud (Fusion, EBS, Enterprise) to government or enterprise buyers.",
+  "colors": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#C74634",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#C74634",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Source Sans 3",
+    "bodyEN": "Source Serif 4",
+    "headerTH": "Sarabun",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "authoritative-restraint",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#1A3D8F",
+    "#0D1F5A",
+    "#E5E8EE",
+    "#C74634",
+    "#5C5C5C",
+    "#C5CBD7"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>salesforce-accent</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #0F172A;" title="Primary: #0F172A"></div>
+            <div class="swatch" style="background-color: #94A3B8;" title="Secondary: #94A3B8"></div>
+            <div class="swatch" style="background-color: #00A1E0;" title="Accent: #00A1E0"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #0F172A;" title="Text: #0F172A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('salesforce-accent')">View JSON</button>
+
+        <div id="salesforce-accent" class="modal" onclick="closeModal('salesforce-accent')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('salesforce-accent')">&times;</span>
+                <h4>salesforce-accent</h4>
+                <pre>{
+  "name": "salesforce-accent",
+  "displayName": "Salesforce Accent",
+  "category": "vendor",
+  "description": "Future Slate base with Salesforce blue accent. Salesforce's identity is customer-centric and energetic. Features modern, technically credible aesthetic with Salesforce blue for customer outcomes, revenue metrics, and 'Why Salesforce?' positioning. Dark-mode-friendly. Use when pitching Salesforce CRM or platform to customer-centric enterprise buyers.",
+  "colors": {
+    "primary": "#0F172A",
+    "secondary": "#94A3B8",
+    "accent": "#00A1E0",
+    "background": "#FFFFFF",
+    "text": "#0F172A",
+    "muted": "#64748B"
+  },
+  "darkMode": {
+    "primary": "#0F172A",
+    "secondary": "#94A3B8",
+    "accent": "#00A1E0",
+    "background": "#0F172A",
+    "text": "#F8FAFC",
+    "muted": "#94A3B8"
+  },
+  "fonts": {
+    "headerEN": "Inter Tight",
+    "bodyEN": "Inter",
+    "headerTH": "IBM Plex Sans Thai",
+    "bodyTH": "IBM Plex Sans Thai",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "modern-technical",
+  "cornerRadius": 4,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#0F172A",
+    "#070B15",
+    "#94A3B8",
+    "#00A1E0",
+    "#64748B",
+    "#D4DDE7"
+  ],
+  "useDarkMode": true
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>sap-accent</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #1A3D8F;" title="Primary: #1A3D8F"></div>
+            <div class="swatch" style="background-color: #E5E8EE;" title="Secondary: #E5E8EE"></div>
+            <div class="swatch" style="background-color: #0070F2;" title="Accent: #0070F2"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('sap-accent')">View JSON</button>
+
+        <div id="sap-accent" class="modal" onclick="closeModal('sap-accent')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('sap-accent')">&times;</span>
+                <h4>sap-accent</h4>
+                <pre>{
+  "name": "sap-accent",
+  "displayName": "SAP Accent",
+  "category": "vendor",
+  "description": "Civic Indigo base with SAP blue accent. SAP's identity is built on technical trustworthiness and enterprise stability. Features authoritative government aesthetic with SAP blue for transformation milestones, process-redesign moments, and 'Why SAP?' positioning. Use when pitching SAP S/4HANA, RISE, or BTP to enterprise buyers.",
+  "colors": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#0070F2",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#0070F2",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Source Sans 3",
+    "bodyEN": "Source Serif 4",
+    "headerTH": "Sarabun",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "authoritative-restraint",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#1A3D8F",
+    "#0D1F5A",
+    "#E5E8EE",
+    "#0070F2",
+    "#5C5C5C",
+    "#C5CBD7"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>scholar-olive</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #5C6E2E;" title="Primary: #5C6E2E"></div>
+            <div class="swatch" style="background-color: #E8E6DC;" title="Secondary: #E8E6DC"></div>
+            <div class="swatch" style="background-color: #B85042;" title="Accent: #B85042"></div>
+            <div class="swatch" style="background-color: #FBFAF6;" title="Background: #FBFAF6"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('scholar-olive')">View JSON</button>
+
+        <div id="scholar-olive" class="modal" onclick="closeModal('scholar-olive')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('scholar-olive')">&times;</span>
+                <h4>scholar-olive</h4>
+                <pre>{
+  "name": "scholar-olive",
+  "displayName": "Scholar Olive",
+  "category": "industry",
+  "description": "Considered, evidence-led, mission-driven. Education and NGO audiences are sensitive to slick marketing and respond to substance. Features editorial layouts, generous line-height, and understated chart palettes. Uses warm white backgrounds and serif typography. Use when the customer is a university, school, research institute, or nonprofit foundation.",
+  "colors": {
+    "primary": "#5C6E2E",
+    "secondary": "#E8E6DC",
+    "accent": "#B85042",
+    "background": "#FBFAF6",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#5C6E2E",
+    "secondary": "#E8E6DC",
+    "accent": "#B85042",
+    "background": "#1A1A1A",
+    "text": "#E8E6DC",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Cormorant Garamond",
+    "bodyEN": "Lora",
+    "headerTH": "Noto Serif Thai",
+    "bodyTH": "Noto Serif Thai",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "considered-evidence",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#5C6E2E",
+    "#3A4520",
+    "#E8E6DC",
+    "#B85042",
+    "#5C5C5C",
+    "#D5D2C6"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>signal-magenta</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #C026D3;" title="Primary: #C026D3"></div>
+            <div class="swatch" style="background-color: #F5F3FF;" title="Secondary: #F5F3FF"></div>
+            <div class="swatch" style="background-color: #FACC15;" title="Accent: #FACC15"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('signal-magenta')">View JSON</button>
+
+        <div id="signal-magenta" class="modal" onclick="closeModal('signal-magenta')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('signal-magenta')">&times;</span>
+                <h4>signal-magenta</h4>
+                <pre>{
+  "name": "signal-magenta",
+  "displayName": "Signal Magenta",
+  "category": "industry",
+  "description": "Bold, contemporary, signal-of-now. Media and telco audiences expect higher visual production value than B2B average. Features layered text and image, occasional full-bleed photography, and motion-friendly composition that exports cleanly to video. Supports both light and dark backgrounds. Use when the customer is a telco, broadcaster, media group, or advertising platform.",
+  "colors": {
+    "primary": "#C026D3",
+    "secondary": "#F5F3FF",
+    "accent": "#FACC15",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#94A3B8"
+  },
+  "darkMode": {
+    "primary": "#C026D3",
+    "secondary": "#F5F3FF",
+    "accent": "#FACC15",
+    "background": "#0F0F12",
+    "text": "#F5F3FF",
+    "muted": "#94A3B8"
+  },
+  "fonts": {
+    "headerEN": "Bricolage Grotesque",
+    "bodyEN": "Inter",
+    "headerTH": "Prompt",
+    "bodyTH": "IBM Plex Sans Thai",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "bold-contemporary",
+  "cornerRadius": 2,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#C026D3",
+    "#7A0FA3",
+    "#F5F3FF",
+    "#FACC15",
+    "#94A3B8",
+    "#E8E6F7"
+  ],
+  "useDarkMode": true
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>steel-forge</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #36454F;" title="Primary: #36454F"></div>
+            <div class="swatch" style="background-color: #B0B7C0;" title="Secondary: #B0B7C0"></div>
+            <div class="swatch" style="background-color: #FF6F3C;" title="Accent: #FF6F3C"></div>
+            <div class="swatch" style="background-color: #F5F6F8;" title="Background: #F5F6F8"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('steel-forge')">View JSON</button>
+
+        <div id="steel-forge" class="modal" onclick="closeModal('steel-forge')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('steel-forge')">&times;</span>
+                <h4>steel-forge</h4>
+                <pre>{
+  "name": "steel-forge",
+  "displayName": "Steel Forge",
+  "category": "industry",
+  "description": "Industrial confidence without dystopian aesthetics. Steel and blueprint machinery aesthetic balanced with accessible typography. Features strong horizontal lines, sectioned blocks, and safety orange accents. Use when the customer is a factory, OEM, energy producer, refinery, or industrial utility valuing operational precision.",
+  "colors": {
+    "primary": "#36454F",
+    "secondary": "#B0B7C0",
+    "accent": "#FF6F3C",
+    "background": "#F5F6F8",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#36454F",
+    "secondary": "#B0B7C0",
+    "accent": "#FF6F3C",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Manrope",
+    "bodyEN": "Inter",
+    "headerTH": "Prompt",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "industrial-confidence",
+  "cornerRadius": 2,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#36454F",
+    "#1B232A",
+    "#B0B7C0",
+    "#FF6F3C",
+    "#5C5C5C",
+    "#99A0AA"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>trust-navy</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #1E2761;" title="Primary: #1E2761"></div>
+            <div class="swatch" style="background-color: #CADCFC;" title="Secondary: #CADCFC"></div>
+            <div class="swatch" style="background-color: #D97757;" title="Accent: #D97757"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #141413;" title="Text: #141413"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('trust-navy')">View JSON</button>
+
+        <div id="trust-navy" class="modal" onclick="closeModal('trust-navy')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('trust-navy')">&times;</span>
+                <h4>trust-navy</h4>
+                <pre>{
+  "name": "trust-navy",
+  "displayName": "Trust Navy",
+  "category": "industry",
+  "description": "Stable, precise, institutional. Designed for banking, FinTech, and insurance sectors where trust and numerical clarity dominate. Pairs traditional financial report aesthetics with modern typographic clarity. Use when the customer is a bank, securities firm, fintech platform, or financial services provider seeking institutional credibility.",
+  "colors": {
+    "primary": "#1E2761",
+    "secondary": "#CADCFC",
+    "accent": "#D97757",
+    "background": "#FFFFFF",
+    "text": "#141413",
+    "muted": "#6E6B66"
+  },
+  "darkMode": {
+    "primary": "#1E2761",
+    "secondary": "#CADCFC",
+    "accent": "#D97757",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A09A"
+  },
+  "fonts": {
+    "headerEN": "Inter Tight",
+    "bodyEN": "Lora",
+    "headerTH": "IBM Plex Sans Thai",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "trust-and-precision",
+  "cornerRadius": 2,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#1E2761",
+    "#0F1540",
+    "#CADCFC",
+    "#D97757",
+    "#6E6B66",
+    "#9DBCFC"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>vibrant-coral</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #F96167;" title="Primary: #F96167"></div>
+            <div class="swatch" style="background-color: #F9E795;" title="Secondary: #F9E795"></div>
+            <div class="swatch" style="background-color: #2F3C7E;" title="Accent: #2F3C7E"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('vibrant-coral')">View JSON</button>
+
+        <div id="vibrant-coral" class="modal" onclick="closeModal('vibrant-coral')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('vibrant-coral')">&times;</span>
+                <h4>vibrant-coral</h4>
+                <pre>{
+  "name": "vibrant-coral",
+  "displayName": "Vibrant Coral",
+  "category": "industry",
+  "description": "Energetic, accessible, brand-confident. Retail decks compete with vendor marketing; this theme has higher visual energy. Features bold typography, large hero imagery, and color-blocked sections where numbers are visual hooks. Use when the customer is a retailer, restaurant chain, FMCG brand, or e-commerce platform seeking consumer brand confidence.",
+  "colors": {
+    "primary": "#F96167",
+    "secondary": "#F9E795",
+    "accent": "#2F3C7E",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#F96167",
+    "secondary": "#F9E795",
+    "accent": "#2F3C7E",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Poppins",
+    "bodyEN": "Inter",
+    "headerTH": "Prompt",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "energetic-accessible",
+  "cornerRadius": 2,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#F96167",
+    "#E83D45",
+    "#F9E795",
+    "#2F3C7E",
+    "#5C5C5C",
+    "#FADAB4"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+    <div class="theme-card">
+        <div class="theme-header">
+            <h3>workday-accent</h3>
+        </div>
+
+        <div class="color-swatches">
+            <div class="swatch" style="background-color: #1A3D8F;" title="Primary: #1A3D8F"></div>
+            <div class="swatch" style="background-color: #E5E8EE;" title="Secondary: #E5E8EE"></div>
+            <div class="swatch" style="background-color: #F38B00;" title="Accent: #F38B00"></div>
+            <div class="swatch" style="background-color: #FFFFFF;" title="Background: #FFFFFF"></div>
+            <div class="swatch" style="background-color: #1A1A1A;" title="Text: #1A1A1A"></div>
+        </div>
+
+        <div class="font-samples">
+            <div style="font-family: sans-serif; font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                Header Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 12px;">
+                ทดสอบฟอนต์หัวข้อภาษาไทย
+            </div>
+
+            <div style="font-family: sans-serif; font-size: 14px; margin-bottom: 8px;">
+                Body Font: sans-serif
+            </div>
+            <div style="font-family: sans-serif; font-size: 12px; margin-bottom: 12px;">
+                ตัวอย่างข้อความภาษาไทยในฟอนต์ Body
+            </div>
+        </div>
+
+        <button class="json-button" onclick="showModal('workday-accent')">View JSON</button>
+
+        <div id="workday-accent" class="modal" onclick="closeModal('workday-accent')">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close" onclick="closeModal('workday-accent')">&times;</span>
+                <h4>workday-accent</h4>
+                <pre>{
+  "name": "workday-accent",
+  "displayName": "Workday Accent",
+  "category": "vendor",
+  "description": "Civic Indigo base with Workday orange accent. Workday's brand is forward-looking, human-centric, and energetic. Features authoritative government aesthetic with Workday orange for organizational change, talent-driven outcomes, and future-of-work narratives. Use when pitching Workday (HR, Finance, Planning) to change-oriented enterprise buyers.",
+  "colors": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#F38B00",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#F38B00",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Source Sans 3",
+    "bodyEN": "Source Serif 4",
+    "headerTH": "Sarabun",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "authoritative-restraint",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#1A3D8F",
+    "#0D1F5A",
+    "#E5E8EE",
+    "#F38B00",
+    "#5C5C5C",
+    "#C5CBD7"
+  ],
+  "useDarkMode": false
+}</pre>
+            </div>
+        </div>
+    </div>
+    
+        </div>
+        <footer>
+            <p>All themes are self-contained. Click "View JSON" to see theme configuration details.</p>
+        </footer>
+    </div>
+
+    <script>
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
+            }
+        };
+    </script>
+</body>
+</html>

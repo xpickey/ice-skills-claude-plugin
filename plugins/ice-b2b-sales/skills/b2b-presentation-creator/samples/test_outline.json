@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "deck_type": "solution-demo",
+    "customer_name_en": "ACME Corp",
+    "customer_name_th": "บริษัท เอซีเอ็มอี จำกัด",
+    "title_en": "Test Solution Pitch",
+    "title_th": "ทดสอบ Solution Pitch",
+    "version": "V01R01",
+    "date": "2026-04-26"
+  },
+  "slides": [
+    {
+      "layout": "title-hero",
+      "title_en": "Test Solution Pitch",
+      "title_th": "ทดสอบ Solution Pitch",
+      "subtitle_en": "Smoke test of b2b-presentation-creator skill",
+      "subtitle_th": "การทดสอบ Smoke Test ของ Skill"
+    },
+    {
+      "layout": "stat-callout",
+      "value": "67%",
+      "label_en": "Average reduction in close cycle",
+      "label_th": "ลดระยะเวลาปิดดีลเฉลี่ย",
+      "context_en": "Across 50+ enterprise engagements"
+    },
+    {
+      "layout": "icon-text-rows",
+      "title_en": "Three core capabilities",
+      "title_th": "ขีดความสามารถหลัก 3 ด้าน",
+      "rows": [
+        {"icon": "shield", "header_en": "Security", "header_th": "ความปลอดภัย", "body_en": "Enterprise-grade controls"},
+        {"icon": "trending-up", "header_en": "Growth", "header_th": "การเติบโต", "body_en": "Built-in analytics"},
+        {"icon": "users", "header_en": "Adoption", "header_th": "การใช้งาน", "body_en": "Change management included"}
+      ]
+    },
+    {
+      "layout": "process-flow",
+      "title_en": "Implementation in five phases",
+      "title_th": "การนำไปใช้งาน 5 ระยะ",
+      "steps": [
+        {"label": "Discover"},
+        {"label": "Design"},
+        {"label": "Build"},
+        {"label": "Test"},
+        {"label": "Launch"}
+      ]
+    }
+  ]
+}

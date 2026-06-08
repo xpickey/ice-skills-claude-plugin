@@ -1,0 +1,169 @@
+{
+  "name": "Proposal & Business Case Deck",
+  "description": "Late-stage sale. Proposal submission, executive readout, or board approval support. Goal is to win the commercial decision.",
+  "length": "18–25 slides",
+  "audience": "Economic Buyer + C-suite + procurement + sometimes board members",
+  "tone": "Executive, evidence-rich, financially literate. Every claim is supported by a number or a citation.",
+  "slides": [
+    {
+      "slide": 1,
+      "layout": "title-hero",
+      "purpose": "Title",
+      "content_guidance": "Customer + Proposal Title + Version + Date"
+    },
+    {
+      "slide": 2,
+      "layout": "two-column",
+      "purpose": "Executive Summary",
+      "content_guidance": "Recommendation in one sentence + 3 key reasons in supporting bullets"
+    },
+    {
+      "slide": 3,
+      "layout": "stat-callout",
+      "purpose": "Situation Today",
+      "content_guidance": "The customer's current state, in their own numbers"
+    },
+    {
+      "slide": 4,
+      "layout": "two-column",
+      "purpose": "Why This Matters Now",
+      "content_guidance": "Macro pressure / regulatory / competitive trigger (use icons if 2–3 themes)"
+    },
+    {
+      "slide": 5,
+      "layout": "stat-callout",
+      "purpose": "What We Heard — Theme 1",
+      "content_guidance": "Pain theme 1 as separate slide with supporting numbers"
+    },
+    {
+      "slide": 6,
+      "layout": "stat-callout",
+      "purpose": "What We Heard — Theme 2",
+      "content_guidance": "Pain theme 2 as separate slide with supporting numbers"
+    },
+    {
+      "slide": 7,
+      "layout": "stat-callout",
+      "purpose": "What We Heard — Theme 3",
+      "content_guidance": "Pain theme 3 as separate slide with supporting numbers"
+    },
+    {
+      "slide": 8,
+      "layout": "two-column",
+      "purpose": "What Success Looks Like",
+      "content_guidance": "Quantified target state (before/after format)"
+    },
+    {
+      "slide": 9,
+      "layout": "half-bleed-image",
+      "purpose": "Our Solution — Overview",
+      "content_guidance": "Solution architecture at a high level (workflow diagram)"
+    },
+    {
+      "slide": 10,
+      "layout": "2x3-grid",
+      "purpose": "Solution — How It Solves Each Pain",
+      "content_guidance": "Pain → Solution mapping, one row per pain (3 rows = 3 pains)"
+    },
+    {
+      "slide": 11,
+      "layout": "icon-text-rows",
+      "purpose": "Differentiators — Why Us",
+      "content_guidance": "3–5 specific differentiators, each with proof (not generic claims)"
+    },
+    {
+      "slide": 12,
+      "layout": "phased-timeline",
+      "purpose": "Implementation Approach",
+      "content_guidance": "Phases, durations, key milestones"
+    },
+    {
+      "slide": 13,
+      "layout": "half-bleed-image",
+      "purpose": "Team and Roles",
+      "content_guidance": "Named team + experience + RACI (use photo grid + responsibilities)"
+    },
+    {
+      "slide": 14,
+      "layout": "icon-text-rows",
+      "purpose": "Investment Summary",
+      "content_guidance": "Pricing breakdown — software / services / support. Currency clearly stated (THB / USD / EUR). Show net + VAT for Thai customers"
+    },
+    {
+      "slide": 15,
+      "layout": "2x3-grid",
+      "purpose": "Total Cost of Ownership (TCO)",
+      "content_guidance": "3-year or 5-year TCO with line items (use stacked bar chart if data-heavy)"
+    },
+    {
+      "slide": 16,
+      "layout": "2x3-grid",
+      "purpose": "Return on Investment (ROI)",
+      "content_guidance": "Quantified benefits, payback period, NPV/IRR if relevant. Never invent benefits — use customer statements or industry benchmarks with citation"
+    },
+    {
+      "slide": 17,
+      "layout": "2x3-grid",
+      "purpose": "Risk and Mitigation",
+      "content_guidance": "Top 5 risks + mitigation for each (honest assessment, not vague 'low risk' claims)"
+    },
+    {
+      "slide": 18,
+      "layout": "stat-callout-grid",
+      "purpose": "Customer References",
+      "content_guidance": "Logos with one-line outcomes (1–3 references)"
+    },
+    {
+      "slide": 19,
+      "layout": "stat-callout",
+      "purpose": "Why Us — Closing",
+      "content_guidance": "One number that proves the firm can deliver (e.g., '500+ implementations in 18 months')"
+    },
+    {
+      "slide": 20,
+      "layout": "icon-text-rows",
+      "purpose": "What We Need to Move Forward",
+      "content_guidance": "Decision needed + by when"
+    },
+    {
+      "slide": 21,
+      "layout": "half-bleed-image",
+      "purpose": "Appendix — Detailed Methodology",
+      "optional": true,
+      "content_guidance": "Deeper methodology / framework explanation"
+    },
+    {
+      "slide": 22,
+      "layout": "half-bleed-image",
+      "purpose": "Appendix — Organization Chart",
+      "optional": true,
+      "content_guidance": "Full org structure with team members"
+    },
+    {
+      "slide": 23,
+      "layout": "icon-text-rows",
+      "purpose": "Appendix — Detailed Pricing",
+      "optional": true,
+      "content_guidance": "Line-by-line cost breakdown"
+    },
+    {
+      "slide": 24,
+      "layout": "icon-text-rows",
+      "purpose": "Appendix — Security & SLAs",
+      "optional": true,
+      "content_guidance": "Detailed security certifications and service level agreements"
+    },
+    {
+      "slide": 25,
+      "layout": "half-bleed-image",
+      "purpose": "Appendix — TOR Compliance Checklist",
+      "optional": true,
+      "content_guidance": "For Thai government RFPs only: compliance with each TOR section by paragraph number"
+    }
+  ],
+  "special_notes": {
+    "thai_government_bids": "When responding to a TOR/RFP for Thai government: Slide 1 must show TOR reference number and submission date. Slides 14–16 must follow Thai government cost categories from พรบ. and ระเบียบ (see govt-egp-gfmis skill). Add Appendix slide listing compliance with each TOR section by paragraph number.",
+    "currency_requirement": "Investment Summary (Slide 14) must state currency explicitly (THB / USD / EUR). For Thai customers, show net + VAT separately.",
+    "roi_requirement": "Never invent benefits. Every benefit line item must come from: (a) a real customer statement, (b) an industry benchmark with citation, or (c) a vendor-published case study (cited)."
+  }
+}

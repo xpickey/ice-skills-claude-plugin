@@ -1,0 +1,46 @@
+{
+  "name": "vibrant-coral",
+  "displayName": "Vibrant Coral",
+  "category": "industry",
+  "description": "Energetic, accessible, brand-confident. Retail decks compete with vendor marketing; this theme has higher visual energy. Features bold typography, large hero imagery, and color-blocked sections where numbers are visual hooks. Use when the customer is a retailer, restaurant chain, FMCG brand, or e-commerce platform seeking consumer brand confidence.",
+  "colors": {
+    "primary": "#F96167",
+    "secondary": "#F9E795",
+    "accent": "#2F3C7E",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#F96167",
+    "secondary": "#F9E795",
+    "accent": "#2F3C7E",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Poppins",
+    "bodyEN": "Inter",
+    "headerTH": "Prompt",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "energetic-accessible",
+  "cornerRadius": 2,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#F96167",
+    "#E83D45",
+    "#F9E795",
+    "#2F3C7E",
+    "#5C5C5C",
+    "#FADAB4"
+  ],
+  "useDarkMode": false
+}

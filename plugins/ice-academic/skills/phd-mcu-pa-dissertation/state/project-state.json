@@ -1,0 +1,210 @@
+{
+  "_schema_version": "V01R01",
+  "_schema_date": "2026-05-03",
+  "_description": "Cross-session state สำหรับโครงการดุษฎีนิพนธ์ ปร.ด. รปศ. มจร — ใช้ track Phase ปัจจุบัน + ตัวแปร + สถานะแต่ละบท",
+  "_usage": "Skill อ่าน/อัปเดตไฟล์นี้ทุกครั้งที่ขยับ Phase หรือมีการเปลี่ยนแปลงสำคัญ",
+
+  "project": {
+    "title_thai": "[ชื่อเรื่องภาษาไทย — จะกรอกใน Phase 1]",
+    "title_english": "[Title in English — to be filled in Phase 1]",
+    "researcher_name": "[ชื่อ-นามสกุล ผู้วิจัย]",
+    "advisor_main": "[อาจารย์ที่ปรึกษาหลัก]",
+    "advisor_co": ["[อาจารย์ที่ปรึกษาร่วม 1]", "[อาจารย์ที่ปรึกษาร่วม 2]"],
+    "academic_year_start": "[ปีการศึกษาที่เข้าศึกษา]",
+    "track": "Track 2.1",
+    "program": "ปรัชญาดุษฎีบัณฑิต สาขาวิชารัฐประศาสนศาสตร์",
+    "university": "มหาวิทยาลัยมหาจุฬาลงกรณราชวิทยาลัย"
+  },
+
+  "current_phase": {
+    "phase": 0,
+    "phase_name": "Onboarding/Pre-research",
+    "started_date": "[YYYY-MM-DD]",
+    "expected_completion_date": "[YYYY-MM-DD]",
+    "notes": "[Note from current session]"
+  },
+
+  "gates": {
+    "gate_1_topic_critique": {
+      "status": "pending",
+      "submitted_date": null,
+      "result_date": null,
+      "outcome": null,
+      "comments_received": [],
+      "notes": ""
+    },
+    "gate_2_proposal_defense": {
+      "status": "pending",
+      "submitted_date": null,
+      "result_date": null,
+      "outcome": null,
+      "comments_received": [],
+      "notes": ""
+    },
+    "gate_3_final_defense": {
+      "status": "pending",
+      "submitted_date": null,
+      "result_date": null,
+      "outcome": null,
+      "comments_received": [],
+      "notes": ""
+    }
+  },
+
+  "research_design": {
+    "research_type": "Mixed Methods (Sequential Explanatory)",
+    "research_questions": [
+      "[RQ1]",
+      "[RQ2]",
+      "[RQ3]"
+    ],
+    "objectives": [
+      "เพื่อ[ศึกษา DV]",
+      "เพื่อศึกษาปัจจัยที่ส่งผลต่อ [DV]",
+      "เพื่อนำเสนอ[Output]"
+    ],
+    "hypotheses": [
+      "[H1]",
+      "[H2]"
+    ]
+  },
+
+  "variables": {
+    "iv1": {
+      "name_thai": "[ตัวแปรต้น 1]",
+      "name_english": "[IV1]",
+      "theory_source": "[ผู้แต่ง (ปี)]",
+      "dimensions": ["[ด้าน 1]", "[ด้าน 2]", "[ด้าน 3]", "[ด้าน 4]", "[ด้าน 5]"],
+      "locked": false
+    },
+    "iv2": {
+      "name_thai": "[ตัวแปรต้น 2 หรือ X2 หลักธรรม]",
+      "name_english": "[IV2 / Dhamma]",
+      "theory_source": "[หลักธรรม + พระไตรปิฎก]",
+      "dimensions": ["[ด้าน 1]", "[ด้าน 2]"],
+      "locked": false
+    },
+    "dv": {
+      "name_thai": "[ตัวแปรตาม]",
+      "name_english": "[DV]",
+      "theory_source": "[ผู้แต่ง (ปี)]",
+      "dimensions": ["[ด้าน 1]", "[ด้าน 2]"],
+      "locked": false
+    }
+  },
+
+  "section_numbering": {
+    "topic_has_buddhist_integration_keyword": false,
+    "comment": "ตรวจชื่อหัวข้อ: ถ้ามี 'การบูรณาการ' หรือ 'การประยุกต์' = true → กรอบ = 2.7 / ถ้าไม่มี = false → กรอบ = 2.6",
+    "framework_section_number": "2.6"
+  },
+
+  "key_informants": {
+    "type": "Mixed Methods",
+    "minimum_required": 17,
+    "groups": [
+      {"name": "ผู้กำหนดนโยบาย", "count": 0, "target": 4},
+      {"name": "ผู้ปฏิบัติงาน", "count": 0, "target": 4},
+      {"name": "ผู้รับบริการ", "count": 0, "target": 3},
+      {"name": "นักวิชาการในประเด็น", "count": 0, "target": 3},
+      {"name": "นักวิชาการพระพุทธศาสนา", "count": 0, "target": 3}
+    ],
+    "total_count": 0,
+    "total_target": 17
+  },
+
+  "experts": {
+    "minimum_required": 5,
+    "external_minimum": 2,
+    "list": [
+      {"name": "[ผู้เชี่ยวชาญ 1]", "expertise": "เนื้อหา/ทฤษฎี", "internal_external": "internal"},
+      {"name": "[ผู้เชี่ยวชาญ 2]", "expertise": "ระเบียบวิธีวิจัย", "internal_external": "internal"},
+      {"name": "[ผู้เชี่ยวชาญ 3]", "expertise": "พระพุทธศาสนา", "internal_external": "internal"},
+      {"name": "[ผู้เชี่ยวชาญ 4]", "expertise": "เนื้อหา/ทฤษฎี", "internal_external": "external"},
+      {"name": "[ผู้เชี่ยวชาญ 5]", "expertise": "ระเบียบวิธีวิจัย", "internal_external": "external"}
+    ]
+  },
+
+  "instrument_validation": {
+    "ioc_completed": false,
+    "ioc_average": null,
+    "try_out_count": 0,
+    "try_out_required": 30,
+    "cronbach_alpha": null,
+    "cronbach_threshold": 0.70
+  },
+
+  "chapter_status": {
+    "chapter_1": {
+      "status": "not_started",
+      "draft_completed": false,
+      "audit_passed": false,
+      "version": "V00R00",
+      "last_updated": null
+    },
+    "chapter_2": {
+      "status": "not_started",
+      "draft_completed": false,
+      "audit_passed": false,
+      "version": "V00R00",
+      "last_updated": null
+    },
+    "chapter_3": {
+      "status": "not_started",
+      "draft_completed": false,
+      "audit_passed": false,
+      "version": "V00R00",
+      "last_updated": null
+    },
+    "chapter_4": {
+      "status": "not_started",
+      "draft_completed": false,
+      "audit_passed": false,
+      "version": "V00R00",
+      "last_updated": null
+    },
+    "chapter_5": {
+      "status": "not_started",
+      "draft_completed": false,
+      "audit_passed": false,
+      "version": "V00R00",
+      "last_updated": null
+    }
+  },
+
+  "quality_gates_status": {
+    "format_audit": "pending",
+    "fact_audit": "pending",
+    "ai_detection": "pending",
+    "buddhist_integrity": "pending",
+    "mcu_standards": "pending",
+    "consistency_chain": "pending"
+  },
+
+  "ai_detection_scores": {
+    "turnitin_ai": null,
+    "gptzero": null,
+    "originality_ai": null,
+    "copyleaks": null,
+    "threshold": 30,
+    "last_scan_date": null
+  },
+
+  "session_log": [
+    {
+      "session_date": "2026-05-03",
+      "phase_at_start": 0,
+      "phase_at_end": 0,
+      "key_actions": [
+        "Skill initialized",
+        "Project state created"
+      ],
+      "next_steps": [
+        "Topic Development (Phase 1)",
+        "ตั้ง Working Title 3-5 ทางเลือก"
+      ]
+    }
+  ],
+
+  "notes": "Initial state — to be populated as project progresses."
+}

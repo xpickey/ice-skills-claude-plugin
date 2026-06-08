@@ -1,0 +1,46 @@
+{
+  "name": "steel-forge-oracle",
+  "displayName": "Steel Forge with Oracle Accent",
+  "category": "industry-vendor-hybrid",
+  "description": "Steel Forge manufacturing theme with Oracle red accent overlay",
+  "colors": {
+    "primary": "#36454F",
+    "secondary": "#B0B7C0",
+    "accent": "#C74634",
+    "background": "#F5F6F8",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#36454F",
+    "secondary": "#B0B7C0",
+    "accent": "#C74634",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Manrope",
+    "bodyEN": "Inter",
+    "headerTH": "Prompt",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "industrial-confidence-oracle",
+  "cornerRadius": 2,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#36454F",
+    "#1B232A",
+    "#B0B7C0",
+    "#C74634",
+    "#5C5C5C",
+    "#99A0AA"
+  ],
+  "useDarkMode": false
+}

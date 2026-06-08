@@ -1,0 +1,46 @@
+{
+  "name": "trust-navy",
+  "displayName": "Trust Navy",
+  "category": "industry",
+  "description": "Stable, precise, institutional. Designed for banking, FinTech, and insurance sectors where trust and numerical clarity dominate. Pairs traditional financial report aesthetics with modern typographic clarity. Use when the customer is a bank, securities firm, fintech platform, or financial services provider seeking institutional credibility.",
+  "colors": {
+    "primary": "#1E2761",
+    "secondary": "#CADCFC",
+    "accent": "#D97757",
+    "background": "#FFFFFF",
+    "text": "#141413",
+    "muted": "#6E6B66"
+  },
+  "darkMode": {
+    "primary": "#1E2761",
+    "secondary": "#CADCFC",
+    "accent": "#D97757",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A09A"
+  },
+  "fonts": {
+    "headerEN": "Inter Tight",
+    "bodyEN": "Lora",
+    "headerTH": "IBM Plex Sans Thai",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "trust-and-precision",
+  "cornerRadius": 2,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#1E2761",
+    "#0F1540",
+    "#CADCFC",
+    "#D97757",
+    "#6E6B66",
+    "#9DBCFC"
+  ],
+  "useDarkMode": false
+}

@@ -1,0 +1,274 @@
+{
+  "metadata": {
+    "deckType": "Solution & Demo",
+    "customer": "ABC Industrial Co Ltd (anon)",
+    "language": "bilingual",
+    "version": "V01R01",
+    "date": "2026-04-26"
+  },
+  "slides": [
+    {
+      "layout": "title-hero",
+      "title": "Proposed Oracle Fusion Cloud ERP Solution",
+      "title_th": "การแก้ไขปัญหา Oracle Fusion Cloud ERP ที่เสนอ",
+      "subtitle": "ABC Industrial Co Ltd — Manufacturing Excellence",
+      "subtitle_th": "บริษัท เอบีซี อินดัสเตรียล จำกัด — ความเป็นเลิศในการผลิต"
+    },
+    {
+      "layout": "stat-callout",
+      "value": "25%",
+      "label": "Potential OEE Improvement",
+      "label_th": "การปรับปรุง OEE ที่เป็นไปได้",
+      "context": "Through real-time production visibility and shop-floor data integration",
+      "context_th": "ผ่านการมองเห็นการผลิตแบบเรียลไทม์และการรวมข้อมูลห้องทำงาน"
+    },
+    {
+      "layout": "two-column",
+      "title": "What We Heard from Your Team",
+      "title_th": "สิ่งที่เราได้ยินจากทีมของคุณ",
+      "left": [
+        "Production planning is fragmented across Excel sheets",
+        "No real-time visibility into OEE, downtime, or quality",
+        "Supplier data arrives late; integration is manual",
+        "Plant-floor cost tracking requires 5+ manual processes",
+        "Financial close takes 15 days; should be 3 days"
+      ],
+      "right": [
+        "Khun Somchai, Production: 'We're blind to real-time issues'",
+        "Khun Niran, Finance: 'Cost allocation is our biggest bottleneck'",
+        "Khun Pim, Supply Chain: 'We need live supplier visibility'",
+        "Khun Ananda, Quality: 'Each defect is traced manually'"
+      ]
+    },
+    {
+      "layout": "icon-text-rows",
+      "title": "What Success Means to You",
+      "title_th": "ความสำเร็จหมายถึงอะไรสำหรับคุณ",
+      "rows": [
+        {
+          "header": "Real-Time Production Visibility",
+          "header_th": "การมองเห็นการผลิตแบบเรียลไทม์",
+          "body": "OEE dashboard, downtime alerts, root-cause tracking — live",
+          "body_th": "แดชบอร์ด OEE การแจ้งเตือนเวลาหยุด การติดตามสาเหตุ — สด"
+        },
+        {
+          "header": "Integrated Supplier Network",
+          "header_th": "เครือข่ายซัพพลายเออร์ที่ผสมผสาน",
+          "body": "Quality metrics, delivery schedules, cost shared with partners",
+          "body_th": "ตัวชี้วัดคุณภาพ ตารางเวลาการส่งมอบ ต้นทุนที่แบ่งปันกับพารตเนอร์"
+        },
+        {
+          "header": "Automated Plant-Floor Costing",
+          "header_th": "การคำนวณต้นทุนห้องทำงานแบบอัตโนมัติ",
+          "body": "Labor, materials, overhead allocated in real-time by product",
+          "body_th": "แรงงาน วัสดุ ค่าใช้สอย จัดสรรแบบเรียลไทม์ตามผลิตภัณฑ์"
+        },
+        {
+          "header": "3-Day Financial Close",
+          "header_th": "ปิดการเงิน 3 วัน",
+          "body": "Close the month in 72 hours with full GL reconciliation",
+          "body_th": "ปิดเดือนใน 72 ชั่วโมงพร้อมการปรองดองบัญชีแยกประเภทเต็มรูปแบบ"
+        }
+      ]
+    },
+    {
+      "layout": "process-flow",
+      "title": "Our Engagement Approach",
+      "title_th": "วิธีการให้บริการของเรา",
+      "steps": [
+        "Discovery",
+        "Design",
+        "Build",
+        "Test",
+        "Deploy"
+      ]
+    },
+    {
+      "layout": "two-column",
+      "title": "Solution Architecture — Oracle Fusion Cloud ERP",
+      "title_th": "สถาปัตยกรรมโซลูชัน — Oracle Fusion Cloud ERP",
+      "left": [
+        "Oracle Fusion Cloud ERP core modules:",
+        "— Production Planning & Execution",
+        "— Supply Chain Management",
+        "— Cost Accounting & Analysis",
+        "— General Ledger & Financials",
+        "Integrated with shop-floor IoT sensors"
+      ],
+      "right": [
+        "Cloud deployment (OCI region: Bangkok)",
+        "Real-time data ingestion from plant floor",
+        "API integrations with supplier portals",
+        "Automated closing & consolidation workflows",
+        "Native mobile access for site managers"
+      ]
+    },
+    {
+      "layout": "icon-text-rows",
+      "title": "How Fusion Solves Each Pain Point",
+      "title_th": "วิธีที่ Fusion แก้ไขปัญหาแต่ละข้อ",
+      "rows": [
+        {
+          "header": "Pain: Fragmented Production Planning",
+          "header_th": "ความเจ็บ: การวางแผนการผลิตแบบแยกส่วน",
+          "body": "Solution: Oracle Fusion Planning Module → unified demand/supply planning, real-time constraints",
+          "body_th": "โซลูชัน: โมดูลการวางแผน Oracle Fusion → การวางแผนความต้องการ/อุปทาน แบบรวมศูนย์"
+        },
+        {
+          "header": "Pain: No OEE Visibility",
+          "header_th": "ความเจ็บ: ไม่มีการมองเห็น OEE",
+          "body": "Solution: Manufacturing Intelligence Dashboard → KPIs updated every 5 minutes",
+          "body_th": "โซลูชัน: แดชบอร์ดข่าวกรรมการผลิต → อัปเดต KPI ทุก 5 นาที"
+        },
+        {
+          "header": "Pain: Late Supplier Data",
+          "header_th": "ความเจ็บ: ข้อมูลซัพพลายเออร์ล่าช้า",
+          "body": "Solution: Supplier Portal + Auto-Receipt → real-time shipment visibility",
+          "body_th": "โซลูชัน: พอร์ตัลซัพพลายเออร์ + การรับสินค้าโดยอัตโนมัติ → การมองเห็นการส่งสินค้าแบบเรียลไทม์"
+        },
+        {
+          "header": "Pain: 15-Day Financial Close",
+          "header_th": "ความเจ็บ: ปิดการเงิน 15 วัน",
+          "body": "Solution: Closed-Loop Costing + Auto GL → 3-day close guaranteed",
+          "body_th": "โซลูชัน: โครงร่างต้นทุนปิด + GL อัตโนมัติ → ปิด 3 วันรับประกัน"
+        }
+      ]
+    },
+    {
+      "layout": "two-column",
+      "title": "Day-in-the-Life: Khun Somchai (Production Manager)",
+      "title_th": "วันในชีวิต: คุณสมชาย (ผู้จัดการการผลิต)",
+      "left": [
+        "6:00 AM: Checks Oracle Fusion mobile app",
+        "• OEE dashboard shows 82% (up from 75% yesterday)",
+        "• Downtime alert: Press Line B stopped at 5:45 AM",
+        "6:15 AM: Calls maintenance; root cause is bad die",
+        "6:30 AM: Dies ordered from suppliers; ETA 8:00 AM",
+        "8:30 AM: Production resumes, OEE recovers to 85%"
+      ],
+      "right": [
+        "Why this matters:",
+        "Before Fusion: Khun Somchai gets a call at 9 AM",
+        "Before Fusion: By then, 3+ hours of production lost",
+        "Before Fusion: No clear root cause; guess & hope",
+        "With Fusion: Alert in seconds; action in minutes",
+        "With Fusion: Save 50+ units/day; avoid 30% loss"
+      ]
+    },
+    {
+      "layout": "icon-text-rows",
+      "title": "Why Oracle Fusion Beats the Alternatives",
+      "title_th": "เหตุใด Oracle Fusion เอาชนะทางเลือก",
+      "rows": [
+        {
+          "header": "Complete P2P + O2C Coverage",
+          "header_th": "ความครอบคลุมแบบเต็มรูปแบบ P2P + O2C",
+          "body": "One system covers procurement, production, cost, GL (vs. patch-work)",
+          "body_th": "ระบบเดียวครอบคลุมการจัดซื้อ การผลิต ต้นทุน GL"
+        },
+        {
+          "header": "Native Shop-Floor Integration",
+          "header_th": "การรวมเข้าห้องทำงานแบบดั้งเดิม",
+          "body": "IoT sensors → Fusion MES → ERP (no middleware)",
+          "body_th": "เซนเซอร์ IoT → Fusion MES → ERP (ไม่มีซอฟต์แวร์กลาง)"
+        },
+        {
+          "header": "Cloud-Native Scalability",
+          "header_th": "ความสามารถในการปรับขนาดแบบคลาวด์-เนทีฟ",
+          "body": "Add new plants in hours, not months",
+          "body_th": "เพิ่มโรงงานใหม่ในอพ.ศ.หลายชั่วโมง ไม่ใช่ หลายเดือน"
+        },
+        {
+          "header": "Data Pedigree & Compliance",
+          "header_th": "ข้อมูลลำเลียง & การปฏิบัติตามกฎหมาย",
+          "body": "Full audit trail, PDPA-ready, SLA-backed uptime 99.99%",
+          "body_th": "ติดตามการตรวจสอบแบบเต็มรูปแบบ PDPA-ready SLA-backed uptime"
+        }
+      ]
+    },
+    {
+      "layout": "phased-timeline",
+      "title": "Implementation Roadmap",
+      "title_th": "แผนการขยาย",
+      "phases": [
+        {
+          "name": "Foundation (Weeks 1-4)",
+          "name_th": "มูลนิธิ (สัปดาห์ 1-4)",
+          "duration": "4 weeks",
+          "description": "Cloud environment, master data, user training"
+        },
+        {
+          "name": "Core Go-Live (Weeks 5-8)",
+          "name_th": "Go-Live หลัก (สัปดาห์ 5-8)",
+          "duration": "4 weeks",
+          "description": "Procurement, Inventory, Financials live in production"
+        },
+        {
+          "name": "MES Integration (Weeks 9-12)",
+          "name_th": "การรวม MES (สัปดาห์ 9-12)",
+          "duration": "4 weeks",
+          "description": "Shop floor sensors, OEE dashboard, KPI tracking"
+        },
+        {
+          "name": "Optimization (Weeks 13+)",
+          "name_th": "การปรับปรุง (สัปดาห์ 13+)",
+          "duration": "ongoing",
+          "description": "Process refinement, advanced analytics, cost reduction"
+        }
+      ]
+    },
+    {
+      "layout": "icon-text-rows",
+      "title": "What We Need from You",
+      "title_th": "สิ่งที่เราต้องการจากคุณ",
+      "rows": [
+        {
+          "header": "Data Access & Governance",
+          "header_th": "การเข้าถึงข้อมูล & การปกครอง",
+          "body": "Master data, transaction history, chart of accounts"
+        },
+        {
+          "header": "Steering Committee & SME Availability",
+          "header_th": "ความพร้อมของคณะสร้างสรรค์ & SME",
+          "body": "Weekly decision gates; part-time SME commitment for 16 weeks"
+        },
+        {
+          "header": "Infrastructure Readiness",
+          "header_th": "ความพร้อมของโครงสร้างพื้นฐาน",
+          "body": "Network bandwidth, VPN access for go-live"
+        }
+      ]
+    },
+    {
+      "layout": "phased-timeline",
+      "title": "Next Steps & Timeline",
+      "title_th": "ขั้นตอนถัดไป & เวลาประมาณการ",
+      "phases": [
+        {
+          "name": "Technical Design Review",
+          "name_th": "การตรวจสอบการออกแบบทางเทคนิค",
+          "duration": "May 3",
+          "description_th": "ครอบคลุม: สถาปัตยกรรม การรวมเข้า ความปลอดภัย"
+        },
+        {
+          "name": "Steering Committee Alignment",
+          "name_th": "การจัดแนว Steering Committee",
+          "duration": "May 10",
+          "description_th": "ได้รับการอนุมัติ ชั้นสูง ของหนึ่งร้อยตัด"
+        },
+        {
+          "name": "Foundation Phase Kickoff",
+          "name_th": "Foundation Phase Kickoff",
+          "duration": "May 17",
+          "description_th": "โครงการเริ่มต้น ทีม Mobilize"
+        },
+        {
+          "name": "Go-Live Target",
+          "name_th": "Go-Live Target",
+          "duration": "Sep 15",
+          "description_th": "การผลิตแบบตัดเล็บ; MES ตามด้วย"
+        }
+      ]
+    }
+  ]
+}

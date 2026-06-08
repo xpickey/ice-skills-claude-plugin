@@ -1,0 +1,118 @@
+{
+  "name": "ice-propose",
+  "displayName": "iCE Propose",
+  "category": "custom",
+  "description": "iCE Consulting proprietary theme for B2B enterprise sales proposals, methodology decks, solution architecture, project roadmaps, and TOR-compliance documents. Premium-enterprise-advisor mood with a soft edge — confident, calm, technical without being aggressive. Cool palette built on iCE Blue and iCE Cyan, with glass/metallic 3D infographic style and bilingual Thai+English hierarchy. Use when the customer is iCE Consulting itself, when the user requests iCE-branded output, or when the deck must follow iCE Corporate Identity. Pairs cleanly with Oracle, NetSuite, SAP, and Microsoft vendor accents because the core palette is cool-neutral.",
+  "colors": {
+    "primary": "#1E66A4",
+    "secondary": "#41A8B5",
+    "accent": "#7BC9D2",
+    "background": "#FFFFFF",
+    "text": "#1E2937",
+    "muted": "#595959"
+  },
+  "darkMode": {
+    "primary": "#41A8B5",
+    "secondary": "#7BC9D2",
+    "accent": "#1E66A4",
+    "background": "#0F1B2D",
+    "text": "#F4F6F8",
+    "muted": "#9CA3AF"
+  },
+  "fonts": {
+    "headerEN": "Raleway",
+    "bodyEN": "Open Sans",
+    "headerTH": "Kanit",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "premium-advisor-soft-edge",
+  "cornerRadius": 8,
+  "lineWeight": 1.5,
+  "chartCycle": [
+    "#1E66A4",
+    "#41A8B5",
+    "#7AA8CC",
+    "#7BC9D2",
+    "#194F7A",
+    "#A8C7E0"
+  ],
+  "useDarkMode": false,
+  "extendedPalette": {
+    "iceBlue95": "#194F7A",
+    "iceBlue80": "#2B7AC0",
+    "iceBlue50": "#7AA8CC",
+    "iceBlue30": "#A8C7E0",
+    "iceBlue10": "#E5EEF5",
+    "iceCyan50": "#7BC9D2",
+    "iceCyan10": "#DAEEF1",
+    "coolGrayLight": "#F4F6F8",
+    "midGray": "#9CA3AF"
+  },
+  "semanticColors": {
+    "success": "#16A34A",
+    "warning": "#D97706",
+    "error": "#DC2626",
+    "info": "#41A8B5"
+  },
+  "gradients": {
+    "headerDiagonal": {
+      "direction": "135deg",
+      "stops": ["#1E66A4", "#41A8B5"]
+    },
+    "headerHorizontal": {
+      "direction": "90deg",
+      "stops": ["#1E66A4", "#41A8B5"]
+    },
+    "block3DTriTone": {
+      "top": "#7BC9D2",
+      "mid": "#41A8B5",
+      "base": "#1E66A4"
+    }
+  },
+  "typography": {
+    "h1TitleEN": { "size": 40, "weight": "ExtraBold", "color": "#1E2937" },
+    "h1SubTH": { "size": 24, "weight": "Regular", "color": "#595959" },
+    "h2Section": { "size": 24, "weight": "Bold", "color": "#1E66A4" },
+    "h3Item": { "size": 19, "weight": "Bold", "color": "#1E2937" },
+    "body": { "size": 13, "weight": "Regular", "color": "#595959" },
+    "caption": { "size": 10, "weight": "Regular", "color": "#9CA3AF" }
+  },
+  "layoutPatterns": {
+    "patternA": "two-column-split — Core Principles 45% + Visualization 55% + bottom Toolset gallery",
+    "patternB": "horizontal-tech-flow — Source Systems → Connector → Destination Cloud → Outputs",
+    "patternC": "phase-grid-3x2 — 6 phase cards with check-icon bullets and top banner",
+    "patternD": "timeline-swimlane — milestone diamonds + horizontal RACI bars + bottom phase axis"
+  },
+  "infographicStyle": {
+    "iconStyle": "isometric-3D, glass-metallic, 15-25deg tilt, soft drop shadow 15-25% opacity",
+    "iconColorRange": "monochromatic blue-cyan (#7AA8CC to #41A8B5)",
+    "pyramidTiers": "max 3, top #41A8B5 + mid #7AA8CC + base #1E66A4",
+    "diamondMarker": "isometric cube, 1.5-2x larger than icon, used for phase boundary",
+    "cardStyle": "white fill, 8px radius, #A8C7E0 border 1px, no shadow",
+    "connectorStyle": "2px stroke #41A8B5 solid arrow OR gradient pipe for secure connection"
+  },
+  "antiPatterns": [
+    "no colors outside palette (purple, orange, pink) in main content",
+    "no mixing flat and 3D icons in same slide",
+    "no heavy shadows or saturated gradients",
+    "Thai title must not be larger than English title",
+    "no plain black bullets — use cyan check icon",
+    "no navy full-page background in content slides",
+    "no emojis in body content",
+    "no logo in both corners on same slide"
+  ],
+  "logoPlacement": {
+    "coverSlide": "top-left",
+    "contentSlide": "top-right",
+    "footerMode": "bottom-left with page number bottom-right"
+  },
+  "source": "Distilled from 6 real iCE Consulting deliverables + iCE Corporate Identity Guideline",
+  "version": "V01R01",
+  "dateCreated": "2026-05-15"
+}

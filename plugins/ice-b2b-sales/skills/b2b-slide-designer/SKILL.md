@@ -1,0 +1,221 @@
+---
+name: b2b-slide-designer
+description: "Creative presentation design advisor for B2B. Matches and selects the right style, theme, and template based on iCE Corporate Identity (CI) and user requirements. Provides Designer-Brief level specifications for 8 templates: Linen, Arctic, Cobalt, Onyx, Amber, Whiteboard, iCE-CI, and iCE-Propose. Each template ships with detailed playbook in Thai, plus full color/typography/grid/spacing/iconography/animation/accessibility specs that work for both PPTX and Word output. Trigger especially when the user mentions iCE Consulting branding, iCE proposal, iCE-themed deck, Proposal layout, Solution Architecture diagram, Project Roadmap with RACI, or any iCE-issued document."
+---
+
+# B2B Slide Designer (V02R02 — 2026-06-03)
+
+Skill นี้ช่วยให้ผู้ใช้งานเลือกและออกแบบ Presentation Style ระดับมืออาชีพที่สอดคล้องกับ
+**iCE Corporate Identity (CI)** ตลอดทั้ง 7 Template โดยให้ Designer-Brief Specification
+ครอบคลุม Color System, Typography Hierarchy, Grid, Spacing, Image Treatment,
+Iconography, Animation, Accessibility และ 15 Layout Patterns สำหรับการสร้างทั้ง
+PowerPoint (.pptx) และ Microsoft Word (.docx)
+
+## 1. Core Capabilities
+
+1.  **CI Alignment** — ทุก Template ผสาน iCE Main Blue (`#1E66A4`) และ iCE Secondary Blue (`#41A8B5`)
+    เป็นสี Accent หลักโดยอัตโนมัติ
+2.  **Style Matching** — แนะนำ Template ที่เหมาะสมที่สุดตามวัตถุประสงค์ ผู้ฟัง และโทน
+    ของการนำเสนอ
+3.  **Designer-Brief Output** — ให้ Hex Color, Font Stack, Grid System, Spacing Scale,
+    Iconography Style, Image Treatment และ Layout Pattern อย่างละเอียด
+4.  **Multi-format Support** — Specification ใช้ได้ทั้ง PPTX (16:9 หรือ 4:3) และ Word
+    (A4 Portrait/Landscape)
+5.  **15-Layout Playbook** — แต่ละ Template มี 15 Layout Patterns พร้อมการวาง Header
+    รูปภาพ และ Text ให้เลือกใช้ตามประเภทเนื้อหา
+
+## 2. Available Templates
+
+| # | Template | Concept | Best For |
+| :--- | :--- | :--- | :--- |
+| 1 | **Linen** | Natural & Elegant | Soft Proposal, HR, Sustainability, Brand Story |
+| 2 | **Arctic** | Modern & Crisp | Tech Solution, Software Demo, Innovation Pitch |
+| 3 | **Cobalt** | Strong Corporate | Executive Briefing, Financial Review, Annual Report |
+| 4 | **Onyx** | Premium Dark | Luxury Brand, High-end Consulting, Keynote |
+| 5 | **Amber** | Energetic & Warm | Marketing Pitch, Creative Workshop, Growth Strategy |
+| 6 | **Whiteboard** | Collaborative & Sketchy | Internal Brainstorming, Agile Update, Training |
+| 7 | **iCE-CI** | Official Corporate Identity | All iCE Branded Material (Standard Default) |
+| 8 | **iCE-Propose** | Premium Advisor with Soft Edge | iCE Proposal, Solution Architecture, Roadmap, TOR Response |
+
+## 3. Template Selection Matrix
+
+| Decision Criterion | Linen | Arctic | Cobalt | Onyx | Amber | Whiteboard | iCE-CI | iCE-Propose |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| C-Suite Audience | ◐ | ◐ | ● | ● | ○ | ○ | ● | ● |
+| Technical Audience | ○ | ● | ◐ | ● | ○ | ◐ | ◐ | ● |
+| External / Customer | ● | ● | ● | ● | ● | ◐ | ● | ● |
+| Internal / Team | ◐ | ◐ | ◐ | ○ | ● | ● | ● | ◐ |
+| Formal Tone | ● | ◐ | ● | ● | ○ | ○ | ● | ● |
+| Creative / Pitch Tone | ◐ | ● | ○ | ◐ | ● | ● | ◐ | ● |
+| Print Friendly | ● | ● | ◐ | ○ | ● | ● | ● | ◐ |
+| Dark Room Projection | ○ | ◐ | ● | ● | ◐ | ○ | ◐ | ● |
+| Solution Architecture | ○ | ● | ◐ | ◐ | ○ | ○ | ◐ | ● |
+| Proposal / RFP / TOR | ◐ | ◐ | ● | ◐ | ○ | ○ | ● | ● |
+| Roadmap with RACI | ◐ | ● | ◐ | ◐ | ○ | ◐ | ◐ | ● |
+
+Legend: ● Highly Recommended  |  ◐ Suitable  |  ○ Not Recommended
+
+## 4. How to Use
+
+### Step 1 — Identify User Intent
+- ใครคือผู้ฟัง (Audience)?
+- โทนต้องการแบบใด (Formal / Creative / Technical / Internal)?
+- ใช้พื้นที่ใด (Projector / Print / Digital / Email Attachment)?
+
+### Step 2 — Select Style
+- ใช้ Section 3 Selection Matrix เป็นเครื่องมือคัดกรอง
+- กรณีไม่แน่ใจ ใช้ **iCE-CI** เป็น Default
+
+### Step 3 — Load Design Reference
+อ่านไฟล์ Reference ของ Template ที่เลือก:
+- `references/template_linen.md`
+- `references/template_arctic.md`
+- `references/template_cobalt.md`
+- `references/template_onyx.md`
+- `references/template_amber.md`
+- `references/template_whiteboard.md`
+- `references/template_ice_ci.md`
+- `references/template_ice_propose.md` (สำหรับงาน Proposal / Architecture / Roadmap ที่ต้องการ 3D infographic)
+
+### Step 4 — Apply 15-Layout Playbook
+แต่ละ Reference มี 15 Layout Patterns ให้เลือก ตั้งแต่ Title, Section Divider,
+Two-Column, Image-led, Data-led, Quote, Process, Comparison ไปจนถึง Closing
+
+### Step 5 — Generate Output
+- สำหรับ PPTX → Pair กับ Skill `pptx` หรือ `b2b-presentation-creator`
+- สำหรับ Word → Pair กับ Skill `docx`
+
+## 5. Quality Standards
+
+| Standard | Requirement |
+| :--- | :--- |
+| Consistency | คง Font Family และ Color Palette ตลอดทั้ง Deck |
+| Readability | Body Text ขนาดอย่างน้อย 18pt บน PPTX, 11pt บน Word |
+| Contrast | คะแนน WCAG AA ขั้นต่ำ 4.5:1 สำหรับ Body Text |
+| Thai Language | คำอธิบายและตัวอย่างเนื้อหาทั้งหมดเป็นภาษาไทยเชิงธุรกิจ |
+| iCE CI | ทุก Template ต้องมี iCE Blue เป็นองค์ประกอบที่มองเห็นได้ |
+
+## 5.5. Font Pairing Reference (TH + EN Visual Balance) — V02R01 addition 2026-05-24
+
+> **Established 2026-05-24 จาก User-provided font_test.pptx visual comparison + TQR Project test (2026-05-24).**
+> ใช้เมื่อ Template ไม่ระบุ Font ชัดเจน หรือเมื่อสร้าง Custom Designer-Brief
+
+### Approved Font Whitelist (Audience-Driven Tier)
+
+| Tier | Font (TH+EN unified) | Use Case | Trade-off |
+| :--- | :--- | :--- | :--- |
+| **T1 Premium** | **Sukhumvit Set** | Executive Pitch, Board Paper, Customer Proposal | macOS native; ต้อง Embed บน Windows |
+| **T1 Premium Alt** | **IBM Plex Sans Thai** | Modern Brand, Tech Company Pitch | Free OFL license; cross-platform ดีกว่า Sukhumvit |
+| **T2 Business** | **Sarabun** | SME / Mid-market Proposal, Business Case | Google Fonts free; weight options ครบ |
+| **T2 Business Alt** | **Noto Sans Thai** | Cross-platform Modern, Wide Distribution | Google Fonts free; Adobe-style design |
+| **T3 Classic** | **TH SarabunPSK** | TOR Response, e-GP, GFMIS, ดุษฎีนิพนธ์, ราชการ | sipa.or.th free; **มาตรฐานราชการไทย** |
+| **T4 Universal** | **Tahoma** | Internal QBR/EBR, Working Doc, Handover | ติดมากับ Windows+macOS; ไม่ต้อง Embed |
+
+### 5.5.1 Embed-Safety (customer-facing decks ที่ส่งออกนอกเครื่อง) — KD V01R01 2026.06.03
+
+Whitelist column "Trade-off" บอกว่า font ไหน "ต้อง Embed" แต่ **embed ได้หรือไม่ ขึ้นกับ fsType + เป็น static ไหม** ตารางนี้คือผล**ตรวจจริงจากเครื่อง** (fontTools) — ใช้เลือก font ตอนงานต้อง embed:
+
+| Font | fsType จริง | Variable? | Embed | หมายเหตุ |
+| :--- | :--- | :--- | :--- | :--- |
+| **Sarabun** | 0x0000 Installable | static | ✅ เต็ม | embed-safe หลัง normalize |
+| **IBM Plex Sans Thai** | 0x0000 Installable | static | ✅ เต็ม | embed-safe หลัง normalize |
+| **Kanit** | 0x0000 Installable | static | ✅ เต็ม | embed-safe หลัง normalize |
+| **TH Sarabun New** | 0x0000 Installable | static | ✅ เต็ม | embed-safe หลัง normalize |
+| **Open Sans** | 0x0000 Installable | ⚠️ **VARIABLE** | ✅ ต้อง instance | instancer → static **ก่อน** embed (variable embed ไม่ได้) |
+| **Sukhumvit Set** | 0x0004 Preview&Print | static | ⚠️ read-only | embed ได้แต่ผู้รับ**แก้ข้อความไม่ได้** + เป็น macOS proprietary (ระวังลิขสิทธิ์) |
+| **Tahoma** | 0x0008 Editable | static | ✅ (ไม่จำเป็น) | T4 มีในทุกเครื่อง → ไม่ต้อง embed |
+
+**กฎ embed-safe (ก่อนเลือก font ให้ deck ที่จะ embed):** ทุก font ต้อง (1) **static** (Variable → instancer ก่อน — เช่น Open Sans local เป็น variable) (2) **fsType ≠ 0x0002 Restricted** (3) **normalize ผ่าน fontTools** (round-trip — แม้ static ก็ต้อง กัน "General Failure")
+
+**Embed-safe pairs ที่แนะนำ (SIL OFL — ฝังถูกกฎหมาย, verified):** Body = Open Sans↔Sarabun · Heading = Raleway↔Kanit · Alt = Inter↔IBM Plex Sans Thai
+
+> **การ embed ทำที่ deliverable-gen** ด้วย `_lib/embed_fonts_pptx.py` (จัดการ 5 เงื่อนไข + normalize + validate ครบ) — skill นี้แค่**เลือก font ให้ embed-safe** แล้วส่ง spec ต่อ. ⛔ ห้ามใช้ LibreOffice `EmbedFonts` (ไม่ embed จริง + พัง 16:9). ตรวจสุดท้ายต้องเปิด **PowerPoint จริง** (qlmanage = false-green)
+
+### Audience-Driven Font Selection Algorithm
+
+```
+IF audience contains ("C-level" OR "Executive" OR "Board" OR "Customer Pitch"):
+   → Sukhumvit Set (T1)
+ELSE IF audience contains ("ราชการ" OR "TOR" OR "Public Sector" OR "e-GP" OR "GFMIS" OR "ดุษฎีนิพนธ์"):
+   → TH SarabunPSK (T3)
+ELSE IF audience contains ("Internal" OR "QBR" OR "EBR" OR "Working" OR "Cross-platform"):
+   → Tahoma (T4)
+ELSE IF audience contains ("SME" OR "Mid-market" OR "Business Case"):
+   → Sarabun (T2)
+ELSE:
+   → Sukhumvit Set (T1 default — assume customer-facing)
+```
+
+### Template-to-Font Default Mapping
+
+| Template | Recommended Font | Rationale |
+| :--- | :--- | :--- |
+| **iCE-Propose** (Customer Proposal) | Sukhumvit Set | T1 Premium — customer-facing |
+| **iCE-CI** (Corporate Identity) | Sukhumvit Set | T1 Premium — brand standard |
+| **Cobalt** (Executive Pitch) | Sukhumvit Set | T1 Premium — executive audience |
+| **Onyx** (Premium Dark) | IBM Plex Sans Thai | T1 Alt — modern brand vibe |
+| **Linen** (Soft Business) | Sarabun | T2 Business — mid-market |
+| **Arctic** (Clean Minimal) | Noto Sans Thai | T2 Alt — cross-platform |
+| **Amber** (Warm Marketing) | Sarabun | T2 Business — marketing reach |
+| **Whiteboard** (Workshop/Internal) | Tahoma | T4 Universal — internal use |
+
+### Forbidden Combinations (Visual Imbalance — Auto-Warn)
+
+❌ **Do NOT mix** these in single Deck/Doc:
+
+| Combination | Why Forbidden |
+| :--- | :--- |
+| Sarabun (TH) + Calibri (EN) | Sarabun x-height ~80% ของ Calibri ที่ pt เดียวกัน |
+| Sukhumvit Set (TH) + Calibri (EN) | Imbalance แบบเดียวกับ Sarabun |
+| TH SarabunPSK (TH) + Times New Roman (EN) | Serif/Sans-serif clash + size mismatch |
+| Cordia New / Angsana New + Modern Latin font | Cordia เป็น 1990s metric — ตีกับ Latin สมัยใหม่ |
+| Browallia New + Calibri | "Scanner output" look |
+| Arial เดี่ยวสำหรับ TH/EN mixed | Latin dominates; Thai fallback → 2 ฟอนต์ในประโยคเดียว |
+| Kanit (TH) + Calibri (EN) | Kanit Latin หนักกว่า Thai → hierarchy เพี้ยน |
+
+### Bilingual Pairing Rule (CRITICAL)
+
+ทุก Designer-Brief สำหรับ Thai/EN mixed Output **ต้อง specify ทั้ง Latin Font และ Complex-Script Font** (สำหรับ PPTX = `latin` + `cs` typeface; สำหรับ Word = `w:ascii` + `w:cs`). ถ้าไม่ตั้ง `cs` Windows จะ fallback ไป Browallia New หรือ Cordia New ทำให้ visual แตก
+
+**Correct Designer-Brief sample:**
+```yaml
+font_family:
+  primary: "Sukhumvit Set"
+  latin_typeface: "Sukhumvit Set"
+  complex_script_typeface: "Sukhumvit Set"  # CRITICAL — ห้ามเว้นว่าง
+  fallback: "Tahoma"
+```
+
+### Visual Parity Test (verify in Designer-Brief)
+
+ทุก Font ที่เลือกต้องผ่าน Visual Parity Test:
+1. Render ประโยค "การประยุกต์ใช้ AI บน Oracle NetSuite Cloud ERP" ที่ 18pt
+2. ตรวจสอบ Thai chars (`บน`, `การ`, `ใช้`) สูงเท่ากับ Latin chars (`AI`, `Oracle`, `ERP`) หรือไม่
+3. ถ้าต่ำกว่า ~85% → swap ไปใช้ Tier ที่เหมาะสมกว่า
+
+### Reference Files
+
+- `${HOME}/Downloads/font_test.pptx` (User-provided 2026-05-24 — 13-font visual comparison sample)
+- `pptx-builder-agent.md V02R01` (Audience-Driven Matrix implementation)
+- `docs-builder-agent.md V02R01` (Word equivalent)
+- `qa-master-agent.md V01R04` (Dimension 7 Font Quality validator)
+
+## 6. Companion Skills
+
+- `pptx` — เครื่องมือสร้างไฟล์ PPTX
+- `docx` — เครื่องมือสร้างไฟล์ Word
+- `b2b-presentation-creator` — Theme/Layout Engine สำหรับ Deck เต็มรูปแบบ
+- `theme-factory` — Color/Theme Library
+- `canvas-design` — สำหรับ Visual Asset และ Poster
+- `brand-guidelines` — สำหรับ Brand Compliance
+- `pre-flight-deck` — Quality Gate ก่อนสร้าง Deck
+
+## 7. Versioning
+
+| Version | Date | Highlights |
+| :--- | :--- | :--- |
+| V01R01 | 2026-04-28 | Designer-Brief expansion + iCE-CI as 7th Template + 15 Layout Patterns per Template + Multi-format (PPTX/Word) support |
+| V01R02 | 2026-05-15 | (See prior release notes) |
+| **V02R02** | **2026-06-03** | **Added §5.5.1 Embed-Safety — fsType (tested in-machine via fontTools) + Variable-font warning (Open Sans local = variable) + Sukhumvit Set = Preview&Print read-only + embed-safe SIL OFL pairs + pointer to deliverable-gen `_lib/embed_fonts_pptx.py` + ⛔ no LibreOffice EmbedFonts. Source: KD_PPTX-Embedded-Font-TH-EN_V01R02** |
+| **V02R01** | **2026-05-24** | **Added Section 5.5 Font Pairing Reference — Audience-Driven Tier (T1-T4) + Approved Whitelist + Forbidden Combinations + Bilingual Pairing Rule (latin+cs). Source: User-provided font_test.pptx 2026-05-24 + TQR Test** |
+| V01R02 | 2026-05-15 | Added 8th Template **iCE-Propose** — distilled from 6 real iCE deliverables; introduces 4 Signature Layout Patterns (Two-Column Split, Horizontal Tech Flow, 3×2 Phase Grid, Timeline+Swimlane), 3D Glass-Metallic Infographic system, Bilingual EN-first Hierarchy rule, and Verified Color Pairings from production work |

@@ -1,0 +1,318 @@
+{
+  "metadata": {
+    "deckType": "Proposal & Business Case",
+    "customer": "Regional Tech HQ (anon)",
+    "language": "en",
+    "version": "V01R01",
+    "date": "2026-04-26"
+  },
+  "slides": [
+    {
+      "layout": "title-hero",
+      "title": "Microsoft Dynamics 365 + Power Platform Regional Rollout",
+      "subtitle": "Regional Tech HQ — APAC Unified Workload Proposal"
+    },
+    {
+      "layout": "two-column",
+      "title": "Executive Summary",
+      "left": [
+        "Recommendation: Proceed with 18-month rollout of Dynamics 365 Sales, Customer Service, and Power Platform",
+        "Investment: $3.2M (software, services, training)",
+        "Key Business Driver: Unify fragmented sales and customer data across 8 APAC markets"
+      ],
+      "right": [
+        "Expected ROI: 35% year 1; payback in 28 months",
+        "Primary Benefits: 40% faster deal closure, 25% higher CSAT, 20% sales productivity gain",
+        "Risk: Low — Microsoft has proven track record in APAC SaaS"
+      ]
+    },
+    {
+      "layout": "stat-callout",
+      "value": "$12M",
+      "label": "Annual Revenue at Risk Today",
+      "context": "Lack of real-time customer visibility; 9 different CRM systems; delayed pipeline reporting"
+    },
+    {
+      "layout": "two-column",
+      "title": "Why This Matters Now: Regulatory & Competitive Pressure",
+      "left": [
+        "Data Sovereignty: APAC governments tightening data residency rules (PDPA, RMDP, GDPR UK).",
+        "Competitive Threat: Rivals unified on single CRM; we're fragmented.",
+        "Cloud Maturity: 60% of regional competitors already on Azure/Dynamics."
+      ],
+      "right": [
+        "Risk of Inaction: Miss 18-month opportunity; competitors consolidate further.",
+        "Regulatory Exposure: Fines for non-compliance with APAC data rules (up to 4% of revenue).",
+        "Customer Experience Debt: Each contact repeated across 9 systems; errors cascade."
+      ]
+    },
+    {
+      "layout": "icon-text-rows",
+      "title": "Pain Themes — What We Heard",
+      "rows": [
+        {
+          "header": "Theme 1: Fragmented Sales Data",
+          "body": "9 regional systems; no single view of customer; reps re-enter data per market. Sales leader: 'I don't know our true pipeline until month-end.'"
+        },
+        {
+          "header": "Theme 2: Slow Deal Cycles",
+          "body": "No real-time opportunity scoring; forecasts delayed 2 weeks. 40% deal slip because handoff between sales and CS is chaotic."
+        },
+        {
+          "header": "Theme 3: Customer Service Islands",
+          "body": "Each market runs own support ticketing. Escalations take days; customers re-explain issues 3x. CSAT stuck at 72%."
+        },
+        {
+          "header": "Theme 4: Regulatory Compliance Gaps",
+          "body": "No audit trail for APAC data flows. PDPA audit findings: 'Data dispersed, no central control.' Risk of penalty."
+        }
+      ]
+    },
+    {
+      "layout": "two-column",
+      "title": "What Success Looks Like",
+      "left": [
+        "Before: 9 systems, 6+ months deal cycle, 72% CSAT",
+        "Business Outcomes: 4 months faster; 92% CSAT; 1 view per customer"
+      ],
+      "right": [
+        "Sales dashboard shows real-time pipeline across all markets",
+        "Customer service resolves 90% of tickets without escalation",
+        "Finance sees accurate ARR and gross margin by customer, instantly",
+        "Data governance: PDPA-audit ready in 15 minutes (vs. 8 weeks today)"
+      ]
+    },
+    {
+      "layout": "two-column",
+      "title": "Our Solution — Microsoft Dynamics 365 + Power Platform",
+      "left": [
+        "Core System: Dynamics 365 Sales (unified pipeline)",
+        "Service Module: Dynamics 365 Customer Service (ticketing, knowledge)",
+        "Automation: Power Automate (workflow orchestration)",
+        "Analytics: Power BI (real-time dashboards)",
+        "Integration: Azure Logic Apps (ERP, marketing platform, HRIS)"
+      ],
+      "right": [
+        "Why Microsoft: Cloud-native, APAC region, PDPA-compliant, low cost of ownership",
+        "Why Now: 18-month window before PDPA enforcement tightens (Q1 2027)",
+        "Regional Advantage: Azure data center in Singapore + Bangkok; <50ms latency"
+      ]
+    },
+    {
+      "layout": "icon-text-rows",
+      "title": "How Each Solution Solves Each Pain",
+      "rows": [
+        {
+          "header": "Pain: 9 Fragmented Systems → Solution: Single Dynamics 365 Instance",
+          "body": "All 8 APAC countries on one platform; master data centralized; sync to local systems if needed"
+        },
+        {
+          "header": "Pain: Slow Deal Cycles → Solution: Sales Intelligence + Power BI",
+          "body": "AI-powered opportunity scoring; mobile alerts for at-risk deals; cycle time cut by 40%"
+        },
+        {
+          "header": "Pain: Service Silos → Solution: D365 Customer Service + Knowledge AI",
+          "body": "Cross-region ticket routing; AI chatbots resolve 50% before human touch; CSAT +20 points"
+        },
+        {
+          "header": "Pain: Compliance Gaps → Solution: Azure AD + Encryption + Audit Logs",
+          "body": "All APAC data stays in APAC region; compliance report auto-generated; ready for regulators"
+        }
+      ]
+    },
+    {
+      "layout": "icon-text-rows",
+      "title": "Why Microsoft Over Salesforce or SAP CRM",
+      "rows": [
+        {
+          "header": "Platform Flexibility",
+          "body": "Power Platform lets you build custom workflows without licensing new tools. Salesforce: $500/month/app. Us: $150/month."
+        },
+        {
+          "header": "APAC Data Residency",
+          "body": "Data stays in Singapore/Bangkok. Salesforce: Regional tier costs 2x more. SAP: No native APAC offering."
+        },
+        {
+          "header": "Integration Cost",
+          "body": "Azure Logic Apps + Dynamics = native connectors. Salesforce: MuleSoft middleware ($150K+). You save $200K."
+        },
+        {
+          "header": "Total Cost of Ownership",
+          "body": "5-year TCO: D365 $4.8M vs Salesforce $7.2M vs SAP $9.1M. Winner: Microsoft (35% cheaper)."
+        }
+      ]
+    },
+    {
+      "layout": "phased-timeline",
+      "title": "Implementation Timeline",
+      "phases": [
+        {
+          "name": "Phase 1: Foundation",
+          "duration": "Weeks 1-12",
+          "description": "Infrastructure, master data, user training. Go-live in Singapore and Australia."
+        },
+        {
+          "name": "Phase 2: Regional Rollout",
+          "duration": "Weeks 13-24",
+          "description": "Thailand, Malaysia, Indonesia. Knowledge transfer to regional teams."
+        },
+        {
+          "name": "Phase 3: Service Optimization",
+          "duration": "Weeks 25-36",
+          "description": "AI tuning, workflow optimization, cost reduction play."
+        },
+        {
+          "name": "Phase 4: Advanced Analytics",
+          "duration": "Weeks 37-52",
+          "description": "Predictive sales, customer lifetime value, expansion scoring."
+        }
+      ]
+    },
+    {
+      "layout": "table",
+      "title": "Investment Summary — 18-Month Rollout",
+      "headers": [
+        "Category",
+        "Cost (USD)",
+        "Notes"
+      ],
+      "rows": [
+        ["Software Licensing", "$1,200,000", "D365 Sales + Service seats; Power BI; 18 months prepaid"],
+        ["Professional Services", "$1,100,000", "Implementation partner; data migration; training; change mgmt"],
+        ["Infrastructure & Support", "$500,000", "Azure environment; premium support; training platform"],
+        ["Change Management", "$400,000", "Comms; training; helpdesk support for 12 months post-go-live"],
+        ["Total", "$3,200,000", "Includes all software, services, and 12 months post-launch support"]
+      ]
+    },
+    {
+      "layout": "two-column",
+      "title": "Total Cost of Ownership (5-Year View)",
+      "left": [
+        "Year 1: $3.2M (rollout + training)",
+        "Years 2-5: $400K/year (licenses + support)",
+        "5-Year Total: $4.8M"
+      ],
+      "right": [
+        "Comparison: Salesforce TCO 5yr = $7.2M (+50%)",
+        "Comparison: SAP CRM TCO 5yr = $9.1M (+89%)",
+        "Winner: Microsoft saves $2.4M vs Salesforce over 5 years"
+      ]
+    },
+    {
+      "layout": "two-column",
+      "title": "Return on Investment (5-Year Projection)",
+      "left": [
+        "Year 1: Deal cycle -2 months = $5M revenue acceleration",
+        "Year 1: Sales productivity +20% = $2M margin gain",
+        "Year 1: CSAT +20 points = 15% churn reduction = $3M ARR retained",
+        "Year 1 Total Benefit: $10M"
+      ],
+      "right": [
+        "Payback Period: 5 quarters (Year 1 Q4 + Q1 Y2)",
+        "Year 5 IRR: 45% (exceptional for enterprise software)",
+        "NPV (10% discount): $14.2M",
+        "Cumulative Benefit Year 1-5: $45M vs cost $4.8M"
+      ]
+    },
+    {
+      "layout": "two-column",
+      "title": "Risks & Mitigation",
+      "left": [
+        "User Adoption Risk: Complex change across 8 markets",
+        "Mitigation: $400K change mgmt budget; local champions; pilot-first approach",
+        "",
+        "Data Quality Risk: Master data is inconsistent across 9 systems",
+        "Mitigation: 8-week data cleansing sprint before go-live; governance rules enforced"
+      ],
+      "right": [
+        "Regulatory Risk: PDPA audits during rollout; delays",
+        "Mitigation: Compliance officer on steering committee; audit-ready checklist",
+        "",
+        "Performance Risk: Regional cloud latency; user experience poor",
+        "Mitigation: Azure Singapore + Bangkok regions; <50ms SLA; failover to geographically closest center"
+      ]
+    },
+    {
+      "layout": "icon-text-rows",
+      "title": "Customer References — Similar Scale & Geography",
+      "rows": [
+        {
+          "header": "Tech Firm, 300-person regional HQ (Singapore)",
+          "body": "Unified 5 regional CRM instances on D365. Cycle time: 9 months → 5.5 months. CSAT: 75% → 91%. Go-live: Mar 2024."
+        },
+        {
+          "header": "SaaS Company, 200-person APAC hub (Bangkok)",
+          "body": "Migrated from Salesforce to D365. Annual software cost: $500K → $280K. ROI in Year 1. Go-live: Sep 2023."
+        },
+        {
+          "header": "Financial Services, Multi-Country (Singapore/HK/Bangkok)",
+          "body": "Dynamics 365 + Power BI for credit sales + audit. PDPA compliance: audit-ready in 2 hours (vs 6 weeks before). Go-live: Jan 2024."
+        }
+      ]
+    },
+    {
+      "layout": "stat-callout",
+      "value": "92%",
+      "label": "Average CSAT Achieved by D365 Customers in APAC",
+      "context": "Microsoft customer data, YoY 2023-2024. You: 72% today. Improvement potential: +20 points."
+    },
+    {
+      "layout": "icon-text-rows",
+      "title": "What We Need to Move Forward",
+      "rows": [
+        {
+          "header": "Decision — Steering Committee Approval",
+          "body": "CFO + CMO + CHRO sign-off on $3.2M investment; timeline commitment through Q4 2026"
+        },
+        {
+          "header": "Data — Master Data Readiness",
+          "body": "Export of customer, opportunity, and account master data from all 9 systems by May 31"
+        },
+        {
+          "header": "Engagement — Implementation Partner Selection",
+          "body": "Microsoft or Avanade to execute. Final SOW and resource plan by June 15."
+        }
+      ]
+    },
+    {
+      "layout": "two-column",
+      "title": "Closing: Why This Proposal Wins",
+      "left": [
+        "1. Solves Real Problem: $12M at-risk revenue from fragmentation",
+        "2. Rapid ROI: Payback in 5 quarters; $45M benefit over 5 years",
+        "3. Market-Leading Tech: Microsoft's APAC footprint, PDPA readiness"
+      ],
+      "right": [
+        "4. Proven References: 3 similar-scale wins in region; all exceeded expectations",
+        "5. Risk-Mitigated: Experienced partner; phased approach; governance in place",
+        "6. Competitive Urgency: 18-month window before APAC regulatory tightening (Q1 2027)"
+      ]
+    },
+    {
+      "layout": "phased-timeline",
+      "title": "Decision Checkpoint: May 10, 2026",
+      "phases": [
+        {
+          "name": "April 26-May 3",
+          "duration": "1 week",
+          "description": "Q&A, financial deep-dive, reference calls to similar customers"
+        },
+        {
+          "name": "May 4-10",
+          "duration": "1 week",
+          "description": "Steering committee prepares recommendation"
+        },
+        {
+          "name": "May 10",
+          "duration": "Decision Day",
+          "description": "Board-level approval; sign SOW; declare intent to proceed"
+        },
+        {
+          "name": "May 17+",
+          "duration": "Go",
+          "description": "Foundation phase begins; partner mobilization; master data sprint"
+        }
+      ]
+    }
+  ]
+}

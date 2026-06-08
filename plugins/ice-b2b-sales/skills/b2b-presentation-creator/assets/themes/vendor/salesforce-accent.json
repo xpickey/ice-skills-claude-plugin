@@ -1,0 +1,46 @@
+{
+  "name": "salesforce-accent",
+  "displayName": "Salesforce Accent",
+  "category": "vendor",
+  "description": "Future Slate base with Salesforce blue accent. Salesforce's identity is customer-centric and energetic. Features modern, technically credible aesthetic with Salesforce blue for customer outcomes, revenue metrics, and 'Why Salesforce?' positioning. Dark-mode-friendly. Use when pitching Salesforce CRM or platform to customer-centric enterprise buyers.",
+  "colors": {
+    "primary": "#0F172A",
+    "secondary": "#94A3B8",
+    "accent": "#00A1E0",
+    "background": "#FFFFFF",
+    "text": "#0F172A",
+    "muted": "#64748B"
+  },
+  "darkMode": {
+    "primary": "#0F172A",
+    "secondary": "#94A3B8",
+    "accent": "#00A1E0",
+    "background": "#0F172A",
+    "text": "#F8FAFC",
+    "muted": "#94A3B8"
+  },
+  "fonts": {
+    "headerEN": "Inter Tight",
+    "bodyEN": "Inter",
+    "headerTH": "IBM Plex Sans Thai",
+    "bodyTH": "IBM Plex Sans Thai",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "modern-technical",
+  "cornerRadius": 4,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#0F172A",
+    "#070B15",
+    "#94A3B8",
+    "#00A1E0",
+    "#64748B",
+    "#D4DDE7"
+  ],
+  "useDarkMode": true
+}

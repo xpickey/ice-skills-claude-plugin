@@ -1,0 +1,120 @@
+{
+  "name": "Solution & Demo Deck",
+  "description": "Solutioning stage. Champion has been qualified; senior stakeholders are joining. Goal is to show how the proposed solution maps to the customer's pain, and to set up a credible technical conversation.",
+  "length": "12–18 slides",
+  "audience": "Champion + Economic Buyer + technical evaluators (CIO / CTO / Head of Operations)",
+  "tone": "Confident, evidence-led. The deck mixes narrative with visual storytelling.",
+  "slides": [
+    {
+      "slide": 1,
+      "layout": "title-hero",
+      "purpose": "Title",
+      "content_guidance": "Customer name + 'Proposed Solution' + date"
+    },
+    {
+      "slide": 2,
+      "layout": "stat-callout",
+      "purpose": "Why We're Here",
+      "content_guidance": "One-sentence framing of the customer's central challenge (use large stat format)"
+    },
+    {
+      "slide": 3,
+      "layout": "2x3-grid",
+      "purpose": "What We Heard",
+      "content_guidance": "4–6 pain points captured during discovery, each in customer language"
+    },
+    {
+      "slide": 4,
+      "layout": "two-column",
+      "purpose": "What Success Means to You",
+      "content_guidance": "Outcome statements, ideally quoted from the discovery transcript"
+    },
+    {
+      "slide": 5,
+      "layout": "process-flow",
+      "purpose": "Our Approach",
+      "content_guidance": "The engagement / methodology at a glance (3–5 phases)"
+    },
+    {
+      "slide": 6,
+      "layout": "half-bleed-image",
+      "purpose": "Solution Architecture",
+      "content_guidance": "High-level diagram — components, integrations, key data flows. See 07-infographics.md for diagram patterns"
+    },
+    {
+      "slide": 7,
+      "layout": "2x3-grid",
+      "purpose": "Module / Capability Map",
+      "content_guidance": "Modules or capabilities, each tied to one pain point from slide 3"
+    },
+    {
+      "slide": 8,
+      "layout": "half-bleed-image",
+      "purpose": "Walkthrough — Day in the Life",
+      "content_guidance": "Persona-led scenario (5–7 frames). Use specific persona name (e.g., 'Khun Somchai, AP Specialist'), not generic 'user'"
+    },
+    {
+      "slide": 9,
+      "layout": "icon-text-rows",
+      "purpose": "Where the Magic Happens",
+      "content_guidance": "3–5 differentiators, each a sentence + one supporting fact"
+    },
+    {
+      "slide": 10,
+      "layout": "half-bleed-image",
+      "purpose": "Integration & Data",
+      "content_guidance": "Existing systems + planned integrations + data flow direction (workflow diagram)"
+    },
+    {
+      "slide": 11,
+      "layout": "icon-text-rows",
+      "purpose": "Security & Compliance",
+      "content_guidance": "3–5 standards/controls (ISO 27001, PDPA, etc.). See legal-it-thailand-cloud skill for Thai govt standards"
+    },
+    {
+      "slide": 12,
+      "layout": "phased-timeline",
+      "purpose": "Implementation Approach",
+      "content_guidance": "Phases with weeks/months, not specific dates"
+    },
+    {
+      "slide": 13,
+      "layout": "stat-callout-grid",
+      "purpose": "Customer References",
+      "content_guidance": "1–3 references from same industry or similar size"
+    },
+    {
+      "slide": 14,
+      "layout": "icon-text-rows",
+      "purpose": "What We Need from You",
+      "content_guidance": "Decisions, access, sponsorship commitments"
+    },
+    {
+      "slide": 15,
+      "layout": "phased-timeline",
+      "purpose": "Suggested Next Steps",
+      "content_guidance": "3–5 actions with owners and dates"
+    },
+    {
+      "slide": 16,
+      "layout": "half-bleed-image",
+      "purpose": "Appendix — Technical Architecture",
+      "optional": true,
+      "content_guidance": "Deeper technical version of slide 6 (if architecture was simplified for executives)"
+    },
+    {
+      "slide": 17,
+      "layout": "half-bleed-image",
+      "purpose": "Appendix — Data Model",
+      "optional": true,
+      "content_guidance": "Detail diagram held in reserve"
+    },
+    {
+      "slide": 18,
+      "layout": "half-bleed-image",
+      "purpose": "Appendix — Screenshots / Demo Walkthrough",
+      "optional": true,
+      "content_guidance": "UI screenshots or additional demo frames"
+    }
+  ]
+}

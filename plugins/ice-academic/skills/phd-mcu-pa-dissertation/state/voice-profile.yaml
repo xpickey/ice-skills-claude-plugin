@@ -1,0 +1,159 @@
+# Voice Profile
+# ดุษฎีนิพนธ์ ปร.ด. รปศ. มจร
+# Schema Version: V01R01
+# Reference: 07-academic-thai-voice.md §6
+
+profile_metadata:
+  version: V01R01
+  last_updated: "2026-05-03"
+  mode: "default"  # default | extracted_from_user | synthesized_from_folder
+  source_files: []  # ลิสต์ของไฟล์ที่ใช้สังเคราะห์ Voice Profile
+  consistency_target: 85  # % minimum consistency across chapters
+
+# ─────────────────────────────────────────────
+# Default Profile — Standard for ปร.ด. รปศ. มจร
+# ─────────────────────────────────────────────
+
+default_profile:
+
+  first_person:
+    primary: "ผู้วิจัย"
+    forbidden:
+      - "ผม"
+      - "ดิฉัน"
+      - "ฉัน"
+      - "เรา"  # เลี่ยงในงานวิชาการ
+    examples:
+      - "ผู้วิจัยจึงสนใจศึกษา..."
+      - "ผู้วิจัยขอเสนอ..."
+      - "ผู้วิจัยพบว่า..."
+
+  sentence_length:
+    target_mean: 18.5
+    target_sd: 6.2  # >= 5 = Burstiness OK
+    short_sentences:
+      target_pct: 15  # 3-12 คำ
+      min_per_paragraph: 1
+    long_sentences:
+      target_pct: 12  # 25-35 คำ
+      min_per_paragraph: 1
+
+  sentence_opening:
+    variety_target: 5  # patterns per paragraph
+    distribution_target:
+      subject_first: 35
+      adverbial: 25
+      subordinate: 20
+      quote_reference: 15
+      other: 5
+
+  ai_vocabulary:
+    density_max: 4  # per 1,000 words
+    forbidden_thai: # CLAUDE.md §9.1
+      - "เป็นที่ทราบกันดีว่า"
+      - "ปฏิเสธไม่ได้ว่า"
+      - "อาจถือได้ว่า"
+      - "ดังที่กล่าวไว้ข้างต้น"
+      - "ในแง่หนึ่ง"
+      - "อาจกล่าวได้ว่า"
+    forbidden_dissertation: # 07-academic-thai-voice.md §2.2
+      - "ในยุคปัจจุบัน"
+      - "โลกในศตวรรษที่ 21"
+      - "ความท้าทายอันยิ่งใหญ่"
+      - "การพัฒนาอย่างไม่หยุดยั้ง"
+      - "เป็นที่ประจักษ์ชัด"
+    moderate_use_density_max: 1  # per 500 words
+
+  preferred_connectors:
+    - "ดังนั้น"
+    - "เนื่องจาก"
+    - "นอกจากนี้"
+    - "ทั้งนี้"
+    - "อย่างไรก็ตาม"
+    - "อนึ่ง"
+    - "เพราะเหตุนี้"
+    - "ในขณะเดียวกัน"
+
+  preferred_vocabulary:
+    academic:
+      - "พิจารณา"  # ไม่ใช่ "ดู"
+      - "ปรากฏ"  # ไม่ใช่ "เห็น"
+      - "ระบุ"  # ไม่ใช่ "บอก"
+      - "เสนอ"  # ไม่ใช่ "พูด"
+      - "วิเคราะห์"
+      - "สังเคราะห์"
+      - "ค้นพบ"  # ไม่ใช่ "เจอ"
+
+  soul_techniques:
+    s1_have_opinions:
+      use_in: ["บทอภิปราย"]
+      forbidden_in: ["บทนำ", "บทระเบียบวิธี"]
+    s2_vary_rhythm:
+      use_in: ["Key Findings", "Conclusions"]
+    s3_acknowledge_complexity:
+      use_in: ["Discussion", "Limitation"]
+    s4_first_person:
+      use_in: ["all chapters"]
+      consistency_required: true
+    s5_let_some_mess_in:
+      max_per_chapter: 2
+      forbidden_in: ["Abstract", "Methodology"]
+    s6_specific_reactions:
+      use_in: ["Results", "Discussion"]
+      consistency_required: true
+
+  tone:
+    register: "Academic Thai formal"
+    politeness: "สุภาพ ไม่อวดอ้าง"
+    forbidden_artifacts:
+      - "ครับ/ค่ะ"
+      - "นะ"
+      - "ก็"
+      - "Sure!"
+      - "Great question!"
+
+# ─────────────────────────────────────────────
+# Extracted User Profile (Mode B)
+# ─────────────────────────────────────────────
+# ใช้เมื่อ ผู้ใช้ส่งงานเขียนของตนเอง → Claude สกัด Profile
+
+extracted_user_profile: null  # Populate ภายหลัง
+
+# ─────────────────────────────────────────────
+# Synthesized Profile (Mode C)
+# ─────────────────────────────────────────────
+# ใช้เมื่อ ผู้ใช้ระบุ folder → Claude สังเคราะห์ Profile
+
+synthesized_profile: null  # Populate ภายหลัง
+
+# ─────────────────────────────────────────────
+# Active Profile (Profile ที่ Skill ใช้จริง)
+# ─────────────────────────────────────────────
+
+active_profile:
+  use: "default"  # default | extracted_user | synthesized
+  override_reason: null
+  applied_to_chapters: []
+  consistency_check_results: {}
+
+# ─────────────────────────────────────────────
+# Audit History
+# ─────────────────────────────────────────────
+
+audit_history:
+  - date: "2026-05-03"
+    chapter: "all"
+    voice_consistency_score: null
+    ai_detection_score: null
+    notes: "Initial profile created"
+
+# ─────────────────────────────────────────────
+# Usage Instructions
+# ─────────────────────────────────────────────
+# 1. Default ใช้ทันที — ผู้ใช้ไม่ต้องทำอะไร
+# 2. ถ้าผู้ใช้มีงานเขียนของตนเอง → ส่งให้ Claude → populate extracted_user_profile
+# 3. ถ้าต้องการสังเคราะห์จาก folder → populate synthesized_profile
+# 4. active_profile.use = profile ที่ Skill ใช้
+# 5. ทุก audit → append เข้า audit_history
+
+# Reference: 07-academic-thai-voice.md §6

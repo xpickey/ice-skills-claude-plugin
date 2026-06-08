@@ -1,0 +1,46 @@
+{
+  "name": "sap-accent",
+  "displayName": "SAP Accent",
+  "category": "vendor",
+  "description": "Civic Indigo base with SAP blue accent. SAP's identity is built on technical trustworthiness and enterprise stability. Features authoritative government aesthetic with SAP blue for transformation milestones, process-redesign moments, and 'Why SAP?' positioning. Use when pitching SAP S/4HANA, RISE, or BTP to enterprise buyers.",
+  "colors": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#0070F2",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#1A3D8F",
+    "secondary": "#E5E8EE",
+    "accent": "#0070F2",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Source Sans 3",
+    "bodyEN": "Source Serif 4",
+    "headerTH": "Sarabun",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "authoritative-restraint",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#1A3D8F",
+    "#0D1F5A",
+    "#E5E8EE",
+    "#0070F2",
+    "#5C5C5C",
+    "#C5CBD7"
+  ],
+  "useDarkMode": false
+}

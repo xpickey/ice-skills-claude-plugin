@@ -1,0 +1,403 @@
+{
+  "metadata": {
+    "skill_name": "b2b-solution-selling-skill",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-04-22T03:31:54Z",
+    "evals_run": [
+      0,
+      1,
+      2
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 0,
+        "time_seconds": 210.4,
+        "tokens": 100514,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Includes a SPIN sequence with explicitly weighted Implication and Need-payoff questions (>=4 Implication questions)",
+          "passed": true,
+          "evidence": "Section 3 has 6 Implication questions (I1\u2013I6) and 4 Need-payoff questions (N1\u2013N4)"
+        },
+        {
+          "text": "Includes a Challenger 6-step pitch (Warmer, Reframe, Rational Drowning, Emotional Impact, New Way, Your Solution)",
+          "passed": true,
+          "evidence": "Section 4 explicitly labeled all 6 steps: Warmer, Reframe, Rational Drowning, Emotional Impact, New Way, Your Solution"
+        },
+        {
+          "text": "Explicit Thai cultural calibration mentioned (kreng-jai, face, hierarchy, family-principal shadow buying centre)",
+          "passed": true,
+          "evidence": "Section 5C\u2013E with kreng-jai rules, face/naa examples, hierarchy/phu-yai protocols, family principal shadow buying centre"
+        },
+        {
+          "text": "Quantifies pain in THB (cost of close delay, audit risk, working capital, etc.)",
+          "passed": true,
+          "evidence": "Rational Drowning quantifies THB 9\u201311M close labor, THB 6\u20137M audit remediation, THB 8\u201315M restatement risk; total THB 20\u201330M/year"
+        },
+        {
+          "text": "Addresses SAP S/4HANA RISE and NetSuite competitive positioning specifically",
+          "passed": true,
+          "evidence": "Appendix includes objection scripts for SAP RISE (no modern controls) and NetSuite (custom code for consolidation)"
+        },
+        {
+          "text": "Specifies a primary commitment to ask for + a fallback commitment",
+          "passed": true,
+          "evidence": "Section 3 Commitment Asks: primary (peer CFO call + SA deep-dive), fallback (one-pager on control+speed)"
+        },
+        {
+          "text": "Walks in with explicit pre-call hypothesis (top 3 pains, EB hypothesis, Champion hypothesis, compelling event)",
+          "passed": true,
+          "evidence": "Section 1B lists three pains; Section 1C compelling event; Section 2E CFO as EB; Section 2C Controller as champion"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 0,
+        "time_seconds": 102.7,
+        "tokens": 96340,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Scores all 8 MEDDPICC elements explicitly (M, E, D, D, P, I, C, C) with traffic-light or numeric score",
+          "passed": true,
+          "evidence": "Scorecard: M=1, E=0, D=1, D=0, P=1, I=0, C=1, C=2 with RED/YELLOW status indicators"
+        },
+        {
+          "text": "Applies the Champion vs Coach vs Friend distinction to the FP&A Director (likely classifies as Coach, not Champion)",
+          "passed": true,
+          "evidence": "Explicitly: 'FP&A Director is a Coach, not a Champion' with evidence of lacking uncomfortable actions"
+        },
+        {
+          "text": "Names explicit kill criteria \u2014 the condition under which the seller will walk away",
+          "passed": true,
+          "evidence": "Section 3: 4 kill criteria listed with April 25 deadline (CFO 1:1, decision process, compelling event, response)"
+        },
+        {
+          "text": "Provides specific actions for this week (max 3) with element, action, owner, date",
+          "passed": true,
+          "evidence": "Section 4: 3 actions (Tue 23 CFO email, Wed 24 FP&A coaching, Thu 25 Finance Controller discovery) with owners"
+        },
+        {
+          "text": "Identifies seller-DNA derailers (e.g., Happy Ears, Alligator Arms, Single-threaded)",
+          "passed": true,
+          "evidence": "Seller DNA Coaching Note identifies Alligator Arms, Happy Ears, Single-threaded, Intellectual Honesty gaps"
+        },
+        {
+          "text": "Interprets CFO 6-week silence through Thai cultural lens (kreng-jai = polite no, not agreement)",
+          "passed": true,
+          "evidence": "Section: 'Kreng-jai (\u0e40\u0e01\u0e23\u0e07\u0e43\u0e08) \u2014 Silence means not yet...CFO may be signalling: I like the idea but I am not ready'"
+        },
+        {
+          "text": "Provides overall classification: Commit / Best Case / Pipeline / Disqualify",
+          "passed": true,
+          "evidence": "Verdict: 'DISQUALIFY or execute emergency triage this week' with score 2/8 GREEN \u2192 recommendation"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 9,
+        "failed": 0,
+        "total": 0,
+        "time_seconds": 609.1,
+        "tokens": 136680,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Includes a Win Brief artefact (why customer bought, EB, Champion, why us vs competition)",
+          "passed": true,
+          "evidence": "Section 1 Win Brief: Why They Bought (pain+BOI), Who Bought (CFO/EB, Controller/Champion), Why Us (speed)"
+        },
+        {
+          "text": "Includes a SOW Alignment Memo mapping the 3 verbal commitments (Hardcat, data migration, training) to in-SOW / out-of-scope-promised / acknowledged status",
+          "passed": true,
+          "evidence": "Section 6 maps all 6 commitments: Hardcat (Conditional, SOW Line 3), data migration (YES, SOW), training (YES, SOW) with gap closure"
+        },
+        {
+          "text": "Customer Success Criteria are numerical and EB-signable (e.g., '7-day close by Q4', 'BOI e-tax by Q1 2027', 'X super-users certified by Y')",
+          "passed": true,
+          "evidence": "Section 2: \u22647 days, live by 31 Dec 2026, \u226580% of 8 certified (\u226575% exam), all with baseline/target"
+        },
+        {
+          "text": "Open Commitments Log explicitly logs all 3 verbal promises with status and owner",
+          "passed": true,
+          "evidence": "Section 4 details all 6 promises (3 verbal + 3 outcome) with status, owner, closure plan, risk level"
+        },
+        {
+          "text": "Risk Register with multiple risks (probability x impact) and named mitigations",
+          "passed": true,
+          "evidence": "Section 5: 10 risks with Prob(1-5) \u00d7 Impact(1-5) = Priority, named mitigations, owners, contingencies"
+        },
+        {
+          "text": "Stakeholder map carried into handover (CFO=EB, Group Controller=Champion, plus other personas)",
+          "passed": true,
+          "evidence": "Section 3: 6 stakeholders mapped (CFO/EB, Controller/Champion, CIO, Warehouse Mgrs, Finance users, Procurement)"
+        },
+        {
+          "text": "BOI e-tax invoice Q1 2027 deadline is treated as compelling event with specific go-live timing",
+          "passed": true,
+          "evidence": "Executive Summary: 'BOI e-tax by Q1 2027...Signature May \u2192 6\u20137 month go-live (Nov/Dec 2026) = 1-month buffer'"
+        },
+        {
+          "text": "Asserts artefacts must exist BEFORE signature (the cardinal rule)",
+          "passed": true,
+          "evidence": "Executive Summary: '10 mandatory artefacts (all included)' with approval chain including 'before customer receives'"
+        },
+        {
+          "text": "Specifies AD's role post-signature (does not throw over the wall)",
+          "passed": true,
+          "evidence": "Section 1: 'Account Director remains EB owner; monthly executive business reviews for life of contract'"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.14,
+        "passed": 1,
+        "failed": 6,
+        "total": 0,
+        "time_seconds": 120.0,
+        "tokens": 81894,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Includes a SPIN sequence with explicitly weighted Implication and Need-payoff questions (>=4 Implication questions)",
+          "passed": false,
+          "evidence": "SPIN framework present but Implication questions not explicitly called out; minimal leverage language"
+        },
+        {
+          "text": "Includes a Challenger 6-step pitch (Warmer, Reframe, Rational Drowning, Emotional Impact, New Way, Your Solution)",
+          "passed": false,
+          "evidence": "No Challenger structure; uses discovery framework instead, not Warmer-to-Solution template"
+        },
+        {
+          "text": "Explicit Thai cultural calibration mentioned (kreng-jai, face, hierarchy, family-principal shadow buying centre)",
+          "passed": false,
+          "evidence": "Thai context section mentions family control but lacks kreng-jai, face, or hierarchy protocols"
+        },
+        {
+          "text": "Quantifies pain in THB (cost of close delay, audit risk, working capital, etc.)",
+          "passed": false,
+          "evidence": "References ROI, working capital, cost avoidance but no explicit THB quantification of pain drivers"
+        },
+        {
+          "text": "Addresses SAP S/4HANA RISE and NetSuite competitive positioning specifically",
+          "passed": true,
+          "evidence": "Section 5 competitive differentiation addresses both SAP RISE vs NetSuite with feature comparisons"
+        },
+        {
+          "text": "Specifies a primary commitment to ask for + a fallback commitment",
+          "passed": false,
+          "evidence": "Proposes next steps but does not name primary vs fallback; implies technical deep-dive only"
+        },
+        {
+          "text": "Walks in with explicit pre-call hypothesis (top 3 pains, EB hypothesis, Champion hypothesis, compelling event)",
+          "passed": false,
+          "evidence": "Discusses red flags but no pre-call hypothesis structure; CFO implied but no stated compelling event"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.29,
+        "passed": 2,
+        "failed": 5,
+        "total": 0,
+        "time_seconds": 265.8,
+        "tokens": 86340,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Scores all 8 MEDDPICC elements explicitly (M, E, D, D, P, I, C, C) with traffic-light or numeric score",
+          "passed": false,
+          "evidence": "MEDDPICC framework used but no numeric scores or traffic-light ratings provided"
+        },
+        {
+          "text": "Applies the Champion vs Coach vs Friend distinction to the FP&A Director (likely classifies as Coach, not Champion)",
+          "passed": true,
+          "evidence": "Section 7 Champion: 'you have advocates, but no **sponsor** with skin in the game'"
+        },
+        {
+          "text": "Names explicit kill criteria \u2014 the condition under which the seller will walk away",
+          "passed": false,
+          "evidence": "Suggests pausing after Day 5 if no timeline, but no explicit kill criteria with dates"
+        },
+        {
+          "text": "Provides specific actions for this week (max 3) with element, action, owner, date",
+          "passed": true,
+          "evidence": "Section lists Day 1\u20135 actions (recon, diagnose, reframe, set timeline, escalate/walk) with owners"
+        },
+        {
+          "text": "Identifies seller-DNA derailers (e.g., Happy Ears, Alligator Arms, Single-threaded)",
+          "passed": false,
+          "evidence": "Mentions 'you've done easy part' and 'FP&A is not enough' but does not name seller-DNA derailer terminology"
+        },
+        {
+          "text": "Interprets CFO 6-week silence through Thai cultural lens (kreng-jai = polite no, not agreement)",
+          "passed": false,
+          "evidence": "No mention of kreng-jai, Thai culture, or polite-no interpretation; treats silence as generic stall"
+        },
+        {
+          "text": "Provides overall classification: Commit / Best Case / Pipeline / Disqualify",
+          "passed": false,
+          "evidence": "Suggests 'pause for 30 days' or 'escalate/walk' but no MEDDPICC-based classification formula"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.56,
+        "passed": 5,
+        "failed": 4,
+        "total": 0,
+        "time_seconds": 69.7,
+        "tokens": 78151,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Includes a Win Brief artefact (why customer bought, EB, Champion, why us vs competition)",
+          "passed": false,
+          "evidence": "No discrete Win Brief section; customer profile names roles but does not synthesize buying narrative"
+        },
+        {
+          "text": "Includes a SOW Alignment Memo mapping the 3 verbal commitments (Hardcat, data migration, training) to in-SOW / out-of-scope-promised / acknowledged status",
+          "passed": false,
+          "evidence": "Section 3 lists in-scope/out-of-scope but no formalized alignment memo with gap status"
+        },
+        {
+          "text": "Customer Success Criteria are numerical and EB-signable (e.g., '7-day close by Q4', 'BOI e-tax by Q1 2027', 'X super-users certified by Y')",
+          "passed": true,
+          "evidence": "Section 6 Success Criteria include 7-day close, BOI Q1 2027, 8 super-users, phase gates"
+        },
+        {
+          "text": "Open Commitments Log explicitly logs all 3 verbal promises with status and owner",
+          "passed": false,
+          "evidence": "Commitments in Section 3.2\u20133.4 but no formalized Log with owner/status/closure plan per promise"
+        },
+        {
+          "text": "Risk Register with multiple risks (probability x impact) and named mitigations",
+          "passed": true,
+          "evidence": "Section 4 lists 6 risks with Likelihood/Impact and mitigation text"
+        },
+        {
+          "text": "Stakeholder map carried into handover (CFO=EB, Group Controller=Champion, plus other personas)",
+          "passed": true,
+          "evidence": "Section 2 Stakeholder Map lists CFO (EB), Controller (Champion), IT, Finance, Warehouse staff"
+        },
+        {
+          "text": "BOI e-tax invoice Q1 2027 deadline is treated as compelling event with specific go-live timing",
+          "passed": true,
+          "evidence": "Section 2.1 Compelling Events: BOI E-Tax readiness Q1 2027 with regulatory risk"
+        },
+        {
+          "text": "Asserts artefacts must exist BEFORE signature (the cardinal rule)",
+          "passed": true,
+          "evidence": "Section 7 Critical Handoff Checklist titled 'Before signature'; document internal-use only"
+        },
+        {
+          "text": "Specifies AD's role post-signature (does not throw over the wall)",
+          "passed": false,
+          "evidence": "Document does not explicitly define AD's ongoing role post-signature; shifts to Delivery Manager ownership"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 307.4,
+        "stddev": 266.7714,
+        "min": 102.7,
+        "max": 609.1
+      },
+      "tokens": {
+        "mean": 111178.0,
+        "stddev": 22183.7682,
+        "min": 96340,
+        "max": 136680
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.33,
+        "stddev": 0.2128,
+        "min": 0.14,
+        "max": 0.56
+      },
+      "time_seconds": {
+        "mean": 151.8333,
+        "stddev": 101.852,
+        "min": 69.7,
+        "max": 265.8
+      },
+      "tokens": {
+        "mean": 82128.3333,
+        "stddev": 4099.5261,
+        "min": 78151,
+        "max": 86340
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.67",
+      "time_seconds": "+155.6",
+      "tokens": "+29050"
+    }
+  },
+  "notes": []
+}

@@ -1,0 +1,46 @@
+{
+  "name": "steel-forge",
+  "displayName": "Steel Forge",
+  "category": "industry",
+  "description": "Industrial confidence without dystopian aesthetics. Steel and blueprint machinery aesthetic balanced with accessible typography. Features strong horizontal lines, sectioned blocks, and safety orange accents. Use when the customer is a factory, OEM, energy producer, refinery, or industrial utility valuing operational precision.",
+  "colors": {
+    "primary": "#36454F",
+    "secondary": "#B0B7C0",
+    "accent": "#FF6F3C",
+    "background": "#F5F6F8",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#36454F",
+    "secondary": "#B0B7C0",
+    "accent": "#FF6F3C",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Manrope",
+    "bodyEN": "Inter",
+    "headerTH": "Prompt",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "industrial-confidence",
+  "cornerRadius": 2,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#36454F",
+    "#1B232A",
+    "#B0B7C0",
+    "#FF6F3C",
+    "#5C5C5C",
+    "#99A0AA"
+  ],
+  "useDarkMode": false
+}

@@ -1,0 +1,46 @@
+{
+  "name": "netsuite-accent",
+  "displayName": "NetSuite Accent",
+  "category": "vendor",
+  "description": "Standalone NetSuite navy base with slate-blue accents. NetSuite is technically Oracle-owned but maintains distinct visual identity — darker, more conservative, finance-focused. Features navy for consolidation workflows, multi-subsidiary reporting, and close process improvements. Use when pitching NetSuite (ERP, Financials, Planning) to finance-centric enterprise buyers.",
+  "colors": {
+    "primary": "#1A2647",
+    "secondary": "#94A3B8",
+    "accent": "#5B7DB1",
+    "background": "#FFFFFF",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#1A2647",
+    "secondary": "#94A3B8",
+    "accent": "#5B7DB1",
+    "background": "#1A1A1A",
+    "text": "#F5F5F5",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Source Sans 3",
+    "bodyEN": "Source Serif 4",
+    "headerTH": "Sarabun",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "authoritative-restraint",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#1A2647",
+    "#0D1528",
+    "#94A3B8",
+    "#5B7DB1",
+    "#5C5C5C",
+    "#C5CBD7"
+  ],
+  "useDarkMode": false
+}

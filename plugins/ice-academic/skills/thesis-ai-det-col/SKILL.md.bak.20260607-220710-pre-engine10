@@ -1,0 +1,431 @@
+---
+name: thesis-ai-det-col
+description: Thai academic AI detection, correction, and Voice/Writing Profile extraction skill. Use whenever the user wants to detect whether Thai academic text was written by AI, humanize Thai text to authentic human academic writing, or extract a Voice/Writing Profile from a folder of reference documents. Triggers on "ตรวจ AI", "ทำให้ดูเป็นมนุษย์เขียน", "humanize", "ลด AI score", "Turnitin", "GPTZero", "แก้ข้อความ AI", "สกัด writing style", "ดุษฎีนิพนธ์ มจร", "บทความวิชาการ TCI", "บทความวิจัย" — and tasks involving Thai dissertations, MCU theses, Buddhist Integration writing, AGJ articles. Also triggers when the user gives a folder of academic PDFs and asks to learn the writing style. ONLY handles reading, detecting, rewriting — does NOT produce formatted documents.
+---
+
+# THESIS-AI-DET-COL — Thai Academic AI Detection & Correction Skill
+
+ทักษะการตรวจจับและแก้ไขเนื้อหา AI สำหรับงานเขียนวิชาการภาษาไทย ครอบคลุม Detection, Correction (Two-Pass Method), และ Voice/Writing Profile Extraction พร้อม Voice Profile Library 7 Sub-Profiles ของงานวิชาการไทยที่สกัดจาก corpus 101 ไฟล์
+
+**Version: V03R01 | 2026.06.07** — ยกระดับจากบทเรียนจุดหลุดจริง: ขยายเป็น 15 จุดตรวจ (Zero-Tolerance Class, Template Proximity, Nested Clause, Closing Ritual, Acronym Discipline, Reporting Verb Alignment), Field-Discovered Living List, Mandatory Load Manifest และ Full-Coverage Scan Discipline
+
+---
+
+## 1. Scope (ขอบเขต)
+
+**ทักษะนี้ทำ:**
+- ตรวจจับว่าข้อความเขียนโดย AI หรือไม่ (3-Layer Detection Methodology)
+- แก้ไขข้อความ AI ให้อ่านเหมือนมนุษย์เขียนและตรงเสียงผู้เขียน (Two-Pass Method)
+- อ่านโฟลเดอร์เอกสารอ้างอิงและสกัดเป็น Voice/Writing Profile ใหม่ (6+1 Dimensions)
+- อ่านสรุปและให้ feedback คุณภาพข้อความ
+
+**ทักษะนี้ไม่ทำ:**
+- ไม่สร้างเอกสารรูปแบบสำเร็จ (PPTX/DOCX/PDF/Excel) — ปล่อยให้ skill อื่นทำ
+- ไม่ทำการตลาด/ขาย (ใช้ b2b-* skills)
+- ไม่จัดทำแผนภูมิหรือ visualization
+- ไม่ตอบคำถามทั่วไปที่ไม่เกี่ยวกับ AI Detection/Correction
+
+**Output ขึ้นกับ Prompt:** ผู้ใช้ระบุรูปแบบที่ต้องการในแต่ละครั้ง (เช่น "ส่งเป็น markdown" / "ใส่ในไฟล์ .md" / "พิมพ์ใน chat") ทักษะนี้เน้นเนื้อหา ไม่กำหนด format
+
+---
+
+## 2. หกโหมดหลัก (Six Modes)
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│  Mode 1: DETECT       — ตรวจ AI signature ด้วย 3-Layer Method     │
+│  Mode 2: EXTRACT      — สกัด Voice Profile จากโฟลเดอร์อ้างอิง     │
+│  Mode 3: CORRECT      — แก้ไขข้อความด้วย Two-Pass Method           │
+│  Mode 4: FULL CYCLE   — Detect → Correct → Soul → Voice Match     │
+│  Mode 5: SUMMARIZE    — อ่านและสรุปคุณภาพ/ข้อสังเกต               │
+│  Mode 6: ADD SOUL     — เติมเสียงมนุษย์เมื่อข้อความผ่าน detector  │ ⭐ NEW
+│                          แต่ยัง "ไม่มีตัวตน"                       │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### กฎเหล็กของ Skill นี้
+
+1. **ห้าม fabricate** — ห้ามสร้างชื่อ ตัวเลข citation วันที่ ที่ไม่มีอยู่จริง
+2. **ห้ามทำ Pass 1 + Pass 2 พร้อมกัน** — แก้ rhythm ก่อน vocabulary เสมอ (เหตุผลใน `references/02_two_pass_protocol.md`)
+3. **Voice Profile ต้องมาจาก Level 1–5 Hierarchy** — ห้ามเดา ถ้าไม่มีต้องถาม (รายละเอียดใน `references/03_voice_extraction_methodology.md`)
+4. **Verified AI Signature เท่านั้น** — ใช้รายการคำที่ปรากฏ ≤ 5 ครั้งใน corpus 292K คำของไทยจริง อย่าใช้ Tier 1 list ภาษาอังกฤษโดยตรง สำหรับงาน English/Bilingual ดู Wikipedia 24 patterns ใน `references/07_wikipedia_24_patterns.md`
+5. **Output format ขึ้นกับ Prompt** — Skill นี้ไม่กำหนด format ปล่อยให้ Prompt บอก
+6. **"Avoiding AI patterns is only half the job"** — การลบ AI patterns ไม่พอ ต้องเติม **เสียงมนุษย์** ด้วย (Mode 6 ADD SOUL — ดู `references/08_personality_and_soul.md`)
+7. **Mandatory Load Manifest** ⭐ V03 — ห้ามเริ่ม Mode ใดโดยไม่โหลดไฟล์ครบตามตาราง Section 3.5 — การอ่านเฉพาะ vocabulary list แล้วข้ามไฟล์ pattern เชิงโครงสร้างคือสาเหตุจุดหลุดที่เกิดมาแล้วจริง
+8. **Full-Coverage Scan** ⭐ V03 — ตรวจทุกย่อหน้า ทุกบรรทัด 100% ห้ามสุ่มตรวจ ห้ามตัดสินจากความถี่รวมทั้งฉบับอย่างเดียว — check เชิงระยะใกล้ (Template Proximity / Closing Ritual) ต้องใช้ sliding window และต้องรายงาน Scan Coverage ทุกครั้ง (รายละเอียด `references/01_three_layer_detection.md` §1.5)
+
+---
+
+## 3. การตัดสินใจเลือก Mode (Mode Selection)
+
+ก่อนเริ่มทำงาน ตรวจสอบ prompt ของผู้ใช้และเลือก Mode:
+
+| User says (ภาษาไทย) | User says (English) | Mode |
+|---|---|---|
+| "ตรวจดูข้อความนี้ว่าเขียนโดย AI ไหม" | "Check if this text is AI-generated" | **Mode 1: DETECT** |
+| "อ่านโฟลเดอร์ X แล้วสกัด writing profile" | "Read folder X and extract writing style" | **Mode 2: EXTRACT** |
+| "แก้ข้อความนี้ให้เหมือนมนุษย์เขียน" + ระบุ Voice Profile | "Humanize this text using profile X" | **Mode 3: CORRECT** |
+| "ตรวจและแก้ให้ครบ ใช้ profile X" | "Detect and fix using profile X" | **Mode 4: FULL CYCLE** |
+| "อ่านและสรุปข้อความนี้ให้หน่อย" | "Read and summarize this for me" | **Mode 5: SUMMARIZE** |
+
+**หากไม่ชัดเจน** ให้ถามผู้ใช้:
+> "ขอเรียนสอบถามเพื่อเลือกโหมดที่เหมาะสมครับ:
+> 1. ตรวจอย่างเดียว (Detect)
+> 2. สกัด writing profile (Extract)
+> 3. แก้ไขข้อความ (Correct) — ต้องการ Voice Profile หรือไม่?
+> 4. ตรวจ + แก้ ครบวงจร (Full Cycle)
+> 5. อ่านและสรุป (Summarize)"
+
+---
+
+## 3.5 Mandatory Load Manifest (บังคับโหลดก่อนเริ่ม — ห้ามข้าม) ⭐ V03
+
+ไฟล์ใน manifest คือไฟล์ **บังคับ** ไม่ใช่ progressive disclosure — โหลดให้ครบก่อนเริ่มรัน workflow และบันทึกรายชื่อลงช่อง "Files Loaded" ของ Detection Report ทุกครั้ง (รายงานที่ไม่มีรายการไฟล์ = ไม่สมบูรณ์)
+
+| Mode | ไฟล์บังคับ (ข้อความภาษาไทย) | เพิ่มเมื่อ English/Bilingual |
+|---|---|---|
+| Mode 1 DETECT | `01` + `06` + `05` | + `07` |
+| Mode 2 EXTRACT | `03` | — |
+| Mode 3 CORRECT | `02` + `04` + `05` + `06` + `09` | + `07` |
+| Mode 4 FULL CYCLE | ตาม Mode 1 + Mode 3 | + `07` |
+| Mode 6 ADD SOUL | `08` | — |
+
+## 3.6 Thai Structural Quick-List (TQ1–TQ8) ⭐ V03
+
+กฎโครงสร้างที่เคยหลุดจริง — ฝังไว้ใน SKILL.md เพื่อบังคับใช้ได้ตั้งแต่ยังไม่เปิดไฟล์ reference:
+
+| # | กฎ | อ้างอิง |
+|---|---|---|
+| TQ1 | อนุประโยคซ้อน "ซึ่ง/ที่/อัน" ≤ 2 ชั้นต่อประโยค | `05` §1.3 |
+| TQ2 | โครงเปิดประโยคเดียวกันห้ามซ้ำภายใน 5 ประโยค/ย่อหน้าเดียวกัน (รวม "เมื่อพิจารณา…จะพบว่า") | `01` Check 6 |
+| TQ3 | สูตรประโยคสำเร็จรูปต้องรื้อทั้งโครง ไม่ใช่ถอดคำ | `05` §7 |
+| TQ4 | Forward signpost ("…ในหัวข้อถัดไป") ≤ 1 ครั้ง/เอกสาร ห้ามปิดหัวข้อติดกันด้วยสูตรเดียวกัน | `05` §9 |
+| TQ5 | Acronym นิยามเต็มครั้งแรกครั้งเดียว หลังจากนั้นใช้ตัวย่อ | `05` §8 |
+| TQ6 | คำ Class A Zero-Tolerance (อย่างก้าวกระโดด ฯลฯ) เจอครั้งเดียวก็ต้องแก้ | `06` §1.6 |
+| TQ7 | ย่อหน้าสรุปห้ามเปิดด้วยสูตรสังเคราะห์ ("ทั้งหมดนี้สังเคราะห์ได้ว่า") | `06` §1.5 |
+| TQ8 | ระวัง "การ/ความ" ซ้อน และ passive แบบภาษาแปล | `05` §1 |
+| TQ9 | กริยารายงานต้องตรงชนิดแหล่ง — งานทัศนะห้าม "พบว่า/พิสูจน์ว่า" งานเชิงประจักษ์ห้าม "พิสูจน์ว่า" (เว้นแต่ทดสอบสมมติฐาน) "ยืนยัน" สงวนไว้สำหรับหลายแหล่งตรงกัน | `05` §10 |
+
+---
+
+## 4. Mode 1: DETECT (การตรวจจับ)
+
+### 4.1 ขั้นตอน
+
+1. **อ่านข้อความ** ที่ผู้ใช้ส่งมา — ระบุภาษา ความยาว บริบท (ดุษฎีนิพนธ์ / บทความ / ทั่วไป)
+2. **โหลดไฟล์ตาม Manifest (Section 3.5)** แล้วรัน **Scan Discipline Protocol** (`01` §1.5) — แตกย่อหน้าใส่หมายเลข ไล่ตรวจทุกย่อหน้า 100% ห้ามสุ่ม
+3. **Run 3-Layer Self-Check (15 จุดตรวจ)** ตามรายละเอียดใน `references/01_three_layer_detection.md`:
+   - **Layer 1 (2):** Check 1a Density (Class B) + Check 1b Zero-Tolerance (Class A — hard gate พบครั้งเดียว = Fail)
+   - **Layer 2 (7):** Burstiness, Sentence Opening, Paragraph Symmetry, Transition Density, Bullet-thinking, **Template Proximity**, **Nested Clause Depth**
+   - **Layer 3 (6):** Paragraph Length, Citation Distribution, Personal Voice Markers, **Section-Closing Ritual**, **Acronym Re-Expansion**, **Reporting Verb Alignment**
+4. **Output Detection Report** ตามแม่แบบใน `templates/detection_report.md` — ระบุ Files Loaded + Scan Coverage 100%
+
+### 4.2 ตัวเลขสถิติที่ต้องคำนวณ
+
+- Mean sentence length (คำต่อประโยค)
+- Standard Deviation (SD) ของความยาวประโยค (ผ่านเกณฑ์: SD ≥ 5)
+- Tier 1 word density per 1,000 คำ (Class B)
+- Class A Zero-Tolerance hits (ต้อง = 0 — ถ้าพบให้ระบุตำแหน่ง)
+- Transition density per 500 คำ
+- Personal Voice Markers count
+- Template Proximity violations (โครงซ้ำในหน้าต่าง 5 ประโยค)
+- จำนวนหัวข้อที่ปิดด้วยสูตรเดียวกัน + จำนวน forward signpost
+- จำนวน Acronym re-expansion
+- จำนวนประโยคที่อนุประโยคซ้อน > 2 ชั้น
+- จำนวนจุดอ้างอิงที่กริยารายงานไม่ตรงชนิดแหล่ง (`05` §10)
+- Scan Coverage (ย่อหน้าที่ตรวจ / ทั้งหมด — ต้อง 100%)
+
+### 4.3 ผลลัพธ์
+
+- Detection Report (ตาราง + คะแนนรวม)
+- คำตัดสิน: Pass / Fail
+- ข้อแนะนำ: ถ้า Fail ให้ดำเนินการ Mode 3 (Correction)
+
+---
+
+## 5. Mode 2: EXTRACT (สกัด Voice Profile)
+
+### 5.1 ขั้นตอน
+
+1. **ถามผู้ใช้** เพื่อระบุแหล่งสกัด (Level 1 ของ 5-Level Source Hierarchy):
+   - "ระบุโฟลเดอร์/ไฟล์อ้างอิงที่จะสกัด Voice Profile"
+   - "ผู้เขียนคือใคร? (ตนเอง / องค์กร / persona)"
+   - "บริบทงานคืออะไร? (Academic / Business / Government / Marketing)"
+
+2. **อ่านเอกสารทุกชิ้น** ในแหล่งที่ระบุ — ทั้งเชิงปริมาณและคุณภาพ
+   - เชิงปริมาณ: ใช้ pdftotext/text extraction และวิเคราะห์ความยาวประโยค ความถี่คำ
+   - เชิงคุณภาพ: อ่านบทคัดย่อ บทนำ บทสรุป และเชิงอรรถ
+
+3. **สกัด 6+1 Dimensions** ตาม methodology ใน `references/03_voice_extraction_methodology.md`:
+   - D1 Sentence-Level Patterns
+   - D2 Vocabulary Signature
+   - D3 Paragraph Architecture
+   - D4 Argumentation Style
+   - D5 Citation & Reference Style
+   - D6 Cultural & Contextual Markers
+   - D7 Disciplinary Conventions (Intensive Mode สำหรับงานวิชาการ)
+
+4. **Output Voice Profile** ตามแม่แบบใน `templates/voice_profile.md`
+   - รวม Calibration Samples 3 ย่อหน้า เพื่อให้ผู้ใช้ verify
+
+5. **บันทึก Profile ID** เป็น VP-[YYYYMMDD]-[XXX] ใน `voice_profiles/` ของ session ปัจจุบัน
+
+### 5.2 หากผู้ใช้ไม่ระบุแหล่งอ้างอิง
+
+ใช้ 5-Level Source Hierarchy ตามลำดับ:
+- **Level 1:** User-Specified Folder (priority สูงสุด — ถาม)
+- **Level 2:** This Skill's Reference (`voice_profiles/KM-TH-THESIS-DOC_V02R01.md` มี 7 Sub-Profiles ของงานวิชาการไทย — ใช้ Decision Tree เลือก)
+- **Level 3:** Active Skill's KB (เฉพาะถ้าเป็น compound skill)
+- **Level 4:** Pre-defined Library (ใน KM-TH-THESIS-DOC ระบุ 7 Sub-Profiles)
+- **Level 5:** ASK USER — ห้ามเดา ห้ามมั่ว
+
+---
+
+## 6. Mode 3: CORRECT (แก้ไข Two-Pass)
+
+### 6.1 Pre-Conditions
+
+ก่อนเริ่ม Mode 3 ต้องมี:
+- ข้อความที่จะแก้ (input)
+- **Voice Profile** — ถ้าไม่มี ให้สกัดด้วย Mode 2 ก่อน หรือเลือกจาก KM-TH-THESIS-DOC
+- User-provided facts (ตัวเลข/ชื่อ/วันที่ ที่จะใส่เป็น Personal Anchors — ป้องกัน hallucination)
+- Target AI score (เช่น < 20%)
+
+### 6.2 ขั้นตอน Two-Pass (กฎเหล็ก: ห้ามรวม Pass 1 + 2)
+
+#### Pass 1: Rhythm Correction (5 Steps)
+1. ระบุย่อหน้าเสี่ยง (>3/5 ประโยคยาว 16-22 คำ)
+2. Burstiness Injection: ตัด 2 ประโยคให้สั้น (8-12 คำ), ขยาย 1 ประโยคให้ยาว (25-35 คำ)
+3. Diversify Sentence Opening: 5 รูปแบบ (Adverb/Subordinate/Question/Quote/Prepositional) + **Proximity Guard** (โครงเดียวกันห้ามซ้ำใน 5 ประโยค/ย่อหน้าเดียว)
+4. Adjust Paragraph Architecture: short/medium/long mix
+5. Verify SD ≥ 5
+
+#### Pass 2: Vocabulary Correction (6 Steps + Voice Profile)
+1. Search & Replace 9 หมวดตามลำดับ (English Verbs/Adjectives/Nouns/Phrases + Thai openers/modifiers/connectives/hedging + **Class A Zero-Tolerance**)
+2. **Replace by Voice Profile** — ใช้ D2 Vocabulary Signature ของ Profile ที่เลือก
+3. ระวัง Symptom Substitution (ห้ามเปลี่ยนคำ AI เป็นคำ AI อีกคำ)
+4. เพิ่ม Specificity (เปลี่ยนคำคลุมเครือเป็นรายละเอียด)
+5. **Template-Level Replace** ⭐ V03 — รื้อโครงสูตรประโยคสำเร็จรูป (`05` §7) ทั้งประโยค ไม่ใช่ถอดคำ
+6. **Reporting Verb Alignment** ⭐ V03 — กริยารายงานต้องตรงชนิดแหล่ง (`05` §10): งานทัศนะใช้ "เสนอว่า/ชี้ว่า" ห้าม "พบว่า/พิสูจน์ว่า", งานเชิงประจักษ์ใช้ "พบว่า" ห้าม "พิสูจน์ว่า" เว้นแต่ทดสอบสมมติฐานจริง
+
+#### Optional: Advanced Techniques (4 Techniques)
+ใช้เสริมหลัง Pass 1+2 ผ่านแล้ว เมื่อ AI score ยังสูง:
+- A: Sentence Combining & Splitting
+- B: Personal/Cultural Markers (กฎหมาย, มาตรา, ตัวเลขจริง)
+- C: Aside & Qualification
+- D: Imperfect Flow
+
+รายละเอียดเต็มใน `references/02_two_pass_protocol.md` และ Catalog 12 Techniques ใน `references/04_correction_techniques.md`
+
+### 6.3 ผลลัพธ์
+
+- Pass 1 Output (Rhythm Corrected) + Burstiness Report
+- Pass 2 Output (Vocabulary + Voice Profile applied) + Vocabulary Change Log
+- Final Output (รวม Advanced Techniques ถ้ามี)
+- รายการ `[NEEDS USER INPUT: ...]` ที่ต้องผู้ใช้เติม
+
+---
+
+## 7. Mode 4: FULL CYCLE
+
+ทำตามลำดับ Detect → Correct → Voice Match → Iterate
+
+```
+[Input Text] → Mode 1 (Detect) → ผ่าน?
+                      ↓ No                    ↓ Yes
+              Mode 3 (Correct Two-Pass)      [Done]
+                      ↓
+              Mode 1 (Re-Detect) ← Loop จน AI score < target
+                      ↓
+              Voice Match Scoring (D1-D6+D7) — เกณฑ์ ≥ 75%
+                      ↓ Pass
+              [Final Output]
+```
+
+ใช้ prompt template ใน `templates/full_cycle_prompt.md`
+
+---
+
+## 8. Mode 5: SUMMARIZE
+
+อ่านข้อความและให้ feedback ในประเด็น:
+- คุณภาพ AI signature โดยรวม
+- จุดเด่น/จุดอ่อน
+- ความสอดคล้องกับ Voice Profile (ถ้าผู้ใช้ระบุ)
+- ข้อแนะนำการปรับปรุง
+
+ไม่ต้องรัน 3-Layer ครบเหมือน Mode 1 — เป็น quick read เท่านั้น
+
+---
+
+## 8.5 Mode 6: ADD SOUL ⭐ NEW (V02)
+
+### 8.5.1 เมื่อใดต้องใช้
+
+ใช้เมื่อ:
+- ข้อความผ่าน 3-Layer Detection แล้วแต่ peer reviewer ยังบอกว่า "อ่านเหมือน AI"
+- ข้อความ "เย็นชา" "เป็นกลางเกินไป" "ไม่มีตัวตน"
+- หลัง Pass 1+2 แล้วยัง flag จาก Turnitin 2026 (ที่ตรวจ "soulless writing")
+- ผู้ใช้ขอเฉพาะ — เช่น "เติมเสียงให้บทความนี้หน่อย"
+
+### 8.5.2 ขั้นตอน
+
+1. **อ่าน `references/08_personality_and_soul.md`** ทั้งหมด
+2. **รัน Soul Check 7 คำถาม** (Section 4 ของไฟล์ดังกล่าว)
+3. **เลือก Technique S1-S6** ที่เหมาะกับจุดที่ขาด:
+   - S1: Have Opinions
+   - S2: Vary Rhythm Aggressively
+   - S3: Acknowledge Complexity
+   - S4: Use "ผู้วิจัย" When It Fits (จริง ๆ ไม่หลบ)
+   - S5: Let Some Mess In
+   - S6: Be Specific About Reactions
+4. **ปรับข้อความตาม Voice Profile** — ห้ามเติม fake personality
+
+### 8.5.3 กฎเหล็กของ Mode 6
+
+- **ห้ามเติม fake personality** — ห้ามคิดความเห็นที่ผู้เขียนไม่ได้คิด
+- **ห้าม fabricate emotions** — อย่าเขียน "I keep thinking about" ถ้าผู้เขียนไม่ได้รู้สึก
+- **Counterargument ต้องอิงงานวิจัยจริง** — ห้ามสร้าง "บางคนแย้งว่า..." ลอย ๆ
+- **ใช้ user-provided facts เท่านั้น** สำหรับข้อสังเกตเฉพาะ
+
+---
+
+## 9. การใช้ KM-TH-THESIS-DOC (Voice Profile Library)
+
+### 9.1 7 Sub-Profiles ที่มี
+
+| ID | ชื่อ | บริบท |
+|---|---|---|
+| **VP-A1** | MCU PA Dissertation | ดุษฎีนิพนธ์รัฐประศาสนศาสตร์ มจร (ไม่เน้นพุทธ) |
+| **VP-A2** | MCU Buddhist Integration | ดุษฎีนิพนธ์ มจร พุทธบูรณาการเป็นแกน |
+| **VP-B1** | AGJ Article | บทความวิชาการ AGJ TCI Tier 2 |
+| **VP-B2** | General TCI Academic | บทความวิชาการ TCI ทั่วไป |
+| **VP-C1** | Accounting Research | บทความวิจัยบัญชี/บริหาร (มี x̄, SD) |
+| **VP-C2** | Procurement Research | บทความวิจัยจัดซื้อจัดจ้าง / e-GP |
+| **VP-C3** | Public Sector/Education Research | บทความวิจัยรัฐประศาสนศาสตร์/การศึกษา |
+
+### 9.2 Decision Tree การเลือก Profile
+
+```
+START → เป็นงาน มจร? (ดุษฎีนิพนธ์/วิทยานิพนธ์)
+         │
+        ┌┴┐
+       Yes No
+        │  │
+       ┌┴┐ │
+   Buddhist?
+   เป็นแกน?
+    Yes No  │
+     │  │   │
+    A2 A1   เป็น Research (มีสถิติ) หรือ Academic?
+                │
+              ┌┬┴┬─┐
+              │  │ │
+              Academic  Research
+                 │       │
+              วารสาร?    สาขา?
+              ┌┴┐    ┌──┼──┐
+              AGJ Other บัญชี จัดซื้อ รัฐ/Edu
+              B1 B2   C1   C2   C3
+```
+
+ดูรายละเอียดเต็มใน `voice_profiles/KM-TH-THESIS-DOC_V02R01.md` Section 12
+
+### 9.3 ถ้าไม่มี Sub-Profile ใดเหมาะ
+
+→ ใช้ Mode 2 (EXTRACT) สกัด Profile ใหม่จากโฟลเดอร์อ้างอิงของผู้ใช้
+
+---
+
+## 10. Anti-Hallucination Safeguards
+
+ทุก Mode ต้อง enforce:
+- **Mandatory User Fact Input** ก่อน Correction (ตัวเลข ชื่อ วันที่ จากผู้ใช้)
+- **Mandatory Voice Profile** ก่อน Pass 2
+- **Flag Missing Data** เป็น `[NEEDS USER INPUT: <สิ่งที่ต้องการ>]`
+- **No Citation Generation** — ใช้เฉพาะที่ผู้ใช้ให้
+- **Pass Separation** — ไม่ให้รัน Pass 1+2 พร้อมกัน
+- **No Voice Profile Fabrication** — Level 5 = ASK เสมอ
+
+---
+
+## 11. Output Format (ขึ้นกับ Prompt)
+
+Skill นี้ **ไม่กำหนด format** ของ output — ปล่อยให้ Prompt เป็นผู้กำหนด
+
+| ผู้ใช้ขอ | Skill ตอบสนองอย่างไร |
+|---|---|
+| "ตอบใน chat" | แสดงผลในข้อความ chat ใช้ markdown ตาราง |
+| "ใส่ในไฟล์ .md" | สร้างไฟล์ markdown ในตำแหน่งที่ระบุ |
+| "ทำเป็นรายงาน Word" | เรียก skill `docx` เพิ่มเติม (ไม่ทำเอง) |
+| "Make it a presentation" | เรียก skill `pptx`/`b2b-presentation-creator` เพิ่ม (ไม่ทำเอง) |
+| "ระบุภาษาไทย" | ตอบไทย |
+| "ระบุภาษาอังกฤษ" | ตอบอังกฤษ |
+| "Bilingual" | ตอบสองภาษาคู่ขนาน |
+
+---
+
+## 12. Reference Files
+
+ไฟล์ที่อยู่ใน Load Manifest (Section 3.5) เป็นไฟล์ **บังคับโหลด** ตาม Mode — ไฟล์อื่นอ่านเมื่อต้องการรายละเอียดเฉพาะเรื่อง:
+
+| ไฟล์ | เมื่อใช้ |
+|---|---|
+| `00_MAIN_KB_V05R01.md` | KB หลัก ~30K คำ — อ่านทั้งหมดเฉพาะกรณี comprehensive task |
+| `01_three_layer_detection.md` | เมื่อทำ Mode 1 (Detect) — methodology + checks ครบ |
+| `02_two_pass_protocol.md` | เมื่อทำ Mode 3 (Correct) — Pass 1 + Pass 2 + Advanced Techniques |
+| `03_voice_extraction_methodology.md` | เมื่อทำ Mode 2 (Extract) — 6+1 Dimensions + 5-Level Hierarchy |
+| `04_correction_techniques.md` | Catalog 18 Techniques พร้อม before/after examples (V02 — เพิ่ม 6 จาก Wikipedia) |
+| `05_thai_academic_patterns.md` | **บังคับใน Mode 1+3 (ไทย)** — Translationese, Formulaic Templates (§7), Acronym Discipline (§8), Section-Closing Variety (§9) |
+| `06_verified_ai_signatures.md` | รายการคำที่ verified ว่าเป็น AI signature ใน corpus 292K คำ |
+| `07_wikipedia_24_patterns.md` ⭐ NEW | 24 patterns ครบจาก Wikipedia (สำหรับ English/Bilingual) |
+| `08_personality_and_soul.md` ⭐ NEW | Mode 6 ADD SOUL — เติมเสียงมนุษย์ Technique S1-S6 |
+| `09_filler_replacement_table.md` ⭐ NEW | ตารางแทนที่ filler phrases + chatbot artifacts (Pass 2 Step 2.4) |
+
+อ่าน `voice_profiles/KM-TH-THESIS-DOC_V02R01.md` เมื่อต้องเลือก Sub-Profile หรือดู pattern เฉพาะสาขา
+
+อ่าน `templates/*.md` เมื่อต้องสร้าง output ตามรูปแบบมาตรฐาน
+
+---
+
+## 13. Workflow Summary
+
+```
+ผู้ใช้พิมพ์ prompt
+    ↓
+[Skill] เลือก Mode (1/2/3/4/5)
+    ↓
+[Skill] ถามคำถามที่จำเป็น (Voice source, facts, target score)
+    ↓
+[Skill] โหลดไฟล์บังคับตาม Load Manifest (Section 3.5) ให้ครบ
+    ↓
+[Skill] รัน workflow ตาม Mode
+    ↓
+[Skill] ส่ง output ตาม format ที่ prompt กำหนด
+    ↓
+[Skill] เสนอ next step
+```
+
+---
+
+## 14. กรณีพิเศษ
+
+**ถ้าผู้ใช้ส่งโฟลเดอร์ที่มี > 50 ไฟล์ PDF:**
+- ให้ใช้ pdftotext/aggregate analysis ก่อน เพื่อสำรวจในเชิงสถิติ
+- อ่านเชิงลึกเฉพาะตัวอย่างที่หลากหลาย (อย่างน้อย 8-10 ฉบับ ครอบคลุมประเภท)
+- ใช้ aggregate sample เพื่อ verify pattern
+- บันทึกผลทั้ง aggregate และ deep reading
+
+**ถ้าข้อความ < 300 คำ:**
+- AI Detector ไม่แม่นยำ — แจ้งผู้ใช้
+- แนะนำให้เขียนเอง หรือใช้ Mode 5 (Summarize) แทน
+
+**ถ้าผู้ใช้ขอ "เขียนใหม่ทั้งหมด" แทนการแก้:**
+- เป็น out-of-scope ของ Skill นี้ — เน้นแก้ ไม่เน้นเขียนใหม่
+- แนะนำให้ใช้ Mode 2 (Extract Profile) + skill อื่นที่เน้นการเขียนสร้างใหม่
+
+---
+
+*Skill นี้สกัดจาก Knowledge Base 30,000 คำ + Voice Profile Library 4,300 คำ ที่อิงงานวิจัยไทยจริง 101 ฉบับ (corpus 292,000 คำ) — ดูเอกสารต้นทางใน `references/00_MAIN_KB_V05R01.md`*
+
+*Version History: V01R01 สร้างจาก KB V05R01 | V02 เพิ่ม Mode 6 ADD SOUL + Wikipedia 24 Patterns | **V03R01 (2026.06.07)** ยกระดับจากบทเรียนจุดหลุดจริง — 15-Point Detection, Zero-Tolerance Class A/B, Template-Level Checks, Reporting Verb Discipline, Field-Discovered Living List, Mandatory Load Manifest, Full-Coverage Scan Discipline*

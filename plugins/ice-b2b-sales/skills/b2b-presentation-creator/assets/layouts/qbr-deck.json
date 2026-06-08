@@ -1,0 +1,107 @@
+{
+  "name": "Customer Success & QBR Deck",
+  "description": "Quarterly or annual review with an existing customer. Goal is to demonstrate value delivered, surface risks, and tee up renewal or expansion.",
+  "length": "10–15 slides",
+  "audience": "Champion + executive sponsor; sometimes the original Economic Buyer",
+  "tone": "Outcome-focused, candid. Acknowledge what didn't work alongside what did.",
+  "slides": [
+    {
+      "slide": 1,
+      "layout": "title-hero",
+      "purpose": "Title",
+      "content_guidance": "Customer + 'Quarterly Business Review — Q[N] [YYYY]' + date"
+    },
+    {
+      "slide": 2,
+      "layout": "two-column",
+      "purpose": "Executive Summary",
+      "content_guidance": "Health score + headline outcomes + headline asks"
+    },
+    {
+      "slide": 3,
+      "layout": "stat-callout",
+      "purpose": "Where We Started",
+      "content_guidance": "Original objectives and starting state (before)"
+    },
+    {
+      "slide": 4,
+      "layout": "stat-callout-grid",
+      "purpose": "What We've Delivered",
+      "content_guidance": "3–5 outcomes with numbers (stat callout grid format)"
+    },
+    {
+      "slide": 5,
+      "layout": "2x3-grid",
+      "purpose": "Health Score",
+      "content_guidance": "Scorecard across adoption / value / advocacy / risk. Show underlying metric, not just traffic lights"
+    },
+    {
+      "slide": 6,
+      "layout": "icon-text-rows",
+      "purpose": "Wins This Quarter",
+      "content_guidance": "3–5 specific wins with named teams or users"
+    },
+    {
+      "slide": 7,
+      "layout": "icon-text-rows",
+      "purpose": "What Didn't Land",
+      "content_guidance": "Honest list of missed targets, with diagnosis. This slide builds trust — don't skip it"
+    },
+    {
+      "slide": 8,
+      "layout": "2x3-grid",
+      "purpose": "Adoption Metrics",
+      "content_guidance": "Logins / active users / module adoption / data quality — with trend lines (charts grid)"
+    },
+    {
+      "slide": 9,
+      "layout": "phased-timeline",
+      "purpose": "Roadmap — What's Next from Us",
+      "content_guidance": "Upcoming features, releases, services"
+    },
+    {
+      "slide": 10,
+      "layout": "icon-text-rows",
+      "purpose": "What We're Asking from You",
+      "content_guidance": "Customer commitments / data / sponsor time"
+    },
+    {
+      "slide": 11,
+      "layout": "two-column",
+      "purpose": "Renewal / Expansion Conversation",
+      "optional": true,
+      "content_guidance": "If renewal in <6 months: terms, timing, value justification. Only include if renewal is imminent"
+    },
+    {
+      "slide": 12,
+      "layout": "two-column",
+      "purpose": "Risks We're Watching",
+      "content_guidance": "Top 3 risks with action plans"
+    },
+    {
+      "slide": 13,
+      "layout": "phased-timeline",
+      "purpose": "Mutual Action Plan",
+      "content_guidance": "Joint actions with owners and dates"
+    },
+    {
+      "slide": 14,
+      "layout": "2x3-grid",
+      "purpose": "Appendix — Detailed Metrics",
+      "optional": true,
+      "content_guidance": "Full data breakdown"
+    },
+    {
+      "slide": 15,
+      "layout": "icon-text-rows",
+      "purpose": "Appendix — Support & Escalation Log",
+      "optional": true,
+      "content_guidance": "Support ticket summary, escalations, resolutions"
+    }
+  ],
+  "special_notes": {
+    "health_score_slide": "Use a clear visual scorecard on Slide 5. Avoid traffic-light only; show the underlying metric (e.g., '87% adoption' not just green)",
+    "what_didnt_land_slide": "Slide 7 is critical for trust-building. Be honest about missed targets. Decks that skip this read as pure marketing.",
+    "renewal_conversation_slide": "Only include Slide 11 if renewal is within 6 months. Otherwise hold for next QBR."
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "scholar-olive",
+  "displayName": "Scholar Olive",
+  "category": "industry",
+  "description": "Considered, evidence-led, mission-driven. Education and NGO audiences are sensitive to slick marketing and respond to substance. Features editorial layouts, generous line-height, and understated chart palettes. Uses warm white backgrounds and serif typography. Use when the customer is a university, school, research institute, or nonprofit foundation.",
+  "colors": {
+    "primary": "#5C6E2E",
+    "secondary": "#E8E6DC",
+    "accent": "#B85042",
+    "background": "#FBFAF6",
+    "text": "#1A1A1A",
+    "muted": "#5C5C5C"
+  },
+  "darkMode": {
+    "primary": "#5C6E2E",
+    "secondary": "#E8E6DC",
+    "accent": "#B85042",
+    "background": "#1A1A1A",
+    "text": "#E8E6DC",
+    "muted": "#A0A0A0"
+  },
+  "fonts": {
+    "headerEN": "Cormorant Garamond",
+    "bodyEN": "Lora",
+    "headerTH": "Noto Serif Thai",
+    "bodyTH": "Noto Serif Thai",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "considered-evidence",
+  "cornerRadius": 0,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#5C6E2E",
+    "#3A4520",
+    "#E8E6DC",
+    "#B85042",
+    "#5C5C5C",
+    "#D5D2C6"
+  ],
+  "useDarkMode": false
+}

@@ -1,0 +1,8 @@
+# runtime artifacts — never commit (platform-specific, large, rebuildable)
+.venv/
+**/data/browser_state/
+**/__pycache__/
+*.pyc
+node_modules/
+**/*.tflite
+.DS_Store

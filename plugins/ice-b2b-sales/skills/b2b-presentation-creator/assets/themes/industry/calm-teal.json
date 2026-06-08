@@ -1,0 +1,46 @@
+{
+  "name": "calm-teal",
+  "displayName": "Calm Teal",
+  "category": "industry",
+  "description": "Clinical clarity, calm, trustworthy. Designed for hospital and pharma audiences who interpret aggressive marketing as risky. Features rounded corners, soft shadows, and human-centered photography in moderation. Warm coral accents for human moments. Use when the customer is a hospital, clinic, pharma, medical device maker, or health insurer.",
+  "colors": {
+    "primary": "#028090",
+    "secondary": "#E8F1F2",
+    "accent": "#F08C5E",
+    "background": "#FFFFFF",
+    "text": "#102F33",
+    "muted": "#5C7174"
+  },
+  "darkMode": {
+    "primary": "#028090",
+    "secondary": "#E8F1F2",
+    "accent": "#F08C5E",
+    "background": "#0F1A1C",
+    "text": "#E8F1F2",
+    "muted": "#A0A8AA"
+  },
+  "fonts": {
+    "headerEN": "Inter",
+    "bodyEN": "Lora",
+    "headerTH": "IBM Plex Sans Thai",
+    "bodyTH": "Sarabun",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "clinical-clarity",
+  "cornerRadius": 4,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#028090",
+    "#004453",
+    "#E8F1F2",
+    "#F08C5E",
+    "#5C7174",
+    "#B8DFE3"
+  ],
+  "useDarkMode": false
+}

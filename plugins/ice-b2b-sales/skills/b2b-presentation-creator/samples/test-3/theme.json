@@ -1,0 +1,46 @@
+{
+  "name": "future-slate-microsoft",
+  "displayName": "Future Slate with Microsoft Accent",
+  "category": "industry-vendor-hybrid",
+  "description": "Future Slate tech theme with Microsoft blue accent overlay",
+  "colors": {
+    "primary": "#0F172A",
+    "secondary": "#94A3B8",
+    "accent": "#0078D4",
+    "background": "#FFFFFF",
+    "text": "#0F172A",
+    "muted": "#64748B"
+  },
+  "darkMode": {
+    "primary": "#0F172A",
+    "secondary": "#94A3B8",
+    "accent": "#0078D4",
+    "background": "#0F172A",
+    "text": "#F8FAFC",
+    "muted": "#94A3B8"
+  },
+  "fonts": {
+    "headerEN": "Inter Tight",
+    "bodyEN": "Inter",
+    "headerTH": "IBM Plex Sans Thai",
+    "bodyTH": "IBM Plex Sans Thai",
+    "monoEN": "JetBrains Mono"
+  },
+  "weights": {
+    "primary": 0.6,
+    "secondary": 0.3,
+    "accent": 0.1
+  },
+  "motif": "modern-technical-microsoft",
+  "cornerRadius": 4,
+  "lineWeight": 1,
+  "chartCycle": [
+    "#0F172A",
+    "#070B15",
+    "#94A3B8",
+    "#0078D4",
+    "#64748B",
+    "#D4DDE7"
+  ],
+  "useDarkMode": false
+}

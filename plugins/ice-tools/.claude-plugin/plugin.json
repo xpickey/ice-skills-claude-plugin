@@ -1,0 +1,6 @@
+{
+  "name": "ice-tools",
+  "description": "iCE productivity tools — graphify (knowledge graph), nanobanana (image gen), notebooklm, cua-driver, automation-workflow. 5 skills.",
+  "version": "1.0.0",
+  "author": { "name": "xpickey" }
+}
