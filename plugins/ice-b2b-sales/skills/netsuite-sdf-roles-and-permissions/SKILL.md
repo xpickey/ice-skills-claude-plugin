@@ -1,7 +1,6 @@
 ---
 name: netsuite-sdf-roles-and-permissions
 description: Use when generating or reviewing NetSuite SDF permission configurations such as customrole XML, script deployment permissions, permkey values, permlevel choices, run-as role design, and least-privilege access. Confirms exact ADMI_ / LIST_ / REGT_ / REPO_ / TRAN_ permission IDs, distinguishes standard permissions from customrecord_* script IDs, and validates permissions against bundled NetSuite reference data.
-license: The Universal Permissive License (UPL), Version 1.0
 metadata:
   author: Oracle NetSuite
   version: 1.0

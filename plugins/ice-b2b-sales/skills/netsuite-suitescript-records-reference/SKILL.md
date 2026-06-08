@@ -1,7 +1,6 @@
 ---
 name: netsuite-suitescript-records-reference
 description: SuiteScript records and fields reference. Look up field IDs, types, required status, and search capabilities for all 272 NetSuite record types. Use this when building SuiteScript to ensure correct field usage.
-license: The Universal Permissive License (UPL), Version 1.0
 metadata:
   author: Oracle NetSuite
   version: 1.0

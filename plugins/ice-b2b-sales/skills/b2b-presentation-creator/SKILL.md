@@ -2,7 +2,6 @@
 name: b2b-presentation-creator
 description: |
   World-class PowerPoint (.pptx) skill for B2B Enterprise Software Sales — full lifecycle Discovery to Renewal. Generates executive-grade decks with 9 industry themes, 6 vendor accents (Oracle, SAP, Microsoft, Salesforce, NetSuite, Workday), 1 iCE-branded proprietary theme (ice-propose), bilingual Thai+English typography, 4 infographic methods, and 5-dimensional visual QA. Use when the user asks to build a deck, slides, presentation, pitch, proposal deck, demo deck, RFP/TOR response, business case, QBR/EBR, or any .pptx for B2B sales, presales, or customer success. Trigger especially for iCE Consulting branded decks, iCE proposals, or iCE-themed output. Thai triggers: ทำ slide, สร้าง presentation, เตรียม deck, ทำ pitch, deck ลูกค้า, deck QBR, ทำ infographic, deck iCE, ธีม iCE. Pairs with pptx engine, theme-factory, ice-b2b-enterprise-sale, brand-guidelines.
-license: Proprietary
 ---
 
 # b2b-presentation-creator — World-Class Deck Skill for Enterprise Sales

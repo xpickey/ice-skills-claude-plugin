@@ -1,7 +1,6 @@
 ---
 name: nanobanana-connection
 description: เชื่อมต่อและสั่งงาน Nano Banana MCP Server (Google Gemini Image Generation) จาก Claude Desktop, Cowork และ Code CLI. ใช้ทุกครั้งที่ผู้ใช้ต้องการ สร้างภาพ AI, แก้ภาพ, ทำ Logo, Hero Image, Product Shot, Thumbnail, Banner, Mockup, Sticker, Illustration, Setup/Troubleshoot Nano Banana MCP, หรือ เปลี่ยน/Rotate API Key. ครอบคลุม Pre-flight Connection Test (MCP+Auth+Quota), Prompt Cookbook ไทย-อังกฤษ 30+ Pattern, Aspect Ratio/Resolution, Multi-image Editing, Billing/Quota Recovery 7 Scenario, และ API Key Rotation One-script (Desktop+Cowork+Code CLI พร้อมกัน). Triggers ภาษาไทย — ทำภาพให้หน่อย, สร้างภาพ AI, วาด AI, ทำ hero/thumbnail/logo/product shot/banner/illustration, แก้ภาพนี้, สร้าง mockup, Nano Banana, Gemini image, เปลี่ยน API Key, rotate key, Key รั่ว. English — generate/edit image, create illustration/banner, AI image, nano banana, rotate API key, change Gemini key, leaked key. คู่กับ b2b-presentation-creator, canvas-design, brand-guidelines.
-license: Internal use — iCE Consulting / Trusted Transformation Strategist
 metadata:
   version: V02R02
   date: 2026-05-25

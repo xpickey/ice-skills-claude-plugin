@@ -2,7 +2,6 @@
 name: pre-flight-deck
 description: |
   Mandatory gate-keeper that runs BEFORE any presentation deck (.pptx) creation or major edit. Forces comprehensive reading of skill references, asset verification, layout planning, and user sign-off before allowing build. Use this skill EVERY TIME the user asks for a deck, slides, presentation, pitch, proposal, demo deck, business case, QBR, or any .pptx output — including phrasings like "make a presentation", "build a deck", "create slides", "ทำ slide", "สร้าง deck", "เตรียม presentation". This skill prevents "functional but not delightful" output by enforcing the B2B Deck Quality Charter checklist BEFORE execution. It pairs with b2b-presentation-creator (which then does the actual build) and the project's B2B_DECK_QUALITY_CHARTER.md (which lists mandatory visual elements). Run this skill BEFORE invoking b2b-presentation-creator. Triggers especially on multi-slide decks (5+ slides), executive audiences (CEO/CFO/Board), and when the user's prior chat produced a deck that needed re-design.
-license: Proprietary
 ---
 
 # pre-flight-deck — Mandatory Pre-Build Gate-Keeper

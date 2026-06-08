@@ -1,7 +1,6 @@
 ---
 name: automation-workflow
 description: "Designs automation workflows with trigger-action sequences, tool connections, and error handling procedures. Use when automating repetitive business processes."
-allowed-tools: Read Write Glob
 metadata:
   author: matthewhitcham
   version: "1.0"

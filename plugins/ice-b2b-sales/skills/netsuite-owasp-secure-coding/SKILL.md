@@ -1,7 +1,6 @@
 ---
 name: netsuite-owasp-secure-coding
 description: Platform-agnostic OWASP secure coding practices with JavaScript/Node.js patterns and NetSuite SuiteScript examples. Covers Open Worldwide Application Security Project (OWASP) Top 10 (2021), output encoding, injection prevention, CSP headers, file security, API hardening, AI agent security, DRY security patterns, and 48+ security pitfalls with GOOD/BAD code templates.
-license: The Universal Permissive License (UPL), Version 1.0
 metadata:
   author: Oracle NetSuite
   version: 1.0
