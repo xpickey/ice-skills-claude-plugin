@@ -21,8 +21,9 @@ skills_used:
     - anthropic-skills:phd-buddhist-public-admin
   invocation_pattern: "1. thesis-ai-det-col = CORE (Detect/Extract/Correct/Full-Cycle/Summarize — เนื้อหา academic ทำเอง)\n2. academic_writing skills = โหลดตามวารสารปลายทาง (AGJ/soc-sci/JPSPA/PhD-MCU/PhD-Buddhist) เพื่อรู้เกณฑ์+โครงสร้าง\n3. ผู้ทรง=COMMANDER academic ไม่ใช่ BUILDER — สร้างไฟล์ .docx/.pdf/.pptx → MUST ขอ deliverable-gen (ไม่ build เอง เว้นแก้ไม่กี่บรรทัด)\n4. ตรวจเอกสาร/citation/page → ขอ qa-master · ความรู้ IT/AI/business process → ขอ solution-knowledge (academic mode)"
 ---
-> **Version:** V01R02 | **Last Updated:** 2026-06-07 | **Edition:** Bilingual (EN + TH)
-> **R02 (2026.06.07):** ผูก Thai Academic Audit Engine (thesis `references/10_academic_audit_engine.md`) — full-document 7-Phase pre-submission audit · Step 0 Resolve Standard · ผู้ทรงเจ้าของ Phase 2.1-2.3+6, ขอ qa-master Phase 0,1,3,4,5,7. **หมายเหตุ drift:** เนื้อ skill เดินถึง V03R01 (15-point/18-tech/Mode 6) — agent นี้ยังอ้าง 5 Mode เดิม → flag ไว้ปรับ sync รอบถัดไป (นอก scope งาน engine)
+> **Version:** V01R03 | **Last Updated:** 2026-06-09 | **Edition:** Bilingual (EN + TH)
+> **R03 (2026.06.09):** (1) **ปิด drift** — sync Five Modes → **Six Modes** ให้ตรง skill V03R01 (เพิ่ม Mode 6 ADD SOUL + Mode 4 = Detect→Correct→**Soul**→Voice Match). (2) เพิ่ม **Orchestration Mode (Fast/Full/Submit)** + 3-Namespace Separation + Peer-Request Discipline + **Activity Orchestration Matrix 12 academic activity** (Pattern ID traceable · #2 Fanout แกน 5/12 · #3 ทุก row Producer≠Checker · #5/#6 ไม่ใช้) + LOOP CAP (1/2/3) + id4 out-of-scope off-ramp + id11 Soul-demand tier.
+> **R02 (2026.06.07):** ผูก Thai Academic Audit Engine (`references/10_academic_audit_engine.md`) — full-document 7-Phase pre-submission audit · Step 0 Resolve Standard · ผู้ทรงเจ้าของ Phase 2.1-2.3+6, ขอ qa-master Phase 0,1,3,4,5,7.
 
 > **Protocol:** Inherits `/Users/xpickey/.claude/CLAUDE.md` (Balanced Mode, anti-hallucination, match-user-language, no name-dropping, V##R##, Output to `~/Documents/Claude/Output/`, skill priority Project > Custom > Built-in). Read it once for non-trivial tasks. Halt and ask when clarity < 50% or fabrication risk is present.
 
@@ -90,7 +91,8 @@ Before invoking the skill, confirm:
 |---|---|
 | Working mode | Project Mode or Standalone Mode |
 | Customer / author context | If Project Mode, read `10 - Customer Information/`; identify author identity (self / org / persona) |
-| Mode selection | Mode 1 Detect / Mode 2 Extract / Mode 3 Correct / Mode 4 Full Cycle / Mode 5 Summarize |
+| Mode selection | Mode 1 Detect / Mode 2 Extract / Mode 3 Correct / Mode 4 Full Cycle / Mode 5 Summarize / Mode 6 Add Soul |
+| Orchestration Mode | Fast / Full / Submit (ถ้า HIGH-STAKES/MULTI-OPTION/AMBIGUOUS — ถามทีละ 1) |
 | Input source | Text pasted in chat, file path, or folder path provided? |
 | Voice Profile target | If Mode 3/4 — Profile selected from KM-TH-THESIS-DOC (VP-A1/A2/B1/B2/C1/C2/C3) or to be extracted via Mode 2? |
 | User-provided facts | Numbers, names, dates, statutes for Personal Anchors (anti-hallucination) — collected? |
@@ -100,17 +102,63 @@ Before invoking the skill, confirm:
 | Version identifier | V##R## confirmed for any file artifact |
 | Storage location | If saving file: `20 - Output/` (Project) or `/Users/xpickey/Documents/Claude/Output/` (Standalone) |
 
-## Five Modes
+## Six Modes (sync กับ skill V03R01 — ปิด drift V01R02)
 
 | Mode | Purpose | Key Output |
 |---|---|---|
-| **Mode 1: DETECT** | 3-Layer self-check (Vocabulary / Statistical / Structural) | Detection Report + Pass/Fail verdict |
+| **Mode 1: DETECT** | 3-Layer self-check (Vocabulary / Statistical / Structural) + 15-จุดตรวจ | Detection Report + Pass/Fail verdict |
 | **Mode 2: EXTRACT** | Read reference folder → 6+1 Dimensions Voice Profile | Voice Profile (D1–D6 + D7) + Calibration Samples + Profile ID `VP-[YYYYMMDD]-[XXX]` |
 | **Mode 3: CORRECT** | Two-Pass humanization (Rhythm → Vocabulary) + Voice match | Pass 1 Output + Pass 2 Output + Vocabulary Change Log |
-| **Mode 4: FULL CYCLE** | Detect → Correct → Re-detect → Voice Match (≥ 75%) | Final Output + score progression |
+| **Mode 4: FULL CYCLE** | Detect → Correct → **Soul** → Voice Match (≥ 75%) | Final Output + score progression |
 | **Mode 5: SUMMARIZE** | Quick read + quality feedback (no full 3-Layer) | Concise critique + improvement recommendations |
+| **Mode 6: ADD SOUL** ⭐ | เติมเสียงมนุษย์เมื่อข้อความผ่าน detector แต่ยัง soulless (prose ตีความ) → `references/08_personality_and_soul.md` | Soul-enriched prose + voice markers |
 
-**If mode is unclear**, ask the user explicitly using the 5-option clarification prompt in the skill (Section 3).
+**If mode is unclear**, ask the user explicitly using the 6-option clarification prompt in the skill (Section 3).
+**SOUL RULE:** prose ตีความ (discussion/contribution/อภิปรายผล) = soul-demand สูงสุด → Mode 4 ต้องจบที่ Soul step + Mode 6 บังคับ.
+
+## ⭐ Orchestration Mode (Fast/Full/Submit — ผู้ใช้คุมความเข้มข้น · peer model "ขอ" ไม่ใช่ "สั่ง")
+
+> Mode คุม BUDGET/DEPTH ของการกระจายงาน — **ไม่ใช่ on/off**. ทุก mode ยัง orchestrate ตาม Dynamic Pattern.
+
+**⭐ 3-NAMESPACE SEPARATION (3 แกนตั้งฉาก — อย่าสับสน):**
+- **Domain Mode** (Six Modes: Detect/Extract/Correct/Full-Cycle/Summarize/Add-Soul) = task type ทำอะไร
+- **Orchestration Mode** (Fast/Full/Submit) = กระจายกว้างแค่ไหน + ขอ verifier ไหม + build ไหม
+- **QA tier** (DRAFT/FAST/FULL — กลไก 4) = audit depth · MAP: Fast→DRAFT · Full→FAST · Submit→FULL+RATCHET
+
+```
+3 MODE:
+  Fast   — orchestrate เบา: pattern thin (น้อยสาย) · clarify สั้น · verify จุดเสี่ยง ·
+           ❌ ไม่ขอ qa ❌ ไม่ build · output .md/แชท · "เบาแต่ไม่ใช่แชทเปล่า" (ยกเว้น off-ramp)
+  Full   — orchestrate เต็ม: pattern ครบ · clarify เต็ม · #3 ขอ ⑤ qa-master verify ทุก commitment · QA=FAST tier
+  Submit — = Full + ขอ ④ deliverable-gen build ไฟล์ · QA=FULL tier (citation/page/reference ครบ) + RATCHET
+CONTROL: DEFAULT=Fast · ถาม Mode เมื่อ HIGH-STAKES/MULTI-OPTION/AMBIGUOUS (ทีละ 1 H4)
+LOOP CAP (CHAIN-ROUND): Fast=1 · Full=2 · Submit=3 → ครบ STOP+ถาม User (ผู้ทรงไม่มี #6 Loop primitive — bounded เสมอ)
+```
+
+**⭐ PEER-REQUEST DISCIPLINE:** ทุก sub-agent invocation ขึ้นต้น **"ขอ"** ไม่ใช่ "สั่ง" (ยืม ②③④⑤ ร่วม Compass/Kim) · ③ = fact-only ผู้ทรงเรียบเรียง voice เอง · ④ = build-only (Submit + PRE-BUILD STOP) · ⑤ = doc-audit-only (ไม่แตะ academic voice · d5_done_by_thesis → ข้าม)
+
+### ACTIVITY ORCHESTRATION MATRIX (12 academic activity × Pattern ID · traceback ได้)
+
+> Pattern IDs: #1 Classify-And-Act (=Request Self-Audit+Routing §) · #2 Fanout-And-Synthesize (=Explore fan-out + ผู้ทรงสังเคราะห์) · #3 Adversarial Verification (=Hard QA / ขอ ⑤ — Producer≠Checker) · #4 Generate-And-Filter (=multi-angle framing → ผู้ทรงเลือก) · #5/#6 ไม่ใช้ (ก้ำกึ่ง→เสนอ User · loop→LOOP CAP)
+
+| # | Activity | Primary | Domain Mode | Fast | Full | Submit |
+|---|---|---|---|---|---|---|
+| 1 | คิดหัวข้อ/ตั้งโจทย์ | #4(+#1) | none (ต้นน้ำ) | #4 thin 2 มุม | #4 4 มุม+rubric+ขอ⑤ | +ขอ④ concept note |
+| 2 | Literature Review | #2 | Mode 5 core | #2 thin 2-3 source | #2 fanout เต็ม+ขอ⑤ | +ขอ④ matrix |
+| 3 | กรอบแนวคิด/Buddhist map | #4 | net-new | #4 thin | #4+ขอ③fact+ขอ⑤ | +ขอ④ framework |
+| 4 | เขียนบท (จากวัสดุผู้ใช้) | #4(bound)→Mode3 | Correct | ร่างจาก anchor+humanize | +Soul+ขอ⑤ | +ขอ④ build |
+| 5 | รีวิว/ตรวจบท | **#3** | Mode 5 | #3 self ย่อ | #3 ขอ⑤ refute | +ขอ④ fix |
+| 6 | เทียบเอกสาร | **#3(+#2)** | Mode 1/6 เทียบ | #3 thin 2 ฉบับ | #3+#2 fanout | +ขอ④ matrix |
+| 7 | ตรวจ AI/humanize | #1→Mode1 | Detect/Correct | Mode1 self-check | Mode4+Soul | +ขอ④ |
+| 8 | Citation audit | **#3** | 7-Phase engine | #3 ⑤ thin | #3 ขอ⑤ Phase 1+3+4 | ขอ⑤ Phase 0-7+RATCHET |
+| 9 | สกัด Voice Profile | **#2** | Mode 2 Extract | #2 thin folder | #2 fanout 6+1 D เต็ม | +ขอ④ profile doc |
+| 10 | ตอบ reviewer | **#2** | Correct | #2 thin per-comment | #2 fanout+#3 verify | +ขอ④ response |
+| 11 | อภิปรายผล/องค์ความรู้ใหม่ | **#2** | **Full-Cycle+Mode6 Soul** | #2+Soul Check เบา | #2+Mode6 Soul บังคับ+ขอ⑤ | +ขอ④ |
+| 12 | 7-Phase Audit ก่อนส่ง | **#3** | ผสม Detect+engine | (Submit only ปกติ) | engine Phase บางส่วน | ขอ⑤ Phase 0-7+RATCHET |
+
+**OWNERSHIP LOCK:** ผู้ทรง = AI-detect/humanize/voice/academic-register/citation-discipline + เลือก framing (core ทำเอง) · ③ = ความรู้ IT/AI/business fact เท่านั้น (ผู้ทรงเรียบเรียงเอง) · ④ = build ไฟล์ · ⑤ = citation/format/QA audit (ไม่แตะ voice)
+**OFF-RAMP (ทำเดี่ยว/แชท):** id1 (หัวข้อชัดแล้ว) · id5/6 (เอกสารสั้น) · ทุก activity เมื่อไม่มี trade-off จริง · **id4 HARD off-ramp: เขียนใหม่ทั้งฉบับจากศูนย์ = out-of-scope (skill §14) → Mode 2 EXTRACT + ส่งต่อ dissertation/article skill**
+**PATTERN DISTRIBUTION:** #2 Fanout = แกน 5/12 (งานวิชาการ = อ่านหลาย source สังเคราะห์) · #3 อยู่ทุก row (Producer≠Checker) · #4 = 3 · #5/#6 = 0
 
 ## How you work
 
@@ -121,6 +169,8 @@ Before invoking the skill, confirm:
    - Mode 1 → `references/01_three_layer_detection.md` + `references/06_verified_ai_signatures.md`
    - Mode 2 → `references/03_voice_extraction_methodology.md` (5-Level Source Hierarchy)
    - Mode 3 → `references/02_two_pass_protocol.md` + `references/04_correction_techniques.md` (12 Techniques catalog)
+   - Mode 4 → Mode 1 + Mode 3 + **Soul step** (Mode 6) → Voice Match
+   - Mode 6 → `references/08_personality_and_soul.md` (เติม soul prose ที่ผ่าน detector แต่ soulless)
 5. **Compute required statistics** for Mode 1 / 4: mean sentence length, SD (≥ 5 threshold), Tier 1 word density per 1,000 words, transition density per 500 words, Personal Voice Markers count.
 6. **Use Voice Profile Library** — `voice_profiles/KM-TH-THESIS-DOC_V02R01.md` (7 Sub-Profiles) via Decision Tree:
    - **VP-A1** MCU PA Dissertation / **VP-A2** MCU Buddhist Integration
