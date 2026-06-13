@@ -48,6 +48,41 @@ def hex_to_rgb(h):
     return RGBColor(int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16))
 
 
+# ── CHAR GUARD (PPTX Lesson #18) ────────────────────────────────────────────
+# U+2192 "→" (และ arrow ญาติ) ทำให้ PowerPoint for Mac ปฏิเสธทั้งไฟล์ (Repair)
+# ขณะที่ LibreOffice/qlmanage ปล่อยผ่าน (false-green). แทนด้วย ▸ (U+25B8) ที่
+# เปิดได้ทุก engine + สื่อความ flow เดียวกัน. ตรวจซ้ำที่ deck_qa.py (safety net).
+CHAR_REPLACEMENTS = {
+    "→": "▸",  # → RIGHTWARDS ARROW       → ▸ BLACK RIGHT-POINTING SMALL TRIANGLE
+    "⟶": "▸",  # ⟶ LONG RIGHTWARDS ARROW  → ▸
+    "➜": "▸",  # ➜ HEAVY ROUND-TIPPED ARROW → ▸
+    "➔": "▸",  # ➔ HEAVY WIDE-HEADED ARROW  → ▸
+    "➙": "▸",  # ➙ HEAVY RIGHTWARDS ARROW   → ▸
+}
+
+
+def _sanitize_chars(obj, _stats=None):
+    """Recursively replace PowerPoint-rejecting chars in any string within spec.
+    Returns (sanitized_obj, replacement_count). Logs to stderr — never silent."""
+    top = _stats is None
+    if _stats is None:
+        _stats = {"count": 0}
+    if isinstance(obj, str):
+        out = obj
+        for bad, good in CHAR_REPLACEMENTS.items():
+            if bad in out:
+                _stats["count"] += out.count(bad)
+                out = out.replace(bad, good)
+        return (out, _stats["count"]) if top else out
+    if isinstance(obj, dict):
+        res = {k: _sanitize_chars(v, _stats) for k, v in obj.items()}
+        return (res, _stats["count"]) if top else res
+    if isinstance(obj, list):
+        res = [_sanitize_chars(v, _stats) for v in obj]
+        return (res, _stats["count"]) if top else res
+    return (obj, _stats["count"]) if top else obj
+
+
 def add_title_slide(prs, slide, theme):
     layout = prs.slide_layouts[0]
     s = prs.slides.add_slide(layout)
@@ -153,6 +188,10 @@ LAYOUTS = {
 def build(spec_path, out_path):
     with open(spec_path) as f:
         spec = json.load(f)
+    # CHAR GUARD (Lesson #18): auto-replace PowerPoint-rejecting chars (→ ▸) before build
+    spec, _n = _sanitize_chars(spec)
+    if _n:
+        print(f"CHAR-GUARD: replaced {_n} arrow char(s) (U+2192/etc → ▸) — would have caused PowerPoint Repair", file=sys.stderr)
     prs = Presentation()
     prs.slide_width = Inches(10)
     prs.slide_height = Inches(7.5)

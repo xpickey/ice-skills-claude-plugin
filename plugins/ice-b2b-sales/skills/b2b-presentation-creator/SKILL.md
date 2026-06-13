@@ -2,6 +2,7 @@
 name: b2b-presentation-creator
 description: |
   World-class PowerPoint (.pptx) skill for B2B Enterprise Software Sales — full lifecycle Discovery to Renewal. Generates executive-grade decks with 9 industry themes, 6 vendor accents (Oracle, SAP, Microsoft, Salesforce, NetSuite, Workday), 1 iCE-branded proprietary theme (ice-propose), bilingual Thai+English typography, 4 infographic methods, and 5-dimensional visual QA. Use when the user asks to build a deck, slides, presentation, pitch, proposal deck, demo deck, RFP/TOR response, business case, QBR/EBR, or any .pptx for B2B sales, presales, or customer success. Trigger especially for iCE Consulting branded decks, iCE proposals, or iCE-themed output. Thai triggers: ทำ slide, สร้าง presentation, เตรียม deck, ทำ pitch, deck ลูกค้า, deck QBR, ทำ infographic, deck iCE, ธีม iCE. Pairs with pptx engine, theme-factory, ice-b2b-enterprise-sale, brand-guidelines.
+license: Proprietary
 ---
 
 # b2b-presentation-creator — World-Class Deck Skill for Enterprise Sales
@@ -164,7 +165,18 @@ e.g. `Proposal_BangkokBank_V01R01_2026-04-26.pptx`
 
 ### Step 6 — QA (mandatory)
 
-Run the **5-dimensional QA** described in `references/09-qa-framework.md`:
+**Step 6.0 — Forbidden-char gate (run FIRST — cheapest check, catches the worst failure).** ⭐
+Before any rendering, scan the deck's **text** (via python-pptx — **no render engine needed**) for the character blocklist below. These chars make **PowerPoint for Mac reject the entire file** (forces the "Repair" dialog), yet **LibreOffice / qlmanage open them fine** — so a render-based preview is *false-green* here and will pass a deck that is actually broken on the customer's machine.
+
+| Forbidden char | Code point | Replace with | Why |
+|---|---|---|---|
+| `→` | U+2192 RIGHTWARDS ARROW | `▸` (U+25B8) | PowerPoint Repair-rejects the whole file; ▸ conveys the same flow and opens on every engine |
+| `⟶` `➜` `➔` `➙` | U+27F6 / U+2799 / U+2794 / U+2799 | `▸` (U+25B8) | Same family — same risk |
+
+- The build pipeline (`_lib/build_pptx.py`) auto-replaces these at build time, and `scripts/deck_qa.py` re-scans as a safety net. If you author or paste slide text directly, **replace `→` with `▸` yourself** — do not rely on the eye, the bug is invisible in any LibreOffice preview.
+- **Debug method if a deck triggers Repair:** binary-search by splitting the file page-by-page (do NOT read the spec hunting for it) — the offending glyph is often in a single shape. (Field case: KT Food S4 — one `→` rejected the whole deck; LibreOffice had passed it.)
+
+Then run the **5-dimensional QA** described in `references/09-qa-framework.md`:
 
 1. First Impression (does it land in 2 seconds?)
 2. Usability (can the audience follow the story?)
@@ -174,8 +186,8 @@ Run the **5-dimensional QA** described in `references/09-qa-framework.md`:
 
 Plus the content checks:
 
-- Run `python -m markitdown <file>.pptx | grep -iE "xxxx|lorem|ipsum|placeholder"` to catch leftover boilerplate.
-- Convert to images and dispatch a subagent for visual inspection (REQUIRED for ≥5 slides).
+- Run `python scripts/deck_qa.py --deck <file>.pptx --output-dir <dir>` — this runs the forbidden-char scan + boilerplate grep (xxxx/lorem/ipsum/placeholder). The char scan runs **even when LibreOffice is absent**.
+- Convert to images and dispatch a subagent for visual inspection (REQUIRED for ≥5 slides). **Note:** LibreOffice render = *preview only*, **not** a validation pass — it is false-green (cannot see U+2192 rejection, 16:9 breakage, corruption, or font "General Failure" that real PowerPoint surfaces). The final visual sign-off must come from opening the deck in **real PowerPoint**.
 - **Font-embed check (customer-facing):** confirm deliverable-gen ran `_lib/validate_pptx_fonts.py` → PASS, and the deck was opened in **real PowerPoint** with no "Repair" and no font "General Failure" (see §5.1).
 
 Iterate fix → re-QA at least once. Do not declare success until a full pass surfaces no new issues.
@@ -400,6 +412,7 @@ You rarely need all 10 references. Pull only what the situation demands.
 
 | Version | Date | Change |
 |---|---|---|
+| **V01R04** | **2026-06-13** | **Added Step 6.0 Forbidden-char gate (U+2192 `→` + family → `▸` U+25B8) as the FIRST QA check — text-based, runs without any render engine. Demoted LibreOffice render to *preview only, not a validation pass* (false-green: cannot see U+2192 Repair-rejection, 16:9 breakage, corruption, font General Failure). Final visual sign-off = real PowerPoint. Switched content-check command to `scripts/deck_qa.py` (forbidden-char scan + boilerplate grep, LibreOffice-optional). Source: KT Food S4 field bug + PPTX Lesson #18.** |
 | **V01R03** | **2026-06-03** | **Added §5.1 Font Embedding — embed-safe font rules (static + fsType≠Restricted + SIL OFL) + handoff to deliverable-gen `_lib/embed_fonts_pptx.py` (5 PowerPoint-safe conditions incl. fontTools normalize for "General Failure") + ⛔ no LibreOffice EmbedFonts + Step 6 QA & §10 Self-Check embed gates. Source: KD_PPTX-Embedded-Font-TH-EN_V01R02.** |
 | **V01R02** | **2026-05-19** | **Added references/12-quality-charter.md — B2B Deck Quality Charter (9 mandatory items + 8-step Pre-Build Workflow + Pass ≥8/9 threshold + 10 Anti-Patterns). Charter enforced by presentation-generator-agent V01R03 Phase A.5 and qa-master-agent V01R02 Dimension 6.** |
 | V01R01 | 2026-05-15 | Initial release — 11 references + scripts + assets + samples (66 files, 349KB ZIP) |

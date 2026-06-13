@@ -35,20 +35,35 @@ MODERATE_PATTERNS = [
     (r"expand\s+on", "Incomplete instruction"),
 ]
 
+# PPTX Lesson #18: chars that make PowerPoint for Mac REJECT the whole file (Repair)
+# but LibreOffice/qlmanage pass (false-green). Detected via text-extract (NO LibreOffice
+# dependency) so the check works even when no render engine is installed.
+CHAR_BLOCKLIST = {
+    "→": "▸",  # U+2192 RIGHTWARDS ARROW         → ▸ (U+25B8, PowerPoint-safe)
+    "⟶": "▸",  # U+27F6 LONG RIGHTWARDS ARROW    → ▸
+    "➜": "▸",  # U+2799 HEAVY ROUND-TIPPED ARROW → ▸
+    "➔": "▸",  # U+2794 HEAVY WIDE-HEADED ARROW  → ▸
+    "➙": "▸",  # U+2799 HEAVY RIGHTWARDS ARROW   → ▸
+}
+
 
 def check_libreoffice() -> bool:
     """Check if LibreOffice is available."""
     return shutil.which("soffice") is not None
 
 
-def pptx_to_pdf(pptx_path: str, pdf_path: str) -> None:
-    """Convert PPTX to PDF using LibreOffice."""
+def pptx_to_pdf(pptx_path: str, pdf_path: str) -> bool:
+    """Convert PPTX to PDF using LibreOffice (preview render only — NOT a validation pass).
+    Returns True if rendered, False if LibreOffice absent (char/content checks still run).
+    NOTE: LibreOffice is false-green — it cannot see corruption/16:9/General-Failure/U+2192
+    that real PowerPoint rejects. Final visual validation must open in REAL PowerPoint."""
     if not check_libreoffice():
-        logger.error(
-            "LibreOffice not found. Install: brew install libreoffice (macOS) "
-            "or apt-get install libreoffice (Linux)"
+        logger.warning(
+            "LibreOffice not found — skipping preview render (this is OK). "
+            "Text/char checks still run. Final visual check: open in REAL PowerPoint "
+            "(LibreOffice render = false-green, install only for preview: brew install libreoffice)."
         )
-        sys.exit(1)
+        return False
 
     try:
         subprocess.run(
@@ -66,9 +81,10 @@ def pptx_to_pdf(pptx_path: str, pdf_path: str) -> None:
             timeout=120,
         )
         logger.info(f"PDF generated: {pdf_path}")
+        return True
     except subprocess.CalledProcessError as e:
-        logger.error(f"LibreOffice conversion failed: {e.stderr.decode()}")
-        sys.exit(1)
+        logger.warning(f"LibreOffice preview render failed (non-fatal): {e.stderr.decode()}")
+        return False
 
 
 def pdf_to_images(pdf_path: str, output_dir: str, dpi: int) -> List[str]:
@@ -128,6 +144,29 @@ def find_issues(text: str, patterns: List[Tuple[str, str]]) -> List[str]:
     for pattern, description in patterns:
         if re.search(pattern, text, re.IGNORECASE):
             issues.append(description)
+    return issues
+
+
+def find_forbidden_chars(pptx_path: str) -> List[str]:
+    """Lesson #18: scan each slide for PowerPoint-rejecting chars (→ etc).
+    Returns per-slide issue strings. Uses python-pptx — no LibreOffice needed."""
+    try:
+        from pptx import Presentation
+    except ImportError:
+        return []
+    issues = []
+    try:
+        prs = Presentation(pptx_path)
+        for idx, slide in enumerate(prs.slides, 1):
+            stext = "\n".join(sh.text for sh in slide.shapes if hasattr(sh, "text"))
+            for bad, good in CHAR_BLOCKLIST.items():
+                if bad in stext:
+                    issues.append(
+                        f"Slide {idx}: forbidden char '{bad}' (U+{ord(bad):04X}) "
+                        f"→ PowerPoint rejects whole file (Repair). Replace with '{good}'."
+                    )
+    except Exception as e:
+        logger.error(f"forbidden-char scan failed: {e}")
     return issues
 
 
@@ -209,15 +248,21 @@ def main() -> None:
 
     logger.info(f"Starting QA on: {args.deck}")
 
-    with_pdf = output_path / f"{pptx_path.stem}.pdf"
-    pptx_to_pdf(str(pptx_path), str(with_pdf))
-
-    images = pdf_to_images(str(with_pdf), str(output_path), args.dpi)
+    # Lesson #18: forbidden-char scan FIRST — runs always, no LibreOffice needed
+    forbidden = find_forbidden_chars(str(pptx_path))
 
     text = extract_text_from_pptx(str(pptx_path))
-
-    critical_issues = find_issues(text, CRITICAL_PATTERNS)
+    critical_issues = find_issues(text, CRITICAL_PATTERNS) + forbidden
     moderate_issues = find_issues(text, MODERATE_PATTERNS)
+
+    # LibreOffice preview render (OPTIONAL — preview only, NOT a validation pass).
+    # If absent, char/content checks above still cover correctness; visual check = real PowerPoint.
+    images = []
+    with_pdf = output_path / f"{pptx_path.stem}.pdf"
+    if pptx_to_pdf(str(pptx_path), str(with_pdf)):
+        images = pdf_to_images(str(with_pdf), str(output_path), args.dpi)
+    else:
+        logger.warning("No preview images — open the deck in REAL PowerPoint for visual QA.")
 
     try:
         from pptx import Presentation
