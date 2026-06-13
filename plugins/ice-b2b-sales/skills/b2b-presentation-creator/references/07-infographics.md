@@ -329,6 +329,17 @@ dot -Tsvg orgchart.dot -o orgchart.svg
 
 **Use when:** Title slide hero, section dividers, abstract backgrounds that provide visual energy without technical accuracy.
 
+**Engine — เลือก MCP ตามงาน (ผ่าน connection skill):**
+| งาน | engine | skill |
+|---|---|---|
+| hero/divider/background ภายใน เร็ว | **Nano Banana** (Gemini image) `mcp__nanobanana__generate_image` | `nanobanana-connection` |
+| 4K / มี text / diagram fidelity สูง | **Higgsfield Nano Banana Pro** | `higgsfield-connection` |
+| product shot / DTC ad / brand visual | **Higgsfield Marketing Studio / FLUX.2 / Soul** | `higgsfield-connection` |
+| video clip / motion hero / brand video | **Higgsfield** (Kling/Veo/Seedance) `generate_video` | `higgsfield-connection` |
+| character/avatar คงหน้าข้ามหลายสไลด์ | **Higgsfield Soul ID** | `higgsfield-connection` |
+
+> **เลือกอย่างไร:** ภาพ hero/พื้นหลังภายในที่ไม่ต้อง 4K → nanobanana (เร็ว, quota Google, ไม่เปลืองเครดิต). งานคุณภาพสูง/video/ad/brand/character → higgsfield (credit-based — **preflight cost ด้วย `get_cost: true` ก่อนสั่ง**). deliverable-gen-agent (เจนนี่) bind ทั้ง 2 MCP + skill แล้ว — เรียกได้ตอน build deck. รายละเอียด prompt/model → `nanobanana-connection` หรือ `higgsfield-connection`.
+
 **When NOT to use:**
 - Any diagram claiming to show the customer's actual system
 - Any technical specification or architecture diagram
