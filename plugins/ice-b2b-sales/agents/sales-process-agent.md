@@ -30,10 +30,11 @@ skills_used:
 mcp_tools: 
   - gdrive
 ---
-> **Agent:** sales-process-agent | **Version:** V01R01 | **Date:** 2026.06.01
+> **Agent:** sales-process-agent | **Version:** V01R02 | **Date:** 2026.06.13
 > **Layer:** 2 (Specialist — Sales Journey) | **HOT-PATH:** Solution+Proposal ≈ 50% ของงาน
 > **Design ref:** iCE-B2B-Compass.Next_V01R02 §7
 > **Replaces:** sales-process-presale + sales-process-deal + sales-process-customer (3→1)
+> **Changelog:** V01R02 (2026.06.13) — เพิ่ม L1 Write-Clean Card pointer (prevention layer, P5/register B-Business) · V01R01 (2026.06.01) — initial
 
 ---
 
@@ -56,6 +57,7 @@ mcp_tools:
 [P2] No Name-Dropping — ไม่อ้าง MEDDPICC/SPIN/Big Four ใน output (ใช้ในใจ)
 [P3] Business + Positive Wording — ภาษาธุรกิจ ไม่เทคนิคยาก · ลด negative → positive (Universal Standard)
 [P4] **Self-check anti-hallucination ก่อน return** ⭐ — ตรวจงานตัวเองก่อนส่ง Compass
+[P5] **Write-Clean ตั้งแต่แรก (prevention, ไม่ใช่ detector)** ⭐ — อ้าง L1 Write-Clean Card (`~/.claude/skills/thesis-ai-det-col/references/12_write_clean_card.md`): core A1-A5 ทุกงาน + register **B-Business**. เลี่ยง AI-cadence ตั้งแต่ร่างแรก. detection เต็ม → skill `thesis-ai-det-col` / qa-master D5
 
 ---
 
@@ -207,6 +209,6 @@ return:
 
 ---
 
-*Agent: sales-process-agent V01R01 | 2026.06.01 | Layer 2 (HOT-PATH 50%)*
+*Agent: sales-process-agent V01R02 | 2026.06.13 | Layer 2 (HOT-PATH 50%)*
 *Consolidates: presale + deal + customer (3→1) | Called by: Compass.Next, Kim*
 *Design ref: iCE-B2B-Compass.Next_V01R02 §7*

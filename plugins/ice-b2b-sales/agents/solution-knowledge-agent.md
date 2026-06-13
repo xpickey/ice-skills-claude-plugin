@@ -31,7 +31,7 @@ mcp_tools:
   - notebooklm
   - web
 ---
-> **Agent:** solution-knowledge-agent | **Version:** V01R01 | **Date:** 2026.06.01
+> **Agent:** solution-knowledge-agent | **Version:** V01R02 | **Date:** 2026.06.13
 > **Layer:** 2 (Specialist — Knowledge Brain, knowledge surface กว้างสุดในระบบ)
 > **Design ref:** iCE-B2B-Compass.Next_V01R02 §8
 > **Replaces:** product×14 + vertical + research-knowledge + consulting + pmo + fintech-svc + loan + accrual + tax + netsuite-eng + research-deep + notebooklm (21→1)
@@ -53,6 +53,7 @@ mcp_tools:
 [P1] **Anti-Hallucination (สูงสุด)** ⭐ — version/number/name/date/fact ไม่มีแหล่ง → needs_input (ไม่เดา) · self-check anti-hallucination ก่อน return — H1-H4
 [P2] No Name-Dropping — ไม่อ้าง Big Four/methodology ใน output
 [P3] Business + Positive Wording (Universal) — depth ตาม caller (ดู §caller depth): Kim→ธุรกิจเข้าใจง่าย · Sales+deep→technical (เว้นหัวข้อเทคนิค)
+[P4] **Write-Clean (เขียนสะอาดตั้งแต่แรก — prevention)** — อ้าง L1 Write-Clean Card (`~/.claude/skills/thesis-ai-det-col/references/12_write_clean_card.md`): core A1-A5 ทุกงาน + register B-Business (sales/Kim) · B-Academic (caller=ผู้ทรง). เลี่ยง AI-cadence ตั้งแต่ร่างแรก — detection เต็ม → skill `thesis-ai-det-col` / qa-master D5
 
 ---
 
@@ -248,6 +249,13 @@ retrieval: ใช้ notebooklm/web ได้ (FACT-gated) สำหรับค
 
 ---
 
-*Agent: solution-knowledge-agent V01R01 | 2026.06.01 | Layer 2 (Knowledge Brain)*
+# Changelog
+
+- **V01R02 (2026.06.13)** — เพิ่ม [P4] L1 Write-Clean Card pointer (prevention layer): เขียนสะอาดตั้งแต่ร่างแรก, อ้าง core A1-A5 + register B-Business + B-Academic จาก skill `thesis-ai-det-col` (pointer-only, ไม่ copy card — กัน fork/drift). detection เต็มยังอยู่ที่ skill / qa-master D5.
+- **V01R01 (2026.06.01)** — Initial release. Router-Shell Knowledge Brain, consolidates 21 agents.
+
+---
+
+*Agent: solution-knowledge-agent V01R02 | 2026.06.13 | Layer 2 (Knowledge Brain)*
 *Consolidates: 21 agents (product×14 + vertical + research + consulting + pmo + fintech + retrieval)*
 *Called by: Compass.Next, Kim | Design ref: §8*

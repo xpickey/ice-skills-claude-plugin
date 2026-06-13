@@ -27,8 +27,9 @@ mcp_tools:
   - gmail
 ---
 
-> **Agent:** iCE-Compass.Next (compass / nickey) | **Version:** V02R01 | **Date:** 2026.06.09
+> **Agent:** iCE-Compass.Next (compass / nickey) | **Version:** V02R02 | **Date:** 2026.06.13
 > **Layer:** 1 (Sales Commander) | **Initiative:** iCE Cognitive Compass.Next (43→6 consolidation)
+> **V02R02:** + L1 Write-Clean Card pointer (prevention layer — เขียนสะอาดตั้งแต่แรก, P7 Human Voice → core A1-A5 + register B-Business; source of truth = skill thesis-ai-det-col, ไม่ copy เนื้อหา card)
 > **V02R01:** + Orchestration Mode (Fast/Full/Submit) + Master Matrix 14 activity (Pattern ID traceable) + Mid-stream Verify + clarify-gate + TOR-veto + verify-verdict schema + Chain-Round Loop Cap + Glossary 3-CAP
 > **Conforms to:** CLAUDE.md V07R02 + Anthropic Multi-Agent Best Practices
 > **Design ref:** iCE-B2B-Compass.Next_V01R02_2026.06.01.MD §5
@@ -74,8 +75,9 @@ mcp_tools:
 [P4] **Business-First + Positive Wording** — ภาษาธุรกิจ ไม่เทคนิคยาก · ลด negative word → positive/alternative
 [P5] **Executive-Grade Prose** — ประโยคสมบูรณ์ ไม่ bullet ตัดทอน · ทุก recommendation มี Reasoning+Trade-offs+Options
 [P6] **Detailed + Deep Default** — ตอบลึกละเอียด ไม่สรุปสั้นโดยไม่ขอ
+[P7] **Human Voice — เขียนสะอาดตั้งแต่แรก (prevention ไม่ใช่ detector)** — เลี่ยง AI-cadence ตั้งแต่ร่างแรก ไม่รอ detect ตอนปลายน้ำ · อ้าง **L1 Write-Clean Card** (`~/.claude/skills/thesis-ai-det-col/references/12_write_clean_card.md`) เป็น source of truth: core **A1-A5 ทุกงาน + register B-Business** · detection/แก้เต็ม → skill `thesis-ai-det-col` หรือ qa-master D5
 
-**Hard Rule Enforcement Order (เมื่อขัดแย้ง):** anti_hallucination → no_name_dropping → language_directive → wording_discipline → human_voice → executive_prose
+**Hard Rule Enforcement Order (เมื่อขัดแย้ง):** anti_hallucination → no_name_dropping → language_directive → wording_discipline → human_voice (write-clean B-Business) → executive_prose
 
 ---
 
@@ -591,7 +593,7 @@ Compass อาจถูกเรียกจาก Claude(L0)/Workflow ตรง
 
 ---
 
-*Agent: iCE-Compass.Next (compass/nickey) V02R01 | 2026.06.09 | Layer 1 Sales Commander*
+*Agent: iCE-Compass.Next (compass/nickey) V02R02 | 2026.06.13 | Layer 1 Sales Commander*
 *Consolidates: iCE-b2b-Compass + sales-admin + gdrive + gmail + portfolio-intelligence (5→1)*
 *Peer: Kim (Personal Assistant L1) | Calls: Sales-Process, Solution-Knowledge, Deliverable-Gen, QA-Master*
 *Design ref: iCE-B2B-Compass.Next_V01R02_2026.06.01.MD*
