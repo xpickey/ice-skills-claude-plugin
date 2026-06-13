@@ -2,7 +2,9 @@
 
 ## When to Read This
 
-อ่านเมื่อทำ Mode 1 (DETECT) ในขั้น Layer 1 (Vocabulary Footprints) หรือ Mode 3 (CORRECT) Pass 2 — โดยเฉพาะเมื่อข้อความมีภาษาอังกฤษหรือต้องการตรวจ patterns ที่ครอบคลุมกว่า Verified AI Signature List ของไทย
+อ่านเมื่อทำ Mode 1 (DETECT) ในขั้น Layer 1 (Vocabulary Footprints) หรือ Mode 3 (CORRECT) Pass 2 — เมื่อต้องการชุด patterns ที่ครอบคลุมและ register-agnostic (ใช้ได้กับทุก register: Academic / Business / General)
+
+**Version: V06R01 (2026.06.13)** — PROMOTE เป็น 🟦 pure-core (register-agnostic): ลบ academic-frame 2 จุด — EN-trigger ในย่อหน้า When to Read และประโยค "In Thai academic writing, prioritize..." ใต้ Severity Triage — ปรับเป็น register-neutral; คง 24 patterns + Severity Triage ครบ
 
 **Source of Truth:** [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) maintained by WikiProject AI Cleanup — จากการสังเกตหลายพันกรณีของ AI-generated text บน Wikipedia ทั่วโลก
 
@@ -301,7 +303,7 @@ When running detection:
 🟠 **Medium severity (recommended fix):** Patterns 2, 6, 8, 9, 10, 13, 14, 15, 22, 23, 24
 🟢 **Low severity (cosmetic):** Patterns 11, 12, 16, 17, 18
 
-In Thai academic writing, prioritize 🔴 High severity patterns first — they signal AI most strongly to readers and detectors alike.
+จัดการ 🔴 High severity patterns ก่อนเสมอ — เป็นสัญญาณ AI ที่ชัดที่สุดต่อทั้งผู้อ่านและ detector (กฎนี้ใช้ได้กับทุก register: Academic / Business / General)
 
 ---
 

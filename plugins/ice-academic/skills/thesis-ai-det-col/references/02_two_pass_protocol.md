@@ -1,8 +1,12 @@
 # Two-Pass Correction Protocol
 
+**V06R01** · 2026.06.13 · 🟦 CORE (register-agnostic) · Shared Core + 3 Branches (🟩 Academic / 🟧 Business / 🟪 General เท่าเทียม)
+
 ## When to Read This
 
-อ่านไฟล์นี้เมื่อทำ Mode 3 (CORRECT) หรือ Mode 4 (FULL CYCLE) ขั้นตอนแก้ไข — ต้องการรายละเอียด Pass 1 + Pass 2 + Advanced Techniques
+🟦 **CORE — register-agnostic.** ไฟล์นี้คือกลไกแก้ไขสองรอบ (Rhythm + Vocabulary) ที่ใช้ได้กับทุก register — 🟩 Academic / 🟧 Business / 🟪 General เรียกใช้กลไกเดียวกัน ต่างกันแค่ "ตารางคำ/ความหนาแน่น/Voice Profile" ที่แต่ละ branch หยิบมาเสียบ (ดู Step 2.1 / Step 2.2). ไม่มี academic default ฝังในกลไก
+
+อ่านเมื่อทำขั้นตอน CORRECT (แก้ไข) หรือ FULL CYCLE ของ register ใดก็ตาม — ต้องการรายละเอียด Pass 1 (Rhythm) + Pass 2 (Vocabulary) + Advanced Techniques (→ §4 pointer)
 
 ---
 
@@ -80,29 +84,49 @@
 
 ### Step 2.1: Search & Replace 9 หมวด ตามลำดับ
 
+🟦 **CORE:** ลำดับ 9 หมวดเป็น register-agnostic — แต่ **ตารางคำ/density ที่หยิบมาเสียบในแต่ละหมวดต่างกันตาม branch** (🟩 SSOT = `06_verified_ai_signatures.md` · 🟧 SSOT = `11_business_ai_patterns.md` · 🟪 ใช้คำที่ overlap ทั้งสอง branch — Tier 1 EN + Class A สากล). ทั้ง 3 เท่าเทียม ห้าม default Academic
+
 ตรวจตามลำดับ ห้ามสลับ:
 
 1. Tier 1 English Verbs (delve, leverage, foster, navigate)
 2. Tier 1 English Adjectives (comprehensive, robust, seamless)
 3. Tier 1 English Nouns (landscape, realm, tapestry)
 4. AI Phrase Templates ("It's important to note", "In today's fast-paced")
-5. คำเปิดประโยคไทย (ดูใน `06_verified_ai_signatures.md`)
+5. คำเปิดประโยคไทย → ตาราง SSOT ตาม branch (🟩 `06_verified_ai_signatures.md` · 🟧 `11_business_ai_patterns.md`)
 6. คำขยายไทยพร่ำเพรื่อ
 7. คำเชื่อมไทยซ้ำ
 8. Hedging ซ้ำ
-9. **Class A Zero-Tolerance** ⭐ V03 (`06_verified_ai_signatures.md` §1.5-1.6) — คำเร่งน้ำหนักโปรโมต (อย่างก้าวกระโดด, พลิกโฉม) และสูตรสังเคราะห์ ("ทั้งหมดนี้สังเคราะห์ได้ว่า") เจอครั้งเดียวก็ต้องลบ/แทน ห้ามใช้เกณฑ์ density
+9. **Class A Zero-Tolerance** ⭐ V03 → **ดู SSOT (pointer):** 🟩 `06_verified_ai_signatures.md` §1.5-1.6 · 🟧 `11_business_ai_patterns.md` (Anti-ลิเก L1-8 / Class A ฝั่งธุรกิจ). หลักการ register-agnostic: คำเร่งน้ำหนักโปรโมต + สูตรสังเคราะห์ เจอครั้งเดียวต้องลบ/แทน **ห้ามใช้เกณฑ์ density** (density ใช้กับ Class B เท่านั้น). ตัวอย่าง 🟩: "อย่างก้าวกระโดด", "พลิกโฉม", "ทั้งหมดนี้สังเคราะห์ได้ว่า"
 
 ### Step 2.2: Replace ตาม Voice Profile
 
-**สำคัญที่สุด:** ใช้ Voice Profile ที่ Calibrated แล้ว — D2 Vocabulary Signature ระบุ "คำที่ผู้เขียนใช้บ่อย" และ "คำที่ผู้เขียนหลีกเลี่ยง"
+🟦 **CORE (register-agnostic):** กลไกคงเดิมทุก register — ใช้ Voice Profile ที่ Calibrated แล้ว โดย D2 Vocabulary Signature ระบุ "คำที่ผู้เขียนใช้บ่อย" และ "คำที่ผู้เขียนหลีกเลี่ยง" แล้วเลือกคำแทนที่ตามนั้น. ตัวคำแทนที่ขึ้นกับ branch — 🟩/🟧/🟪 เท่าเทียมกัน ไม่มี branch ใดเป็นค่าเริ่มต้น
 
-**ตัวอย่าง (Tier 1: "leverage"):**
+**ตัวอย่างคำแทนที่ตาม branch (Tier 1: "leverage" / "ขับเคลื่อนด้วย"):**
+
+🟩 **Academic** — เลือก Voice Profile วิชาการ (ดูชุด A1/A2/B1/B2/C1/C2/C3 ใน `03_voice_extraction_methodology.md` + `voice_profiles/`)
 
 | Voice Profile | คำแทนที่ที่ตรง |
 |---|---|
 | Profile A1/A2 (MCU) | "อาศัย" / "ใช้กลไก" |
 | Profile B1 (AGJ) | "ขับเคลื่อน" / "ใช้" |
 | Profile C1 (Accounting Research) | "ใช้" / "ประยุกต์ใช้" |
+
+🟧 **Business** — เลือก Voice Profile เชิงธุรกิจ/ข้อเสนอ (ดู `11_business_ai_patterns.md` — ตารางคำ + Voice ฝั่งธุรกิจ)
+
+| บริบท | คำแทนที่ที่ตรง |
+|---|---|
+| Proposal / Executive (formal) | "ใช้" / "อาศัย" + ระบุผลเชิงตัวเลข |
+| Pitch / Marketing | คงพลังได้แต่ผูกกับ proof point จริง — เลี่ยงสูตรลอย |
+
+🟪 **General** — เลือก Voice Profile ทั่วไป (ความเป็นทางการกลาง ๆ — ไม่ผูกศัพท์เฉพาะวิชาการหรือธุรกิจ)
+
+| บริบท | คำแทนที่ที่ตรง |
+|---|---|
+| Explanatory / Informational | "ใช้" / "ทำให้เกิด" + รายละเอียดเฉพาะ |
+| Narrative / Opinion | ตามเสียงผู้เขียนจริง |
+
+> ⚠️ ทั้ง 3 branch เท่าเทียม — เลือกตาม register ของงาน ห้าม default ไป Academic. ถ้ายังไม่มี Voice Profile ของ branch นั้น → calibrate ก่อน (`03_voice_extraction_methodology.md`) ห้ามยืมโปรไฟล์ข้าม register
 
 ### Step 2.3: ระวัง Symptom Substitution
 
@@ -140,6 +164,8 @@
 
 ### Step 2.6: Reporting Verb Alignment (กริยารายงานตรงชนิดแหล่ง) ⭐ V03
 
+🟩 **Branch-conditional (Academic-primary):** บังคับเมื่อมีการอ้างอิงแหล่ง — งานวิชาการเป็นหลัก. 🟧 Business/🟪 General ใช้เมื่ออ้างงานวิจัย/ข้อมูลแหล่งที่สาม; งานที่ไม่มี citation ข้ามได้
+
 ไล่ทุกจุดอ้างอิง เทียบกริยารายงานกับตาราง `05_thai_academic_patterns.md` §10:
 
 - งานทัศนะ/บทความวิชาการ → เสนอว่า, ชี้ว่า, มองว่า, วิเคราะห์ว่า (ห้าม ยืนยันว่า/พิสูจน์ว่า/พบว่า)
@@ -148,65 +174,49 @@
 
 กริยาแรงเกินหลักฐาน = overclaim ต้องแก้ทุกจุด — ห้ามยกระดับ claim เพื่อให้ข้อความดูหนักแน่น
 
-**Pass 2 Exit Criteria:**
-- ✅ Tier 1 word density ผ่านเกณฑ์ (Class B)
-- ✅ ไม่มีคำ Class A Zero-Tolerance หลงเหลือ (สแกนทุกบรรทัด)
+**Pass 2 Exit Criteria** (🟦 CORE — Class B density/Class A table หยิบจาก SSOT ของ branch ที่ใช้):
+- ✅ Tier 1 word density ผ่านเกณฑ์ (Class B — density ตาม register: 🟩 `06` §5 / 🟧 `11`)
+- ✅ ไม่มีคำ Class A Zero-Tolerance หลงเหลือ (สแกนทุกบรรทัด — SSOT: 🟩 `06` §1/1.5/1.6 · 🟧 `11`)
 - ✅ ไม่มี Formulaic Template หลงเหลือ — ตรวจทั้งโครง ไม่ใช่แค่คำ
 - ✅ ไม่มีโครงเปิดซ้ำภายใน 5 ประโยค/ย่อหน้าเดียวกัน
 - ✅ Forward signpost ≤ 1 ครั้ง/เอกสาร และไม่มีหัวข้อติดกันปิดด้วยสูตรเดียวกัน
 - ✅ Acronym นิยามเต็มครั้งเดียว หลังจากนั้นใช้ตัวย่อ
 - ✅ ทุกประโยคซ้อนอนุประโยค ≤ 2 ชั้น
-- ✅ กริยารายงานตรงกับชนิดแหล่งทุกจุดอ้างอิง (`05` §10)
+- ✅ 🟩 กริยารายงานตรงกับชนิดแหล่งทุกจุดอ้างอิง (`05` §10) — branch-conditional (ดู Step 2.6)
 - ✅ ไม่มี Symptom Substitution
 - ✅ ทุกคำคลุมเครือถูกแทนด้วยรายละเอียด
-- ✅ คำที่เลือกตรงกับ Voice Profile
+- ✅ คำที่เลือกตรงกับ Voice Profile (ของ branch ที่ใช้)
 
 ---
 
-## 4. ADVANCED CORRECTION TECHNIQUES (4 Techniques)
+## 4. ADVANCED CORRECTION TECHNIQUES → ดู SSOT ใน `04`
 
-ใช้เสริมหลัง Pass 1+2 ผ่านแล้ว แต่ AI score ยังสูง:
+🟦 **CORE pointer (de-dup):** ใช้เสริมหลัง Pass 1+2 ผ่านแล้ว แต่ AI score ยังสูง. รายละเอียด **Advanced Techniques ทั้งชุด เป็น SSOT ที่ `04_correction_techniques.md`** (18 Techniques T1-T18 + Anti-Patterns 8 + ตัวอย่าง before/after) — ห้าม duplicate ที่นี่
 
-### Technique A: Sentence Combining & Splitting
+**Map 4 Advanced → 18-Technique Catalog (`04`):**
 
-**วิธีใช้:**
-- รวมประโยคสั้น 2 ประโยคเป็นประโยคยาวซับซ้อน (ใช้ "—" หรือ ":")
-- แยกประโยคยาว 1 ประโยคเป็นประโยคสั้น 2-3 ประโยค
+| Advanced (เดิม) | → `04` Technique | หมายเหตุ register |
+|---|---|---|
+| A. Sentence Combining & Splitting | T2 Burstiness + T10 Asymmetric Density | register-agnostic |
+| B. Personal / Cultural Markers | T1 Personal Anchor + T12 Cultural/Temporal | 🟩 ไทย/ราชการ: พ.ร.บ./หนังสือ ว.; Profile A2: พระไตรปิฎก + "ผู้วิจัย/รูปหรือคน" · 🟧 Business: ชื่อบริษัท/ตัวเลขดีล · 🟪 General: เหตุการณ์/ปีจริง |
+| C. Aside & Qualification (em dash) | T7 Counterargument + Adv C | em dash ภาษาไทย ≤ 1 ครั้ง/300 คำ (ทุก register) |
+| D. Imperfect Flow | T18 + Anti-Pattern "filler burstiness" | "นอกจากนี้/อีกทั้ง/ยิ่งไปกว่านั้น" ≤ 1 ครั้ง/1,000 คำ; ปล่อยบางย่อหน้าเริ่ม abrupt / จบปลายเปิด |
 
-### Technique B: Insert Personal/Cultural Markers
-
-**สำหรับงานราชการและวิชาการไทย:**
-- "ตาม พ.ร.บ.การจัดซื้อจัดจ้าง พ.ศ. 2560 มาตรา 8 (3)..."
-- "จากการสำรวจ 245 หน่วยงานในปี 2566 พบว่า 67%..."
-- "อ้างถึงหนังสือกระทรวงการคลัง ที่ กค 0405.4/ว.123..."
-
-**สำหรับ Profile A2 (Buddhist Integration):**
-- อ้างพระไตรปิฎก "ที.ปา. (ไทย) ๑๑/๒๒๘/๒๕๙"
-- ใช้ "ผู้วิจัย" + "รูปหรือคน"
-
-### Technique C: Aside & Qualification
-
-แทรกข้อสังเกตด้วย em dash (ในภาษาไทยใช้ ≤ 1 ครั้งต่อ 300 คำ):
-
-> "ระบบนี้ได้ผลดี — แม้จะมีข้อจำกัดในการใช้งานช่วงแรกที่ผู้ใช้ต้องเรียนรู้ใหม่ — ในที่สุดก็ยอมรับโดยทั่วไป"
-
-### Technique D: Imperfect Flow
-
-**กฎ:**
-- ห้ามใช้ "นอกจากนี้/อีกทั้ง/ยิ่งไปกว่านั้น" ทุกย่อหน้า — สูงสุด 1 ครั้งต่อ 1,000 คำ
-- ปล่อยให้บางย่อหน้าเริ่มแบบ abrupt
-- บางครั้งจบแบบปลายเปิด
+> รายละเอียดเต็ม + ตัวอย่าง → `04_correction_techniques.md`. branch-specific marker (🟩/🟧/🟪) เลือกตาม register ของงาน — กลไกแทรกเหมือนกัน ต่างกันแค่ชนิด marker
 
 ---
 
 ## 5. Visual Summary
 
+🟦 กลไกเดียวกันทุก register — สิ่งที่เปลี่ยนคือ Voice Profile + ตารางคำ/density ที่หยิบจาก SSOT ของ branch (🟩 `06`/`05` · 🟧 `11` · 🟪 overlap)
+
 ```
 ┌────────────────────────────────────────────────────────┐
 │  Draft (after Detection)                                │
-│  + Voice Profile (from Mode 2 or KM-TH-THESIS-DOC)      │
+│  + Voice Profile ของ branch (🟩 Academic / 🟧 Business   │
+│    / 🟪 General — เท่าเทียม, calibrate ก่อนใช้)          │
 │         ↓                                                │
-│  PASS 1: RHYTHM CORRECTION (5 Steps)                    │
+│  PASS 1: RHYTHM CORRECTION (5 Steps) — register-agnostic │
 │  1.1 ระบุย่อหน้าเสี่ยง                                    │
 │  1.2 Burstiness Injection (ตัด 2 / ขยาย 1)              │
 │  1.3 Diversify Sentence Openings (5 รูปแบบ)            │
@@ -214,19 +224,22 @@
 │  1.5 Verify SD ≥ 5                                      │
 │         ↓                                                │
 │  PASS 2: VOCABULARY CORRECTION (6 Steps)                │
-│  2.1 Search & Replace 9 หมวด (รวม Class A)              │
-│  2.2 Replace by VOICE PROFILE                           │
+│  2.1 Search & Replace 9 หมวด (Class A → SSOT ของ branch) │
+│  2.2 Replace by VOICE PROFILE (🟩/🟧/🟪 เท่าเทียม)       │
 │  2.3 Avoid Symptom Substitution                         │
 │  2.4 Add Specificity                                    │
 │  2.5 Template-Level Replace (รื้อโครง)                  │
-│  2.6 Reporting Verb Alignment (กริยาตรงแหล่ง)           │
+│  2.6 Reporting Verb Alignment — 🟩 branch-conditional   │
 │         ↓                                                │
-│  ADVANCED (เลือกใช้ตามจำเป็น)                            │
-│  A: Sentence Combining & Splitting                      │
-│  B: Personal/Cultural Markers                           │
-│  C: Aside & Qualification                               │
-│  D: Imperfect Flow                                      │
+│  ADVANCED (เลือกใช้ตามจำเป็น) → SSOT `04`                │
+│  A→T2/T10 · B→T1/T12 · C→T7 · D→T18  (marker ตาม branch) │
 │         ↓                                                │
 │  Re-Detection → ผ่าน → Voice Match Scoring              │
 └────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## Changelog
+
+- **V06R01 (2026.06.13)** — RE-LABEL เป็น 🟦 CORE register-agnostic ภายใต้สถาปัตยกรรม Shared Core + 3 Branches เท่าเทียม (🟩 Academic / 🟧 Business / 🟪 General). (1) Trigger (When to Read) → register-neutral ไม่ผูก Mode 3 academic. (2) Step 2.2 Voice table → แยก 3 branch เท่าเทียม + กฎห้าม default Academic / ห้ามยืมโปรไฟล์ข้าม register. (3) §4 Advanced → pointer ไป `04` (SSOT 18 Techniques) + map A-D→T2/T10/T1/T12/T7/T18 (ตัด ~30 บรรทัดซ้ำ). (4) Class A / Class B density → pointer ไป SSOT ตาม branch (🟩 `06` · 🟧 `11`). (5) Step 2.6 Reporting Verb → flag branch-conditional (Academic-primary). คง Pass 1/Pass 2 thresholds (SD≥5, density Class B, Class A zero-tolerance) ครบ.

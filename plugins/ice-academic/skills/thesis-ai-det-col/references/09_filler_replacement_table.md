@@ -1,8 +1,14 @@
 # Filler Phrase Replacement Table
 
+**Version: V01R02 | 2026.06.13** — 🟦 CORE re-label (register-agnostic) ใน SKILL V06 architecture pass · section 1-8 = contract (04/06/07/11 hard-link — ห้ามเปลี่ยนเลข) · เนื้อหาตาราง filler/hedge/chatbot คงเดิม verbatim.
+
+> 🟦 **CORE — register-agnostic.** ตารางนี้เป็นกลไกกลาง: filler / hedging / generic conclusion / chatbot artifact คือเสียงรบกวนที่ไม่เพิ่มความหมายในทุก register เท่ากัน — ไม่มี academic default. กลไก "ตัด/ย่อ" ใช้ได้เหมือนกันทั้ง 🟩 Academic · 🟧 Business · 🟪 General. ส่วนที่ register หนึ่งต้องทำต่อ (เช่น แทนข้อสรุปกว้างด้วยข้อเท็จจริง+ตัวเลขในงานวิชาการ) เป็น follow-on ของ branch นั้น ไม่ใช่ของ CORE.
+
 ## When to Read This
 
-อ่านเมื่อทำ Pass 2 Step 2.4 (Add Specificity) — ใช้ตารางนี้แทนที่ filler phrases ที่ไม่เพิ่มความหมาย
+อ่านเมื่อ workflow เรียก "Add Specificity / ตัด filler" (Academic = Pass 2 Step 2.4 · branch อื่นใช้ step เทียบเท่า) — ใช้ตารางนี้แทนที่ filler phrases ที่ไม่เพิ่มความหมาย โดยไม่ผูกกับ register ใด register หนึ่ง
+
+**Section numbers 1-8 = CONTRACT** — `04` / `06` / `07` / `11` hard-link มาที่เลข section เหล่านี้ (§1-2 filler · §4 generic conclusion · §5 sycophantic · §6 cutoff disclaimer · §7 chatbot artifact). ห้ามเปลี่ยนเลข section.
 
 ---
 
@@ -85,9 +91,11 @@
 
 ---
 
-## 4. Generic Positive Conclusions — ตัดทิ้ง / แทนด้วยข้อเท็จจริง
+## 4. Generic Positive Conclusions — ตัดทิ้งก่อน (CUT, not fact-sub)
 
-| Generic (AI ใช้) | Replacement Strategy |
+> **General note (🟦 CORE):** กลไกกลางของ section นี้คือ **ตัด** ข้อสรุปกว้าง ๆ ที่ไม่มีเนื้อ — เพราะมันไม่เพิ่มความหมายในทุก register. การ "แทนด้วยข้อเท็จจริง/ตัวเลข/วันที่" ในคอลัมน์ Replacement Strategy เป็น **follow-on ของ branch** (เด่นใน 🟩 Academic ที่ต้องมี evidence) ไม่ใช่ขั้นบังคับของ CORE. ถ้า branch/บริบทไม่มีข้อเท็จจริงให้แทน → ตัดทิ้งเฉย ๆ คือคำตอบที่ถูก ห้าม fabricate ตัวเลขเพื่อเติมช่องว่าง.
+
+| Generic (AI ใช้) | Replacement Strategy (default = CUT; fact-sub = branch follow-on) |
 |---|---|
 | "The future looks bright" | ระบุแผนเฉพาะ + ตัวเลข + วันที่ |
 | "Exciting times lie ahead" | ระบุเหตุการณ์เฉพาะ |
@@ -104,7 +112,7 @@
 
 ## 5. Sycophantic / Servile — ตัดออก
 
-ห้ามใส่ในเอกสารวิชาการ/ทางการ/ราชการ:
+ห้ามใส่ใน deliverable ที่ไม่ใช่บทสนทนา (any non-conversational deliverable) — ครอบทุก register เท่ากัน (🟩 Academic · 🟧 Business · 🟪 General):
 
 **English:**
 - "Great question!"

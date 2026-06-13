@@ -1,22 +1,31 @@
-# 10 — Thai Academic Audit Engine (TAAE)
+# 10 — Thai Document Audit Engine (TDAE)
 
-> **Version:** V01R02 | **Date:** 2026.06.07 | **Edition:** Thai (academic)
-> **Status:** Shared engine — single source of truth. ถูกชี้ (pointer) จาก qa-master-agent (Academic QA Mode) และ thesis-ai-det-col-agent (ผู้ทรง/สมนึก) — **ห้ามก๊อปเนื้อไปไว้ที่อื่น แก้ที่นี่ที่เดียว**
+> **Version:** V01R03 | **Date:** 2026.06.13 | **Edition:** Thai · **3-Register** (Academic 🟩 / Business 🟧 / General 🟪)
+> **Status:** Shared engine — single source of truth. ถูกชี้ (pointer) จาก qa-master-agent และ thesis-ai-det-col-agent (ผู้ทรง/สมนึก) — **ห้ามก๊อปเนื้อไปไว้ที่อื่น แก้ที่นี่ที่เดียว**
+> **R03 (2026.06.13):** RE-LABEL → **register-agnostic engine**. เปลี่ยนชื่อ TAAE→TDAE "Thai Document Audit Engine". แก่น (Prime Directive / Step 0 Resolve Standard / Standard Card / Citation Guard / Final Gate) เป็น **register-neutral** ไม่ผูก academic เป็น default. Standard Card **parameterize per register** + สร้าง slot Business 🟧 / General 🟪 (ว่างอยู่ รอ seed). คง AGJ (÷5.72, Step 0 L0-L3, shingle 14-16, Final Gate ratchet) ไว้เป็น **academic example** ไม่ใช่ default. ย้าย board-paper จาก academic → business register.
 > **R02 (2026.06.07):** เพิ่ม §0.5 Execution Context — engine ทำงานได้ทั้งมี/ไม่มี agent fleet (web-safe, graceful degradation). OWNER = คำแนะนำเชิง role ไม่ใช่เงื่อนไขบังคับ. แก่น engine (Step 0/Prime Directive/anti-halluc/final re-run) คงเสมอทุก environment.
-> **สกัดจากการตรวจจริง:** บทความ AGJ "การประยุกต์ใช้ AI เพื่อยกระดับกระบวนการจัดซื้อจัดจ้างฯ" (rev1.6 → rev2.4, ตอบผู้ทรง 3 ท่าน Major Revision) — ต้นทาง `Academic/บทความวิชาการที่ 1/21 - ประเมินรอบที่ 1/PHD.Article.Audit.md`
+> **สกัดจากการตรวจจริง (academic seed):** บทความ AGJ "การประยุกต์ใช้ AI เพื่อยกระดับกระบวนการจัดซื้อจัดจ้างฯ" (rev1.6 → rev2.4, ตอบผู้ทรง 3 ท่าน Major Revision) — ต้นทาง `Academic/บทความวิชาการที่ 1/21 - ประเมินรอบที่ 1/PHD.Article.Audit.md`. **corpus asymmetry = data-availability ไม่ใช่ priority ranking** — academic มี seed เพราะมีเคสจริงก่อน ไม่ได้แปลว่า academic สำคัญกว่า business/general.
 
 ---
 
 ## 0. เครื่องยนต์นี้คืออะไร (อ่านก่อนใช้)
 
-Engine นี้คือ **ระเบียบวิธีตรวจเอกสารวิชาการไทยก่อนเผยแพร่** ที่ใช้ได้กับงานวิชาการไทย **ทุกชนิด** — ดุษฎีนิพนธ์/วิทยานิพนธ์, บทความวิชาการ, บทความวิจัย, รายงานหน่วยงาน, board paper
+Engine นี้คือ **ระเบียบวิธีตรวจเอกสารไทยก่อนเผยแพร่** ที่ **register-agnostic** — กลไกแกนไม่ผูกชนิดเอกสารใดเป็น default. รองรับ **3 register เท่าเทียม**:
 
-**กฎสูงสุดของ Engine (Prime Directive):**
+| Register | ครอบคลุม | สถานะ seed |
+|---|---|---|
+| 🟩 **Academic** | ดุษฎีนิพนธ์/วิทยานิพนธ์, บทความวิชาการ, บทความวิจัย | seeded (AGJ เคสจริง) |
+| 🟧 **Business** | proposal, board paper, business case, report หน่วยงาน, deck | slot ว่าง (รอ seed) |
+| 🟪 **General** | บทความทั่วไป, content, จดหมาย, เอกสารสื่อสารทั่วไป | slot ว่าง (รอ seed) |
 
-> Engine นี้ **ไม่รู้เกณฑ์มาตรฐานของเอกสารเอง** และ **ห้ามจำค่าเกณฑ์ไว้ในหัว** — ค่าเกณฑ์ (จำนวนหน้า/คำ, ช่วงบทคัดย่อ, ระบบอ้างอิง, ฟอนต์, สูตรนับคำ) คือ **spec ของเอกสารแต่ละชนิด** ที่ต้อง **"ดึงสด" (Resolve)** จากแหล่งความจริงของเอกสารนั้นก่อนเสมอ (ดู §1 Step 0)
+> **register เท่าเทียม ไม่มีตัวใดเกาะตัวอื่น** — engine ไม่ default ไป academic. ทุกตัวอย่าง AGJ ในไฟล์นี้ติดป้าย 🟩 ชัดเจนว่าเป็น *academic example* ไม่ใช่ค่ากลางของ engine.
 
-Engine = **"ตัวสกัดเกณฑ์ + เทคนิคตรวจ"** (generic, reusable)
-Standard = **"เกณฑ์ที่ถูกต้องของเอกสารชิ้นนั้น"** (มาจาก skill วารสาร / Template — ไม่ใช่ความจำ)
+**กฎสูงสุดของ Engine (Prime Directive — register-neutral):**
+
+> Engine นี้ **ไม่รู้เกณฑ์มาตรฐานของเอกสารเอง** และ **ห้ามจำค่าเกณฑ์ไว้ในหัว** — ค่าเกณฑ์ (จำนวนหน้า/คำ, ช่วงบทคัดย่อ/สรุปผู้บริหาร, ระบบอ้างอิง, ฟอนต์, สูตรนับคำ) คือ **spec ของเอกสารแต่ละชนิดในแต่ละ register** ที่ต้อง **"ดึงสด" (Resolve)** จากแหล่งความจริงของเอกสารนั้นก่อนเสมอ (ดู §1 Step 0). กฎนี้ใช้เท่ากันทั้ง 🟩/🟧/🟪.
+
+Engine = **"ตัวสกัดเกณฑ์ + เทคนิคตรวจ"** (generic, reusable, register-agnostic)
+Standard = **"เกณฑ์ที่ถูกต้องของเอกสารชิ้นนั้น"** (มาจาก skill วารสาร / Template วารสาร / Template proposal / author guideline — ไม่ใช่ความจำ)
 
 **โครงสองชั้นของทุก Phase:**
 
@@ -48,11 +57,13 @@ Engine นี้ออกแบบให้ **self-contained** — Claude ตั
 
 ---
 
-## 1. STEP 0 — RESOLVE STANDARD (ทำก่อนตรวจทุกครั้ง — HARD GATE)
+## 1. STEP 0 — RESOLVE STANDARD (ทำก่อนตรวจทุกครั้ง — HARD GATE · register-neutral core)
 
-**ห้ามเริ่ม Phase 1–7 ก่อนผ่าน Step 0** — Step 0 จบลงด้วย **"Standard Card"** ที่ทุก Phase ใช้เทียบ
+**ห้ามเริ่ม Phase 1–7 ก่อนผ่าน Step 0** — Step 0 จบลงด้วย **"Standard Card"** ที่ทุก Phase ใช้เทียบ. กลไก Step 0 (ลำดับชั้น L0-L3, การคาลิเบรตสูตรนับคำ, การสร้าง Standard Card) เป็น **core register-neutral** — ใช้เหมือนกันทั้ง 🟩/🟧/🟪. ต่างกันแค่ "ฟิลด์ใน Standard Card" ที่ parameterize ตาม register (§1.5)
 
-### 1.1 ลำดับชั้นแหล่งเกณฑ์ (Source-of-Truth Hierarchy)
+> **§1.1–§1.3 = core (register-neutral).** §1.5 = Standard Card แยกตาม register. §1.6 = Registry per register (academic seeded, business/general slot ว่าง).
+
+### 1.1 ลำดับชั้นแหล่งเกณฑ์ (Source-of-Truth Hierarchy — core ทุก register)
 
 ```
 INPUT: เอกสารที่จะตรวจ + (อาจมี) คำสั่งจาก prompt
