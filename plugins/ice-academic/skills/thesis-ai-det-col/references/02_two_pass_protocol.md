@@ -1,6 +1,6 @@
 # Two-Pass Correction Protocol
 
-**V06R01** · 2026.06.13 · 🟦 CORE (register-agnostic) · Shared Core + 3 Branches (🟩 Academic / 🟧 Business / 🟪 General เท่าเทียม)
+**V06R02** · 2026.06.13 · 🟦 CORE (register-agnostic) · Shared Core + 3 Branches (🟩 Academic / 🟧 Business / 🟪 General เท่าเทียม) · *[R02: กู้ em-dash worked example (split orphan) + pointer →11 §7.4]*
 
 ## When to Read This
 
@@ -199,10 +199,10 @@
 |---|---|---|
 | A. Sentence Combining & Splitting | T2 Burstiness + T10 Asymmetric Density | register-agnostic |
 | B. Personal / Cultural Markers | T1 Personal Anchor + T12 Cultural/Temporal | 🟩 ไทย/ราชการ: พ.ร.บ./หนังสือ ว.; Profile A2: พระไตรปิฎก + "ผู้วิจัย/รูปหรือคน" · 🟧 Business: ชื่อบริษัท/ตัวเลขดีล · 🟪 General: เหตุการณ์/ปีจริง |
-| C. Aside & Qualification (em dash) | T7 Counterargument + Adv C | em dash ภาษาไทย ≤ 1 ครั้ง/300 คำ (ทุก register) |
+| C. Aside & Qualification (em dash) | T7 Counterargument + Adv C | em dash ภาษาไทย ≤ 1 ครั้ง/300 คำ (ทุก register) · ตัวอย่าง: *"ระบบนี้ได้ผลดี — แม้จะมีข้อจำกัดในการใช้งานช่วงแรกที่ผู้ใช้ต้องเรียนรู้ใหม่ — ในที่สุดก็ยอมรับโดยทั่วไป"* |
 | D. Imperfect Flow | T18 + Anti-Pattern "filler burstiness" | "นอกจากนี้/อีกทั้ง/ยิ่งไปกว่านั้น" ≤ 1 ครั้ง/1,000 คำ; ปล่อยบางย่อหน้าเริ่ม abrupt / จบปลายเปิด |
 
-> รายละเอียดเต็ม + ตัวอย่าง → `04_correction_techniques.md`. branch-specific marker (🟩/🟧/🟪) เลือกตาม register ของงาน — กลไกแทรกเหมือนกัน ต่างกันแค่ชนิด marker
+> รายละเอียดเต็ม + ตัวอย่าง → `04_correction_techniques.md`. branch-specific marker (🟩/🟧/🟪) เลือกตาม register ของงาน — กลไกแทรกเหมือนกัน ต่างกันแค่ชนิด marker. ตัวอย่าง Personal/Cultural anchor ราชการ → `11` §7.4
 
 ---
 
