@@ -2,8 +2,8 @@
 name: ice-b2b-enterprise-sale
 description: Control/orchestrator skill for B2B Enterprise Software Sale work at iCE Consulting on Oracle Cloud (Fusion ERP/EPM/OCI), Oracle EBS, and Oracle NetSuite — plus adjacent practices in FinTech/Lending/IFRS9, Thai GFMIS/e-GP, and รัฐวิสาหกิจ TOR-Comply work. Routes work to the right sub-skill by Deliverable first, then Product, then Domain overlay, then Industry context. Optimised for Rapid Workflow (30–60 min per deliverable) and Pre-sales-heavy workload mix (~70 percent). Use this skill whenever the user is doing Sales, Pre-sales, Proposal, RFP, TOR, Demo, Account Planning, Customer Engagement, or Existing Customer Change Request work — including Thai-language phrasings such as ทำข้อเสนอ, เขียน proposal, ตอบ TOR, เตรียม demo, วาง account plan, ทำ business case, ตอบ RFI, ทำ CR ลูกค้าเก่า, ทำ board paper, and เตรียม pitch. Enforces a mandatory Typography and Bilingual Font QA gate before saving any .docx, .pptx, or .pdf deliverable.
 metadata:
-  version: V02R03
-  date: 2026-05-27
+  version: V02R04
+  date: 2026-06-14
 ---
 
 # Section 0 — Role & Mission
@@ -105,6 +105,10 @@ Chain order:
 3. Product skill (fusion / ebs / netsuite / fintech) — feasibility, scoping, license
 4. Domain skill (if applicable) — GFMIS, e-GP, PDPA
 5. b2b-presentation-creator — when output is a .pptx
+   5b. **AI imagery (optional)** — เมื่อต้อง hero/section-divider/product-shot/brand-visual ที่ ref 07 Method 3 ระบุ:
+       · ภาพภายในเร็ว/ไม่ 4K → `nanobanana-connection` (Gemini image — MCP เสมอ, quota ไม่เปลืองเครดิต)
+       · 4K/text-fidelity/video/DTC-ad/brand/character คงหน้า → `higgsfield-connection` (credit-based — preflight cost ก่อน)
+       · **Execution Path:** Claude Code (มี Bash) → higgsfield CLI `hf generate create <model> --prompt` · Claude Desktop/Web/Cowork → MCP tool · nanobanana = MCP เสมอ
 6. Typography QA gate — before save
 
 ## 4.2 Strategic (Standard Path)
@@ -326,6 +330,16 @@ anything in this skill where they conflict. Specifically:
 End of router. The deliverable starts in the chain.
 
 # Section 12 — Change Log
+
+**V02R04 — 2026.06.14 — Sub-release. AI Imagery awareness added.**
+เพิ่ม Step 5b (AI imagery, optional) ใน Hot Path chain (Section 4.1) — ให้ skill นี้รู้จัก
+`nanobanana-connection` (Gemini image, MCP เสมอ, hero/infographic ภายในเร็ว/quota) และ
+`higgsfield-connection` (full suite image+video+marketing+Soul-ID, credit-based, 4K/ad/brand/
+character คงหน้า) เผื่อกรณีเรียก skill นี้ตรง (ไม่ผ่าน deliverable-gen agent). ฝัง Execution
+Path Rule: Claude Code (Bash) → higgsfield CLI `hf generate create` · Claude Desktop/Web/Cowork
+→ MCP tool · nanobanana = MCP เสมอ. preflight cost ก่อนงาน higgsfield แพง. No routing changes —
+Hot/Standard/Fast Path เหมือนเดิม; เพิ่มเฉพาะ optional step ใน Hot Path เมื่อ ref 07 Method 3
+(AI imagery) ของ b2b-presentation-creator ถูกเรียก. ไม่แตะ reference files.
 
 **V02R03 — 2026.05.27 — Sub-release. Positive Wording Discipline added.**
 Added Section 6A "Positive Wording Discipline" as a Ground Rule for all Proposal,

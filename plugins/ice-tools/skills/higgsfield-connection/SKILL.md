@@ -3,8 +3,8 @@ name: higgsfield-connection
 description: เชื่อมต่อและสั่งงาน Higgsfield AI MCP Server (image + video + Marketing Studio + Soul ID + Virality Predictor) จาก Claude Desktop, Cowork และ Code CLI. ใช้ทุกครั้งที่ผู้ใช้ต้องการ สร้าง/แก้ภาพ AI คุณภาพสูง (FLUX.2/Soul/Nano Banana Pro), สร้างวิดีโอ AI (Kling/Veo/Seedance/Marketing Studio), ทำ DTC/Product Ads, Product Photoshoot, Brand Video, UGC, สร้าง Avatar/Character ที่หน้าตาคงเส้นคงวา (Soul ID), วิเคราะห์โอกาสไวรัลของวิดีโอ (Virality Predictor), upscale ภาพ/วิดีโอ, generate เสียง/เพลง/voiceover, หรือ Setup/Troubleshoot Higgsfield. ครอบคลุม Pre-flight (MCP+Auth+Credit), Model-Selection Decision Tree (30+ models), Credit/Cost Preflight (get_cost), Async Job Polling, Media Upload Flow (local/URL), Marketing Studio Brand-Kit workflow. ต่างจาก nanobanana (Gemini image-only) — Higgsfield = full image+video+marketing+audio suite. Triggers ภาษาไทย — ทำวิดีโอ AI, สร้าง ad/โฆษณา, product shot, ภาพสินค้า, avatar, character คงหน้า, ทำ hero/banner คุณภาพสูง, วิเคราะห์วิดีโอไวรัล, upscale, ทำ voiceover, Higgsfield, FLUX, Kling, Veo, Soul ID, Marketing Studio. English — generate video, AI ad, product photoshoot, DTC ad, brand video, consistent character/avatar, soul id, virality predictor, upscale video, higgsfield, kling, veo, flux, marketing studio. คู่กับ b2b-presentation-creator, deliverable-gen-agent, nanobanana-connection, canvas-design, brand-guidelines.
 license: Internal use — iCE Consulting / Trusted Transformation Strategist
 metadata:
-  version: V01R01
-  date: "2026-06-13"
+  version: V01R02
+  date: "2026-06-14"
   author: Trusted Transformation Strategist
 ---
 
@@ -17,6 +17,25 @@ metadata:
 ทำให้ผู้ใช้สั่งงาน Higgsfield AI ผ่าน MCP Server จาก **Claude Desktop / Cowork / Code CLI** ได้ครบ image + video + audio + Marketing Studio + Soul ID + Virality Predictor — ตั้งแต่ pre-flight (เช็ค connection + credit), เลือก model ให้ถูกงาน, preflight cost, สั่ง generate, poll async job, ไปจนถึงส่งผลคืนพร้อมราคา.
 
 > **Higgsfield vs Nano Banana — เลือกตัวไหน:** Nano Banana = Gemini **image-only** (เร็ว, ฟรี/quota Google, เหมาะ infographic/hero ภายใน). Higgsfield = **full suite** image (FLUX.2/Soul) + video (Kling/Veo/Seedance) + Marketing Studio (DTC ads) + Soul ID (consistent character) + audio + virality analysis — **credit-based** (เสียเครดิต). งานภาพง่าย/ภายใน → nanobanana. งานวิดีโอ/ad/brand/character คงหน้า/คุณภาพสูง → higgsfield.
+
+---
+
+## ⭐ EXECUTION PATH — CLI หรือ MCP? (เลือกตาม runtime ก่อนทุกอย่าง)
+
+Higgsfield เรียกได้ 2 ทาง — **เลือกตาม environment ที่รันอยู่**:
+
+| Engine | 🖥️ Claude Code (มี Bash/terminal) | 💬 Claude อื่น (Desktop / Web / Cowork — ไม่มี shell) |
+|---|---|---|
+| **Higgsfield** | **CLI** ผ่าน Bash → `higgsfield generate create <model> --prompt "..."` | **MCP** → `mcp__<uuid>__generate_image` / `generate_video` |
+| **Nano Banana** | **MCP** (ไม่มี CLI — เป็น local Python MCP server) | **MCP** |
+
+**กฎเลือก:**
+1. **อยู่ Claude Code + งาน Higgsfield → ใช้ CLI** (เรียกผ่าน Bash tool). เหตุผล: เห็น output/cost ตรง, จัดการ async job ด้วย `higgsfield generate wait`, ไม่ผูก MCP session, debug ง่าย. ดู command ใน `references/cli-commands.md`
+2. **อยู่ Claude Desktop/Web/Cowork (ไม่มี Bash) → ใช้ MCP tool** (ทางเดียวที่เรียกได้)
+3. **Nano Banana → MCP เสมอ** ทุก environment (ไม่มี CLI)
+4. **ไม่แน่ใจว่าอยู่ runtime ไหน:** เช็คว่ามี Bash tool ไหม — มี = Claude Code (CLI ได้) · ไม่มี = ใช้ MCP
+
+> **CLI ติดตั้งแล้ว** (brew, v0.2.1, alias `hf`/`higgs`) + auth login แล้ว. ดู `references/cli-commands.md` สำหรับ command mapping (generate/cost/wait/account/model/workflow). MCP path ดู `references/mcp-functions.md`. ทั้งสองใช้บัญชี + credit pool เดียวกัน.
 
 ---
 
@@ -39,7 +58,7 @@ metadata:
 
 ก่อนสั่ง generate ครั้งแรกในงานหนึ่ง ตรวจ 3 อย่างนี้เสมอ เพื่อกัน error กลางคันและกัน "สั่งไปแล้วเครดิตไม่พอ":
 
-1. **MCP connected?** — tool `mcp__*__generate_image` / `generate_video` ปรากฏใน session ไหม. ไม่มี → ดู `references/install-and-auth.md` (CLI `higgsfield auth login` + restart client)
+1. **Path connected?** — เลือกตาม Execution Path (ด้านบน): **Claude Code** → `hf account status` รันผ่านได้ไหม (CLI + auth ok) · **Claude อื่น** → tool `mcp__*__generate_image` ปรากฏใน session ไหม. ไม่ ok → ดู `references/install-and-auth.md` (`higgsfield auth login` + restart client)
 2. **Auth ยัง valid?** — Higgsfield session อายุสั้น, re-auth เป็นระยะ. ถ้า tool คืน auth error → `higgsfield auth login` ใหม่
 3. **Credit พอไหม?** — เรียก `balance` ดู credit + plan. งานที่ไม่แน่ใจราคา → **preflight ด้วย `get_cost: true`** ก่อนสั่งจริง (ดู STEP 2)
 
@@ -190,7 +209,8 @@ prompt cookbook ไทย-อังกฤษ + ตัวอย่างแยก
 
 | ไฟล์ | เมื่อใช้ |
 |---|---|
-| `references/mcp-functions.md` | รายการ tool เต็ม + params + return shape |
+| `references/cli-commands.md` ⭐ | **CLI path (Claude Code)** — higgsfield CLI commands + CLI↔MCP mapping (ใช้เมื่อมี Bash) |
+| `references/mcp-functions.md` | **MCP path (Claude อื่น)** — รายการ tool เต็ม + params + return shape |
 | `references/model-catalog.md` | 30+ models แยก image/video/audio + use-case + constraint |
 | `references/prompt-cookbook.md` | prompt patterns ไทย-อังกฤษ แยก use-case (image+video) |
 | `references/marketing-studio.md` | DTC ads / product / webproduct / brand kit / Soul ID workflow |
@@ -223,4 +243,5 @@ prompt cookbook ไทย-อังกฤษ + ตัวอย่างแยก
 ---
 
 ## CHANGELOG
+- **V01R02 (2026-06-14)** — +**Execution Path Rule** (Claude Code → CLI `hf generate ...` ผ่าน Bash · Claude Desktop/Web/Cowork → MCP tool · Nano Banana = MCP เสมอ ไม่มี CLI). +`references/cli-commands.md` (CLI v0.2.1 brew, alias hf/higgs, auth login แล้ว — command + CLI↔MCP mapping verify จาก `hf --help` จริง). STEP 0 pre-flight + ref table แยก 2 path. CLI ติดตั้งจริงแล้ว (208 credit starter — preflight cost สำคัญ).
 - **V01R01 (2026-06-13)** — สร้างครั้งแรก. Connection/orchestration skill สำหรับ Higgsfield AI MCP (image+video+marketing+soul+virality). ขนานกับ nanobanana-connection แต่ครอบ full suite + credit-based (preflight cost) + model-selection decision tree (30+ models) + async job polling + Marketing Studio workflow. คู่กับ b2b-presentation-creator / deliverable-gen-agent.

@@ -29,17 +29,23 @@ skills_used:
   analytics: 
     - sales-pipeline-report           # local (~/.claude/skills/ — iCE-customized)
   imagery:                            # ⭐ AI image/video gen สำหรับ hero/infographic/product-shot ใน deliverable (ref 07 Method 3)
-    - nanobanana-connection           # local — Gemini image (เร็ว/quota — infographic/hero ภายใน)
-    - higgsfield-connection           # local — full suite image+video+marketing+soul (4K/ad/brand/character คงหน้า)
+    # ⚡ EXECUTION PATH (ref higgsfield-connection V01R02): Higgsfield มี 2 path —
+    #   Claude Code (มี Bash) → CLI: hf generate create <model> --prompt ... (ผ่าน Bash) ⭐ env ปัจจุบัน
+    #   Claude Desktop/Web/Cowork (ไม่มี shell) → MCP tool: mcp__<uuid>__generate_image/generate_video
+    #   nanobanana = MCP เสมอ ทุก env (ไม่มี CLI)
+    #   preflight cost ก่อนงาน higgsfield แพง (hf generate cost / get_cost:true) — credit-based 208 starter
+    - nanobanana-connection           # local — Gemini image (เร็ว/quota — infographic/hero ภายใน) · MCP เสมอ
+    - higgsfield-connection           # local — full suite image+video+marketing+soul (4K/ad/brand/character คงหน้า) · CLI(Claude Code)/MCP(อื่น)
   invocation_pattern: "1. ROLE 1 DESIGN: รับ content → b2b-slide-designer(V03R01 4ref) เลือก template/theme/CI → pre-flight-deck gate → layout\n2. ROLE 2 BUILD: python-pptx/docx/openpyxl via _lib/build_*.py helper + 18 PPTX lessons + Build Discipline D1-D4 (tri-slot font ⭐)\n3. ROLE 3 ANALYTICS: pandas/matplotlib + sales-pipeline-report → dashboard/insight\n4. STRICT VALIDATOR ก่อน return (font/corruption/overlap/embed + open PowerPoint จริง)\n5. NO sub-agent call — build เองด้วย helper module (design+build coherence) · report up → Compass dispatch QA (producer≠checker)"
 mcp_tools: 
   - gdrive
   - web
-  - nanobanana                        # ⭐ mcp__nanobanana__generate_image — สร้างภาพ AI (Gemini) ใน deliverable
-  - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID
+  - nanobanana                        # ⭐ mcp__nanobanana__generate_image — สร้างภาพ AI (Gemini) ใน deliverable · MCP เสมอ (ไม่มี CLI)
+  - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID · + CLI path (hf generate create) เมื่ออยู่ Claude Code (Bash) — preflight cost ก่อนงานแพง
 ---
-> **Agent:** deliverable-gen-agent | **Version:** V01R05 | **Date:** 2026.06.13
+> **Agent:** deliverable-gen-agent | **Version:** V01R06 | **Date:** 2026.06.14
 > **Layer:** 2 (Specialist — Production, design+build รวม) | **BUILD HOT-PATH**
+> **R06 (2026.06.14):** +Execution Path Rule (CLI Claude Code / MCP อื่น) + ref higgsfield-connection V01R02 — ระบุชัด AI imagery มี 2 path: Claude Code (มี Bash) → higgsfield CLI (`hf generate create <model> --prompt`) · Claude Desktop/Web/Cowork (ไม่มี shell) → MCP tool (`mcp__<uuid>__generate_image/video`) · nanobanana = MCP เสมอทุก env. preflight cost ก่อนงาน higgsfield แพง (credit-based 208 starter). เพิ่มเป็น note ใน skills_used.imagery + comment ใน mcp_tools — คง binding เดิม (skills_used/mcp_tools ไม่เปลี่ยน).
 > **R05 (2026.06.13):** +AI Imagery binding — skills_used.imagery (nanobanana-connection=Gemini image · higgsfield-connection=full suite image+video+marketing+soul) + mcp_tools (nanobanana + higgsfield UUID). แก้ gap: เดิม build deck ได้แต่สร้าง AI image/video ไม่ได้ (ไม่มี tool). ตอนนี้ ref 07 Method 3 (AI imagery) เรียก engine จริงได้ — nanobanana สำหรับ hero/infographic ภายใน (เร็ว/quota) · higgsfield สำหรับ 4K/video/ad/brand/character คงหน้า. preflight cost ก่อนงาน higgsfield (credit-based).
 > **R04 (2026.06.13):** +[P6] L1 Write-Clean Card pointer (prevention layer) — เขียนสะอาดเลี่ยง AI-cadence ตั้งแต่ร่างแรก · อ้าง core A1-A5 + register B-Business/B-Academic ตาม caller · source of truth = skill thesis-ai-det-col (pointer สั้น ไม่ copy card · กัน fork/drift) · detection เต็ม → qa-master D5
 > **R03 (2026.06.13):** +PPTX Lesson #18 — U+2192 (→) ใน text → PowerPoint for Mac ปฏิเสธทั้งไฟล์ (Repair) ขณะที่ LibreOffice/qlmanage ปล่อยผ่าน (false-green) → แทนด้วย ▸ · _lib/build_pptx.py auto-replace ตอน build · deck_qa.py char-check (ไม่พึ่ง LibreOffice) · ยกระดับ Strict Validator: LibreOffice render = preview เท่านั้น ไม่นับเป็น validation pass · 17→18 lessons sync ทุกจุด (KT Food S4 bug)
