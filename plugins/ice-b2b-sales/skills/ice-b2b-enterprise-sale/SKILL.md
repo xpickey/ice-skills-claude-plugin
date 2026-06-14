@@ -370,9 +370,12 @@ Section 4 Stage Lens points the Negotiate row at Component 10 + D-21; and
 `orchestration-playbook.md` adds a cross-reference from QRC-04 to the deep playbook
 plus a new bilingual QRC-11 (Negotiation In-Room Field Card) calibrated for use in
 the lift on the way up to a final-pricing meeting. No SKILL.md routing changes — the
-Hot Path, Standard Path, and Fast Path remain identical. The deep negotiation content
-lives in `b2b-solution-selling/references/10-negotiation-playbook.md`; this skill
-only routes to it.
+Hot Path, Standard Path, and Fast Path remain identical. Negotiation content currently
+lives distributed across `b2b-solution-selling/references/` (00-blueprint, 03-meddpicc,
+04-challenger, 07-handover, 09-seller-dna — BATNA/ZOPA/objection handling); a dedicated
+`10-negotiation-playbook.md` was scoped here but not yet authored. Until it exists, route
+negotiation work to the 00-09 references above. *(V02R04 note: corrected — earlier text
+claimed a standalone file 10 that does not exist.)*
 
 **V02R01 — 2026.05.14 — Major version threshold (work-in-progress).**
 Reframe acknowledged: source artifacts represent current-state working patterns,

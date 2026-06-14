@@ -326,7 +326,7 @@ Two orthogonal axes shape what the agent can do.
 |---|---|---|
 | **`som`** (default) | tree + screenshot | `element_index` preferred; pixel fallback |
 | **`ax`** | tree only (no PNG) | `element_index` only |
-| **`vision`** | PNG only (no tree) | pixel only — see [SCREENSHOT.md](./SCREENSHOT.md) |
+| **`vision`** | PNG only (no tree) | pixel only — see vision-mode notes in [README.md](./README.md) |
 
 `vision` was renamed from `screenshot` — the old name still decodes
 as a deprecated alias, so an on-disk `"capture_mode": "screenshot"`
@@ -341,10 +341,9 @@ When a snapshot looks wrong (tiny screenshot / empty tree), check
 
 Pure-vision mode has its own caveats — Claude Code's vision
 pipeline downsamples dense text aggressively, so pixel grounding
-takes multiple correction cycles on text-heavy UIs. Read
-[SCREENSHOT.md](./SCREENSHOT.md) before driving anything in that
-mode; it documents the iterate/annotate/verify recipe plus the
-JPEG-over-PNG finding.
+takes multiple correction cycles on text-heavy UIs. See the
+vision-mode notes in [README.md](./README.md) before driving in that
+mode (iterate/annotate/verify approach for text-heavy UIs).
 
 **Window state → what works**
 
