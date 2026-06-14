@@ -1,7 +1,7 @@
 {
   "name": "ice-academic",
-  "description": "Thai academic writing fleet — 6 skills (PhD/MA dissertation MCU, TCI/AGJ/JPSPA articles, social-science, AI-detection) + thesis-ai-det-col-agent + shared _lib/reference.",
-  "version": "1.1.2",
+  "description": "Thai academic writing fleet — 7 skills (PhD/MA dissertation MCU, TCI/AGJ/JPSPA articles, social-science, AI-detection, research-compass-nrct NRCT research-cycle) + thesis-ai-det-col-agent + shared _lib/reference.",
+  "version": "1.2.0",
   "author": {
     "name": "xpickey"
   }
