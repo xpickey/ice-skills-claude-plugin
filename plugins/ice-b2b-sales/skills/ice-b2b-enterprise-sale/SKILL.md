@@ -2,7 +2,7 @@
 name: ice-b2b-enterprise-sale
 description: Control/orchestrator skill for B2B Enterprise Software Sale work at iCE Consulting on Oracle Cloud (Fusion ERP/EPM/OCI), Oracle EBS, and Oracle NetSuite — plus adjacent practices in FinTech/Lending/IFRS9, Thai GFMIS/e-GP, and รัฐวิสาหกิจ TOR-Comply work. Routes work to the right sub-skill by Deliverable first, then Product, then Domain overlay, then Industry context. Optimised for Rapid Workflow (30–60 min per deliverable) and Pre-sales-heavy workload mix (~70 percent). Use this skill whenever the user is doing Sales, Pre-sales, Proposal, RFP, TOR, Demo, Account Planning, Customer Engagement, or Existing Customer Change Request work — including Thai-language phrasings such as ทำข้อเสนอ, เขียน proposal, ตอบ TOR, เตรียม demo, วาง account plan, ทำ business case, ตอบ RFI, ทำ CR ลูกค้าเก่า, ทำ board paper, and เตรียม pitch. Enforces a mandatory Typography and Bilingual Font QA gate before saving any .docx, .pptx, or .pdf deliverable.
 metadata:
-  version: V02R04
+  version: V02R05
   date: 2026-06-14
 ---
 
@@ -331,6 +331,17 @@ End of router. The deliverable starts in the chain.
 
 # Section 12 — Change Log
 
+**V02R05 — 2026.06.14 — Sub-release. Negotiation playbook authored.**
+The dedicated `b2b-solution-selling/references/10-negotiation-playbook.md` (V01R01) was
+authored — extracted from the iCE Negotiation-for-Sales corpus (Win-Win + Position/Interest,
+5-step process, Logos/Pathos, Give-Take/Logrolling/Packaging, Anchoring/Deadlock,
+BATNA/walk-away, countering 4 dirty tactics, 4-step Price Defense, Closing & Binding
+Commitment, iCE Competitor Battle Card + Solution Bundle, Scope-Creep workflow). This closes
+the long-standing reference gap first flagged in V02R02 (file 10 was scoped but not yet
+written). The V02R02 changelog note is updated in place from "does not exist" to "now exists."
+No routing or SKILL.md structure changes — the orchestrator already routed negotiation work to
+Component 10; the deep content now lives in a real file instead of distributed across 00-09.
+
 **V02R04 — 2026.06.14 — Sub-release. AI Imagery awareness added.**
 เพิ่ม Step 5b (AI imagery, optional) ใน Hot Path chain (Section 4.1) — ให้ skill นี้รู้จัก
 `nanobanana-connection` (Gemini image, MCP เสมอ, hero/infographic ภายในเร็ว/quota) และ
@@ -374,8 +385,9 @@ Hot Path, Standard Path, and Fast Path remain identical. Negotiation content cur
 lives distributed across `b2b-solution-selling/references/` (00-blueprint, 03-meddpicc,
 04-challenger, 07-handover, 09-seller-dna — BATNA/ZOPA/objection handling); a dedicated
 `10-negotiation-playbook.md` was scoped here but not yet authored. Until it exists, route
-negotiation work to the 00-09 references above. *(V02R04 note: corrected — earlier text
-claimed a standalone file 10 that does not exist.)*
+negotiation work to the 00-09 references above. *(V02R05 note: superseded —
+`b2b-solution-selling/references/10-negotiation-playbook.md` now exists, V01R01,
+extracted from the iCE Negotiation-for-Sales corpus; route deep negotiation work there.)*
 
 **V02R01 — 2026.05.14 — Major version threshold (work-in-progress).**
 Reframe acknowledged: source artifacts represent current-state working patterns,
