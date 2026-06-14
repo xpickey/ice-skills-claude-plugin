@@ -3,7 +3,7 @@ name: sales-pipeline-report
 description: >
   Generate executive-grade Sales Pipeline reports from CRM Excel data — as a PowerPoint deck,
   Excel workbook, or structured markdown — using a clean visual design system with stage-based
-  categorization (WIN / FOCUS / AT RISK / ACTIVE / EARLY), NetNew vs Recurring revenue split, and quarterly
+  categorization (WON / AWARD / FOCUS / AT RISK / ACTIVE / EARLY), NetNew vs Recurring revenue split, and quarterly
   breakdowns. Use this skill whenever the user uploads or references a sales pipeline Excel file
   and wants any kind of report, deck, summary, or visualization — even if they just say "generate
   the pipeline report", "make slides from this data", "pipeline deck", or "pipeline summary".
@@ -86,27 +86,34 @@ Map CRM stages to 4 executive categories. This mapping is **configurable** — a
 
 | CRM Stage Pattern | Category | Icon | Meaning |
 |---|---|---|---|
-| `Won`, `Closed Won`, `Waiting Invoice`, `A++` | **WIN** | ✅ | Revenue secured |
-| `Award`, `PO`, `Done Nego`, `On Purchasing`, `On Renewal`, `A+`, `A:` | **FOCUS** | 🔥 | High-probability, needs closing action |
+| `Won`, `Closed Won`, `Waiting Invoice`, `A++` | **WON** | ✅ | Revenue secured / imminent |
+| `A+` (Award / Contract / PO in process) | **AWARD** | 🏆 | A+ commit — its own category, separate from WON |
+| `A:` Done Nego, On Renewal | **FOCUS** | 🔥 | Late-stage negotiation / renewal, needs closing action |
 | `May Loss`, `On Recover`, `B:` | **AT RISK** | ⚠️ | Deal in jeopardy — may-loss or in recovery; in pipeline but slipping |
 | `Proposal`, `Decision Maker`, `Develop Sponsor`, `C:`, `D:` | **ACTIVE** | 🎯 | Active pursuit, outcome uncertain |
-| `Opportunity Identified`, `Gathering Req`, `S:` | **EARLY** | 🌱 | Early stage, long-range pipeline |
+| `Opportunity Identified`, `Gathering Req`, `S:`, `T:` | **EARLY** | 🌱 | Early stage, long-range pipeline |
 
 **Mapping logic:**
 ```python
 def map_stage(stage: str) -> str:
-    # Match order: WIN → FOCUS → AT RISK → ACTIVE → EARLY. First match wins.
+    # Match order: WON → AWARD → FOCUS → AT RISK → ACTIVE → EARLY. First match wins.
+    # Test a++ (WON) before a+ (AWARD), since a++ contains a+.
+    # Do NOT use 'po'/'purchasing' substrings — they hit 'Proposal'/'Develop Sponsor'.
     s = stage.strip().lower()
-    if any(x in s for x in ["won", "closed", "invoice", "a++"]):
-        return "WIN"
-    elif any(x in s for x in ["award", "po", "nego", "purchasing", "renewal", "a+", "a:"]):
+    if "won" in s or s.startswith("a++") or "invoice" in s:
+        return "WON"
+    elif s.startswith("a+") or "award" in s:
+        return "AWARD"
+    elif s.startswith("a:") or "nego" in s or "on renewal" in s:
         return "FOCUS"
-    elif any(x in s for x in ["may loss", "recover", "b:"]):
+    elif s.startswith("b:") or "may loss" in s or "recover" in s:
         return "AT RISK"
-    elif any(x in s for x in ["proposal", "decision", "develop", "c:", "d:"]):
+    elif s.startswith("c:") or s.startswith("d:") or "proposal" in s or "decision" in s or "develop" in s:
         return "ACTIVE"
-    else:
+    elif s.startswith("s:") or s.startswith("t:") or "gathering" in s or "opportunity identified" in s or "qualifying" in s:
         return "EARLY"
+    else:
+        return "OTHER"
 ```
 
 ---
@@ -118,7 +125,7 @@ After validation and mapping, compute these standard metrics:
 ```
 TOTAL COMMITTED = Sum of all non-zero Grand Total values across all sheets (deduplicated)
 
-Per Category (WIN / FOCUS / AT RISK / ACTIVE / EARLY):
+Per Category (WON / AWARD / FOCUS / AT RISK / ACTIVE / EARLY):
   - Total amount
   - Deal count
   - NetNew subtotal
@@ -319,18 +326,19 @@ Before presenting output to the user:
 
 ---
 
-**Version:** V01R05 | **Date:** 2026-06-14
-**Change:** Added new **AT RISK** category (icon ⚠️). Stages `May Loss`,
-`On Recover`/`recover`, and the `B:` prefix moved from ACTIVE → AT RISK;
-ACTIVE narrows to `C:`, `D:`, `Proposal`, `Decision Maker`, `Develop Sponsor`.
-AT RISK counts in the active pipeline total (WIN + FOCUS + AT RISK + ACTIVE +
-EARLY = Grand Total). New match order: WIN → FOCUS → AT RISK → ACTIVE → EARLY.
-Applied in trilogy lockstep with `ice-sale-pipeline-report` V04R01 and
-`ice-sale-pipeline-dashboard` V04R01. **Note:** this skill's WIN/FOCUS still
-maps `A+` to FOCUS (the A+→WIN promotion in `ice-sale-pipeline-report` V03R01
-was NOT back-ported here — out of scope for the AT RISK change; flag if mixing
-outputs).
+**Version:** V01R06 | **Date:** 2026-06-14
+**Change:** Adopted the **6-category model** (per Requirement Spec V02R01),
+matching `ice-sale-pipeline-report` V05R01 and `ice-sale-pipeline-dashboard`
+V05R01. **Split AWARD (A+) 🏆 out as its own category, separate from WON.**
+Full order WON → AWARD → FOCUS → AT RISK → ACTIVE → EARLY (first match wins;
+test `a++`=WON before `a+`=AWARD). `A:` stays FOCUS. **Removed the
+`po`/`purchasing` substring** from FOCUS — it was a substring of "Pro**po**sal"
+and "develo**p s**ponsor" and misrouted ACTIVE deals; now matched by
+`A:`/`A+`/`A++` prefix. The earlier AT RISK split (`B:`/may-loss/recover →
+AT RISK) is retained.
 **Prior versions:**
+- V01R05 (2026-06-14) — Added AT RISK category; `B:`/may-loss/recover moved
+  from ACTIVE → AT RISK. (Superseded by V01R06's 6-category model.)
 - V01R04 (2026-05-19) — Bundled 4 reference files into the .skill ZIP as a
   self-contained package. Skill logic unchanged from V01R03.
 - V01R03 (2026-05-13) — Added Step 6.5 Typography & Bilingual Font QA
