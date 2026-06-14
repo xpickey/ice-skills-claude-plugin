@@ -3,7 +3,7 @@ name: sales-pipeline-report
 description: >
   Generate executive-grade Sales Pipeline reports from CRM Excel data — as a PowerPoint deck,
   Excel workbook, or structured markdown — using a clean visual design system with stage-based
-  categorization (WIN / FOCUS / ACTIVE / EARLY), NetNew vs Recurring revenue split, and quarterly
+  categorization (WIN / FOCUS / AT RISK / ACTIVE / EARLY), NetNew vs Recurring revenue split, and quarterly
   breakdowns. Use this skill whenever the user uploads or references a sales pipeline Excel file
   and wants any kind of report, deck, summary, or visualization — even if they just say "generate
   the pipeline report", "make slides from this data", "pipeline deck", or "pipeline summary".
@@ -88,18 +88,22 @@ Map CRM stages to 4 executive categories. This mapping is **configurable** — a
 |---|---|---|---|
 | `Won`, `Closed Won`, `Waiting Invoice`, `A++` | **WIN** | ✅ | Revenue secured |
 | `Award`, `PO`, `Done Nego`, `On Purchasing`, `On Renewal`, `A+`, `A:` | **FOCUS** | 🔥 | High-probability, needs closing action |
-| `Proposal`, `Decision Maker`, `May Loss`, `Develop Sponsor`, `C:`, `B:`, `D:` | **ACTIVE** | 🎯 | Active pursuit, outcome uncertain |
+| `May Loss`, `On Recover`, `B:` | **AT RISK** | ⚠️ | Deal in jeopardy — may-loss or in recovery; in pipeline but slipping |
+| `Proposal`, `Decision Maker`, `Develop Sponsor`, `C:`, `D:` | **ACTIVE** | 🎯 | Active pursuit, outcome uncertain |
 | `Opportunity Identified`, `Gathering Req`, `S:` | **EARLY** | 🌱 | Early stage, long-range pipeline |
 
 **Mapping logic:**
 ```python
 def map_stage(stage: str) -> str:
+    # Match order: WIN → FOCUS → AT RISK → ACTIVE → EARLY. First match wins.
     s = stage.strip().lower()
     if any(x in s for x in ["won", "closed", "invoice", "a++"]):
         return "WIN"
     elif any(x in s for x in ["award", "po", "nego", "purchasing", "renewal", "a+", "a:"]):
         return "FOCUS"
-    elif any(x in s for x in ["proposal", "decision", "may loss", "develop", "c:", "b:", "d:"]):
+    elif any(x in s for x in ["may loss", "recover", "b:"]):
+        return "AT RISK"
+    elif any(x in s for x in ["proposal", "decision", "develop", "c:", "d:"]):
         return "ACTIVE"
     else:
         return "EARLY"
@@ -114,7 +118,7 @@ After validation and mapping, compute these standard metrics:
 ```
 TOTAL COMMITTED = Sum of all non-zero Grand Total values across all sheets (deduplicated)
 
-Per Category (WIN / FOCUS / ACTIVE / EARLY):
+Per Category (WIN / FOCUS / AT RISK / ACTIVE / EARLY):
   - Total amount
   - Deal count
   - NetNew subtotal
@@ -286,7 +290,7 @@ theme, this default applies unless theme file specifies otherwise.
 Before presenting output to the user:
 
 - [ ] Total committed matches sum of all sheets (minus duplicates)
-- [ ] WIN + FOCUS + ACTIVE + EARLY = Grand Total
+- [ ] WIN + FOCUS + AT RISK + ACTIVE + EARLY = Grand Total
 - [ ] NetNew + Recurring = Grand Total per category
 - [ ] Q1 + Q2 + Q3 + Q4 = Annual total per category
 - [ ] No decommitted deals (Grand Total = 0) included in figures
@@ -315,12 +319,20 @@ Before presenting output to the user:
 
 ---
 
-**Version:** V01R04 | **Date:** 2026-05-19
-**Change:** Bundled 4 reference files (design-system.md, theme-zen.md,
-pptx-structure.md, excel-structure.md) into the .skill ZIP as a
-self-contained package — no more external dependency. Skill logic
-unchanged from V01R03.
+**Version:** V01R05 | **Date:** 2026-06-14
+**Change:** Added new **AT RISK** category (icon ⚠️). Stages `May Loss`,
+`On Recover`/`recover`, and the `B:` prefix moved from ACTIVE → AT RISK;
+ACTIVE narrows to `C:`, `D:`, `Proposal`, `Decision Maker`, `Develop Sponsor`.
+AT RISK counts in the active pipeline total (WIN + FOCUS + AT RISK + ACTIVE +
+EARLY = Grand Total). New match order: WIN → FOCUS → AT RISK → ACTIVE → EARLY.
+Applied in trilogy lockstep with `ice-sale-pipeline-report` V04R01 and
+`ice-sale-pipeline-dashboard` V04R01. **Note:** this skill's WIN/FOCUS still
+maps `A+` to FOCUS (the A+→WIN promotion in `ice-sale-pipeline-report` V03R01
+was NOT back-ported here — out of scope for the AT RISK change; flag if mixing
+outputs).
 **Prior versions:**
+- V01R04 (2026-05-19) — Bundled 4 reference files into the .skill ZIP as a
+  self-contained package. Skill logic unchanged from V01R03.
 - V01R03 (2026-05-13) — Added Step 6.5 Typography & Bilingual Font QA
   (mandatory gate before saving .pptx / .xlsx / .docx / .pdf). Defaults
   to Sarabun + Inter for bilingual Thai-English consistency.
