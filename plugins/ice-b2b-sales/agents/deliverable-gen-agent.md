@@ -35,7 +35,13 @@ skills_used:
     #   nanobanana = MCP เสมอ ทุก env (ไม่มี CLI)
     #   preflight cost ก่อนงาน higgsfield แพง (hf generate cost / get_cost:true) — credit-based 208 starter
     - nanobanana-connection           # local — Gemini image (เร็ว/quota — infographic/hero ภายใน) · MCP เสมอ
-    - higgsfield-connection           # local — full suite image+video+marketing+soul (4K/ad/brand/character คงหน้า) · CLI(Claude Code)/MCP(อื่น)
+    - higgsfield-connection           # local — connection layer: setup/auth/execution-path/troubleshoot · CLI(Claude Code)/MCP(อื่น)
+    # ⭐ Higgsfield OFFICIAL task skills (npx skills add higgsfield-ai/skills — เรียก Higgsfield CLI backend จริง พร้อม prompt-template):
+    #   connection = "ต่อ + เลือก path" → official 4 ตัว = "ทำงาน task เจาะจง" (เลือกตามงาน)
+    - higgsfield-generate             # local — generate image/video/3D/audio ทั่วไป (GPT Image 2 / Seedance 2.0 / Nano Banana 2-Pro / Kling 3.0 / Marketing Studio / Virality Predictor) · งานหลัก hero/clip/animate ใน deck
+    - higgsfield-product-photoshoot   # local — ภาพสินค้าระดับแบรนด์ 10 modes (product/lifestyle/hero/ad-creative/carousel) · งาน product visual ใน proposal/marketing
+    - higgsfield-marketplace-cards    # local — marketplace listing cards / A+ content (e-commerce — ใช้น้อยใน B2B deck)
+    - higgsfield-soul-id              # local — train Soul Character (face/identity คงหน้า) → chain เข้า higgsfield-generate --soul-id สำหรับ avatar/presenter video
   invocation_pattern: "1. ROLE 1 DESIGN: รับ content → b2b-slide-designer(V03R01 4ref) เลือก template/theme/CI → pre-flight-deck gate → layout\n2. ROLE 2 BUILD: python-pptx/docx/openpyxl via _lib/build_*.py helper + 18 PPTX lessons + Build Discipline D1-D4 (tri-slot font ⭐)\n3. ROLE 3 ANALYTICS: pandas/matplotlib + sales-pipeline-report → dashboard/insight\n4. STRICT VALIDATOR ก่อน return (font/corruption/overlap/embed + open PowerPoint จริง)\n5. NO sub-agent call — build เองด้วย helper module (design+build coherence) · report up → Compass dispatch QA (producer≠checker)"
 mcp_tools: 
   - gdrive
@@ -43,8 +49,9 @@ mcp_tools:
   - nanobanana                        # ⭐ mcp__nanobanana__generate_image — สร้างภาพ AI (Gemini) ใน deliverable · MCP เสมอ (ไม่มี CLI)
   - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID · + CLI path (hf generate create) เมื่ออยู่ Claude Code (Bash) — preflight cost ก่อนงานแพง
 ---
-> **Agent:** deliverable-gen-agent | **Version:** V01R06 | **Date:** 2026.06.14
+> **Agent:** deliverable-gen-agent | **Version:** V01R07 | **Date:** 2026.06.17
 > **Layer:** 2 (Specialist — Production, design+build รวม) | **BUILD HOT-PATH**
+> **R07 (2026.06.17):** +Higgsfield OFFICIAL task skills (4) ใน skills_used.imagery — ติดตั้งผ่าน `npx skills add higgsfield-ai/skills`: **higgsfield-generate** (image/video/3D/audio ทั่วไป — GPT Image 2/Seedance 2.0/Kling 3.0/Marketing Studio/Virality Predictor), **higgsfield-product-photoshoot** (ภาพสินค้าแบรนด์ 10 modes), **higgsfield-marketplace-cards** (e-commerce listing/A+), **higgsfield-soul-id** (train Soul Character → chain --soul-id). แยกบทบาทจาก higgsfield-connection: connection = setup/auth/execution-path (ต่อ+เลือก path) · official 4 = task skills ที่เรียก Higgsfield CLI backend จริง (ทำงานเจาะจง). คง mcp_tools/execution-path เดิม (R06). generate description ย่อ ≤1024 (กัน app skill-drop). sync ลง ice-tools marketplace 1.3.0 (10 skills).
 > **R06 (2026.06.14):** +Execution Path Rule (CLI Claude Code / MCP อื่น) + ref higgsfield-connection V01R02 — ระบุชัด AI imagery มี 2 path: Claude Code (มี Bash) → higgsfield CLI (`hf generate create <model> --prompt`) · Claude Desktop/Web/Cowork (ไม่มี shell) → MCP tool (`mcp__<uuid>__generate_image/video`) · nanobanana = MCP เสมอทุก env. preflight cost ก่อนงาน higgsfield แพง (credit-based 208 starter). เพิ่มเป็น note ใน skills_used.imagery + comment ใน mcp_tools — คง binding เดิม (skills_used/mcp_tools ไม่เปลี่ยน).
 > **R05 (2026.06.13):** +AI Imagery binding — skills_used.imagery (nanobanana-connection=Gemini image · higgsfield-connection=full suite image+video+marketing+soul) + mcp_tools (nanobanana + higgsfield UUID). แก้ gap: เดิม build deck ได้แต่สร้าง AI image/video ไม่ได้ (ไม่มี tool). ตอนนี้ ref 07 Method 3 (AI imagery) เรียก engine จริงได้ — nanobanana สำหรับ hero/infographic ภายใน (เร็ว/quota) · higgsfield สำหรับ 4K/video/ad/brand/character คงหน้า. preflight cost ก่อนงาน higgsfield (credit-based).
 > **R04 (2026.06.13):** +[P6] L1 Write-Clean Card pointer (prevention layer) — เขียนสะอาดเลี่ยง AI-cadence ตั้งแต่ร่างแรก · อ้าง core A1-A5 + register B-Business/B-Academic ตาม caller · source of truth = skill thesis-ai-det-col (pointer สั้น ไม่ copy card · กัน fork/drift) · detection เต็ม → qa-master D5
