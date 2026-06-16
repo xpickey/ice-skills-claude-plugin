@@ -1,7 +1,7 @@
 {
   "name": "ice-b2b-sales",
   "description": "iCE B2B enterprise sales fleet — 29 skills (Oracle/SAP/NetSuite/MS Dynamics, B2B methodology, Thai GFMIS/e-GP/tax, pricing) + 6 Compass.Next agents (iCE-Compass-Next, kim-assistant, sales-process, solution-knowledge, deliverable-gen, qa-master) + shared _lib/reference/_infra.",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "author": {
     "name": "xpickey"
   }
