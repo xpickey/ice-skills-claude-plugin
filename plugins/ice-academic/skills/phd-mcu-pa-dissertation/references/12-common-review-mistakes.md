@@ -1,13 +1,13 @@
 # 12 — Common Review Mistakes (Master Library)
-## Pre-defense Cross-cutting Checklist + 121 CPs Index + Gate Audits
+## Pre-defense Cross-cutting Checklist + 123 CPs Index + Gate Audits
 
-**Version:** V01R01 | **Date:** 2026-05-03
+**Version:** V01R02 | **Date:** 2026-06-19
 
 ---
 
 ## 1. Mission
 
-ไฟล์นี้คือ **Master Library** สำหรับเตรียมสอบทุก Gate — รวม Common Mistakes ทั้งหมด 121 Checkpoints ที่กระจายอยู่ใน MD 00-11 + Cross-cutting Pattern ที่ปรากฏซ้ำ
+ไฟล์นี้คือ **Master Library** สำหรับเตรียมสอบทุก Gate — รวม Common Mistakes ทั้งหมด 123 Checkpoints (121 หลัก + 2 suffix CP-43a/43b) ที่กระจายอยู่ใน MD 00-11 + Cross-cutting Pattern ที่ปรากฏซ้ำ
 
 **Authority Hierarchy:**
 - **Level 1:** คู่มือ มจร 2563 — มาตรฐานสูงสุด
@@ -21,7 +21,7 @@ Skill จะอ่านไฟล์นี้เมื่อ
 
 ---
 
-## 2. Master CP Index (121 Checkpoints)
+## 2. Master CP Index (123 Checkpoints)
 
 ### 2.1 By Source MD
 
@@ -29,7 +29,7 @@ Skill จะอ่านไฟล์นี้เมื่อ
 |----|-------|------|-------|
 | `00-lifecycle-map.md` | (Master Pitfall Library 12 ข้อ) | — | Universal pitfalls |
 | `02-topic-development.md` | CP-1 ถึง CP-20 | 20 | Topic + Gate 1 |
-| `03-literature-review.md` | CP-21 ถึง CP-43 | 23 | Lit Review + Theory |
+| `03-literature-review.md` | CP-21 ถึง CP-43 (+ CP-43a, CP-43b) | 25 | Lit Review + Theory + Search/Gap |
 | `04-pa-dhamma-mapping.md` | CP-44 ถึง CP-48 | 5 | Theory-Dhamma Map |
 | `05-methodology-design.md` | CP-49 ถึง CP-67 | 19 | Methodology + Gate 2 |
 | `06-writing-standard.md` | CP-68 ถึง CP-77 | 10 | Writing + Cross-Chapter |
@@ -38,7 +38,7 @@ Skill จะอ่านไฟล์นี้เมื่อ
 | `09-fact-audit.md` | CP-94 ถึง CP-103 | 10 | Fact + Hallucination |
 | `10-ai-detection.md` | CP-104 ถึง CP-111 | 8 | AI Detection |
 | `11-citation-footnote.md` | CP-112 ถึง CP-121 | 10 | Citation + Bibliography |
-| **TOTAL** | **CP-1 ถึง CP-121** | **121** | — |
+| **TOTAL** | **CP-1 ถึง CP-121 (+ 2 suffix)** | **123** | — |
 
 ### 2.2 By Severity
 
@@ -53,7 +53,7 @@ Skill จะอ่านไฟล์นี้เมื่อ
 | Phase | จำนวน CP | Critical |
 |-------|----------|---------|
 | Phase 1 (Topic) | 20 | 6 |
-| Phase 2 (Lit Review) | 28 | 8 |
+| Phase 2 (Lit Review) | 30 | 9 |
 | Phase 3 (Methodology) | 19 | 5 |
 | Phase 4 (Writing) | 10 | 4 |
 | Phase 5-6 (Data + Analysis) | (in 06) | — |
@@ -404,12 +404,15 @@ flowchart TD
 
 ## 12. Versioning
 
-**Version:** V01R01
-**Date:** 2026-05-03
+**Version:** V01R02
+**Date:** 2026-06-19
 **Source:**
-- 121 Common Mistakes จาก references/00-11.md
+- 121 Common Mistakes จาก references/00-11.md (+ 2 suffix CP-43a/43b จาก 03-literature-review V01R04)
 - Cross-cutting Patterns 6 (H1-H6) จาก _staging/extracted-common-mistakes.md
 - คู่มือ มจร — Master Authority
 - Note อาจารย์ Excel V02R01 (50 รายการ Common Mistakes จริง)
 - Top 20 Critical Mistakes (Hall of Shame)
-**Update Rule:** Minor edit → V01R02; Major rewrite → V02R01
+**Change Log:**
+- V01R01 (2026-05-03): Initial Master Library (121 CPs)
+- V01R02 (2026-06-19): Sync 03-literature-review V01R04 — เพิ่ม CP-43a/43b (Search/Research-Gap), รวม 123 CPs, อัปเดต Index + Phase 2 count
+**Update Rule:** Minor edit → V01R03; Major rewrite → V02R01

@@ -2,7 +2,7 @@
 name: phd-mcu-pa-dissertation
 description: "Custom skill สำหรับสร้างและตรวจดุษฎีนิพนธ์ปริญญาเอก หลักสูตรปรัชญาดุษฎีบัณฑิต สาขาวิชารัฐประศาสนศาสตร์ มหาวิทยาลัยมหาจุฬาลงกรณราชวิทยาลัย (ปร.ด. รปศ. มจร / PhD MCU PA) บูรณาการหลักพุทธธรรมตามมาตรฐาน มจร เต็มรูปแบบ ครอบคลุม Lifecycle 9 Phase 3 Gate ตั้งหัวข้อ ทบทวนวรรณกรรมผ่าน NotebookLM (MCP + Manual) ออกแบบระเบียบวิธีวิจัย จับคู่ทฤษฎี รปศ. กับหลักธรรม เขียนบทที่ 1-5 Format Audit Fact Audit AI Detection Humanization Trigger เมื่อผู้ใช้กล่าวถึง: ดุษฎีนิพนธ์ มจร, ปร.ด. รปศ. มจร, ปริญญาเอกรัฐประศาสนศาสตร์ มจร, PhD MCU PA, Public Administration MCU, รัฐประศาสนศาสตร์ มจร, บูรณาการพุทธธรรม, จับคู่ทฤษฎีกับพุทธธรรม, NotebookLM corpus, notebooklm-mcp, notebook_query, AI score ดุษฎีนิพนธ์, ตรวจ format มจร, เชิงอรรถ มจร, อ้างอิง มจร, บรรณานุกรม มจร, humanize งานวิจัย หรือคำถามใดๆ เกี่ยวกับการทำดุษฎีนิพนธ์ ปร.ด. รปศ. มจร"
 metadata:
-  version: V01R03
+  version: V01R04
   date: 2026-05-03
   author: Pichai (xpickey@gmail.com)
 ---
@@ -80,6 +80,7 @@ URL Reference: https://gradpol.mcu.ac.th/?page_id=494 (ไม่ Fetch ใช้
 | "TH SarabunPSK", "16pt", "ขอบกระดาษ", "เลขหน้า" | `08-template-audit.md` |
 | "AI score", "Turnitin score", "humanize", "Voice Profile" | `10-ai-detection.md` + `07-academic-thai-voice.md` |
 | "ก่อนสอบ", "pre-defense", "review checklist", "common mistakes", "Hall of Shame" | `12-common-review-mistakes.md` |
+| "PICO", "Boolean", "search strategy", "กลยุทธ์การสืบค้น", "คำค้น", "research gap", "ช่องว่างการวิจัย", "Novelty", "องค์ความรู้ใหม่", "synthesis matrix" | `03-literature-review.md` §4.2.1 + §7.3b (+ `templates/lit-search-and-gap.md`) |
 
 ### Tier 3 — Fallback
 หา signal ไม่ได้ → ถามผู้ใช้ระบุ Stage หรือ Topic ที่ต้องการความช่วยเหลือ
@@ -243,10 +244,11 @@ AI Score ต่ำกว่า threshold ที่กำหนด, Voice Profile
 
 ## Versioning
 
-**Version:** V01R03
-**Date:** 2026-05-03
+**Version:** V01R04
+**Date:** 2026-06-19
 **Change Log:**
 - V01R01 (2026-05-03): Initial release
 - V01R02 (2026-05-03): Update NotebookLM section to MCP-first architecture; add `notebooklm-mcp` keywords; add MCP Trigger Rules; add Mandatory Workflow step 7 for MCP confirm-first
 - V01R03 (2026-05-03): Add `12-common-review-mistakes.md` to Sub-Reference Map; add Pre-defense keywords to Tier 2 Routing
-**Update Rule:** Minor edit → V01R04; Major rewrite → V02R01
+- V01R04 (2026-06-19): เสริม Phase 2 ด้วยเครื่องมือสาย วช./NRCT (adapt-not-adopt) — `03-literature-review.md` เพิ่ม §4.2.1 Search Strategy Builder (PICO→TH/EN keyword→Boolean) + §7.3b Research-Gap Analysis 7-type (Top-5 + Novelty) ทุกขั้นมี Bridge กลับโครง มจร; เพิ่ม CP-43a/43b; เพิ่ม `templates/lit-search-and-gap.md`; Tier-2 keyword (PICO/Boolean/research gap/Novelty); `12-common-review-mistakes.md` → V01R02 (123 CPs). รูปแบบ/ลำดับการเขียนบทที่ 2 ยึด มจร เดิมไม่เปลี่ยน
+**Update Rule:** Minor edit → V01R05; Major rewrite → V02R01

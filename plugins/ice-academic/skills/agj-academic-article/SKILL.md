@@ -34,6 +34,9 @@ description: >
 | จัดรูปแบบ APA นาม-ปี / อ้างอิง | `references/apa-reference-guide.md` |
 | สร้างไฟล์ Word (.docx) | `assets/word-template-spec-agj.md` |
 | ใช้ Prompt สำเร็จรูป | `assets/prompt-templates.md` |
+| เตรียมคำค้นเชิงระบบ (PICO) / คิดชนิด research gap | `references/Checklist-แผนงานเขียนบทความวิชาการ-AI-Procurement.md` (STEP 0.4.1 + บทนำ ¶2) |
+
+> 📝 **Note (2026.06.19):** STEP 0.4.1 เสริม "วิธีสร้างคำค้นเชิงระบบ (PICO→กว้าง/แคบ→คำพ้อง TH/EN)" และบทนำ ¶2 เสริม "ตัวช่วยคิดชนิด Gap 7 แบบ (เลือก 1–2)" — เป็น *เครื่องมือคิดแบบย่อ* (ดัดแปลงสาย วช.) ที่ป้อนกลับเข้ารูปแบบ agj เดิม (ตารางคำค้น 5 ชุด + gap ประโยคเดียว ~150 คำ). **ไม่เปลี่ยนโครงบทความ/สูตรบทนำ 4 ย่อหน้า — ส่วนทฤษฎียังเป็น "วาง Lens" ไม่ใช่ Literature Review.**
 
 **Dependent Skills** — สำหรับ domain knowledge เชิงลึก หากเนื้อหาใน references/ ไม่เพียงพอ:
 - `phd-buddhist-public-admin` → หลักพุทธธรรม, PA-Dhamma mapping, ธรรมนูญชีวิต

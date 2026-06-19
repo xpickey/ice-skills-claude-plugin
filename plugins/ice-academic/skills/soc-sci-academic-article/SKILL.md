@@ -37,6 +37,10 @@ description: >
 | เลือกหัวข้อ × สาขา | `assets/article-topic-matrix.md` |
 | จับคู่ทฤษฎี × โดเมน | `assets/theory-domain-matrix.md` |
 | ค้นหางานวิจัย/เอกสารภายนอก | `references/academic-research-guide.md` |
+| สร้างคำค้นเชิงระบบ (PICO→กว้าง/แคบ→คำพ้อง) | `references/academic-research-guide.md` §2.1.0 |
+| คิดชนิดช่องว่างการวิจัย (research gap 7 แบบ) สำหรับบทนำ ¶1 | `references/writing-technique.md` §3.5 |
+
+> 📝 **Note (2026.06.19):** เสริม *เครื่องมือคิดแบบย่อ* (ดัดแปลงสาย วช.) 2 จุด — `academic-research-guide.md` §2.1.0 (สร้างคำค้นด้วย PICO ก่อนวางชุดคำค้นเดิม) + `writing-technique.md` §3.5 (ตัวช่วยคิดชนิด Gap 7 แบบ เลือก 1–2 → เขียนลงบทนำ ¶1). **ไม่เปลี่ยนโครงบทความ 8 ส่วน / สูตรบทนำ 4 ย่อหน้า / CLAIM-THEORY-EVIDENCE / APA7 — ไม่สร้าง Literature Review section, ไม่ทำ Top-5/Matrix (บทความสั้น).**
 
 **Dependent Skills** — สำหรับ domain knowledge เชิงลึก หากเนื้อหาใน references/ ไม่เพียงพอ:
 - `phd-buddhist-public-admin` → หลักพุทธธรรม, PA-Dhamma mapping, ธรรมนูญชีวิต

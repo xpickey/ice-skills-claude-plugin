@@ -48,6 +48,7 @@ description: "Ph.D./M.A. dissertation guide for MCU Public Administration, Polit
 4. **อ่าน `references/dhamma-life-book.md`** เมื่อเชื่อมโยงหลักธรรมกับบทบาทสังคม
 5. **อ่าน `references/pjd-dictionary.md`** เมื่อต้องนิยามหลักธรรม + อ้างเลขพระไตรปิฎก
 6. **อ่าน `references/citation-format.md`** เมื่อช่วยเรื่องเชิงอรรถ/บรรณานุกรม
+7. **บทที่ ๒ — เครื่องมือเตรียมงาน (อยู่ใน `references/thesis-writing-steps.md`):** §2.0 ยุทธวิธีค้นวรรณกรรม (PICO→คำค้น→Boolean) ใช้ก่อน §2.1/§2.4 · §2.4.5 วิเคราะห์ช่องว่างการวิจัย (Research Gap ๗ ชนิด → Top-5 → Novelty) ใช้หลัง §2.4 หนุนกรอบ §2.5
 
 ---
 
@@ -149,3 +150,7 @@ description: "Ph.D./M.A. dissertation guide for MCU Public Administration, Polit
 - **พจนานุกรมพุทธศาสตร์ ฉบับประมวลธรรม** → `references/pjd-dictionary.md`
 - **ธรรมนูญชีวิต พุทธจริยธรรมเพื่อชีวิตที่ดีงาม** → `references/dhamma-life-book.md`
 - **พุทธธรรม ฉบับปรับขยาย** → อธิบายหลักธรรมเชิงลึก
+
+---
+
+**Change Note (2026.06.19):** เพิ่มเครื่องมือเตรียมงานบทที่ ๒ ใน `thesis-writing-steps.md` (ดัดแปลงสาย วช./NRCT · adapt-not-adopt) — **§2.0** ยุทธวิธีค้นวรรณกรรม (PICO→คำค้น→Boolean) + **§2.4.5** วิเคราะห์ช่องว่างการวิจัย (๗ ชนิด → Top-5 → Novelty) ทุกขั้นมี Bridge กลับโครง มจร เดิม (§2.1/§2.4/§2.5/บทที่ ๑) และคงกฎ มจร ≥๖๐% / ป.เอก only / พระไตรปิฎก มจร ๒๕๓๙. **ไม่เปลี่ยนโครง ๕ บท / §2.1-2.5 / รูปแบบ Steps-Validation-Tips.**
