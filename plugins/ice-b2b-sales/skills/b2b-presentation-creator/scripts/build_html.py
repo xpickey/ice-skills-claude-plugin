@@ -103,7 +103,58 @@ DEFAULT_VARS = {
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?'
              'family=Kanit:wght@400;600;700&family=Sarabun:wght@300;400;600&'
              'family=Raleway:wght@600;800&family=Open+Sans:wght@400;600&'
+             'family=IBM+Plex+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;800&'
+             'family=Noto+Sans+Thai:wght@400;600&'
              'display=swap" rel="stylesheet">')
+
+# ---- Font Strategy (slide-designer §4.6) — font เลือกตามภาษา ไม่ตาม template ----
+# Web-safe stacks: ฟอนต์ไทยมาก่อน Latin เสมอ (กันไทยแตก/fallback)
+FONT_STACKS = {
+    # unified: ตัวเดียวมี TH+EN glyph (default งานทั่วไป — balance เอง)
+    "unified-plex":   "'IBM Plex Sans Thai','IBM Plex Sans',system-ui,sans-serif",
+    "unified-sarabun":"'Sarabun','Open Sans',system-ui,sans-serif",
+    "unified-noto":   "'Noto Sans Thai','Noto Sans',system-ui,sans-serif",
+    # TH-only / EN-only
+    "th-sarabun":     "'Sarabun','Open Sans',system-ui,sans-serif",
+    "en-inter":       "'Inter','Open Sans',system-ui,sans-serif",
+    "display-kanit":  "'Kanit','Raleway',system-ui,sans-serif",
+}
+
+
+def apply_font_strategy(css_vars, fs):
+    """รับ font_strategy จาก Design Spec → set --font-display/--font-body + content-aware size.
+    fs = { mode: TH-only|EN-only|TH+EN, approach: unified|pair, latin, cs, content: presenter|document }
+    """
+    if not fs:
+        return css_vars
+    mode = fs.get("mode", "TH+EN")
+    approach = fs.get("approach", "unified")
+
+    # เลือก stack ตาม mode/approach (ฟอนต์ไทยมาก่อน Latin เสมอ)
+    if mode == "EN-only":
+        body = FONT_STACKS["en-inter"]; disp = "'Raleway','Inter',system-ui,sans-serif"
+    elif mode == "TH-only":
+        body = FONT_STACKS["th-sarabun"]; disp = FONT_STACKS["display-kanit"]
+    else:  # TH+EN กล่องเดียว (ยากสุด)
+        if approach == "pair" and fs.get("latin") and fs.get("cs"):
+            # pair latin+cs: cs(ไทย) มาก่อน latin ใน stack
+            cs, latin = fs["cs"], fs["latin"]
+            body = f"'{cs}','{latin}',system-ui,sans-serif"
+            disp = body
+        else:  # unified (default — ปลอดภัยสุด)
+            body = FONT_STACKS.get(f"unified-{fs.get('font','plex')}", FONT_STACKS["unified-plex"])
+            disp = FONT_STACKS["display-kanit"]
+    css_vars["--font-body"] = body
+    css_vars["--font-display"] = disp
+
+    # content-aware sizing: document(เนื้อเยอะ)→body เล็กลง · presenter(เนื้อน้อย)→title ใหญ่ขึ้น
+    content = fs.get("content", "presenter")
+    if content == "document":
+        css_vars.setdefault("--body-size", "26px")      # ลด 1 step (30→26)
+        css_vars.setdefault("--title-size", "96px")
+    else:  # presenter
+        css_vars.setdefault("--title-size", "120px")    # ใหญ่ขึ้น
+    return css_vars
 
 
 def render_vars(css_vars):
@@ -208,11 +259,15 @@ def slide_html(s):
     return "\n".join(parts)
 
 
-def build(outline, title_override=None, css_vars_override=None):
+def build(outline, title_override=None, css_vars_override=None, font_strategy=None):
     title = title_override or outline.get("title", "Presentation")
     css_vars = dict(outline.get("css_vars", {}))
     if css_vars_override:
         css_vars.update(css_vars_override)
+    # font_strategy (slide-designer §4.6): font เลือกตามภาษา — set ก่อน css_vars override สุดท้าย
+    fs = font_strategy or outline.get("font_strategy")
+    if fs:
+        css_vars = apply_font_strategy(css_vars, fs)
     slides = outline.get("slides", [])
     if not slides:
         raise ValueError("outline has no slides")
@@ -253,6 +308,7 @@ def main():
     ap = argparse.ArgumentParser(description="Build a single-file HTML deck from an outline.")
     ap.add_argument("--outline", required=True, help="outline JSON path")
     ap.add_argument("--css-vars", help="optional JSON of CSS var overrides")
+    ap.add_argument("--font-strategy", help="optional JSON: {mode,approach,latin,cs,content} (slide-designer §4.6)")
     ap.add_argument("--title", help="override deck title")
     ap.add_argument("--output", required=True, help="output .html path")
     a = ap.parse_args()
@@ -263,8 +319,12 @@ def main():
     if a.css_vars:
         with open(a.css_vars, encoding="utf-8") as f:
             css_vars = json.load(f)
+    font_strategy = None
+    if a.font_strategy:
+        font_strategy = json.loads(a.font_strategy) if a.font_strategy.strip().startswith("{") \
+            else json.load(open(a.font_strategy, encoding="utf-8"))
 
-    doc = build(outline, title_override=a.title, css_vars_override=css_vars)
+    doc = build(outline, title_override=a.title, css_vars_override=css_vars, font_strategy=font_strategy)
     with open(a.output, "w", encoding="utf-8") as f:
         f.write(doc)
     n = len(outline.get("slides", []))

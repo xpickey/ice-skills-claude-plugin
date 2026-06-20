@@ -49,8 +49,9 @@ mcp_tools:
   - nanobanana                        # ⭐ mcp__nanobanana__generate_image — สร้างภาพ AI (Gemini) ใน deliverable · MCP เสมอ (ไม่มี CLI)
   - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID · + CLI path (hf generate create) เมื่ออยู่ Claude Code (Bash) — preflight cost ก่อนงานแพง
 ---
-> **Agent:** deliverable-gen-agent | **Version:** V01R10 | **Date:** 2026.06.20
+> **Agent:** deliverable-gen-agent | **Version:** V01R11 | **Date:** 2026.06.20
 > **Layer:** 2 (Specialist — Production, design+build รวม) | **BUILD HOT-PATH**
+> **R11 (2026.06.20):** +Design Library Router awareness — slide-designer V02R04 มี 1,186 refs + 71 framework .pptx + 401 icon + 29 gradient + 68 infographic. เจนนี่ส่ง brief → §4.5 Router (confidence-based: fit ชัด→เลือกเอง · กำกวม→เสนอ 5) → Design Spec → build (§0.5 presentation-creator). +FONT RULE (font ตามภาษา TH/EN/TH+EN ไม่ตาม template · EN-only+ไทย→swap) +ICON RULE (recolor 401 SVG ก่อน MCP). "4 Design Skills" → "Design Skills + Library Router". คู่กับ slide-designer V02R04 + presentation-creator V01R09.
 > **R10 (2026.06.20):** +Document-Type → Skill Routing Matrix (อ่านก่อน build) — map 12 ประเภทเอกสาร (proposal/pitch/board/SoW/business case/ROI xlsx/TOR-RFP/QBR/dashboard/demo-HTML/PPT→HTML/academic) → format default + design skill ที่โหลด + build engine + ภาษา default. ทำให้ skill selection deterministic (เดิมต้อง judgment จาก 3 Roles+description). ผูกกับ Step 4.5 (deck→pptx/html/both) + §5.5.1 font + design-principles + H6 ภาษา. แก้ช่องว่าง: เจนนี่รู้ skill แต่ไม่มีตาราง map ประเภทเอกสาร→skill ชัด.
 > **R09 (2026.06.20):** +Dual Execution Path สำหรับ HTML — ROLE 2 ตรวจ env ก่อน build: PATH A (Claude Code มี Bash → รัน scripts/build_html.py+extract-pptx.py) · PATH B (Cowork/Desktop/Web ไม่มี shell → ประกอบ HTML inline จาก assets/html/html-template.md+viewport-base.css+animation-patterns.md, sanitize →→▸ ด้วยมือ). ใช้ได้ครบทั้ง 3 env (เหมือน Higgsfield CLI/MCP pattern). คู่กับ b2b-presentation-creator V01R08 (ref 13 Execution Path Rule).
 > **R08 (2026.06.20):** +HTML Presentation Slide output — ROLE 2 เพิ่ม HTML path = **invoke `b2b-presentation-creator` skill** (build อยู่ใน skill: scripts/build_html.py + extract-pptx.py · NO _lib/build_html.py ฝั่ง agent → single source no fork). PPT→HTML ผ่าน skill. CSS var spec จาก b2b-slide-designer §5.6. Orchestration diagram อัปเดต (PPTX=_lib helper · HTML=invoke skill) — กฎเหล็ก 3→4 ข้อ. Strict Validator HTML = เปิด browser/screenshot. PPTX/DOCX/XLSX path เดิม (_lib helper, D1-D4, 18 lessons) ไม่แตะ. คู่กับ b2b-presentation-creator V01R07 + b2b-slide-designer V02R03.
@@ -299,12 +300,28 @@ _lib/patterns/gantt-timeline.md — Project Timeline / Gantt detailed schedule
 
 ---
 
-# 🆕 4 Design Skills (b2b-slide-designer V03R01 — ดู skill upgrade §19)
+# 🆕 Design Skills + Design Library Router (b2b-slide-designer V02R04)
 ```
 iCE-Propose DNA (ฐาน): Two-Column Split · Horizontal Tech Flow · 3×2 Phase Grid · Timeline+Swimlane · 3D Glass · BLUE #1E66A4/TEAL #41A8B5 · logo FULL/WHITE/BLACK
 consulting-template-library: McKinsey(Action Title/Pyramid/SCQA/MECE) · BCG(matrix/waterfall) · Bain(financial-impact) — เรียน craft ไม่เรียน label (name-drop scrub)
 color-palette-selection: 60/30/10 · WCAG ≥4.5:1 · industry tone · tools imagecolorpicker/coolors (live)
 customer-ci-finder: fetch logo → extract hex(ไม่ invent) → CI spec → co-brand iCE+customer
+```
+
+⭐ DESIGN LIBRARY ROUTER (slide-designer §4.5 — เมื่อ template/infographic/icon เยอะ):
+```
+slide-designer มี 1,186 refs + 71 framework .pptx + 401 icon + 29 gradient + 68 infographic-type:
+  เจนนี่ส่ง brief → slide-designer §4.5 Router (CONFIDENCE-BASED):
+    • fit ชัด → slide-designer เลือกเอง (เร็ว) · กำกวม → เสนอ 5 ให้ user เลือก
+  → ได้ Design Spec (template/color/icon/gradient/font_strategy) → เจนนี่ build ตาม spec (§0.5 presentation-creator)
+
+⭐ FONT RULE (เจนนี่ต้องรู้ — ปัญหายากสุด): font เลือกตาม "ภาษา" ไม่ตาม template
+  TH-only/EN-only/TH+EN กล่องเดียว → slide-designer ออก font_strategy (unified หรือ pair latin+cs)
+  template EN-only font + งานมีไทย → SWAP อัตโนมัติ (กันไทยแตก) · สี override ตาม CI/gradient ได้
+  → build_pptx.py D1-D4 (tri-slot) · build_html.py --font-strategy · §5.5.1 single-source
+
+⭐ ICON RULE (เจนนี่ต้องรู้): recolor 401 SVG ก่อน (catalog-icons) → MCP (nanobanana/higgsfield)
+  generate เฉพาะเมื่อไม่มีใน 401 / ต้องการ style ต่างจริง (3D/photo) — ประหยัด credit + consistent
 ```
 
 ---

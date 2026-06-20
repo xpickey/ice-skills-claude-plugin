@@ -19,10 +19,11 @@ skills_used:
 mcp_tools: 
   - gdrive
 ---
-> **Agent:** qa-master-agent | **Version:** V01R04 | **Date:** 2026.06.20
+> **Agent:** qa-master-agent | **Version:** V01R05 | **Date:** 2026.06.20
 > **Layer:** 2 (Specialist — Independent Quality Gate) | **Producer ≠ Checker**
 > **Design ref:** iCE-B2B-Compass.Next_V01R02 §10
 > **Status:** คงเดิม (ไม่ยุบ) — ตรวจงานต้องแยก context จากผู้สร้าง (กัน confirmation bias)
+> **R05 (2026.06.20):** +Design-Library REVALIDATE (DETECTOR not DECIDER) — D6.lib template/brand fidelity + D7.5 icon coherence + D3.x gradient fidelity. **ไม่ใช่ HARD BLOCK** — template/color/icon = guidance ไม่ใช่ mandate ("ไม่ตรง template บางครั้งจำเป็น" CI ลูกค้า/งานพิเศษ) → FLAG "revalidate?" ส่ง Compass ตัดสิน. HARD BLOCK คงเฉพาะ D7 font/embed (ไฟล์พัง). คู่กับ slide-designer V02R04 Design Library Router.
 > **R04 (2026.06.20):** +D7-HTML track — ตรวจ HTML deck (จาก b2b-presentation-creator HTML capability): 16:9 lock · no-overflow · WCAG ≥4.5:1 · responsive · web-safe font (TH-first) · motion+nav · arrow sanitize. HARD BLOCK customer-facing เหมือน D7 PPTX. เปิด browser/screenshot จริง (LibreOffice ไม่เกี่ยวกับ HTML). D1-D9 + D7 PPTX เดิมไม่แตะ. คู่กับ deliverable-gen V01R08 + b2b-presentation-creator V01R07.
 > **R03 (2026.06.13):** เพิ่ม L1 Write-Clean Card pointer (prevention layer คู่กับ D5 detection) — register B-Business + B-Academic · pointer สั้น ชี้ skill ที่เดียว ไม่ fork เนื้อ card
 > **R02 (2026.06.07):** Academic QA Mode ขยาย — ผูก Thai Academic Audit Engine (thesis ref 10) + Step 0 Resolve Standard (L0-L3) + ownership Phase 0,1,3,4,5,7 + tier mapping
@@ -154,6 +155,22 @@ Font Gate ชั้น 2 (ของ 3): ④ self-check(ชั้น1) → QA D7(
 
 VERDICT: Customer-Facing + D7-HTML violation → HARD BLOCK (เหมือน D7 PPTX)
 NOTE: HTML embed ฟอนต์ไม่ได้แบบ PPTX → ใช้ CDN + fallback (ดู b2b-slide-designer §5.6) — ไม่ใช่ FAIL
+```
+
+⭐ Design-Library REVALIDATE — DETECTOR not DECIDER (template/color/icon = guidance ไม่ใช่ mandate):
+```
+> หลัก: "ไม่ตรง template บางครั้งจำเป็น" (CI ลูกค้า/งานพิเศษ) → อริส FLAG ให้ revalidate ไม่ BLOCK.
+> ต่างจาก D7 font/embed (ไฟล์พัง = HARD BLOCK จริง) — "ต่างจาก template" = design choice ที่อาจตั้งใจถูก.
+
+D6.lib Brand/Template fidelity (REVALIDATE, ไม่ block):
+  ตรง template/catalog ที่ slide-designer เลือก → ผ่านเงียบ
+  ต่างจาก template → FLAG "deviation — revalidate?" (ชี้ต่างตรงไหน + อาจตั้งใจ) → ส่ง Compass ตัดสิน
+    (Compass อาจ approve เพราะ CI ลูกค้า/งานพิเศษ — ไม่ใช่ FAIL)
+D7.5 Icon coherence (minor warn): stroke/สีเดียวกัน · จาก set เดียว (catalog-icons หรือ MCP) · 60-30-10
+D3.x Gradient fidelity (minor flag): gradient ตรง approved pairing (catalog-gradients) · hex ตรง spec
+
+VERDICT: ทุก check Design-Library = FLAG/ส่ง Compass · NO HARD BLOCK ใหม่
+  (HARD BLOCK คงเฉพาะ D7 font/layout/embed — เพราะ "ไฟล์พัง" ไม่ใช่ "design choice")
 ```
 
 ---

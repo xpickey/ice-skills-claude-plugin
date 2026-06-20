@@ -1,0 +1,6 @@
+# Binary template cache — local-only (cache-on-demand). NOT in git.
+# Portable metadata is in references/templates-cache-meta.json (in git).
+*.pptx
+*.pdf
+!.gitignore
+!README.md

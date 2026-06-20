@@ -1,0 +1,268 @@
+# Templates by Color
+
+Colors available: (unspecified), Black, Blue, Brown, Colorful, Green, Orange, Pink, Purple, Red, Yellow
+
+## (unspecified) (30)
+- Air Liquide — - — `air-liquide`
+- AkzoNobel — - — `akzonobel`
+- Allianz Group — - — `allianz-group`
+- Amadeus — - — `amadeus`
+- AstraZeneca — - — `astrazeneca`
+- Barclays — - — `barclays`
+- BBVA — - — `bbva`
+- Campbell soup — - — `campbell-soup`
+- Compass Group — - — `compass-group`
+- Danone — - — `danone`
+- Delta Airline — - — `delta-airline`
+- Deutsche Börse — - — `deutsche-borse`
+- Dow — - — `dow`
+- Eni SpA — - — `eni-spa`
+- Ericsson — - — `ericsson`
+- Experian — - — `experian`
+- Fresenius Medical Care — - — `fresenius-medical-care`
+- GEA — Specialty Industrial Machinery — `gea`
+- Givaudan — - — `givaudan`
+- Howden — - — `howden`
+- inchcape — - — `inchcape`
+- Ingredion — - — `ingredion`
+- Jack in the box — - — `jack-in-the-box`
+- Kering — - — `kering`
+- Mahindra — - — `mahindra`
+- prysmian — - — `prysmian`
+- Santander — - — `santander`
+- Swiss Re — - — `swiss-re`
+- Veolia — - — `veolia`
+- WPP — - — `wpp`
+
+## Black (12)
+- Adidas Group — Footwear & Accessories — `adidas-group`
+- Audi — Auto Manufacturers — `audi`
+- Caterpillar — - — `caterpillar`
+- Celsius — Beverages - Non-Alcoholic — `celsius`
+- e.l.f. Beauty — Household & Personal Products — `e-l-f-beauty`
+- EssilorLuxottica — Medical Instruments & Supplies — `essilorluxottica`
+- Honeywell — - — `honeywell`
+- Lamborghini — Internet Retail — `lamborghini`
+- Marks & Spencer — Department Stores — `marks-spencer`
+- Mercedes-Benz Group — Auto Manufacturers — `mercedes-benz-group`
+- MillerKnoll — Furnishings Fixtures & Appliances — `millerknoll`
+- Uber — Software - Application — `uber`
+
+## Blue (71)
+- 3i Group — Asset Management — `3i-group`
+- 3M Company — Conglomerates — `3m-company`
+- A.P. Moller - Maersk — Marine Shipping — `a-p-moller-maersk`
+- Adidas Group — Footwear & Accessories — `adidas-group`
+- AirfranceKLM group — Airlines — `airfranceklm-group`
+- Altice — - — `altice`
+- ArcelorMittal — Steel — `arcelormittal`
+- Babcock & Wilcox — Specialty Industrial Machinery — `babcock-wilcox`
+- Bank of Ireland Group plc — Banks - Regional — `bank-of-ireland-group-plc`
+- BMW — Auto Manufacturers — `bmw`
+- Brenntag — Specialty Chemicals — `brenntag`
+- British Land — REIT - Diversified — `british-land`
+- Broadcom — Semiconductors — `broadcom`
+- Bunzl — Food Distribution — `bunzl`
+- CaixaBank — Banks - Regional — `caixabank`
+- Carnival Corporation — Travel Services — `carnival-corporation`
+- Chevron — Oil & Gas Integrated — `chevron`
+- Cigna — Healthcare Plans — `cigna`
+- Coloplast — Medical Instruments & Supplies — `coloplast`
+- DSV — Integrated Freight & Logistics — `dsv`
+- Ecolab — Specialty Chemicals — `ecolab`
+- EDP — Utilities - Diversified — `edp`
+- Ford motor — Auto Manufacturers — `ford-motor`
+- Funko — Leisure — `funko`
+- General Mills — Packaged Foods — `general-mills`
+- General Motors — Auto Manufacturers — `general-motors`
+- Grifols — Drug Manufacturers - General — `grifols`
+- Groupe Bruxelles Lambert — Asset Management — `groupe-bruxelles-lambert`
+- Hannover Re — Insurance - Reinsurance — `hannover-re`
+- Heidelberg Materials — Building Materials — `heidelberg-materials`
+- Heinz — Packaged Foods — `heinz`
+- Hexagon — Scientific & Technical Instruments — `hexagon`
+- Informa — Publishing — `informa`
+- Intel — Semiconductors — `intel`
+- Intertek — Specialty Business Services — `intertek`
+- Johnson Matthey — Specialty Chemicals — `johnson-matthey`
+- Land Securities — REIT - Diversified — `land-securities`
+- Lonza — Diagnostics & Research — `lonza`
+- LVMH — Luxury Goods — `lvmh`
+- Mariott — Lodging — `mariott`
+- Melrose Industries PLC — Specialty Industrial Machinery — `melrose-industries-plc`
+- Nomad Foods — Packaged Foods — `nomad-foods`
+- NOVARTIS — Drug Manufacturers - General — `novartis`
+- Otter Tail Corporation — Conglomerates — `otter-tail-corporation`
+- PepsiCoก — Beverages - Non-Alcoholic — `pepsico`
+- Peugeot — Asset Management — `peugeot`
+- Procter & Gamble — Household & Personal Products — `procter-gamble`
+- Redeia — Utilities - Regulated Electric — `redeia`
+- Saleforce — Software - Application — `saleforce`
+- Samsung — Consumer Electronics — `samsung`
+- Sap — - — `sap`
+- ServiceNow — Software - Application — `servicenow`
+- SES — Auto Parts — `ses`
+- Skanska — Engineering & Construction — `skanska`
+- SKF — Tools & Accessories — `skf`
+- Solvay — Chemicals — `solvay`
+- Sono Motors — Auto Manufacturers — `sono-motors`
+- St. James's Place — Asset Management — `st-james-s-place`
+- Technip — Oil & Gas Equipment & Services — `technip`
+- Telenor — Telecom Services — `telenor`
+- Terna — Utilities - Regulated Electric — `terna`
+- Thales — Aerospace & Defense — `thales`
+- ThyssenKrupp — Conglomerates — `thyssenkrupp`
+- TOMY — Leisure — `tomy`
+- TUI Group — Travel Services — `tui-group`
+- Unilever — Household & Personal Products — `unilever`
+- United Utilities Group — Utilities - Regulated Water — `united-utilities-group`
+- Unitedhealthcare — Healthcare Plans — `unitedhealthcare`
+- Valeo — Auto Parts — `valeo`
+- VinFast — - — `vinfast`
+- Volvo — Farm & Heavy Construction Machinery — `volvo`
+
+## Brown (2)
+- HP — Computer Hardware — `hp`
+- Partners Group — Asset Management — `partners-group`
+
+## Colorful (30)
+- Ageas — Insurance - Diversified — `ageas`
+- Anglo American — Other Industrial Metals & Mining — `anglo-american`
+- Baloise — - — `baloise`
+- BoConcept — Footwear & Accessories — `boconcept`
+- BTS — Railroads — `bts`
+- Centrica — Utilities - Independent Power Producers — `centrica`
+- Coca-Cola — Beverages - Non-Alcoholic — `coca-cola`
+- DCC plc — Oil & Gas Refining & Marketing — `dcc-plc`
+- Deluxe — Conglomerates — `deluxe`
+- Direct Line Insurance Group — - — `direct-line-insurance-group`
+- eBay — Internet Retail — `ebay`
+- Electrolux Group — Furnishings Fixtures & Appliances — `electrolux-group`
+- Hershey — Confectioners — `hershey`
+- Hormel Foods — Packaged Foods — `hormel-foods`
+- International Airlines Group — Airlines — `international-airlines-group`
+- Kimberly-Clark — Household & Personal Products — `kimberly-clark`
+- Kinnevik — Asset Management — `kinnevik`
+- Klépierre — REIT - Retail — `klepierre`
+- LEGO Group — - — `lego-group`
+- Loreal — Household & Personal Products — `loreal`
+- Molson Coors Beverage Company — Beverages - Brewers — `molson-coors-beverage-company`
+- Mondi — Paper & Paper Products — `mondi`
+- Nestlé — Packaged Foods — `nestle`
+- Orkla — Packaged Foods — `orkla`
+- Pinterest — Internet Content & Information — `pinterest`
+- Repsol — Oil & Gas Integrated — `repsol`
+- Roche — Drug Manufacturers - General — `roche`
+- Spin Master — Leisure — `spin-master`
+- Tesla — Auto Manufacturers — `tesla`
+- TotalEnergies — Oil & Gas Integrated — `totalenergies`
+
+## Green (47)
+- 365 อ.ชัชชาติ — - — `365`
+- 3M Company — Conglomerates — `3m-company`
+- Ahold Delhaize — - — `ahold-delhaize`
+- AirfranceKLM group — Airlines — `airfranceklm-group`
+- Altice — - — `altice`
+- Babcock & Wilcox — Specialty Industrial Machinery — `babcock-wilcox`
+- Bank of Ireland Group plc — Banks - Regional — `bank-of-ireland-group-plc`
+- Barratt Developments — Residential Construction — `barratt-developments`
+- British Land — REIT - Diversified — `british-land`
+- Bunzl — Food Distribution — `bunzl`
+- Carlsberg — Beverages - Brewers — `carlsberg`
+- Cigna — Healthcare Plans — `cigna`
+- Del Monte — Farm Products — `del-monte`
+- EDP — Utilities - Diversified — `edp`
+- Fiverr — Internet Content & Information — `fiverr`
+- Fortum — Utilities - Renewable — `fortum`
+- GAC Group — Auto Manufacturers — `gac-group`
+- Grab — Software - Application — `grab`
+- Heineken — Beverages - Brewers — `heineken`
+- Hexagon — Scientific & Technical Instruments — `hexagon`
+- InterContinental Hotels Group — Lodging — `intercontinental-hotels-group`
+- Land Securities — REIT - Diversified — `land-securities`
+- Lloyds Banking Group plc — - — `lloyds-banking-group-plc`
+- Matthews International Corporation — Conglomerates — `matthews-international-corporation`
+- Merck & Co. — Drug Manufacturers - General — `merck-co`
+- Nissan Motor — Auto Manufacturers — `nissan-motor`
+- Nomad Foods — Packaged Foods — `nomad-foods`
+- Novozymes — Specialty Chemicals — `novozymes`
+- Nvdia — Semiconductors — `nvdia`
+- Otter Tail Corporation — Conglomerates — `otter-tail-corporation`
+- Persimmon Homes — Residential Construction — `persimmon-homes`
+- Prologis — REIT - Industrial — `prologis`
+- Redeia — Utilities - Regulated Electric — `redeia`
+- Renault — Auto Manufacturers — `renault`
+- Schneider Electric — Specialty Industrial Machinery — `schneider-electric`
+- ServiceNow — Software - Application — `servicenow`
+- Sonova — Medical Devices — `sonova`
+- St. James's Place — Asset Management — `st-james-s-place`
+- Starbucks — Restaurants — `starbucks`
+- Technip — Oil & Gas Equipment & Services — `technip`
+- United Utilities Group — Utilities - Regulated Water — `united-utilities-group`
+- UPM-Kymmene — Paper & Paper Products — `upm-kymmene`
+- Valeo — Auto Parts — `valeo`
+- Volkswagen Group — Auto Manufacturers — `volkswagen-group`
+- Volvo — Farm & Heavy Construction Machinery — `volvo`
+- Williams-Sonoma, Inc — Specialty Retail — `williams-sonoma-inc`
+- Zevia — Beverages - Non-Alcoholic — `zevia`
+
+## Orange (11)
+- ArcelorMittal — Steel — `arcelormittal`
+- ATOSS — Software - Application — `atoss`
+- Audi — Auto Manufacturers — `audi`
+- Barratt Developments — Residential Construction — `barratt-developments`
+- Heidelberg Materials — Building Materials — `heidelberg-materials`
+- Hermes International SCA — Luxury Goods — `hermes-international-sca`
+- homedepot — Home Improvement Retail — `homedepot`
+- Mariott — Lodging — `mariott`
+- SGS — Consulting Services — `sgs`
+- Wärtsilä — Specialty Industrial Machinery — `wartsila`
+- Xiaomi — Consumer Electronics — `xiaomi`
+
+## Pink (1)
+- Pandora — Luxury Goods — `pandora`
+
+## Purple (8)
+- Accenture — Information Technology Services — `accenture`
+- Brenntag — Specialty Chemicals — `brenntag`
+- Currys plc — Specialty Retail — `currys-plc`
+- FedEx — Integrated Freight & Logistics — `fedex`
+- Merck & Co. — Drug Manufacturers - General — `merck-co`
+- Novozymes — Specialty Chemicals — `novozymes`
+- siemensgamesa — Energy — `siemensgamesa`
+- Telefônica — Telecom Services — `telefonica`
+
+## Red (17)
+- 3M Company — Conglomerates — `3m-company`
+- Broadcom — Semiconductors — `broadcom`
+- CNH Industrial — Farm & Heavy Construction Machinery — `cnh-industrial`
+- Cummins Inc. — - — `cummins-inc`
+- Heinz — Packaged Foods — `heinz`
+- Honeywell — - — `honeywell`
+- John&Johnson — - — `john-johnson`
+- Lenevo — Computer Hardware — `lenevo`
+- Mattel — Leisure — `mattel`
+- Matthews International Corporation — Conglomerates — `matthews-international-corporation`
+- MillerKnoll — Furnishings Fixtures & Appliances — `millerknoll`
+- Novozymes — Specialty Chemicals — `novozymes`
+- Partners Group — Asset Management — `partners-group`
+- Persimmon Homes — Residential Construction — `persimmon-homes`
+- Prudential — Insurance - Diversified — `prudential`
+- Symrise — Specialty Chemicals — `symrise`
+- Tim Hortons — - — `tim-hortons`
+
+## Yellow (14)
+- BMW — Auto Manufacturers — `bmw`
+- Carlsberg — Beverages - Brewers — `carlsberg`
+- Caterpillar — - — `caterpillar`
+- DHL — Integrated Freight & Logistics — `dhl`
+- EssilorLuxottica — Medical Instruments & Supplies — `essilorluxottica`
+- Funko — Leisure — `funko`
+- Intertek — Specialty Business Services — `intertek`
+- Lamborghini — Internet Retail — `lamborghini`
+- Lindt & Sprüngli — Confectioners — `lindt-sprungli`
+- LVMH — Luxury Goods — `lvmh`
+- Melrose Industries PLC — Specialty Industrial Machinery — `melrose-industries-plc`
+- Shell — Oil & Gas Integrated — `shell`
+- Sika — Specialty Chemicals — `sika`
+- Sono Motors — Auto Manufacturers — `sono-motors`

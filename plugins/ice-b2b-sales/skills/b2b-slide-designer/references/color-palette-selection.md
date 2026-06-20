@@ -28,6 +28,12 @@ INDUSTRY TONE (เลือกโทนตาม vertical):
 
 ---
 
+## INSTANCES (hex จริง — Design Library)
+
+> 📌 **catalog-gradients.md = instance library** (29 gradient + hex + 5-stop ramp + use-case) —
+> color-palette นี้มี RULES (60/30/10, harmony, WCAG) · catalog-gradients มี **ตัวอย่างจริงพร้อม hex**.
+> เลือก gradient → `references/catalog-gradients.md` (by mood: cool/warm/dark/brand/green/pastel).
+
 ## TOOLS (live — ดึงตอน build, ไม่ hardcode)
 
 ```

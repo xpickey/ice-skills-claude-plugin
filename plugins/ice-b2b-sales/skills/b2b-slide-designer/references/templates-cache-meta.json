@@ -1,0 +1,663 @@
+{
+  "_note": "metadata cache (portable, in git) — binary .pptx is cache-on-demand (gitignored). ย้ายเครื่อง: metadata บอกว่า template มีกี่ slide/หน้าตาไง → build จาก inspiration ถ้า binary หาย.",
+  "_generated_from": "catalog-templates-ready.md",
+  "templates": {
+    "30 60 90 Day Plan": {
+      "framework": "30 60 90 Day Plan",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/30-60-90-day-plan/01 - Powerpoint/30 60 90 Days Plan.pptx",
+      "catalog_slides": 25,
+      "slides": 20,
+      "shapes_slide1": 24,
+      "size_kb": 187,
+      "openable": true
+    },
+    "Arrow Slides": {
+      "framework": "Arrow Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Arrow Slides/01 - Arrow PowerPoint Slides/Presentation file/Arrow Powerpoint Template.pptx",
+      "catalog_slides": 23,
+      "slides": 20,
+      "shapes_slide1": 33,
+      "size_kb": 397,
+      "openable": true
+    },
+    "Calendar 2021": {
+      "framework": "Calendar 2021",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Calendar 2021/Calendar 2021 Google Slides/Presentation Files/Calendar 2021 Google Slidespptx.pptx",
+      "catalog_slides": 61,
+      "slides": 54,
+      "shapes_slide1": 538,
+      "size_kb": 5465,
+      "openable": true
+    },
+    "Challenges Templates": {
+      "framework": "Challenges Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Challenges-Templates/01-Powerpoint-Challenges/Challenges Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 42,
+      "size_kb": 460,
+      "openable": true
+    },
+    "Chart Slides Rev": {
+      "framework": "Chart Slides Rev",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Chart Slides rev/01 Powerpoint Slides/Presentation Files/Chart Slides Powerpoint Template.pptx",
+      "catalog_slides": 39,
+      "slides": 36,
+      "shapes_slide1": 22,
+      "size_kb": 780,
+      "openable": true
+    },
+    "Cloud Slides Templates": {
+      "framework": "Cloud Slides Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Cloud-Slides-Templates/01-Powerpoint-Cloud/Cloud Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 33,
+      "size_kb": 559,
+      "openable": true
+    },
+    "Company Profile Slides": {
+      "framework": "Company Profile Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Company Profile Slides/Company Profile PowerPoint Slides/Company Profile Powerpoint Template.pptx",
+      "catalog_slides": 76,
+      "slides": 51,
+      "shapes_slide1": 8,
+      "size_kb": 6406,
+      "openable": true
+    },
+    "Decision Slides": {
+      "framework": "Decision Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Decision Slides/03 - Decision Tree Google Slides/Presentation file/Decision Tree Google Slides Template.pptx",
+      "catalog_slides": 26,
+      "slides": 20,
+      "shapes_slide1": 32,
+      "size_kb": 182,
+      "openable": true
+    },
+    "Decision Templates": {
+      "framework": "Decision Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Decision-Templates/01-Powerpoint-Decision/Decision Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 30,
+      "size_kb": 260,
+      "openable": true
+    },
+    "Gantt Slides": {
+      "framework": "Gantt Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Gantt Slides/01 - Gantt PowerPoint Slides/Gantt Slides V4 Powerpoint Template/Presentation file/Gantt Slides V4 Powerpoint Template.pptx",
+      "catalog_slides": 8,
+      "slides": 6,
+      "shapes_slide1": 51,
+      "size_kb": 47,
+      "openable": true
+    },
+    "Gap Analysis Template": {
+      "framework": "Gap Analysis Template",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Gap-Analysis-Template/01-Powerpoint-Gap-Analysis/Gap Analysis.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 32,
+      "size_kb": 438,
+      "openable": true
+    },
+    "Goals Slides": {
+      "framework": "Goals Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Goals Slides/03 - Goals Google Slides/Presentation File/Goals Google Slides Template.pptx",
+      "catalog_slides": 23,
+      "slides": 20,
+      "shapes_slide1": 25,
+      "size_kb": 445,
+      "openable": true
+    },
+    "Iceberg Slides": {
+      "framework": "Iceberg Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Iceberg Slides/03 - Iceberg Google Slides/Presentation file/Iceberg Diagram Google Slides Template.pptx",
+      "catalog_slides": 23,
+      "slides": 20,
+      "shapes_slide1": 145,
+      "size_kb": 201,
+      "openable": true
+    },
+    "Item": {
+      "framework": "Item",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Item/Waterfal Chart Powerpoint Slides 2/Presentation Files/Waterfall Chart Slides PowerPoint Template.pptx",
+      "catalog_slides": 32,
+      "slides": 30,
+      "shapes_slide1": 4,
+      "size_kb": 1853,
+      "openable": true
+    },
+    "Meeting Slides Templates": {
+      "framework": "Meeting Slides Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Meeting-Slides-Templates/01-Powerpoint-Meeting/Meeting Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 134,
+      "size_kb": 1143,
+      "openable": true
+    },
+    "Milestones Slides": {
+      "framework": "Milestones Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Milestones Slides/03 - Milestones Google Slides/Presentation File/Milestones Google Slides Template.pptx",
+      "catalog_slides": 23,
+      "slides": 20,
+      "shapes_slide1": 14,
+      "size_kb": 154,
+      "openable": true
+    },
+    "Mind Map Templates": {
+      "framework": "Mind Map Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Mind-Map-Templates/01-Powerpoint-Mind-Map/Mind Map Infographics.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 26,
+      "size_kb": 439,
+      "openable": true
+    },
+    "Mindmap Slides": {
+      "framework": "Mindmap Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Mindmap Slides/03 - Mindmap Google Slides/Presentation File/Mindmap Google Slides Template.pptx",
+      "catalog_slides": 23,
+      "slides": 20,
+      "shapes_slide1": 22,
+      "size_kb": 582,
+      "openable": true
+    },
+    "Mockup Devices Templates": {
+      "framework": "Mockup Devices Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Mockup-Devices-Templates/01-Powerpoint-Mockup-Devices/Mockup Devices.pptx",
+      "catalog_slides": 42,
+      "slides": 20,
+      "shapes_slide1": 18,
+      "size_kb": 5890,
+      "openable": true
+    },
+    "Objective Slides Infographics": {
+      "framework": "Objective Slides Infographics",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Objective-Slides-Infographics/01 - Powerpoint/Objective Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 21,
+      "size_kb": 344,
+      "openable": true
+    },
+    "Pie Chart Slides": {
+      "framework": "Pie Chart Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Pie Chart Slides/01 - Pie Chart PowerPoint Slides/Presentation File/Pie Chart Slides Powerpoint Template.pptx",
+      "catalog_slides": 23,
+      "slides": 20,
+      "shapes_slide1": 17,
+      "size_kb": 823,
+      "openable": true
+    },
+    "Profit And Loss Infographics": {
+      "framework": "Profit And Loss Infographics",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Profit and Loss Infographics/01 Powerpoint Template 2/Presentation/Profit and Loss Slides Powerpoint Template.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 36,
+      "size_kb": 160,
+      "openable": true
+    },
+    "Project Management Slides": {
+      "framework": "Project Management Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Project Management Slides/03 - Project Management Google Slides/Project Management Slides Google Slides Template.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 30,
+      "size_kb": 146,
+      "openable": true
+    },
+    "Project Status Slides Templates": {
+      "framework": "Project Status Slides Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Project-Status-Slides-Templates/01-Powerpoint-Project-Status/Project Status.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 33,
+      "size_kb": 522,
+      "openable": true
+    },
+    "Question Templates": {
+      "framework": "Question Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Question-Templates/01-Powerpoint-Question/Questions Slides.pptx",
+      "catalog_slides": 41,
+      "slides": 20,
+      "shapes_slide1": 6,
+      "size_kb": 150,
+      "openable": true
+    },
+    "Responsibility Assignment Matrix Templates": {
+      "framework": "Responsibility Assignment Matrix Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Responsibility-Assignment-Matrix-Templates/01-Powerpoint-Responsibility-Assignment-Matrix/Responsibility Assignment Matrix.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 51,
+      "size_kb": 337,
+      "openable": true
+    },
+    "Swot Slides": {
+      "framework": "Swot Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/SWOT Slides/01 - SWOT PowerPoint Slides/Presentation file/SWOT Analysis Slides Powerpoint Template.pptx",
+      "catalog_slides": 23,
+      "slides": 20,
+      "shapes_slide1": 26,
+      "size_kb": 332,
+      "openable": true
+    },
+    "Square Smart Art Posts For Powerpoint": {
+      "framework": "Square Smart Art Posts For Powerpoint",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Square-Smart-Art-Posts-for-PowerPoint/PPTX/Smart Art Posts.pptx",
+      "catalog_slides": 202,
+      "slides": 200,
+      "shapes_slide1": 3,
+      "size_kb": 2261,
+      "openable": true
+    },
+    "Supply Chain Slides": {
+      "framework": "Supply Chain Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Supply Chain Slides/03 - Supply Chain Google Slides/Presentation/Supply Chain Google Slides Template.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 26,
+      "size_kb": 371,
+      "openable": true
+    },
+    "Technology Infographics": {
+      "framework": "Technology Infographics",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Technology Infographics/01 Powerpoint Template/Presentation/Technology Infographics Powerpoint Template.pptx",
+      "catalog_slides": 32,
+      "slides": 30,
+      "shapes_slide1": 85,
+      "size_kb": 1210,
+      "openable": true
+    },
+    "Theo Powerpoint Template": {
+      "framework": "Theo Powerpoint Template",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Theo-Powerpoint-Template/Theo PowerPoint Template.pptx",
+      "catalog_slides": 14,
+      "slides": 6,
+      "shapes_slide1": 5,
+      "size_kb": 10792,
+      "openable": true
+    },
+    "Time Management Templates": {
+      "framework": "Time Management Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Time-Management-Templates/01-Powerpoint-Time-Management/Time Management.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 30,
+      "size_kb": 278,
+      "openable": true
+    },
+    "Us Maps Templates": {
+      "framework": "Us Maps Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/US-Maps-Templates/01-Powerpoint-US-Maps/United States Maps.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 81,
+      "size_kb": 2604,
+      "openable": true
+    },
+    "Value Chain Infographics": {
+      "framework": "Value Chain Infographics",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Value Chain Infographics/01 Powerpoint Template/Presentation/Value Chain Slides Powerpoint Template.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 31,
+      "size_kb": 349,
+      "openable": true
+    },
+    "Worldwide Map": {
+      "framework": "Worldwide Map",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/Worldwide Map/03 - World Map Google Slides/Presentation File/Worldmap Google Slides Template.pptx",
+      "catalog_slides": 23,
+      "slides": 20,
+      "shapes_slide1": 31,
+      "size_kb": 1364,
+      "openable": true
+    },
+    "Agile Slides": {
+      "framework": "Agile Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/agile-slides/Agile Powerpoint Slides/Presentation File/Agile Slides PowerPoint Template.pptx",
+      "catalog_slides": 23,
+      "slides": 20,
+      "shapes_slide1": 18,
+      "size_kb": 208,
+      "openable": true
+    },
+    "Aida Model Infographics": {
+      "framework": "Aida Model Infographics",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/aida-model-infographics/PPTX/AIDA Model Infographics.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 23,
+      "size_kb": 310,
+      "openable": true
+    },
+    "Artificial Intelligence": {
+      "framework": "Artificial Intelligence",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/artificial-intelligence/PPTX/Artificial Intelligence Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 153,
+      "size_kb": 1074,
+      "openable": true
+    },
+    "Blue Ocean Strategy Rev": {
+      "framework": "Blue Ocean Strategy Rev",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/blue-ocean-strategy-rev/PPTX/Blue Ocean Strategy.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 17,
+      "size_kb": 175,
+      "openable": true
+    },
+    "Brain Infographics": {
+      "framework": "Brain Infographics",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/brain-infographics/01 - Powerpoint/Brain Infographics.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 47,
+      "size_kb": 344,
+      "openable": true
+    },
+    "Brain Slides": {
+      "framework": "Brain Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/brain-slides/Brain Google Slides/Brain Google Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 17,
+      "size_kb": 400,
+      "openable": true
+    },
+    "Budget Slides": {
+      "framework": "Budget Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/budget-slides/Budget Powerpoint Slides/Budget Powerpoint Slides.pptx",
+      "catalog_slides": 23,
+      "slides": 20,
+      "shapes_slide1": 112,
+      "size_kb": 2412,
+      "openable": true
+    },
+    "Business Model Canvas": {
+      "framework": "Business Model Canvas",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/business-model-canvas/PPTX/Business Model Canvas.pptx",
+      "catalog_slides": 26,
+      "slides": 20,
+      "shapes_slide1": 38,
+      "size_kb": 675,
+      "openable": true
+    },
+    "Buyer Persona Slides": {
+      "framework": "Buyer Persona Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/buyer-persona-slides/01 - Powerpoint/Buyer Persona Slides.pptx",
+      "catalog_slides": 42,
+      "slides": 20,
+      "shapes_slide1": 63,
+      "size_kb": 813,
+      "openable": true
+    },
+    "Calendar Slides": {
+      "framework": "Calendar Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/calendar-slides/Calendar Google Slides/Presentation Files/Calendar Google Slides .pptx",
+      "catalog_slides": 61,
+      "slides": 54,
+      "shapes_slide1": 100,
+      "size_kb": 408,
+      "openable": true
+    },
+    "Circle Slides": {
+      "framework": "Circle Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/circle-slides/Circle Google Slides/Circle Google Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 30,
+      "size_kb": 502,
+      "openable": true
+    },
+    "Credit Card Slide Infographics": {
+      "framework": "Credit Card Slide Infographics",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/credit-card-slide-infographics/01 - Powerpoint/Credit Card Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 92,
+      "size_kb": 1014,
+      "openable": true
+    },
+    "Customer Journey Map Slides": {
+      "framework": "Customer Journey Map Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/customer-journey-map-slides/Customer Journey Map Powerpoint Slides/Presentation File/Customer Journey Map PowerPoint Template.pptx",
+      "catalog_slides": 24,
+      "slides": 20,
+      "shapes_slide1": 77,
+      "size_kb": 263,
+      "openable": true
+    },
+    "Cyber Security Slides": {
+      "framework": "Cyber Security Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/cyber-security-slides/01 - Powerpoint/Cyber Security Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 63,
+      "size_kb": 1361,
+      "openable": true
+    },
+    "Digital Marketing Slides": {
+      "framework": "Digital Marketing Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/digital-marketing-slides/Digital Marketing Google Slides/Presentation Files/Digital Marketing Google Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 64,
+      "size_kb": 1283,
+      "openable": true
+    },
+    "Ecology Slides New": {
+      "framework": "Ecology Slides New",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/ecology-slides-new/01 - Powerpoint/Ecology Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 144,
+      "size_kb": 1736,
+      "openable": true
+    },
+    "Fitness Slides": {
+      "framework": "Fitness Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/fitness-slides/Fitness Google Slides/Presentation Files/Fitness Google Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 109,
+      "size_kb": 964,
+      "openable": true
+    },
+    "Flow Slides": {
+      "framework": "Flow Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/flow-slides/Flow Powerpoint Slides/Flow Powerpoint Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 40,
+      "size_kb": 109,
+      "openable": true
+    },
+    "Manufacturing Slides": {
+      "framework": "Manufacturing Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/manufacturing-slides/Manufacturing Powerpoint Slides 2/Presentation Files/Manufacturing Slides Powerpoint Template.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 16,
+      "size_kb": 336,
+      "openable": true
+    },
+    "Marketing Slides": {
+      "framework": "Marketing Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/marketing-slides/Marketing Powerpoint Slides/Marketing Powerpoint Slides.pptx",
+      "catalog_slides": 63,
+      "slides": 60,
+      "shapes_slide1": 17,
+      "size_kb": 906,
+      "openable": true
+    },
+    "Mckinsey 7S Model": {
+      "framework": "Mckinsey 7S Model",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/mckinsey-7s-model/PPTX/McKinsey 7S Model.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 29,
+      "size_kb": 844,
+      "openable": true
+    },
+    "Medical Infographics": {
+      "framework": "Medical Infographics",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/medical-infographics/01 - Powerpoint/Medical Infographics.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 122,
+      "size_kb": 1281,
+      "openable": true
+    },
+    "Office Scenes Slides": {
+      "framework": "Office Scenes Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/office-scenes-slides/01 - Powerpoint/Office Scenes Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 69,
+      "size_kb": 843,
+      "openable": true
+    },
+    "Pestel Templates": {
+      "framework": "Pestel Templates",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/pestel-templates/01 - Powerpoint/PESTEL Analysis Slides S1.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 44,
+      "size_kb": 97,
+      "openable": true
+    },
+    "Porter Five Forces": {
+      "framework": "Porter Five Forces",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/porter-five-forces/PPTX/Porter's Five Forces.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 22,
+      "size_kb": 503,
+      "openable": true
+    },
+    "Pricing Table Slides": {
+      "framework": "Pricing Table Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/pricing-table-slides/Pricing Table Google Slides/Pricing Table Google Slides .pptx",
+      "catalog_slides": 27,
+      "slides": 25,
+      "shapes_slide1": 60,
+      "size_kb": 462,
+      "openable": true
+    },
+    "Process Infographics S1": {
+      "framework": "Process Infographics S1",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/process-infographics-s1/01 - Powerpoint/Process Infographics.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 37,
+      "size_kb": 337,
+      "openable": true
+    },
+    "Process Slides": {
+      "framework": "Process Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/process-slides/Process Google Slides/Presentation Files/Process Google Slides.pptx",
+      "catalog_slides": 32,
+      "slides": 30,
+      "shapes_slide1": 18,
+      "size_kb": 230,
+      "openable": true
+    },
+    "Product Roadmap Slides": {
+      "framework": "Product Roadmap Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/product-roadmap-slides/Product Roadmap Google Slides/Product Roadmap Google Slides.pptx",
+      "catalog_slides": 32,
+      "slides": 30,
+      "shapes_slide1": 73,
+      "size_kb": 337,
+      "openable": true
+    },
+    "Puzzle Slides": {
+      "framework": "Puzzle Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/puzzle-slides/Puzzle Powerpoint Slides/Presentation Files/Puzzle Slides Powerpoint Template.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 22,
+      "size_kb": 335,
+      "openable": true
+    },
+    "Responsibility Assignment Matrix Rev": {
+      "framework": "Responsibility Assignment Matrix Rev",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/responsibility-assignment-matrix-rev/PPTX/Responsibility Assignment Matrix.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 51,
+      "size_kb": 337,
+      "openable": true
+    },
+    "Scrum Slides All Files": {
+      "framework": "Scrum Slides All Files",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/scrum-slides-all-files/scrum-powerpoint/Presentation/SCRUM Powerpoint Template.pptx",
+      "catalog_slides": 21,
+      "slides": 19,
+      "shapes_slide1": 34,
+      "size_kb": 361,
+      "openable": true
+    },
+    "Six Sigma Methodology": {
+      "framework": "Six Sigma Methodology",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/six-sigma-methodology/PPTX/Six Sigma Methodology.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 27,
+      "size_kb": 406,
+      "openable": true
+    },
+    "Smile Rating Infographics": {
+      "framework": "Smile Rating Infographics",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/smile-rating-infographics/PPTX/Smile Rating Infographics.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 32,
+      "size_kb": 200,
+      "openable": true
+    },
+    "Tables Of Content Infographics": {
+      "framework": "Tables Of Content Infographics",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/tables-of-content-infographics/01 - Powerpoint/Tables of Content.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 26,
+      "size_kb": 345,
+      "openable": true
+    },
+    "Thank You Slides": {
+      "framework": "Thank You Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/thank-you-slides/PPTX/Thank You Slides.pptx",
+      "catalog_slides": 41,
+      "slides": 20,
+      "shapes_slide1": 9,
+      "size_kb": 134,
+      "openable": true
+    },
+    "Training Slides Rev": {
+      "framework": "Training Slides Rev",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/training Slides Rev/01 Powerpoint Slides 2/Presentation File/Training Powerpoint Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 19,
+      "shapes_slide1": 21,
+      "size_kb": 262,
+      "openable": true
+    },
+    "Work From Home Slides": {
+      "framework": "Work From Home Slides",
+      "src_path": "/Users/xpickey/Documents/iCE/800 - Infographic/work-from-home-slides/01 - Powerpoint/Work From Home Slides.pptx",
+      "catalog_slides": 22,
+      "slides": 20,
+      "shapes_slide1": 151,
+      "size_kb": 1283,
+      "openable": true
+    }
+  }
+}

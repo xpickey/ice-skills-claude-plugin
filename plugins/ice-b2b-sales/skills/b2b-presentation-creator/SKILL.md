@@ -32,10 +32,50 @@ license: Proprietary
 | **B2B Deck Quality Charter** — 9-item Mandatory pre-build checklist + Pre-Build Workflow + Pass ≥8/9 threshold | `references/12-quality-charter.md` |
 | **HTML Presentation Slide** — web-native deck (zero-dep, 16:9), PPT→HTML conversion, build via `scripts/build_html.py` | `references/13-html-deck-builder.md` |
 | **Design principles (20 codified rules)** — format-agnostic (pptx + html); whitespace/contrast/grid/type thresholds | `b2b-slide-designer/references/design-principles.md` |
+| **Build from Design Spec** — รับ template/color/icon/font_strategy จาก slide-designer §4.5 → build ตามนั้น | §0.5 below + `b2b-slide-designer §4.5-4.7` |
+| **Design Library (template/infographic/icon/gradient)** — เลือกจาก 1,186 refs + 71 framework .pptx | `b2b-slide-designer §4.5` (Router) |
 
 **Engine dependency:** This skill produces .pptx output. It uses the `pptx` skill as its rendering engine (python-pptx + pptxgenjs). Always read the `pptx` skill's SKILL.md before generating a final file.
 
 **Mandatory Charter Read:** Before any executive-facing deck build, read `references/12-quality-charter.md` first. It defines 9 mandatory visual elements (Brand Chrome, Icon Library, Color Semantics, Big Number Callouts, Layout Variation, Realistic Data, Outcome Cards, Section Labels, Font Discipline) plus the 8-step Pre-Build Workflow and Pass ≥8/9 threshold.
+
+---
+
+## 0.5 — Build from Design Spec (รับจาก b2b-slide-designer §4.5) ⭐⭐⭐
+
+> **เมื่อ slide-designer ส่ง Design Spec มา** (จาก §4.5 Router STEP 6) — skill นี้ **build ตาม spec นั้นจริง**
+> (template/color/icon/layout) ไม่ใช่ default มั่ว. Design Spec เป็น **format-agnostic** → build ได้ทั้ง PPTX/HTML/PDF.
+
+**Design Spec schema (รับเข้า):**
+```
+{ layout_pattern · infographic_type · icon_set · gradient ·
+  color (จาก CI/color-pattern — ใช้ตามนี้ ไม่ override เอง) ·
+  font_strategy: { mode: TH-only|EN-only|TH+EN, approach: unified|pair, latin, cs } ·
+  title_treatment · mode: presenter|document · template_ready_path (ถ้าใช้ 71 framework .pptx) }
+```
+
+**Build per format:**
+| format | engine | font handling |
+|---|---|---|
+| **PPTX** | theme JSON (ref 02/04) → `_lib/build_pptx.py` (เจนนี่) | D1-D4 tri-slot + embed ตาม font_strategy |
+| **HTML** | `scripts/build_html.py` (PATH A/B, ref 13) | §5.6 web-safe ตาม font_strategy (CSS var) |
+| **PDF** | HTML→PDF (`scripts/export-pdf.sh` Playwright) **หรือ** PPTX→PDF (LibreOffice/PowerPoint) | ตาม format ต้นทาง |
+
+**⭐ Content-Aware Font (font_strategy — ไม่ใช้ font ตาม template ดื้อ ๆ):**
+- **3 mode:** TH-only / EN-only / TH+EN กล่องเดียว → set ตาม `font_strategy.approach`:
+  - `unified` → font ตัวเดียว TH+EN glyph (IBM Plex Sans Thai/Sarabun) ทั้ง latin+cs slot
+  - `pair` → latin font + cs font แยก (D1 tri-slot) — balance ตาม §5.5 Visual Parity
+- **ขนาดตามเนื้อหา:** TH +1-2pt > EN (D3) · document(≤75คำ)→body เล็กลง 1 step · presenter(≤25)→title ใหญ่ขึ้น
+- **font-override (กันไทยแตก):** ถ้า template/spec เป็น EN-only font แต่เนื้อหามีไทย → swap unified/pair อัตโนมัติ
+- **color จาก spec:** ใช้สีที่ slide-designer ส่งมา (CI/gradient) — ไม่ override เอง
+
+**ใช้ 71 framework .pptx (catalog-templates-ready):** ถ้า spec มี `template_ready` →
+resolve ผ่าน **cache-on-demand**: `python b2b-slide-designer/scripts/template_cache.py get "<framework>"`
+→ ได้ path (cache หรือ copy จากต้นทาง) → เปิด .pptx → ดึง layout/shape → ปรับเนื้อ+font ตาม spec → build.
+**ถ้า status=missing** (template หาย/ย้ายเครื่อง) → fallback: build จาก catalog-infographics (inspiration)
+หรือ MCP + แจ้ง user (ไม่ crash). ดู slide-designer catalog-templates-ready.md §Cache-on-Demand.
+
+**Icon:** ตาม Icon-First (slide-designer §4.7) — recolor SVG จาก spec.icon_set ก่อน → MCP เฉพาะถ้าไม่มี.
 
 ---
 
@@ -458,6 +498,7 @@ You rarely need all 10 references. Pull only what the situation demands.
 
 | Version | Date | Change |
 |---|---|---|
+| **V01R09** | **2026-06-20** | **+Build from Design Spec (§0.5) + Content-Aware Font 3-mode.** รับ Design Spec จาก b2b-slide-designer §4.5 Router (template/color/icon/gradient/font_strategy) → build ตาม template จริง ทุก format (PPTX/HTML/PDF). build_html.py: +`apply_font_strategy()` + `--font-strategy` — 3 mode (TH-only/EN-only/TH+EN), TH+EN = unified (IBM Plex Sans Thai) หรือ pair latin+cs (ไทยมาก่อน Latin กันแตก), content-aware size (document→body เล็กลง · presenter→title ใหญ่). +71 framework .pptx (catalog-templates-ready) เปิดดึง layout. +ref 07/02 pointer → slide-designer catalog. font เลือกตามภาษา ไม่ตาม template (§5.5.1 single-source). คู่กับ b2b-slide-designer V02R04.** |
 | **V01R08** | **2026-06-20** | **+Dual Execution Path (ใช้ได้ทั้ง Claude Code / Cowork / Desktop / Web).** ref 13 เพิ่ม Execution Path Rule: PATH A (มี Bash → รัน scripts/build_html.py) · PATH B (ไม่มี shell → ประกอบ HTML inline จาก assets/html/html-template.md + viewport-base.css + animation-patterns.md, sanitize →→▸ เอง). +copy html-template.md + animation-patterns.md เข้า assets/html (inline skeleton). Step 5-HTML + เจนนี่ ROLE 2 ระบุ env detection. ผลลัพธ์เหมือนกันทุก env (single .html 16:9 zero-dep). เหมือน Higgsfield CLI/MCP pattern.** |
 | **V01R07** | **2026-06-20** | **+HTML Presentation Slide capability (skill-owned build).** เพิ่ม Step 4.5 Output Format Decision (pptx/html/both) + Step 5-HTML + Step 6 HTML QA track + ref 13-html-deck-builder.md. Build scripts อยู่ใน skill นี้: `scripts/build_html.py` (HTML render, zero-dep 16:9) + `scripts/extract-pptx.py` (PPT→HTML) + assets/html (viewport-base.css + 10 B2B template subset). เจนนี่ (deliverable-gen) invoke skill เพื่อ build — ไม่เก็บ logic เอง. design-principles (20 rules) + html-styling-export อยู่ที่ slide-designer. Source: frontend-slides (MIT © Zara Zhang) + power-design (MIT © Jack Roberts) — see references/NOTICE-html-slides.md. PPTX flow เดิม (Step 1-6, §5.1 font embed, D1-D4) ไม่แตะ.** |
 | **V01R06** | **2026-06-20** | **§5.1 Font Embedding → de-duplicated to pointer.** Font-selection rules (static + fsType + SIL OFL pairs) ย้ายไปอ้าง `b2b-slide-designer` §5.5.1 เป็น SINGLE SOURCE (typography owner) แทนการ restate ตาราง → no drift เมื่อ whitelist เปลี่ยน. คง embedding-method detail (5 PowerPoint-safe conditions = `deliverable-gen` `_lib/embed_fonts_pptx.py`) + ⛔ no-LibreOffice BLOCK ไว้ในตาราง 3-owner. เหตุผล: Architecture review — แยก skill (designer vs producer) ถูกแล้ว แต่ font rule เขียนซ้ำ 2 ที่ = drift risk. slide-designer §5.5.1 ได้ 📌 SINGLE-SOURCE marker คู่กัน.** |
