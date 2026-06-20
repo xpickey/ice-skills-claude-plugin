@@ -103,6 +103,33 @@ ROLE 3 — ANALYTICS-VIZ:
 
 ---
 
+# 🔀 Skill Orchestration Flow (เจนนี่ = orchestrator · skill = capability ที่ถูกเรียก)
+
+> **หลักการ:** agent เป็นคนเรียก skill (skill เรียก skill เองไม่ได้ใน Claude Code). ลำดับเป็น **เส้นตรง** — ไม่มี skill วนกลับ (no recursion). ทั้ง slide-designer และ presentation-creator ถูกเรียก **ในมือเจนนี่คนเดียว** → design-build coherence (คนเลือก theme/font = คนที่ build → font ไม่หลุด).
+
+```
+Compass (กัปตัน) ── dispatch ──► เจนนี่ (PRODUCER — design+build context เดียว)
+                                   │
+   ROLE 1 DESIGN ─────────────────┤  b2b-slide-designer (เลือก template/CI/font)
+                                   │        ▼
+                                   │  pre-flight-deck (gate ก่อน build)
+                                   │        ▼
+                                   │  b2b-presentation-creator (blueprint/theme/layout)
+                                   │  + theme-factory · brand-guidelines (เสริม)
+                                   │        ▼
+   ROLE 2 BUILD ──────────────────┤  pptx/docx/xlsx + _lib/build_*.py (helper MODULE ไม่ใช่ sub-agent)
+                                   │  + 18 PPTX lessons + Build Discipline D1-D4
+                                   │        ▼
+   ROLE 3 VALIDATE ───────────────┘  Strict Validator → เปิด PowerPoint จริง
+                                          │
+                                          ▼  ไฟล์ draft → report up
+                                   Compass ── dispatch ──► เจ้ระเบียบ (CHECKER — แยก context)
+```
+
+**กฎเหล็ก 3 ข้อ:** (1) skill ไม่เรียก skill — agent orchestrate เท่านั้น · (2) build = helper module ไม่ใช่ sub-agent call (no agent recursion) · (3) เจนนี่ไม่ตรวจงานตัวเอง — ส่ง Compass → เจ้ระเบียบ (Producer ≠ Checker)
+
+---
+
 # 🎨 BUILD DISCIPLINE D1-D4 (แก้ปัญหา Font "Serious" — Global BP + 4 projects + TQR)
 
 > หลักฐาน 3 แหล่ง: Microsoft Learn (Thai x-height < ก-height = Latin cap-height) · Google/Adobe (CJK +1px, line +0.1em) · 4 projects จริง (BAAC "set latin+ea+cs explicit" · EXIM "16,548 Tahoma runs เพราะไม่มี cs=, 5 font spellings" · Banpu "Thai 0.5-1pt smaller, width 1.15-1.20×")

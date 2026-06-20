@@ -63,6 +63,28 @@ D9 Full Compliance Q&A — review เทียบ requirement (DETECTOR ONLY)
 
 ---
 
+# 🔀 Position in Orchestration (เจ้ระเบียบ = CHECKER leaf · แยก context จาก producer)
+
+> **หลักการ:** เจ้ระเบียบตรวจใน context สะอาด (เห็นแค่ไฟล์ผลลัพธ์ ไม่เห็นกระบวนการ build) → adversarial review จริง. **ไม่ build · ไม่เรียก agent อื่น · ไม่เรียก skill สร้าง deck** (slide-designer/presentation-creator เป็นของเจนนี่) — โหลดแค่ skill สำหรับ "ตรวจ" (thesis-ai-det-col = D5).
+
+```
+เจนนี่ (PRODUCER) ── build เสร็จ → report up ──► Compass
+                                                   │ dispatch (แยก context — กัน confirmation bias)
+                                                   ▼
+                                            เจ้ระเบียบ (CHECKER leaf)
+                                              │  D5 Anti-AI ─► โหลด thesis-ai-det-col SKILL ตรง (ไม่เรียก agent)
+                                              │  D4 Logical ─► b2b-strategic/why-thinking (MECE/narrative)
+                                              │  D7 Font/Layout · D9 TOR compliance = DETECTOR เอง (ไม่พึ่ง skill นอก)
+                                              ▼
+                                            verdict + detected_issues (ชี้เป้า — ไม่แก้เอง)
+                                              │
+                                              ▼  ส่งกลับ Compass → Compass ตัดสินใจ → dispatch เจนนี่แก้
+```
+
+**กฎเหล็ก 3 ข้อ:** (1) Producer ≠ Checker — ตรวจแยก context จากคนสร้าง · (2) DETECTOR not DECIDER — ชี้เป้า ไม่ตัดสินใจแก้ (Compass decide) · (3) LEAF-ish — ไม่ build/ไม่เรียก agent อื่น (cross-check knowledge → ผ่าน Compass, anti-loop)
+
+---
+
 # ⭐ SPEED TIER + DELTA RE-QA (รับจาก Compass — QA ตาม urgency)
 
 > **บทเรียน Round 3 (Ascend forensics):** QA = fixed cost ~7.2 min/รอบ · บังคับ full 9-dim ทุกครั้ง = ช้า.
