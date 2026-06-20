@@ -267,21 +267,17 @@ The most common mistake in Thai+English decks is using a Thai font that doesn't 
 
 If a font is not installed, the skill must (a) install via `scripts/install_fonts.sh` (Linux/Mac) or (b) fall back to the closest system font and **note this in the QA report**.
 
-### 5.1 Font Embedding (customer-facing decks) — KD V01R01 2026.06.03
+### 5.1 Font Embedding (customer-facing decks) — pointer, single-source 2026.06.20
 
-A bilingual deck only renders correctly on the recipient's machine if its Thai+English fonts are **embedded**. Embedding is performed by the **deliverable-gen agent**, not by this skill — this skill chooses embed-safe fonts and hands the spec downstream. Two rules govern that handoff:
+A bilingual deck only renders correctly on the recipient's machine if its Thai+English fonts are **embedded**. Three things must line up — and each has ONE owner, so this skill does not restate them:
 
-**Rule 1 — Choose embed-safe fonts.** Every font must be (a) **static** (Variable fonts cannot be embedded — instance to a default weight first), (b) **fsType ≠ Restricted** (0x0002 forbids embedding), and (c) licensed to embed. The SIL OFL pairs below are verified embed-safe after normalization:
+| What | Single source of truth | This skill's job |
+|---|---|---|
+| **Choose embed-safe fonts** (static + fsType≠Restricted + SIL OFL pairs, per-font fsType verified via fontTools) | **`b2b-slide-designer` §5.5.1** (the typography owner) | Pick the font from slide-designer's whitelist; hand the spec down |
+| **Apply the embedding** (5 PowerPoint-safe conditions: `embeddedFontLst` after `notesSz`, fontTools round-trip normalize every font, content-type `application/x-fontdata`, `embedTrueTypeFonts="1"`+`saveSubsetFonts="0"`) | **`deliverable-gen` `_lib/embed_fonts_pptx.py`** (the build tool) | Hand off — never embed here |
+| **Validate** | `deliverable-gen` `_lib/validate_pptx_fonts.py` → open in real PowerPoint | Require PASS before delivery |
 
-| Role | English | Thai | License | Embed |
-|---|---|---|---|---|
-| Body | Open Sans | Sarabun | SIL OFL | ✅ normalize first |
-| Heading | Raleway ExtraBold | Kanit Bold | SIL OFL | ✅ normalize first |
-| Alt | Inter | IBM Plex Sans Thai | SIL OFL | ✅ |
-
-**Rule 2 — Embedding method.** Customer-facing embedding uses `_lib/embed_fonts_pptx.py` (the deliverable-gen tool), which applies all five PowerPoint-safe conditions automatically: `embeddedFontLst` after `notesSz`, **fontTools round-trip normalize on every font** (required even for static fonts — otherwise PowerPoint shows "Install Embedded Fonts: General Failure" and strips them), content-type `application/x-fontdata`, `embedTrueTypeFonts="1"` + `saveSubsetFonts="0"`, then validates with `_lib/validate_pptx_fonts.py`.
-
-> ⛔ **Do NOT use LibreOffice `--convert-to pptx:…EmbedFonts`.** It is proven not to embed any font (it embeds only into `.odp`) and it overwrites `sldSz` to `screen4x3`, destroying 16:9. The deck must finally be opened in **real PowerPoint** (qlmanage/LibreOffice are false-green — they cannot see the "General Failure" warning).
+> ⛔ **Do NOT use LibreOffice `--convert-to pptx:…EmbedFonts`** — proven not to embed (writes only to `.odp`) and it overwrites `sldSz` to `screen4x3`, destroying 16:9. Final sign-off must be **real PowerPoint** (qlmanage/LibreOffice are false-green — they cannot see the "General Failure" warning). *(This ⛔ is the embedding contract; it stays here because it is a hard BLOCK any deck author must see.)*
 
 ---
 
@@ -412,6 +408,7 @@ You rarely need all 10 references. Pull only what the situation demands.
 
 | Version | Date | Change |
 |---|---|---|
+| **V01R06** | **2026-06-20** | **§5.1 Font Embedding → de-duplicated to pointer.** Font-selection rules (static + fsType + SIL OFL pairs) ย้ายไปอ้าง `b2b-slide-designer` §5.5.1 เป็น SINGLE SOURCE (typography owner) แทนการ restate ตาราง → no drift เมื่อ whitelist เปลี่ยน. คง embedding-method detail (5 PowerPoint-safe conditions = `deliverable-gen` `_lib/embed_fonts_pptx.py`) + ⛔ no-LibreOffice BLOCK ไว้ในตาราง 3-owner. เหตุผล: Architecture review — แยก skill (designer vs producer) ถูกแล้ว แต่ font rule เขียนซ้ำ 2 ที่ = drift risk. slide-designer §5.5.1 ได้ 📌 SINGLE-SOURCE marker คู่กัน.** |
 | **V01R05** | **2026-06-13** | **ref 07 Method 3 (AI imagery) — bound to real engines via connection skills: `nanobanana-connection` (Gemini image — hero/infographic ภายใน, เร็ว/quota) + `higgsfield-connection` (full suite: 4K/text via Nano Banana Pro, FLUX.2/Soul, Marketing Studio DTC ads, Kling/Veo video, Soul ID consistent character — credit-based, preflight `get_cost`). เดิม Method 3 เป็น generic "AI imagery" ไม่ชี้ engine. deliverable-gen-agent (เจนนี่) V01R05 bind ทั้ง 2 MCP+skill → build deck ที่มี AI hero/video/ad ได้ในตัว.** |
 | **V01R04** | **2026-06-13** | **Added Step 6.0 Forbidden-char gate (U+2192 `→` + family → `▸` U+25B8) as the FIRST QA check — text-based, runs without any render engine. Demoted LibreOffice render to *preview only, not a validation pass* (false-green: cannot see U+2192 Repair-rejection, 16:9 breakage, corruption, font General Failure). Final visual sign-off = real PowerPoint. Switched content-check command to `scripts/deck_qa.py` (forbidden-char scan + boilerplate grep, LibreOffice-optional). Source: KT Food S4 field bug + PPTX Lesson #18.** |
 | **V01R03** | **2026-06-03** | **Added §5.1 Font Embedding — embed-safe font rules (static + fsType≠Restricted + SIL OFL) + handoff to deliverable-gen `_lib/embed_fonts_pptx.py` (5 PowerPoint-safe conditions incl. fontTools normalize for "General Failure") + ⛔ no LibreOffice EmbedFonts + Step 6 QA & §10 Self-Check embed gates. Source: KD_PPTX-Embedded-Font-TH-EN_V01R02.** |
