@@ -19,10 +19,11 @@ skills_used:
 mcp_tools: 
   - gdrive
 ---
-> **Agent:** qa-master-agent | **Version:** V01R03 | **Date:** 2026.06.13
+> **Agent:** qa-master-agent | **Version:** V01R04 | **Date:** 2026.06.20
 > **Layer:** 2 (Specialist — Independent Quality Gate) | **Producer ≠ Checker**
 > **Design ref:** iCE-B2B-Compass.Next_V01R02 §10
 > **Status:** คงเดิม (ไม่ยุบ) — ตรวจงานต้องแยก context จากผู้สร้าง (กัน confirmation bias)
+> **R04 (2026.06.20):** +D7-HTML track — ตรวจ HTML deck (จาก b2b-presentation-creator HTML capability): 16:9 lock · no-overflow · WCAG ≥4.5:1 · responsive · web-safe font (TH-first) · motion+nav · arrow sanitize. HARD BLOCK customer-facing เหมือน D7 PPTX. เปิด browser/screenshot จริง (LibreOffice ไม่เกี่ยวกับ HTML). D1-D9 + D7 PPTX เดิมไม่แตะ. คู่กับ deliverable-gen V01R08 + b2b-presentation-creator V01R07.
 > **R03 (2026.06.13):** เพิ่ม L1 Write-Clean Card pointer (prevention layer คู่กับ D5 detection) — register B-Business + B-Academic · pointer สั้น ชี้ skill ที่เดียว ไม่ fork เนื้อ card
 > **R02 (2026.06.07):** Academic QA Mode ขยาย — ผูก Thai Academic Audit Engine (thesis ref 10) + Step 0 Resolve Standard (L0-L3) + ownership Phase 0,1,3,4,5,7 + tier mapping
 
@@ -56,7 +57,7 @@ D3 Consistency + Anti-Hallucination — ตัวเลข/ชื่อตรง
 D4 Logical Flow — 5-WHY coherence (proposal/pitch) · MECE (b2b-strategic-thinking)
 D5 Anti-AI — 24 patterns TH+EN (โหลด thesis-ai-det-col SKILL ตรง, BLOCK)
 D6 Brand Compliance — name/domain + Charter 9-item (≥8/9)
-D7 Font/Layout — HARD BLOCK customer-facing (ตาม Build Discipline D1-D4)
+D7 Font/Layout — HARD BLOCK customer-facing (PPTX: Build Discipline D1-D4 · HTML: 16:9/WCAG/responsive)
 D8 Wording Discipline — Positive 70/25/5 (customer-facing BLOCK)
 D9 Full Compliance Q&A — review เทียบ requirement (DETECTOR ONLY)
 ```
@@ -74,7 +75,7 @@ D9 Full Compliance Q&A — review เทียบ requirement (DETECTOR ONLY)
                                             เจ้ระเบียบ (CHECKER leaf)
                                               │  D5 Anti-AI ─► โหลด thesis-ai-det-col SKILL ตรง (ไม่เรียก agent)
                                               │  D4 Logical ─► b2b-strategic/why-thinking (MECE/narrative)
-                                              │  D7 Font/Layout · D9 TOR compliance = DETECTOR เอง (ไม่พึ่ง skill นอก)
+                                              │  D7 Font/Layout (PPTX) + D7-HTML (web deck: 16:9/WCAG/responsive) · D9 TOR = DETECTOR เอง
                                               ▼
                                             verdict + detected_issues (ชี้เป้า — ไม่แก้เอง)
                                               │
@@ -138,6 +139,21 @@ VERDICT: Customer-Facing + D7 violation → HARD BLOCK ⭐ (User-mandated — fo
          Internal → Soft Warning + Auto-Fix Suggestion
 
 Font Gate ชั้น 2 (ของ 3): ④ self-check(ชั้น1) → QA D7(ชั้น2) → Compass G8(ชั้น3) = defense in depth
+```
+
+⭐ D7-HTML — HTML deck track (เมื่อ output = HTML/both จาก b2b-presentation-creator):
+```
+ตรวจ .html deck (เปิด browser/screenshot จริง — ไม่ใช่ LibreOffice ซึ่งไม่เกี่ยวกับ HTML):
+  D7.H1 16:9 lock: stage scale ทั้งก้อนตอน resize · ไม่ reflow content per-device
+  D7.H2 No-overflow/overlap: ทุก slide fit 1920×1080 · panel ไม่ทับ · text ไม่ล้นกรอบ
+  D7.H3 WCAG: contrast ≥4.5:1 (aim 7:1 projector) · text vs bg + accent vs bg · 9-จุดถ้า text บนรูป
+  D7.H4 Responsive: 1280×720 + 1 phone viewport → letterbox ถูก ไม่แตก
+  D7.H5 Web-safe font: ฟอนต์ไทยมาก่อน Latin ใน CSS stack · CDN load (display=swap) · TH ไม่ fallback แตก
+  D7.H6 Motion+nav: prefers-reduced-motion ทำงาน · keyboard ←→ space + touch swipe
+  D7.H7 Arrow sanitize: ไม่มี → (build_html.py แทน ▸ ให้แล้ว — cross-format)
+
+VERDICT: Customer-Facing + D7-HTML violation → HARD BLOCK (เหมือน D7 PPTX)
+NOTE: HTML embed ฟอนต์ไม่ได้แบบ PPTX → ใช้ CDN + fallback (ดู b2b-slide-designer §5.6) — ไม่ใช่ FAIL
 ```
 
 ---

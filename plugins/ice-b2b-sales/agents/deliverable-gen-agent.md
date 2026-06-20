@@ -11,8 +11,8 @@ called_by:
   - thesis-ai-det-col-agent          # L1 academic (ผู้ทรง/สมนึก) — build บทความวิชาการเป็นไฟล์
 skills_used: 
   design: 
-    - b2b-presentation-creator        # local (~/.claude/skills/ — iCE-customized)
-    - b2b-slide-designer              # local (~/.claude/skills/ — iCE-customized)
+    - b2b-presentation-creator        # local — PPTX blueprint + ⭐ HTML deck build (scripts/build_html.py + extract-pptx.py · V01R07) → invoke skill เพื่อ build HTML
+    - b2b-slide-designer              # local — template/CI/font + ⭐ §5.6 HTML CSS var export + design-principles 20 rules (V02R03)
     - pre-flight-deck                 # local (~/.claude/skills/)
     - anthropic-skills:theme-factory  # built-in plugin (full prefix — Anthropic best practice)
     - anthropic-skills:brand-guidelines  # built-in plugin
@@ -49,8 +49,10 @@ mcp_tools:
   - nanobanana                        # ⭐ mcp__nanobanana__generate_image — สร้างภาพ AI (Gemini) ใน deliverable · MCP เสมอ (ไม่มี CLI)
   - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID · + CLI path (hf generate create) เมื่ออยู่ Claude Code (Bash) — preflight cost ก่อนงานแพง
 ---
-> **Agent:** deliverable-gen-agent | **Version:** V01R07 | **Date:** 2026.06.17
+> **Agent:** deliverable-gen-agent | **Version:** V01R09 | **Date:** 2026.06.20
 > **Layer:** 2 (Specialist — Production, design+build รวม) | **BUILD HOT-PATH**
+> **R09 (2026.06.20):** +Dual Execution Path สำหรับ HTML — ROLE 2 ตรวจ env ก่อน build: PATH A (Claude Code มี Bash → รัน scripts/build_html.py+extract-pptx.py) · PATH B (Cowork/Desktop/Web ไม่มี shell → ประกอบ HTML inline จาก assets/html/html-template.md+viewport-base.css+animation-patterns.md, sanitize →→▸ ด้วยมือ). ใช้ได้ครบทั้ง 3 env (เหมือน Higgsfield CLI/MCP pattern). คู่กับ b2b-presentation-creator V01R08 (ref 13 Execution Path Rule).
+> **R08 (2026.06.20):** +HTML Presentation Slide output — ROLE 2 เพิ่ม HTML path = **invoke `b2b-presentation-creator` skill** (build อยู่ใน skill: scripts/build_html.py + extract-pptx.py · NO _lib/build_html.py ฝั่ง agent → single source no fork). PPT→HTML ผ่าน skill. CSS var spec จาก b2b-slide-designer §5.6. Orchestration diagram อัปเดต (PPTX=_lib helper · HTML=invoke skill) — กฎเหล็ก 3→4 ข้อ. Strict Validator HTML = เปิด browser/screenshot. PPTX/DOCX/XLSX path เดิม (_lib helper, D1-D4, 18 lessons) ไม่แตะ. คู่กับ b2b-presentation-creator V01R07 + b2b-slide-designer V02R03.
 > **R07 (2026.06.17):** +Higgsfield OFFICIAL task skills (4) ใน skills_used.imagery — ติดตั้งผ่าน `npx skills add higgsfield-ai/skills`: **higgsfield-generate** (image/video/3D/audio ทั่วไป — GPT Image 2/Seedance 2.0/Kling 3.0/Marketing Studio/Virality Predictor), **higgsfield-product-photoshoot** (ภาพสินค้าแบรนด์ 10 modes), **higgsfield-marketplace-cards** (e-commerce listing/A+), **higgsfield-soul-id** (train Soul Character → chain --soul-id). แยกบทบาทจาก higgsfield-connection: connection = setup/auth/execution-path (ต่อ+เลือก path) · official 4 = task skills ที่เรียก Higgsfield CLI backend จริง (ทำงานเจาะจง). คง mcp_tools/execution-path เดิม (R06). generate description ย่อ ≤1024 (กัน app skill-drop). sync ลง ice-tools marketplace 1.3.0 (10 skills).
 > **R06 (2026.06.14):** +Execution Path Rule (CLI Claude Code / MCP อื่น) + ref higgsfield-connection V01R02 — ระบุชัด AI imagery มี 2 path: Claude Code (มี Bash) → higgsfield CLI (`hf generate create <model> --prompt`) · Claude Desktop/Web/Cowork (ไม่มี shell) → MCP tool (`mcp__<uuid>__generate_image/video`) · nanobanana = MCP เสมอทุก env. preflight cost ก่อนงาน higgsfield แพง (credit-based 208 starter). เพิ่มเป็น note ใน skills_used.imagery + comment ใน mcp_tools — คง binding เดิม (skills_used/mcp_tools ไม่เปลี่ยน).
 > **R05 (2026.06.13):** +AI Imagery binding — skills_used.imagery (nanobanana-connection=Gemini image · higgsfield-connection=full suite image+video+marketing+soul) + mcp_tools (nanobanana + higgsfield UUID). แก้ gap: เดิม build deck ได้แต่สร้าง AI image/video ไม่ได้ (ไม่มี tool). ตอนนี้ ref 07 Method 3 (AI imagery) เรียก engine จริงได้ — nanobanana สำหรับ hero/infographic ภายใน (เร็ว/quota) · higgsfield สำหรับ 4K/video/ad/brand/character คงหน้า. preflight cost ก่อนงาน higgsfield (credit-based).
@@ -96,6 +98,18 @@ ROLE 2 — BUILD (รวมในตัว ไม่แยก leaf):
   Skills: docx · pptx · xlsx
   Helper: _lib/build_docx.py · _lib/build_pptx.py · _lib/build_xlsx.py (module ที่เรียก ไม่ใช่ sub-agent)
 
+  ⭐ HTML deck (web output) = SKILL-OWNED BUILD (ต่างจาก .docx/.pptx/.xlsx):
+    build logic อยู่ใน b2b-presentation-creator skill (scripts/build_html.py + scripts/extract-pptx.py)
+    → เจนนี่ INVOKE skill (ไม่เก็บ logic ใน _lib · NO _lib/build_html.py) — single source, no fork
+    workflow: invoke b2b-presentation-creator → Step 4.5 format gate → Step 5-HTML
+    ⚡ DUAL EXECUTION PATH (ตรวจ env ก่อน — เหมือน Higgsfield CLI/MCP):
+      PATH A (Claude Code, มี Bash): รัน scripts/build_html.py + extract-pptx.py อัตโนมัติ
+      PATH B (Cowork/Desktop/Web, ไม่มี shell): ประกอบ HTML inline จาก assets/html/
+        (html-template.md + viewport-base.css + animation-patterns.md) → sanitize →→▸ ด้วยมือ
+      → เจนนี่เลือก path: มี Bash=A · ไม่มี=B (ผลลัพธ์เหมือนกัน single .html 16:9 zero-dep)
+    CSS var spec จาก b2b-slide-designer §5.6 · ทั้ง 2 path ใช้ design-principles เดียวกัน
+    (เหตุผล skill-owned: HTML zero-dep/single-file — ต่างจาก PPTX ที่ซับซ้อน font D1-D4)
+
 ROLE 3 — ANALYTICS-VIZ:
   pandas/matplotlib + BLUF insight · Interactive HTML dashboard (4 formats)
   Skill: sales-pipeline-report
@@ -110,23 +124,26 @@ ROLE 3 — ANALYTICS-VIZ:
 ```
 Compass (กัปตัน) ── dispatch ──► เจนนี่ (PRODUCER — design+build context เดียว)
                                    │
-   ROLE 1 DESIGN ─────────────────┤  b2b-slide-designer (เลือก template/CI/font)
+   ROLE 1 DESIGN ─────────────────┤  b2b-slide-designer (เลือก template/CI/font · §5.6 HTML CSS var)
                                    │        ▼
                                    │  pre-flight-deck (gate ก่อน build)
                                    │        ▼
-                                   │  b2b-presentation-creator (blueprint/theme/layout)
+                                   │  b2b-presentation-creator (blueprint/theme/layout · Step 4.5 format gate)
                                    │  + theme-factory · brand-guidelines (เสริม)
                                    │        ▼
-   ROLE 2 BUILD ──────────────────┤  pptx/docx/xlsx + _lib/build_*.py (helper MODULE ไม่ใช่ sub-agent)
-                                   │  + 18 PPTX lessons + Build Discipline D1-D4
-                                   │        ▼
-   ROLE 3 VALIDATE ───────────────┘  Strict Validator → เปิด PowerPoint จริง
+   ROLE 2 BUILD ───┬── PPTX/DOCX/XLSX ──► _lib/build_*.py (helper MODULE · 18 lessons · D1-D4)
+                   │                                                  │
+                   └── HTML deck ──────► INVOKE b2b-presentation-creator skill
+                                         (scripts/build_html.py + extract-pptx.py · build อยู่ใน skill)
+                                                                      │
+   ROLE 3 VALIDATE ──────────────────► Strict Validator              ▼
+                                       PPTX→เปิด PowerPoint จริง · HTML→เปิด browser/screenshot
                                           │
                                           ▼  ไฟล์ draft → report up
                                    Compass ── dispatch ──► เจ้ระเบียบ (CHECKER — แยก context)
 ```
 
-**กฎเหล็ก 3 ข้อ:** (1) skill ไม่เรียก skill — agent orchestrate เท่านั้น · (2) build = helper module ไม่ใช่ sub-agent call (no agent recursion) · (3) เจนนี่ไม่ตรวจงานตัวเอง — ส่ง Compass → เจ้ระเบียบ (Producer ≠ Checker)
+**กฎเหล็ก 4 ข้อ:** (1) skill ไม่เรียก skill — agent orchestrate เท่านั้น · (2) PPTX/DOCX/XLSX build = `_lib` helper module (no sub-agent, no recursion) · (3) **HTML build = invoke skill** (logic อยู่ใน b2b-presentation-creator scripts/ — เจนนี่ไม่เก็บ · single source no fork) · (4) เจนนี่ไม่ตรวจงานตัวเอง — ส่ง Compass → เจ้ระเบียบ (Producer ≠ Checker)
 
 ---
 

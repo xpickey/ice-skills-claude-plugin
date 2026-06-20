@@ -3,7 +3,7 @@ name: b2b-slide-designer
 description: "Creative presentation design advisor for B2B. Matches and selects the right style, theme, and template based on iCE Corporate Identity (CI) and user requirements. Provides Designer-Brief level specifications for 8 templates: Linen, Arctic, Cobalt, Onyx, Amber, Whiteboard, iCE-CI, and iCE-Propose. Each template ships with detailed playbook in Thai, plus full color/typography/grid/spacing/iconography/animation/accessibility specs that work for both PPTX and Word output. Trigger especially when the user mentions iCE Consulting branding, iCE proposal, iCE-themed deck, Proposal layout, Solution Architecture diagram, Project Roadmap with RACI, or any iCE-issued document."
 ---
 
-# B2B Slide Designer (V02R02 — 2026-06-03)
+# B2B Slide Designer (V02R03 — 2026-06-20)
 
 Skill นี้ช่วยให้ผู้ใช้งานเลือกและออกแบบ Presentation Style ระดับมืออาชีพที่สอดคล้องกับ
 **iCE Corporate Identity (CI)** ตลอดทั้ง 7 Template โดยให้ Designer-Brief Specification
@@ -202,20 +202,43 @@ font_family:
 - `docs-builder-agent.md V02R01` (Word equivalent)
 - `qa-master-agent.md V01R04` (Dimension 7 Font Quality validator)
 
+## 5.6. HTML Output Styling (Companion — เมื่อ output เป็น HTML deck) — V02R03 2026-06-20
+
+> เมื่อ deck สร้างเป็น **HTML** (ไม่ใช่ .pptx) — slide-designer ยังเป็น **ผู้ป้อน styling spec**
+> (theme/CI/font) เหมือนเดิม แต่ export เป็น **CSS variable** ให้ `b2b-presentation-creator`
+> `scripts/build_html.py` รับไป build. **slide-designer ไม่ build เอง** (เหมือน PPTX ที่ป้อน
+> Designer-Brief ให้ builder). รายละเอียดเต็ม → `references/html-styling-export.md`.
+
+**สิ่งที่ slide-designer ทำสำหรับ HTML:**
+1. **Theme → CSS var** — แต่ละ template (8 ตัว) export `--accent`/`--stage-bg`/scheme (ตาราง map ใน `html-styling-export.md` §1)
+2. **Web-safe font fallback** — ฟอนต์ที่ **§5.5.1 เลือกแล้ว** map เป็น web stack (Sukhumvit→Kanit บนเว็บ, Sarabun/IBM Plex Sans Thai/Kanit มีบน Google Fonts CDN). **§5.5.1 ยังเป็น SINGLE SOURCE ของ font selection** — §5.6 แค่เพิ่ม web fallback ไม่ทับ
+3. **Bilingual rule** — ฟอนต์ไทยอยู่หน้า Latin ใน CSS stack เสมอ (`'Sarabun','Open Sans'`) — แทน latin+cs ของ PPTX
+4. **16:9 + WCAG** — fixed-stage (1920×1080 scale) + contrast ≥4.5:1 (aim 7:1 projector)
+
+> **Design discipline:** HTML deck ใช้ `references/design-principles.md` (20 codified rules —
+> whitespace/contrast/grid/type/mode) ซึ่ง **format-agnostic** ใช้กับ .pptx ด้วย. เสริม §5.5 font
+> discipline + B2B Quality Charter ไม่ทับกัน.
+
 ## 6. Companion Skills
 
 - `pptx` — เครื่องมือสร้างไฟล์ PPTX
 - `docx` — เครื่องมือสร้างไฟล์ Word
-- `b2b-presentation-creator` — Theme/Layout Engine สำหรับ Deck เต็มรูปแบบ
+- `b2b-presentation-creator` — Theme/Layout Engine + HTML deck builder (ref 13 + scripts) สำหรับ Deck เต็มรูปแบบ
 - `theme-factory` — Color/Theme Library
 - `canvas-design` — สำหรับ Visual Asset และ Poster
 - `brand-guidelines` — สำหรับ Brand Compliance
 - `pre-flight-deck` — Quality Gate ก่อนสร้าง Deck
 
+**References ใหม่ (HTML capability — V02R03):**
+- `references/html-styling-export.md` — CSS var map + web-safe font (companion §5.6)
+- `references/design-principles.md` — 20 codified design rules (format-agnostic, จาก power-design MIT)
+- `references/NOTICE-html-slides.md` — third-party attribution (frontend-slides + power-design, MIT)
+
 ## 7. Versioning
 
 | Version | Date | Highlights |
 | :--- | :--- | :--- |
+| **V02R03** | **2026-06-20** | **Added §5.6 HTML Output Styling (Companion) — theme→CSS var export, web-safe font fallback (Sukhumvit→Kanit on web), bilingual TH-first stack, 16:9 fixed-stage rule. + references/html-styling-export.md + references/design-principles.md (20 codified rules, format-agnostic, from power-design MIT © Jack Roberts) + NOTICE-html-slides.md. §5.5.1 ยังเป็น SINGLE SOURCE ของ font selection (§5.6 แค่เพิ่ม web fallback ไม่ทับ). คู่กับ b2b-presentation-creator V01R07 HTML capability.** |
 | V01R01 | 2026-04-28 | Designer-Brief expansion + iCE-CI as 7th Template + 15 Layout Patterns per Template + Multi-format (PPTX/Word) support |
 | V01R02 | 2026-05-15 | (See prior release notes) |
 | **V02R02** | **2026-06-03** | **Added §5.5.1 Embed-Safety — fsType (tested in-machine via fontTools) + Variable-font warning (Open Sans local = variable) + Sukhumvit Set = Preview&Print read-only + embed-safe SIL OFL pairs + pointer to deliverable-gen `_lib/embed_fonts_pptx.py` + ⛔ no LibreOffice EmbedFonts. Source: KD_PPTX-Embedded-Font-TH-EN_V01R02** |
