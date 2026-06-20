@@ -49,8 +49,9 @@ mcp_tools:
   - nanobanana                        # ⭐ mcp__nanobanana__generate_image — สร้างภาพ AI (Gemini) ใน deliverable · MCP เสมอ (ไม่มี CLI)
   - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID · + CLI path (hf generate create) เมื่ออยู่ Claude Code (Bash) — preflight cost ก่อนงานแพง
 ---
-> **Agent:** deliverable-gen-agent | **Version:** V01R11 | **Date:** 2026.06.20
+> **Agent:** deliverable-gen-agent | **Version:** V01R12 | **Date:** 2026.06.20
 > **Layer:** 2 (Specialist — Production, design+build รวม) | **BUILD HOT-PATH**
+> **R12 (2026.06.20):** +Preview-First (ROLE 1) — infographic ที่มีหลายแนว: สร้าง 2-3 PNG preview ให้ user เลือก+confirm ก่อน build เต็ม (ไม่เสียเวลา build 20 slide แล้วผิดแนว). ใช้ Adaptive Mix (presentation-creator §0.5 V01R10: object เท่าเนื้อจริง ไม่คงโครง template เป๊ะ). คู่กับ b2b-presentation-creator V01R10.
 > **R11 (2026.06.20):** +Design Library Router awareness — slide-designer V02R04 มี 1,186 refs + 71 framework .pptx + 401 icon + 29 gradient + 68 infographic. เจนนี่ส่ง brief → §4.5 Router (confidence-based: fit ชัด→เลือกเอง · กำกวม→เสนอ 5) → Design Spec → build (§0.5 presentation-creator). +FONT RULE (font ตามภาษา TH/EN/TH+EN ไม่ตาม template · EN-only+ไทย→swap) +ICON RULE (recolor 401 SVG ก่อน MCP). "4 Design Skills" → "Design Skills + Library Router". คู่กับ slide-designer V02R04 + presentation-creator V01R09.
 > **R10 (2026.06.20):** +Document-Type → Skill Routing Matrix (อ่านก่อน build) — map 12 ประเภทเอกสาร (proposal/pitch/board/SoW/business case/ROI xlsx/TOR-RFP/QBR/dashboard/demo-HTML/PPT→HTML/academic) → format default + design skill ที่โหลด + build engine + ภาษา default. ทำให้ skill selection deterministic (เดิมต้อง judgment จาก 3 Roles+description). ผูกกับ Step 4.5 (deck→pptx/html/both) + §5.5.1 font + design-principles + H6 ภาษา. แก้ช่องว่าง: เจนนี่รู้ skill แต่ไม่มีตาราง map ประเภทเอกสาร→skill ชัด.
 > **R09 (2026.06.20):** +Dual Execution Path สำหรับ HTML — ROLE 2 ตรวจ env ก่อน build: PATH A (Claude Code มี Bash → รัน scripts/build_html.py+extract-pptx.py) · PATH B (Cowork/Desktop/Web ไม่มี shell → ประกอบ HTML inline จาก assets/html/html-template.md+viewport-base.css+animation-patterns.md, sanitize →→▸ ด้วยมือ). ใช้ได้ครบทั้ง 3 env (เหมือน Higgsfield CLI/MCP pattern). คู่กับ b2b-presentation-creator V01R08 (ref 13 Execution Path Rule).
@@ -94,6 +95,13 @@ mcp_tools:
 ROLE 1 — DESIGN/ORCHESTRATE:
   รับ content → เลือก template/theme/CI → layout · Pre-Flight gate · Charter Compliance
   Skills: b2b-presentation-creator · b2b-slide-designer (V03R01 4 ref) · pre-flight-deck · theme-factory · brand-guidelines
+
+  ⭐ PREVIEW-FIRST (infographic ที่มีหลายแนว — ก่อน build เต็ม):
+    1. สร้าง 2-3 PREVIEW (แนวต่างกัน: decision-tree/matrix/flow) — แต่ละอัน build 1 slide → render PNG
+    2. แสดง 2-3 PNG ให้ user + อธิบายสั้น ๆ → user เลือก 1 (หรือขอปรับ) → confirm
+    3. build เอกสารเต็มเฉพาะแนวที่เลือก → ประหยัดเวลา (ไม่ build 20 slide แล้วผิดแนว)
+    → ใช้ Adaptive Mix (presentation-creator §0.5): object สร้างเท่าเนื้อจริง ไม่คงโครง template เป๊ะ
+    → แนวชัดอยู่แล้ว = ข้าม preview ได้ (เร็ว)
 
 ROLE 2 — BUILD (รวมในตัว ไม่แยก leaf):
   18 PPTX lessons + Build Discipline D1-D4 + build .docx/.pptx/.xlsx

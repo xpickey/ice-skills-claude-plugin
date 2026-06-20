@@ -71,11 +71,60 @@ license: Proprietary
 
 **ใช้ 71 framework .pptx (catalog-templates-ready):** ถ้า spec มี `template_ready` →
 resolve ผ่าน **cache-on-demand**: `python b2b-slide-designer/scripts/template_cache.py get "<framework>"`
-→ ได้ path (cache หรือ copy จากต้นทาง) → เปิด .pptx → ดึง layout/shape → ปรับเนื้อ+font ตาม spec → build.
+→ ได้ path (cache หรือ copy จากต้นทาง) → เปิด .pptx **ดู "แนว/ลักษณะ"** → **Adaptive Mix (ดูล่าง)** → build.
 **ถ้า status=missing** (template หาย/ย้ายเครื่อง) → fallback: build จาก catalog-infographics (inspiration)
 หรือ MCP + แจ้ง user (ไม่ crash). ดู slide-designer catalog-templates-ready.md §Cache-on-Demand.
 
 **Icon:** ตาม Icon-First (slide-designer §4.7) — recolor SVG จาก spec.icon_set ก่อน → MCP เฉพาะถ้าไม่มี.
+
+---
+
+### ⭐⭐⭐ ADAPTIVE MIX ENGINE (ผสม: แนว template + เนื้อจริง — ไม่คงโครงเป๊ะ)
+
+> **หลักเหล็ก (บทเรียนจริง):** "ผสม" ≠ ยัดเนื้อเข้า template เป๊ะ (จะเหลือ placeholder "SUBTITLE" ค้าง + font ล้น).
+> **ผสม = เอา "แนว/ลักษณะ" (decision-tree/matrix/funnel/timeline) + สร้าง object เท่าเนื้อจริง + จัด layout สมดุล.**
+> object สร้างเท่าจำนวนข้อมูล — ข้อมูลน้อย = ลด object/ลดขนาด · ข้อมูลมาก = เพิ่ม/แตก slide.
+
+**Algorithm (เมื่อเปิด template .pptx):**
+```
+1. ANALYZE แนว — เปิด template → ดูว่าเป็น "ลักษณะ" อะไร (decision-tree branching · 2-col compare ·
+   funnel · pyramid · timeline · matrix) + palette/shape-style (rounded/sharp, line weight, spacing)
+   → ไม่ต้องอ่าน 94 shape ทีละอัน — จับ "pattern" พอ
+2. COUNT เนื้อจริง — content-tree มีกี่ node/branch/leaf? (เช่น 3 ทางเลือก × 2 detail = 3 branch 6 leaf)
+3. BUILD เท่าเนื้อ — สร้าง object **ตามจำนวนเนื้อจริง** (ไม่ใช่ตาม template):
+   • ข้อมูล < template slot → สร้างแค่เท่าเนื้อ (ไม่เหลือ placeholder) · จัด layout สมดุลใหม่ (3 branch = 3 row เต็มสูง)
+   • ข้อมูล > template slot → ลดขนาด object/ย่อ font ให้พอดี · ถ้าเกินจริง → แตกเป็น 2 slide + แจ้ง
+4. STYLE จาก spec — ใช้ palette/shape-style "แนว" template + override: color→iCE CI (#1E66A4/#41A8B5/accent) ·
+   font→ไทย (font_strategy unified IBM Plex Sans Thai, tri-slot latin+cs)
+5. FONT-FIT — ไทยยาวกว่า EN → word_wrap + ย่อ size ต่อ tier (root 14 / node 11 / detail 9pt) กันล้น ·
+   ทุก text box ตั้ง font ไทย (ไม่ใช่แค่ที่แทน — กัน placeholder เดิมฟอนต์ใหญ่ค้าง)
+6. VERIFY — render → ไม่มี "TITLE/SUBTITLE" ค้าง · ไม่มี text ล้นกรอบ · object = จำนวนเนื้อ
+```
+
+**กฎ node-count mismatch (สำคัญ):** สร้าง object = จำนวนเนื้อจริงเสมอ — template เป็นแค่ "แรงบันดาลใจแนว"
+ไม่ใช่ "กรอบตายตัว". เหลือ slot = ลบ · ขาด slot = เพิ่ม. **ห้ามปล่อย placeholder ค้าง.**
+
+**Fallback → draw-new:** ถ้า template ซับซ้อนเกิน map (94-shape nested) + เนื้อไม่ตรงโครงเลย →
+**วาดใหม่ตามแนว** (python-pptx สร้าง decision-tree/matrix เอง ตาม spec) เร็วกว่า + สะอาดกว่า map.
+*(POC ยืนยัน: วาดตามแนว + object เท่าเนื้อ = สวย+เนื้อครบ กว่า map เข้า template ดิบ)*
+
+---
+
+### ⭐⭐⭐ PREVIEW-FIRST (เจนนี่ทำ preview ให้เลือกก่อน build เต็ม — ไม่เสียเวลา)
+
+> **หลัก:** อย่า build เอกสารเต็มแล้วค่อยรู้ว่า user ไม่ชอบ. **ทำ infographic preview ให้เลือก+confirm ก่อน.**
+
+```
+FLOW (สำหรับ infographic/deck ที่มีหลาย "แนว" ให้เลือก):
+1. เจนนี่สร้าง 2-3 PREVIEW (แนวต่างกัน — เช่น decision-tree vs matrix vs flow) — แต่ละอัน:
+   • build .pptx แค่ 1 slide (Adaptive Mix, object เท่าเนื้อ) → render เป็น PNG
+2. แสดง 2-3 PNG ให้ user ดู + อธิบายสั้น ๆ ว่าแต่ละแนวเหมาะอะไร
+3. user เลือก 1 (หรือขอปรับ) → confirm
+4. เจนนี่ build เอกสารเต็ม (ทุก slide) เฉพาะแนวที่เลือก → PPTX/HTML/PDF
+→ ประหยัดเวลา: ไม่ build จบ 20 slide แล้วพบว่าผิดแนว
+```
+- preview = **PNG** (เร็ว, เห็นภาพจริง — render 1 slide ผ่าน LibreOffice/qlmanage) · ถ้า user ขอ interactive → HTML
+- ใช้กับงานที่ "แนว" ไม่ชัด (เลือกได้หลาย infographic) — งานที่แนวชัดอยู่แล้ว ข้าม preview ได้ (เร็ว)
 
 ---
 
@@ -498,6 +547,7 @@ You rarely need all 10 references. Pull only what the situation demands.
 
 | Version | Date | Change |
 |---|---|---|
+| **V01R10** | **2026-06-20** | **+Adaptive Mix Engine + Preview-First (§0.5).** ADAPTIVE MIX: 'ผสม' = เอาแนว/ลักษณะ template (decision-tree/matrix/funnel) + สร้าง object **เท่าเนื้อจริง** ไม่คงโครง template เป๊ะ (ข้อมูลน้อย=ลด object · มาก=แตก slide) — ห้ามเหลือ placeholder ค้าง · override color→iCE CI + font→ไทย · font-fit ย่อ size กันล้น · fallback draw-new ถ้า template ซับซ้อนเกิน map. PREVIEW-FIRST: เจนนี่ทำ 2-3 infographic preview (PNG) ให้ user เลือก+confirm ก่อน build เต็ม (ไม่เสียเวลา build จบแล้วผิดแนว). POC verified (decision-tree ERP: object เท่าเนื้อ 3 branch×2 leaf, font ไทยไม่ล้น). คู่กับ เจนนี่ ROLE 1 Preview-then-build.** |
 | **V01R09** | **2026-06-20** | **+Build from Design Spec (§0.5) + Content-Aware Font 3-mode.** รับ Design Spec จาก b2b-slide-designer §4.5 Router (template/color/icon/gradient/font_strategy) → build ตาม template จริง ทุก format (PPTX/HTML/PDF). build_html.py: +`apply_font_strategy()` + `--font-strategy` — 3 mode (TH-only/EN-only/TH+EN), TH+EN = unified (IBM Plex Sans Thai) หรือ pair latin+cs (ไทยมาก่อน Latin กันแตก), content-aware size (document→body เล็กลง · presenter→title ใหญ่). +71 framework .pptx (catalog-templates-ready) เปิดดึง layout. +ref 07/02 pointer → slide-designer catalog. font เลือกตามภาษา ไม่ตาม template (§5.5.1 single-source). คู่กับ b2b-slide-designer V02R04.** |
 | **V01R08** | **2026-06-20** | **+Dual Execution Path (ใช้ได้ทั้ง Claude Code / Cowork / Desktop / Web).** ref 13 เพิ่ม Execution Path Rule: PATH A (มี Bash → รัน scripts/build_html.py) · PATH B (ไม่มี shell → ประกอบ HTML inline จาก assets/html/html-template.md + viewport-base.css + animation-patterns.md, sanitize →→▸ เอง). +copy html-template.md + animation-patterns.md เข้า assets/html (inline skeleton). Step 5-HTML + เจนนี่ ROLE 2 ระบุ env detection. ผลลัพธ์เหมือนกันทุก env (single .html 16:9 zero-dep). เหมือน Higgsfield CLI/MCP pattern.** |
 | **V01R07** | **2026-06-20** | **+HTML Presentation Slide capability (skill-owned build).** เพิ่ม Step 4.5 Output Format Decision (pptx/html/both) + Step 5-HTML + Step 6 HTML QA track + ref 13-html-deck-builder.md. Build scripts อยู่ใน skill นี้: `scripts/build_html.py` (HTML render, zero-dep 16:9) + `scripts/extract-pptx.py` (PPT→HTML) + assets/html (viewport-base.css + 10 B2B template subset). เจนนี่ (deliverable-gen) invoke skill เพื่อ build — ไม่เก็บ logic เอง. design-principles (20 rules) + html-styling-export อยู่ที่ slide-designer. Source: frontend-slides (MIT © Zara Zhang) + power-design (MIT © Jack Roberts) — see references/NOTICE-html-slides.md. PPTX flow เดิม (Step 1-6, §5.1 font embed, D1-D4) ไม่แตะ.** |
