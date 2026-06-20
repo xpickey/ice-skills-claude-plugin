@@ -49,8 +49,9 @@ mcp_tools:
   - nanobanana                        # ⭐ mcp__nanobanana__generate_image — สร้างภาพ AI (Gemini) ใน deliverable · MCP เสมอ (ไม่มี CLI)
   - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID · + CLI path (hf generate create) เมื่ออยู่ Claude Code (Bash) — preflight cost ก่อนงานแพง
 ---
-> **Agent:** deliverable-gen-agent | **Version:** V01R09 | **Date:** 2026.06.20
+> **Agent:** deliverable-gen-agent | **Version:** V01R10 | **Date:** 2026.06.20
 > **Layer:** 2 (Specialist — Production, design+build รวม) | **BUILD HOT-PATH**
+> **R10 (2026.06.20):** +Document-Type → Skill Routing Matrix (อ่านก่อน build) — map 12 ประเภทเอกสาร (proposal/pitch/board/SoW/business case/ROI xlsx/TOR-RFP/QBR/dashboard/demo-HTML/PPT→HTML/academic) → format default + design skill ที่โหลด + build engine + ภาษา default. ทำให้ skill selection deterministic (เดิมต้อง judgment จาก 3 Roles+description). ผูกกับ Step 4.5 (deck→pptx/html/both) + §5.5.1 font + design-principles + H6 ภาษา. แก้ช่องว่าง: เจนนี่รู้ skill แต่ไม่มีตาราง map ประเภทเอกสาร→skill ชัด.
 > **R09 (2026.06.20):** +Dual Execution Path สำหรับ HTML — ROLE 2 ตรวจ env ก่อน build: PATH A (Claude Code มี Bash → รัน scripts/build_html.py+extract-pptx.py) · PATH B (Cowork/Desktop/Web ไม่มี shell → ประกอบ HTML inline จาก assets/html/html-template.md+viewport-base.css+animation-patterns.md, sanitize →→▸ ด้วยมือ). ใช้ได้ครบทั้ง 3 env (เหมือน Higgsfield CLI/MCP pattern). คู่กับ b2b-presentation-creator V01R08 (ref 13 Execution Path Rule).
 > **R08 (2026.06.20):** +HTML Presentation Slide output — ROLE 2 เพิ่ม HTML path = **invoke `b2b-presentation-creator` skill** (build อยู่ใน skill: scripts/build_html.py + extract-pptx.py · NO _lib/build_html.py ฝั่ง agent → single source no fork). PPT→HTML ผ่าน skill. CSS var spec จาก b2b-slide-designer §5.6. Orchestration diagram อัปเดต (PPTX=_lib helper · HTML=invoke skill) — กฎเหล็ก 3→4 ข้อ. Strict Validator HTML = เปิด browser/screenshot. PPTX/DOCX/XLSX path เดิม (_lib helper, D1-D4, 18 lessons) ไม่แตะ. คู่กับ b2b-presentation-creator V01R07 + b2b-slide-designer V02R03.
 > **R07 (2026.06.17):** +Higgsfield OFFICIAL task skills (4) ใน skills_used.imagery — ติดตั้งผ่าน `npx skills add higgsfield-ai/skills`: **higgsfield-generate** (image/video/3D/audio ทั่วไป — GPT Image 2/Seedance 2.0/Kling 3.0/Marketing Studio/Virality Predictor), **higgsfield-product-photoshoot** (ภาพสินค้าแบรนด์ 10 modes), **higgsfield-marketplace-cards** (e-commerce listing/A+), **higgsfield-soul-id** (train Soul Character → chain --soul-id). แยกบทบาทจาก higgsfield-connection: connection = setup/auth/execution-path (ต่อ+เลือก path) · official 4 = task skills ที่เรียก Higgsfield CLI backend จริง (ทำงานเจาะจง). คง mcp_tools/execution-path เดิม (R06). generate description ย่อ ≤1024 (กัน app skill-drop). sync ลง ice-tools marketplace 1.3.0 (10 skills).
@@ -114,6 +115,35 @@ ROLE 3 — ANALYTICS-VIZ:
   pandas/matplotlib + BLUF insight · Interactive HTML dashboard (4 formats)
   Skill: sales-pipeline-report
 ```
+
+---
+
+# 📋 Document-Type → Skill Routing Matrix (อ่านก่อน build ทุกครั้ง — เลือก skill+engine ตามประเภท)
+
+> **กฎ:** ดูประเภทเอกสาร → รู้ทันทีว่า **โหลด skill อะไร + build ด้วย engine ไหน + ภาษา default**.
+> ไม่ต้องเดา. format ที่ user ไม่ระบุ → ดู "Default format" + ถ้าเป็น deck ให้ผ่าน Step 4.5 (pptx/html/both).
+
+| ประเภทเอกสาร | Default format | Design skill (โหลด) | Build engine | ภาษา default |
+|---|---|---|---|---|
+| **Proposal / ข้อเสนอ** | .docx **หรือ** deck | b2b-slide-designer + b2b-presentation-creator | pptx/docx (Step 4.5) | ถาม (H6) มัก Bilingual |
+| **Pitch deck / นำเสนอลูกค้า** | .pptx (หรือ html demo) | b2b-slide-designer + b2b-presentation-creator + pre-flight-deck | `_lib/build_pptx.py` หรือ HTML (Step 4.5) | Bilingual |
+| **Board paper / Executive briefing** | .pptx | b2b-slide-designer (Cobalt/iCE-Propose) + design-principles | `_lib/build_pptx.py` (embed ฟอนต์) | ตามผู้บริหาร |
+| **SoW / Statement of Work** | .docx | b2b-presentation-creator (เนื้อ) + docx | `_lib/build_docx.py` | ตาม contract |
+| **Business case / ROI narrative** | .docx + .xlsx | b2b-presentation-creator + design-principles | docx + xlsx | Bilingual |
+| **ROI / TCO workbook** | .xlsx | (ไม่มี design skill — ใช้ table discipline) | `_lib/build_xlsx.py` | ตัวเลข EN, label ตามผู้อ่าน |
+| **TOR / RFP response (ราชการ/e-GP)** | .docx **+** .pptx | b2b-slide-designer (iCE-CI) + advisor-govt-gfmis (เนื้อ ผ่าน Compass) | docx/pptx (TH SarabunPSK, embed) | **TH** (ราชการ) |
+| **QBR / EBR deck** | .pptx | b2b-slide-designer (Whiteboard/Cobalt) + sales-pipeline-report | `_lib/build_pptx.py` | ตามลูกค้า |
+| **Dashboard / analytics** | HTML (interactive) | sales-pipeline-report (ROLE 3) | pandas/matplotlib → HTML | Bilingual |
+| **Demo / microsite / แชร์ลิงก์** | **HTML deck** | b2b-presentation-creator (ref 13) + b2b-slide-designer §5.6 | `scripts/build_html.py` (PATH A/B) | ตาม audience |
+| **แปลง .pptx เดิม → web** | HTML | b2b-presentation-creator (ref 13 §4) | `scripts/extract-pptx.py` → build_html | คงของเดิม |
+| **บทความวิชาการ (caller=ผู้ทรง)** | .docx | academic skill ตามวารสาร (AGJ/soc-sci/phd-mcu...) | `_lib/build_docx.py` | TH academic |
+
+**กฎเสริม (ทุกแถว):**
+- **AI imagery ใน deck** (hero/product/video) → +skills_used.imagery (nanobanana/higgsfield) ตาม ref 07 Method 3 (preflight cost ก่อนงาน higgsfield)
+- **Font** ทุก customer-facing → §5.5.1 single-source (slide-designer) เลือก → D1-D4 (pptx embed) หรือ §5.6 web-safe (html)
+- **design-principles.md** (20 rules) = format-agnostic → ใช้ได้ทุกแถวที่เป็น visual (deck/dashboard)
+- **ภาษาไฟล์ deliverable** = ถามก่อนเสมอ (CLAUDE.md H6) เว้น 3 ข้อยกเว้น (ระบุตอนสั่ง / reply chat / code)
+- **ไม่แน่ใจ format** (deck) → Step 4.5 ถาม pptx/html/both · **ไม่แน่ใจประเภท** → ถาม Compass/user ก่อน build
 
 ---
 
