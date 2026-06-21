@@ -1,6 +1,10 @@
 # API Key Rotation Reference
 
-วิธีเปลี่ยน Gemini API Key สำหรับ Nano Banana MCP — ครอบคลุม Claude Desktop, Cowork, และ Code CLI
+วิธีเปลี่ยน Gemini API Key สำหรับ **rlabs/gemini-mcp** (`@rlabs-inc/gemini-mcp`) — ครอบคลุม Claude Desktop, Cowork, และ Code CLI
+
+> Server นี้ใช้ `GEMINI_API_KEY` อย่างเดียว (ไม่มี Vertex AI ADC / Service Account) — Rotation จึงเหลือเพียงการสับ Key เดียวทุก Client ให้ตรงกัน
+
+---
 
 ## When to Rotate Key
 
@@ -10,8 +14,7 @@
 | สงสัย Anomaly Usage ใน Billing Dashboard | Rotate + ตรวจ Logs | 🔴 ทันที |
 | Compromise สงสัยจาก Phishing / Malware | Rotate + Audit ทุก Key อื่นใน Project | 🔴 ทันที |
 | ครบกำหนด 90 วัน (Best Practice Rotation) | Rotate ตามรอบ | 🟡 ตามตาราง |
-| เปลี่ยน Owner / Admin ของ GCP Project | Rotate + Re-grant IAM | 🟡 ภายใน 7 วัน |
-| Migrate จาก API Key → Vertex AI ADC | Rotate ทั้งหมด + ลบ Old Keys | 🟢 ตาม Roadmap |
+| เปลี่ยน Owner / Admin ของ GCP Project | Rotate + Re-grant Access | 🟡 ภายใน 7 วัน |
 | Setup Environment ใหม่ (Dev → Prod) | สร้าง Key แยกตาม Env | 🟢 ตามแผน |
 
 ---
@@ -26,44 +29,17 @@
 
 **ข้อสำคัญ:** Desktop + Cowork ใช้ Config ไฟล์เดียวกัน — แก้ทีเดียว Effect ทั้งสอง
 
----
-
-## Method 1: One-Script (แนะนำ — ทำทั้งสองพร้อมกัน)
-
-Skill นี้มี Script Bundle อยู่ที่ `scripts/rotate_api_key.sh`
-
-```bash
-# ถ้า Skill ติดตั้งใน Claude Code CLI ($HOME/.claude/skills/)
-bash ~/.claude/skills/nanobanana-connection/scripts/rotate_api_key.sh
-
-# หรือถ้ามีไฟล์อยู่ที่อื่น
-bash /path/to/nanobanana-connection/scripts/rotate_api_key.sh
-```
-
-Script จะ:
-1. เตือนให้ลบ Key เก่าที่ AI Studio ก่อน
-2. ขอ Key ใหม่ (Hidden Input ปลอดภัย)
-3. **ทดสอบ Key ก่อนใช้งานจริง** (curl test ที่ Gemini API)
-4. หา `uv` Full Path อัตโนมัติ
-5. **[1/2]** Backup + Update Desktop / Cowork Config (JSON merge)
-6. **[2/2]** Remove + Re-add ใน Claude Code CLI
-7. แสดง Next Step
-
-**Override Defaults (ถ้าจำเป็น):**
-```bash
-TARGET_DIR=/custom/path \
-IMAGE_OUTPUT_DIR=/custom/images \
-bash scripts/rotate_api_key.sh
-```
+**Server Entry ที่ต้องแก้:** ทุก Client ใช้ชื่อ server ว่า `gemini` ชี้ไปที่ binary local เดียวกันคือ
+`/Users/xpickey/.hermes/node/bin/gemini-mcp` (ติดตั้งผ่าน `npm install -g @rlabs-inc/gemini-mcp` — ไม่ใช่ `uv`/`uvx`/`npx` runtime, และไม่อยู่บน iCloud) สิ่งที่ Rotation แตะมีเพียง `env.GEMINI_API_KEY` เท่านั้น ส่วน `GEMINI_IMAGE_MODEL` และ `GEMINI_OUTPUT_DIR` คงเดิม
 
 ---
 
-## Method 2: Manual — Claude Desktop / Cowork
+## Method 1: Manual — Claude Desktop / Cowork
 
 ### ทาง A: ผ่าน Settings UI
 
 1. Settings (Cmd+,) → Developer / MCP Servers
-2. หา `nanobanana` → กด **Edit**
+2. หา `gemini` → กด **Edit**
 3. เปลี่ยน Value ของ `GEMINI_API_KEY`
 4. Save → **Cmd+Q ปิดสนิท → เปิดใหม่**
 
@@ -73,58 +49,88 @@ bash scripts/rotate_api_key.sh
 open -e "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
 ```
 
-หา section `mcpServers.nanobanana.env.GEMINI_API_KEY` แก้ Value → Save → Restart
+หา section `mcpServers.gemini.env.GEMINI_API_KEY` แก้ Value → Save → Restart
 
-### ทาง C: Python One-liner
+โครง Entry ที่ถูกต้องควรหน้าตาแบบนี้ (แก้เฉพาะบรรทัด Key):
+
+```json
+{
+  "mcpServers": {
+    "gemini": {
+      "command": "/Users/xpickey/.hermes/node/bin/gemini-mcp",
+      "env": {
+        "GEMINI_API_KEY": "AIza_NEW_KEY",
+        "GEMINI_IMAGE_MODEL": "gemini-3-pro-image-preview",
+        "GEMINI_OUTPUT_DIR": "~/.local/share/gemini-mcp-images"
+      }
+    }
+  }
+}
+```
+
+### ทาง C: Python One-liner (แก้เฉพาะ Key)
 
 ```bash
 NEW_KEY="AIza..." python3 -c "
 import json, os
 p = os.path.expanduser('~/Library/Application Support/Claude/claude_desktop_config.json')
 with open(p) as f: cfg = json.load(f)
-cfg['mcpServers']['nanobanana']['env']['GEMINI_API_KEY'] = os.environ['NEW_KEY']
+cfg['mcpServers']['gemini']['env']['GEMINI_API_KEY'] = os.environ['NEW_KEY']
 with open(p, 'w') as f: json.dump(cfg, f, indent=2)
-print('✓ Updated')
+print('Updated gemini API key')
 "
 ```
 
 ---
 
-## Method 3: Manual — Claude Code CLI
+## Method 2: Manual — Claude Code CLI
 
-CLI ไม่ Support `mcp edit` — ต้อง Remove + Re-add
+CLI ไม่ Support `mcp edit` — ต้อง Remove + Re-add (ถ้าต้องการแก้แค่ Key อย่างเดียว ใช้ Python One-liner กับ `~/.claude.json` ก็ได้ — ดูท้ายหัวข้อ)
 
 ```bash
 # 1. ลบ Server เดิม
-claude mcp remove nanobanana --scope user
+claude mcp remove gemini --scope user
 
-# 2. Add ใหม่พร้อม Key ใหม่
-claude mcp add nanobanana --scope user \
+# 2. Add ใหม่พร้อม Key ใหม่ (ชี้ binary local ตรง — ไม่มี uv/npx runtime)
+claude mcp add gemini --scope user \
   --env GEMINI_API_KEY=AIza_NEW_KEY \
-  --env IMAGE_OUTPUT_DIR="/Users/xpickey/Documents/Claude/Custom Skill/nanobanana-mcp/images" \
-  --env NANOBANANA_MODEL=auto \
-  -- /Users/xpickey/.local/bin/uv run \
-     --directory "/Users/xpickey/Documents/Claude/Custom Skill/nanobanana-mcp" \
-     python -m nanobanana_mcp_server.server
+  --env GEMINI_IMAGE_MODEL=gemini-3-pro-image-preview \
+  --env GEMINI_OUTPUT_DIR="$HOME/.local/share/gemini-mcp-images" \
+  -- /Users/xpickey/.hermes/node/bin/gemini-mcp
 
 # 3. ตรวจสอบ
 claude mcp list
-claude mcp get nanobanana
+claude mcp get gemini
 
 # 4. ออกจาก Session เดิม (Ctrl+D) → เปิดใหม่
 claude
 # พิมพ์ /mcp ใน Session ใหม่ ตรวจสถานะ
 ```
 
+**ทางลัด — แก้เฉพาะ Key ใน `~/.claude.json` โดยไม่ Remove/Re-add:**
+
+```bash
+NEW_KEY="AIza..." python3 -c "
+import json, os
+p = os.path.expanduser('~/.claude.json')
+with open(p) as f: cfg = json.load(f)
+cfg['mcpServers']['gemini']['env']['GEMINI_API_KEY'] = os.environ['NEW_KEY']
+with open(p, 'w') as f: json.dump(cfg, f, indent=2)
+print('Updated gemini API key in CLI config')
+"
+# จากนั้น Ctrl+D → เปิด session ใหม่
+```
+
 ---
 
 ## Pre-Rotation Checklist
 
-ก่อนรัน Script หรือทำมือ:
+ก่อนทำ:
 
 - [ ] มี Key ใหม่จาก https://aistudio.google.com/apikey พร้อมแล้ว
+- [ ] เปิด **Billing** ที่ AI Studio แล้ว (Image Generation ไม่อยู่ใน Free Tier — ดู `references/billing-setup.md`)
 - [ ] ลบ Key เก่าที่ AI Studio (ถ้ารั่ว/Compromise)
-- [ ] ปิด Claude Desktop / Cowork ไม่จำเป็นต้องปิดตอน Script รัน แต่ต้องปิดหลังจาก Update Config เสร็จ
+- [ ] ปิด Claude Desktop / Cowork ไม่จำเป็นต้องปิดตอนแก้ Config แต่ต้องปิดหลังจาก Update เสร็จ
 - [ ] (Optional) ทดสอบ Key ใหม่ใช้ได้จริง:
   ```bash
   curl -s "https://generativelanguage.googleapis.com/v1beta/models?key=AIza_NEW_KEY" | head -5
@@ -145,19 +151,27 @@ claude
 
 ### Step 2: ตรวจ Connection
 
-- **Desktop / Cowork:** Settings → Developer → ดู `nanobanana` ต้องเป็น Connected (สีเขียว)
-- **Code CLI:** พิมพ์ `/mcp` ใน Session → ดู `nanobanana` ต้องเป็น Connected
+- **Desktop / Cowork:** Settings → Developer → ดู `gemini` ต้องเป็น Connected (สีเขียว)
+- **Code CLI:** พิมพ์ `/mcp` ใน Session → ดู `gemini` ต้องเป็น Connected
 
 ### Step 3: Functional Test
 
-ใช้ Prompt ทดสอบ (ภาพเล็กๆ ประหยัด Credit):
+rlabs ไม่มี `show_output_stats` / health-check tool แยก — ยืนยันด้วยการเรียก image tool จริง (ภาพเล็ก 1K ประหยัด Credit) หรือเช็คเบาๆ ด้วย `gemini-list-image-sessions` (จะตอบกลับโดยไม่กิน Credit ถ้า Key + Server ทำงาน)
+
+ทดสอบ Generate (Prompt สั้น):
 
 ```
-ใช้ nanobanana สร้าง icon รูปแมวการ์ตูนเรียบๆ
-ขนาด 1:1 resolution 1k save ที่ images folder
+ใช้ gemini สร้าง icon รูปแมวการ์ตูนเรียบๆ
+style แบบ minimalist, aspectRatio 1:1, imageSize 1K
 ```
 
-ถ้าได้ภาพ = Rotation สำเร็จ ถ้าได้ Error 401/403 = Key ใหม่อาจไม่เปิด Billing หรือ Key ผิด
+Tool ที่ถูกเรียกเบื้องหลังคือ `gemini-generate-image(prompt, style, aspectRatio, imageSize)` — ภาพจะถูก save ลง `GEMINI_OUTPUT_DIR` อัตโนมัติ (ไม่มี `output_path` param)
+
+| ผลลัพธ์ | ความหมาย |
+|---|---|
+| ได้ภาพกลับมา | Rotation สำเร็จ |
+| Error 401/403 | Key ผิด หรือ Copy ไม่ครบ (มี Space ต้น/ท้าย) |
+| `429` / `RESOURCE_EXHAUSTED` | Billing ยังไม่เปิด → เปิดที่ AI Studio Billing (`references/billing-setup.md`) |
 
 ---
 
@@ -183,13 +197,15 @@ claude
 
 | Env | Key Name | Quota | Use |
 |---|---|---|---|
-| Dev | `nanobanana-dev` | Low ($5/mo cap) | Local Dev, Testing |
-| Staging | `nanobanana-staging` | Mid ($25/mo) | Pre-prod Validation |
-| Prod | `nanobanana-prod` | High ($500+/mo) | Production Server |
+| Dev | `gemini-dev` | Low ($5/mo cap) | Local Dev, Testing |
+| Staging | `gemini-staging` | Mid ($25/mo) | Pre-prod Validation |
+| Prod | `gemini-prod` | High ($500+/mo) | Production Server |
 
 ในแต่ละ Key:
 - ตั้ง **API Restrictions** ใน Cloud Console — Limit เฉพาะ Generative Language API
 - ตั้ง **Application Restrictions** ถ้าใช้จาก Server → Bind ตาม IP / Service Account
+
+> หมายเหตุต้นทุน: rlabs ตั้ง Default Model เป็น `gemini-3-pro-image-preview` (Nano Banana Pro) ราคา ~$0.12/ภาพ ที่ 4K — ตั้ง Quota Cap ให้สอดคล้องกับปริมาณการ Generate จริง
 
 ### 4. Monitor Key Usage
 
@@ -207,8 +223,8 @@ Anomaly ที่ต้องระวัง:
 
 ทำ Dry-run ทุก Quarter:
 1. สร้าง Key ใหม่ทดสอบ
-2. รัน `rotate_api_key.sh` → Time การทำงาน
-3. ตรวจ Verification
+2. แก้ Config ทุก Client (Desktop/Cowork + CLI) → Time การทำงาน
+3. ตรวจ Verification (Functional Test ด้านบน)
 4. ลบ Key ทดสอบ
 
 เป้าหมาย: Rotate ได้ภายใน **<5 นาที** ตั้งแต่ Detect Compromise → Fully Verified
@@ -218,8 +234,11 @@ Anomaly ที่ต้องระวัง:
 ## Troubleshooting
 
 ### Issue 1: "Server disconnected" หลัง Rotate
-**สาเหตุ:** PATH env หาย / uv path เปลี่ยน
-**แก้:** รัน Script `fix_config_V01R02_2026.05.25.sh` (จาก Project Folder) ใหม่อีกครั้ง
+**สาเหตุ:** Binary path ผิด / `@rlabs-inc/gemini-mcp` ถูกถอนหรือย้ายที่
+**แก้:**
+1. ยืนยัน binary ยังอยู่: `ls -l /Users/xpickey/.hermes/node/bin/gemini-mcp`
+2. ถ้าหาย → ติดตั้งใหม่: `npm install -g @rlabs-inc/gemini-mcp`
+3. ตรวจ `command` ใน Config ชี้ไปที่ path เต็มของ binary (ไม่ใช่ `uv`/`npx`)
 
 ### Issue 2: "401 Unauthorized" หลังใส่ Key ใหม่
 **สาเหตุ:** Key ผิด หรือ Billing ไม่เปิด
@@ -229,7 +248,7 @@ Anomaly ที่ต้องระวัง:
    ```bash
    curl "https://generativelanguage.googleapis.com/v1beta/models?key=<NEW_KEY>"
    ```
-3. ถ้าได้ 403 = Billing ไม่เปิด → `references/billing-setup.md`
+3. ถ้าได้ 403 หรือ `429`/`RESOURCE_EXHAUSTED` = Billing ไม่เปิด → `references/billing-setup.md`
 
 ### Issue 3: Cowork ยังใช้ Key เก่า แม้แก้แล้ว
 **สาเหตุ:** ไม่ได้ Restart สนิท
@@ -255,6 +274,15 @@ find "$HOME/Library/Application Support/Claude/" -name "*.backup.*" -mtime +7 -d
 
 ## Rollback Procedure (ถ้า Key ใหม่ใช้งานไม่ได้)
 
+ก่อนแก้ Config แนะนำ Backup ไฟล์เดิมไว้ก่อนทุกครั้ง:
+
+```bash
+DESKTOP_CONFIG="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
+cp "$DESKTOP_CONFIG" "${DESKTOP_CONFIG}.backup.$(date +%Y%m%d_%H%M%S)"
+```
+
+เมื่อต้อง Rollback:
+
 ```bash
 # 1. กลับไปใช้ Backup ล่าสุด
 DESKTOP_CONFIG="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
@@ -262,17 +290,24 @@ LATEST_BACKUP=$(ls -t "${DESKTOP_CONFIG}.backup."* 2>/dev/null | head -1)
 
 if [[ -n "$LATEST_BACKUP" ]]; then
   cp "$LATEST_BACKUP" "$DESKTOP_CONFIG"
-  echo "✓ Rollback แล้ว — Restart Claude Desktop / Cowork"
+  echo "Rollback แล้ว — Restart Claude Desktop / Cowork"
 else
-  echo "❌ ไม่พบ Backup"
+  echo "ไม่พบ Backup"
 fi
 
 # 2. สำหรับ Code CLI ใส่ Key เก่ากลับ (ถ้ายังไม่ลบที่ AI Studio):
-claude mcp remove nanobanana --scope user
-claude mcp add nanobanana --scope user \
+claude mcp remove gemini --scope user
+claude mcp add gemini --scope user \
   --env GEMINI_API_KEY=<OLD_KEY> \
-  -- /path/to/uv run --directory "/path" python -m nanobanana_mcp_server.server
+  --env GEMINI_IMAGE_MODEL=gemini-3-pro-image-preview \
+  --env GEMINI_OUTPUT_DIR="$HOME/.local/share/gemini-mcp-images" \
+  -- /Users/xpickey/.hermes/node/bin/gemini-mcp
 ```
 
 **คำเตือน:** Rollback ใช้เฉพาะกรณี Key ใหม่มีปัญหา + Key เก่ายังไม่ได้ลบที่ AI Studio
 หาก Key เก่าลบไปแล้ว → ต้องสร้าง Key ใหม่อีกตัว แล้ว Rotate ใหม่
+
+---
+
+*V03R01 — Migrated to rlabs/gemini-mcp (`@rlabs-inc/gemini-mcp` v0.8.1) · 2026-06-21*
+*การเปลี่ยนแปลงหลัก: server `nanobanana`→`gemini`, ลบ uv/uvx runtime + Vertex AI ADC (`NANOBANANA_AUTH_METHOD`/`GCP_PROJECT_ID`) + `NANOBANANA_MODEL`, command ชี้ binary local `/Users/xpickey/.hermes/node/bin/gemini-mcp`, ลบ rotate script bundle ที่อิง nanobanana path, Functional Test เปลี่ยนเป็น `gemini-generate-image` / `gemini-list-image-sessions` (ไม่มี `show_output_stats`), env ใหม่ `GEMINI_IMAGE_MODEL` + `GEMINI_OUTPUT_DIR`*

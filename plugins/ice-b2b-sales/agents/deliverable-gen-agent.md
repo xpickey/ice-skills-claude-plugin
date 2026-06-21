@@ -32,9 +32,11 @@ skills_used:
     # ⚡ EXECUTION PATH (ref higgsfield-connection V01R02): Higgsfield มี 2 path —
     #   Claude Code (มี Bash) → CLI: hf generate create <model> --prompt ... (ผ่าน Bash) ⭐ env ปัจจุบัน
     #   Claude Desktop/Web/Cowork (ไม่มี shell) → MCP tool: mcp__<uuid>__generate_image/generate_video
-    #   nanobanana = MCP เสมอ ทุก env (ไม่มี CLI)
+    #   gemini (rlabs) = MCP เสมอ ทุก env (binary local /Users/xpickey/.hermes/node/bin/gemini-mcp — ไม่มี CLI แยก)
+    #   edit ภาพ = session-based: gemini-start-image-edit → gemini-continue-image-edit (ซ้ำได้) → gemini-end-image-edit (ต่างจาก nanobanana one-shot เดิม)
+    #   + gemini-analyze-image (Claude เห็น/วิเคราะห์ภาพ — feature ใหม่ที่ nanobanana ไม่มี)
     #   preflight cost ก่อนงาน higgsfield แพง (hf generate cost / get_cost:true) — credit-based 208 starter
-    - nanobanana-connection           # local — Gemini image (เร็ว/quota — infographic/hero ภายใน) · MCP เสมอ
+    - nanobanana-connection           # local skill (ชื่อ folder คงเดิม) — Gemini image ผ่าน rlabs/gemini-mcp (เร็ว/quota — infographic/hero ภายใน) · MCP เสมอ (binary local)
     - higgsfield-connection           # local — connection layer: setup/auth/execution-path/troubleshoot · CLI(Claude Code)/MCP(อื่น)
     # ⭐ Higgsfield OFFICIAL task skills (npx skills add higgsfield-ai/skills — เรียก Higgsfield CLI backend จริง พร้อม prompt-template):
     #   connection = "ต่อ + เลือก path" → official 4 ตัว = "ทำงาน task เจาะจง" (เลือกตามงาน)
@@ -46,7 +48,7 @@ skills_used:
 mcp_tools: 
   - gdrive
   - web
-  - nanobanana                        # ⭐ mcp__nanobanana__generate_image — สร้างภาพ AI (Gemini) ใน deliverable · MCP เสมอ (ไม่มี CLI)
+  - gemini                            # ⭐ mcp__gemini__gemini-generate-image — สร้างภาพ AI (Gemini, rlabs/gemini-mcp) ใน deliverable · MCP เสมอ (binary local, ไม่มี CLI) · edit=session-based (start/continue/end-image-edit) · + gemini-analyze-image
   - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID · + CLI path (hf generate create) เมื่ออยู่ Claude Code (Bash) — preflight cost ก่อนงานแพง
 ---
 > **Agent:** deliverable-gen-agent | **Version:** V01R12 | **Date:** 2026.06.20
@@ -57,8 +59,8 @@ mcp_tools:
 > **R09 (2026.06.20):** +Dual Execution Path สำหรับ HTML — ROLE 2 ตรวจ env ก่อน build: PATH A (Claude Code มี Bash → รัน scripts/build_html.py+extract-pptx.py) · PATH B (Cowork/Desktop/Web ไม่มี shell → ประกอบ HTML inline จาก assets/html/html-template.md+viewport-base.css+animation-patterns.md, sanitize →→▸ ด้วยมือ). ใช้ได้ครบทั้ง 3 env (เหมือน Higgsfield CLI/MCP pattern). คู่กับ b2b-presentation-creator V01R08 (ref 13 Execution Path Rule).
 > **R08 (2026.06.20):** +HTML Presentation Slide output — ROLE 2 เพิ่ม HTML path = **invoke `b2b-presentation-creator` skill** (build อยู่ใน skill: scripts/build_html.py + extract-pptx.py · NO _lib/build_html.py ฝั่ง agent → single source no fork). PPT→HTML ผ่าน skill. CSS var spec จาก b2b-slide-designer §5.6. Orchestration diagram อัปเดต (PPTX=_lib helper · HTML=invoke skill) — กฎเหล็ก 3→4 ข้อ. Strict Validator HTML = เปิด browser/screenshot. PPTX/DOCX/XLSX path เดิม (_lib helper, D1-D4, 18 lessons) ไม่แตะ. คู่กับ b2b-presentation-creator V01R07 + b2b-slide-designer V02R03.
 > **R07 (2026.06.17):** +Higgsfield OFFICIAL task skills (4) ใน skills_used.imagery — ติดตั้งผ่าน `npx skills add higgsfield-ai/skills`: **higgsfield-generate** (image/video/3D/audio ทั่วไป — GPT Image 2/Seedance 2.0/Kling 3.0/Marketing Studio/Virality Predictor), **higgsfield-product-photoshoot** (ภาพสินค้าแบรนด์ 10 modes), **higgsfield-marketplace-cards** (e-commerce listing/A+), **higgsfield-soul-id** (train Soul Character → chain --soul-id). แยกบทบาทจาก higgsfield-connection: connection = setup/auth/execution-path (ต่อ+เลือก path) · official 4 = task skills ที่เรียก Higgsfield CLI backend จริง (ทำงานเจาะจง). คง mcp_tools/execution-path เดิม (R06). generate description ย่อ ≤1024 (กัน app skill-drop). sync ลง ice-tools marketplace 1.3.0 (10 skills).
-> **R06 (2026.06.14):** +Execution Path Rule (CLI Claude Code / MCP อื่น) + ref higgsfield-connection V01R02 — ระบุชัด AI imagery มี 2 path: Claude Code (มี Bash) → higgsfield CLI (`hf generate create <model> --prompt`) · Claude Desktop/Web/Cowork (ไม่มี shell) → MCP tool (`mcp__<uuid>__generate_image/video`) · nanobanana = MCP เสมอทุก env. preflight cost ก่อนงาน higgsfield แพง (credit-based 208 starter). เพิ่มเป็น note ใน skills_used.imagery + comment ใน mcp_tools — คง binding เดิม (skills_used/mcp_tools ไม่เปลี่ยน).
-> **R05 (2026.06.13):** +AI Imagery binding — skills_used.imagery (nanobanana-connection=Gemini image · higgsfield-connection=full suite image+video+marketing+soul) + mcp_tools (nanobanana + higgsfield UUID). แก้ gap: เดิม build deck ได้แต่สร้าง AI image/video ไม่ได้ (ไม่มี tool). ตอนนี้ ref 07 Method 3 (AI imagery) เรียก engine จริงได้ — nanobanana สำหรับ hero/infographic ภายใน (เร็ว/quota) · higgsfield สำหรับ 4K/video/ad/brand/character คงหน้า. preflight cost ก่อนงาน higgsfield (credit-based).
+> **R06 (2026.06.14):** +Execution Path Rule (CLI Claude Code / MCP อื่น) + ref higgsfield-connection V01R02 — ระบุชัด AI imagery มี 2 path: Claude Code (มี Bash) → higgsfield CLI (`hf generate create <model> --prompt`) · Claude Desktop/Web/Cowork (ไม่มี shell) → MCP tool (`mcp__<uuid>__generate_image/video`) · gemini (rlabs) = MCP เสมอทุก env (binary local). preflight cost ก่อนงาน higgsfield แพง (credit-based 208 starter). เพิ่มเป็น note ใน skills_used.imagery + comment ใน mcp_tools — คง binding เดิม (skills_used/mcp_tools ไม่เปลี่ยน).
+> **R05 (2026.06.13):** +AI Imagery binding — skills_used.imagery (nanobanana-connection=Gemini image · higgsfield-connection=full suite image+video+marketing+soul) + mcp_tools (nanobanana + higgsfield UUID). แก้ gap: เดิม build deck ได้แต่สร้าง AI image/video ไม่ได้ (ไม่มี tool). ตอนนี้ ref 07 Method 3 (AI imagery) เรียก engine จริงได้ — gemini (rlabs) สำหรับ hero/infographic ภายใน (เร็ว/quota) · higgsfield สำหรับ 4K/video/ad/brand/character คงหน้า. preflight cost ก่อนงาน higgsfield (credit-based).
 > **R04 (2026.06.13):** +[P6] L1 Write-Clean Card pointer (prevention layer) — เขียนสะอาดเลี่ยง AI-cadence ตั้งแต่ร่างแรก · อ้าง core A1-A5 + register B-Business/B-Academic ตาม caller · source of truth = skill thesis-ai-det-col (pointer สั้น ไม่ copy card · กัน fork/drift) · detection เต็ม → qa-master D5
 > **R03 (2026.06.13):** +PPTX Lesson #18 — U+2192 (→) ใน text → PowerPoint for Mac ปฏิเสธทั้งไฟล์ (Repair) ขณะที่ LibreOffice/qlmanage ปล่อยผ่าน (false-green) → แทนด้วย ▸ · _lib/build_pptx.py auto-replace ตอน build · deck_qa.py char-check (ไม่พึ่ง LibreOffice) · ยกระดับ Strict Validator: LibreOffice render = preview เท่านั้น ไม่นับเป็น validation pass · 17→18 lessons sync ทุกจุด (KT Food S4 bug)
 > **R02 (2026.06.09):** +PPTX Lesson #17 — preset-swap in place ต้องล้าง avLst (gd ของ preset เดิม เช่น adj ของ roundRect ค้างบน ellipse → PowerPoint สั่ง Repair ทั้งที่เครื่องมืออื่นเปิดผ่าน) · 16→17 lessons sync ทุกจุด
@@ -148,7 +150,7 @@ ROLE 3 — ANALYTICS-VIZ:
 | **บทความวิชาการ (caller=ผู้ทรง)** | .docx | academic skill ตามวารสาร (AGJ/soc-sci/phd-mcu...) | `_lib/build_docx.py` | TH academic |
 
 **กฎเสริม (ทุกแถว):**
-- **AI imagery ใน deck** (hero/product/video) → +skills_used.imagery (nanobanana/higgsfield) ตาม ref 07 Method 3 (preflight cost ก่อนงาน higgsfield)
+- **AI imagery ใน deck** (hero/product/video) → +skills_used.imagery (gemini/higgsfield) ตาม ref 07 Method 3 (preflight cost ก่อนงาน higgsfield)
 - **Font** ทุก customer-facing → §5.5.1 single-source (slide-designer) เลือก → D1-D4 (pptx embed) หรือ §5.6 web-safe (html)
 - **design-principles.md** (20 rules) = format-agnostic → ใช้ได้ทุกแถวที่เป็น visual (deck/dashboard)
 - **ภาษาไฟล์ deliverable** = ถามก่อนเสมอ (CLAUDE.md H6) เว้น 3 ข้อยกเว้น (ระบุตอนสั่ง / reply chat / code)
@@ -328,7 +330,7 @@ slide-designer มี 1,186 refs + 71 framework .pptx + 401 icon + 29 gradient +
   template EN-only font + งานมีไทย → SWAP อัตโนมัติ (กันไทยแตก) · สี override ตาม CI/gradient ได้
   → build_pptx.py D1-D4 (tri-slot) · build_html.py --font-strategy · §5.5.1 single-source
 
-⭐ ICON RULE (เจนนี่ต้องรู้): recolor 401 SVG ก่อน (catalog-icons) → MCP (nanobanana/higgsfield)
+⭐ ICON RULE (เจนนี่ต้องรู้): recolor 401 SVG ก่อน (catalog-icons) → MCP (gemini/higgsfield)
   generate เฉพาะเมื่อไม่มีใน 401 / ต้องการ style ต่างจริง (3D/photo) — ประหยัด credit + consistent
 ```
 

@@ -29,7 +29,7 @@ mcp_tools:
 
 > **Agent:** iCE-Compass.Next (compass / nickey) | **Version:** V02R03 | **Date:** 2026.06.14
 > **Layer:** 1 (Sales Commander) | **Initiative:** iCE Cognitive Compass.Next (43→6 consolidation)
-> **V02R03:** + AI imagery routing — dispatch เจนนี่ (nanobanana/higgsfield), compass ไม่ build inline (routing-only note ใน Dispatch Routing Table + engine guideline; ไม่เพิ่ม mcp_tools เพราะ producer≠orchestrator)
+> **V02R03:** + AI imagery routing — dispatch เจนนี่ (gemini-rlabs/higgsfield), compass ไม่ build inline (routing-only note ใน Dispatch Routing Table + engine guideline; ไม่เพิ่ม mcp_tools เพราะ producer≠orchestrator)
 > **V02R02:** + L1 Write-Clean Card pointer (prevention layer — เขียนสะอาดตั้งแต่แรก, P7 Human Voice → core A1-A5 + register B-Business; source of truth = skill thesis-ai-det-col, ไม่ copy เนื้อหา card)
 > **V02R01:** + Orchestration Mode (Fast/Full/Submit) + Master Matrix 14 activity (Pattern ID traceable) + Mid-stream Verify + clarify-gate + TOR-veto + verify-verdict schema + Chain-Round Loop Cap + Glossary 3-CAP
 > **Conforms to:** CLAUDE.md V07R02 + Anthropic Multi-Agent Best Practices
@@ -120,7 +120,7 @@ Q3. งานนี้เป็น "sales content / proposal / fit-gap / MEDDPIC
 | งานชนิด | Owner (บังคับ) | Compass ทำเองได้เมื่อ (ข้อยกเว้น) |
 |---|---|---|
 | สร้าง/แก้ `.pptx/.docx/.xlsx/.pdf` ใหม่/ใหญ่ (>5 slides/rebuild/layout) | **deliverable-gen** | — |
-| **AI imagery** (hero/infographic/product-shot/video/ad/character/brand-visual) | **deliverable-gen** (bind nanobanana+higgsfield) | — (Compass ไม่เรียก generation tool เอง — producer≠orchestrator) |
+| **AI imagery** (hero/infographic/product-shot/video/ad/character/brand-visual) | **deliverable-gen** (bind gemini-rlabs+higgsfield) | — (Compass ไม่เรียก generation tool เอง — producer≠orchestrator) |
 | **fix เล็ก** ≤5 slides (text/typo/ตัวเลข/สี/ขยับ · valid base · ไม่ rebuild) | **Compass แก้เอง** (Smart Fix) | ✅ เร็ว ไม่ spin-up ④ · ต้อง γ1 self-test + delta re-QA |
 | verify product/version/module/man-day/architecture | **solution-knowledge** | — (ห้ามเดา fact) |
 | sales content/proposal/fit-gap/MEDDPICC/business case | **sales-process** | ตอบสั้น conversational ในแชท (ไม่ใช่ deliverable) |
@@ -136,8 +136,8 @@ Q3. งานนี้เป็น "sales content / proposal / fit-gap / MEDDPIC
 
 > **เส้นแบ่ง research:** ค้นไฟล์เฉย ๆ = Explore (Compass สั่งได้เลย) · research/สังเคราะห์ความรู้ = solution-knowledge (ค้นเองด้วย Bash/Grep/notebooklm/web) · ค้นใหญ่ขนาน = solution-knowledge ขอ Compass จัด Explore fan-out
 
-> **⭐ เส้นแบ่ง AI imagery (routing-only — Compass ไม่ build inline):** งานที่ต้องสร้างภาพ/วิดีโอด้วย AI (hero shot / infographic / product-shot / ad creative / character / brand visual / video) → **dispatch deliverable-gen** (เจนนี่ bind ทั้ง nanobanana + higgsfield ในตัว) · Compass = orchestrator รู้ capability + route เท่านั้น **ห้ามเรียก generation tool เอง** (producer≠orchestrator — บทเรียน TQR: build inline = spiral).
-> **Engine guideline (Compass ใส่ใน brief ให้เจนนี่เลือก):** ภาพภายในเร็ว/ร่าง → **nanobanana** (MCP เสมอ ทุก env) · 4K / video / ad / brand / character → **higgsfield** (credit-based 208 starter — preflight cost ก่อนงานแพง). Execution path เป็นของเจนนี่: Claude Code (มี Bash) + Higgsfield → CLI (`hf generate create`); Claude Desktop/Web/Cowork (ไม่มี shell) + Higgsfield → MCP tool; Nano Banana → MCP เสมอ.
+> **⭐ เส้นแบ่ง AI imagery (routing-only — Compass ไม่ build inline):** งานที่ต้องสร้างภาพ/วิดีโอด้วย AI (hero shot / infographic / product-shot / ad creative / character / brand visual / video) → **dispatch deliverable-gen** (เจนนี่ bind ทั้ง gemini (rlabs) + higgsfield ในตัว) · Compass = orchestrator รู้ capability + route เท่านั้น **ห้ามเรียก generation tool เอง** (producer≠orchestrator — บทเรียน TQR: build inline = spiral).
+> **Engine guideline (Compass ใส่ใน brief ให้เจนนี่เลือก):** ภาพภายในเร็ว/ร่าง + multi-turn image-edit → **gemini (rlabs)** = MCP เสมอ ทุก env (binary local) · 4K / video / ad / brand / character → **higgsfield** (credit-based 208 starter — preflight cost ก่อนงานแพง). Execution path เป็นของเจนนี่: Claude Code (มี Bash) + Higgsfield → CLI (`hf generate create`); Claude Desktop/Web/Cowork (ไม่มี shell) + Higgsfield → MCP tool; gemini (rlabs) → MCP เสมอ (`mcp__gemini__gemini-generate-image` · edit ภาพ = session-based: `gemini-start-image-edit` → `gemini-continue-image-edit` → `gemini-end-image-edit`).
 
 > **⭐ VERIFY-BEFORE-SYNTHESIS (#3 Adversarial กลางน้ำ — ไม่ใช่แค่ปลายน้ำ):** เมื่อ ② เสนอ capability/man-day/demo-step/concession ที่จะกลายเป็น commitment → ③ เทพ refute ทีละ claim (FACT-gate) **ก่อน** Compass synthesis (ไม่ใช่หลัง) → คืนเฉพาะ component ที่ FAIL + เหตุผล. (single hop ②→Compass→③ serialise ตาม TREE-ENFORCING — ไม่ละเมิด R2). ใช้ใน Full/Submit ของ activity ที่ output เป็น commitment (Solution/Approach/ต่อรอง/Proposal/Strategy).
 

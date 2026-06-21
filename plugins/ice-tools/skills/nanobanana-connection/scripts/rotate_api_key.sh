@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # ============================================================
-# Nanobanana MCP — API Key Rotation Script
+# Gemini Image MCP (rlabs/gemini-mcp) — API Key Rotation Script
 # Bundled in: nanobanana-connection skill
-# Version: V01R01 | Date: 2026.05.25
+# Version: V02R01 | Date: 2026.06.21
+#
+# Engine: @rlabs-inc/gemini-mcp (binary local, ไม่ใช่ uv/Vertex)
+#   Migrated from nanobanana MCP (uv + Custom Skill path บน iCloud) → rlabs/gemini-mcp.
 #
 # Purpose:
 #   เปลี่ยน Gemini API Key พร้อมกันใน:
@@ -15,23 +18,26 @@
 #   chmod +x scripts/rotate_api_key.sh && ./scripts/rotate_api_key.sh
 #
 # Environment Overrides (optional):
-#   TARGET_DIR=/path/to/nanobanana-mcp
-#   IMAGE_OUTPUT_DIR=/path/to/images
+#   GEMINI_BIN=/path/to/gemini-mcp          (default: ~/.hermes/node/bin/gemini-mcp)
+#   GEMINI_OUTPUT_DIR=/path/to/images       (default: ~/.local/share/gemini-mcp-images)
+#   GEMINI_IMAGE_MODEL=gemini-3-pro-image-preview
 # ============================================================
 
 set -e
 
 # ----- Defaults (override via env if needed) -----
-TARGET_DIR="${TARGET_DIR:-/Users/xpickey/Documents/Claude/Custom Skill/nanobanana-mcp}"
+GEMINI_BIN="${GEMINI_BIN:-$HOME/.hermes/node/bin/gemini-mcp}"
+GEMINI_OUTPUT_DIR="${GEMINI_OUTPUT_DIR:-$HOME/.local/share/gemini-mcp-images}"
+GEMINI_IMAGE_MODEL="${GEMINI_IMAGE_MODEL:-gemini-3-pro-image-preview}"
 DESKTOP_CONFIG="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
-IMAGE_OUTPUT_DIR="${IMAGE_OUTPUT_DIR:-$TARGET_DIR/images}"
+SERVER_NAME="gemini"
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo -e "${GREEN}=== Nanobanana API Key Rotation ===${NC}"
+echo -e "${GREEN}=== Gemini (rlabs/gemini-mcp) API Key Rotation ===${NC}"
 echo ""
 
 # ----- เตือนเรื่อง Key เก่า -----
@@ -84,18 +90,14 @@ case "$HTTP_CODE" in
 esac
 echo ""
 
-# ----- หา Full Path ของ uv -----
-UV_PATH=""
-for c in "$HOME/.local/bin/uv" "/opt/homebrew/bin/uv" "/usr/local/bin/uv" "$(which uv 2>/dev/null)"; do
-  if [[ -x "$c" ]]; then UV_PATH="$c"; break; fi
-done
-
-if [[ -z "$UV_PATH" ]]; then
-  echo -e "${RED}❌ หา uv ไม่เจอ — ติดตั้งก่อน:${NC}"
-  echo "   curl -LsSf https://astral.sh/uv/install.sh | sh"
+# ----- ตรวจ binary ของ gemini-mcp -----
+if [[ ! -x "$GEMINI_BIN" ]]; then
+  echo -e "${RED}❌ หา gemini-mcp binary ไม่เจอที่ $GEMINI_BIN${NC}"
+  echo "   ติดตั้งก่อน: npm install -g @rlabs-inc/gemini-mcp"
+  echo "   หรือ override ด้วย: GEMINI_BIN=/path/to/gemini-mcp bash $0"
   exit 1
 fi
-echo -e "${GREEN}✓ uv path: $UV_PATH${NC}"
+echo -e "${GREEN}✓ gemini-mcp binary: $GEMINI_BIN${NC}"
 echo ""
 
 # ----- [1/2] Update Claude Desktop / Cowork -----
@@ -108,21 +110,21 @@ if [[ -f "$DESKTOP_CONFIG" ]]; then
   echo "  สำรอง Config เดิม → $BACKUP"
 
   # Update via Python (handles JSON parsing properly)
-  TARGET_DIR_ESC="$TARGET_DIR" \
-  IMAGE_OUTPUT_DIR_ESC="$IMAGE_OUTPUT_DIR" \
-  UV_PATH_ESC="$UV_PATH" \
+  GEMINI_BIN_ESC="$GEMINI_BIN" \
+  GEMINI_OUTPUT_DIR_ESC="$GEMINI_OUTPUT_DIR" \
+  GEMINI_IMAGE_MODEL_ESC="$GEMINI_IMAGE_MODEL" \
   NEW_KEY_ESC="$NEW_KEY" \
-  HOME_ESC="$HOME" \
+  SERVER_NAME_ESC="$SERVER_NAME" \
   DESKTOP_CONFIG_ESC="$DESKTOP_CONFIG" \
   python3 <<'PYEOF'
-import json, os, sys
+import json, os
 
 p = os.environ['DESKTOP_CONFIG_ESC']
-target_dir = os.environ['TARGET_DIR_ESC']
-image_dir = os.environ['IMAGE_OUTPUT_DIR_ESC']
-uv_path = os.environ['UV_PATH_ESC']
+gemini_bin = os.environ['GEMINI_BIN_ESC']
+output_dir = os.environ['GEMINI_OUTPUT_DIR_ESC']
+image_model = os.environ['GEMINI_IMAGE_MODEL_ESC']
 new_key = os.environ['NEW_KEY_ESC']
-home = os.environ['HOME_ESC']
+server = os.environ['SERVER_NAME_ESC']
 
 try:
     with open(p) as f:
@@ -132,23 +134,22 @@ except (json.JSONDecodeError, FileNotFoundError):
 
 cfg.setdefault('mcpServers', {})
 
-if 'nanobanana' not in cfg['mcpServers']:
-    cfg['mcpServers']['nanobanana'] = {
-        "command": uv_path,
-        "args": ["run", "--directory", target_dir,
-                 "python", "-m", "nanobanana_mcp_server.server"],
+if server not in cfg['mcpServers']:
+    cfg['mcpServers'][server] = {
+        "type": "stdio",
+        "command": gemini_bin,
+        "args": [],
         "env": {
-            "IMAGE_OUTPUT_DIR": image_dir,
-            "NANOBANANA_MODEL": "auto",
-            "PATH": f"{home}/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+            "GEMINI_IMAGE_MODEL": image_model,
+            "GEMINI_OUTPUT_DIR": output_dir
         }
     }
-    print("  สร้าง nanobanana entry ใหม่")
+    print(f"  สร้าง {server} entry ใหม่")
 else:
-    print("  พบ nanobanana entry เดิม")
+    print(f"  พบ {server} entry เดิม")
 
-cfg['mcpServers']['nanobanana'].setdefault('env', {})
-cfg['mcpServers']['nanobanana']['env']['GEMINI_API_KEY'] = new_key
+cfg['mcpServers'][server].setdefault('env', {})
+cfg['mcpServers'][server]['env']['GEMINI_API_KEY'] = new_key
 
 with open(p, 'w') as f:
     json.dump(cfg, f, indent=2)
@@ -161,15 +162,14 @@ else
   cat > "$DESKTOP_CONFIG" <<EOF
 {
   "mcpServers": {
-    "nanobanana": {
-      "command": "$UV_PATH",
-      "args": ["run", "--directory", "$TARGET_DIR",
-               "python", "-m", "nanobanana_mcp_server.server"],
+    "$SERVER_NAME": {
+      "type": "stdio",
+      "command": "$GEMINI_BIN",
+      "args": [],
       "env": {
         "GEMINI_API_KEY": "$NEW_KEY",
-        "IMAGE_OUTPUT_DIR": "$IMAGE_OUTPUT_DIR",
-        "NANOBANANA_MODEL": "auto",
-        "PATH": "$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+        "GEMINI_IMAGE_MODEL": "$GEMINI_IMAGE_MODEL",
+        "GEMINI_OUTPUT_DIR": "$GEMINI_OUTPUT_DIR"
       }
     }
   }
@@ -182,24 +182,24 @@ echo ""
 # ----- [2/2] Update Claude Code CLI -----
 echo -e "${YELLOW}[2/2] อัปเดต Claude Code CLI...${NC}"
 if command -v claude &> /dev/null; then
-  claude mcp remove nanobanana --scope user 2>/dev/null && \
+  claude mcp remove "$SERVER_NAME" --scope user 2>/dev/null && \
     echo "  ลบ Entry เดิมแล้ว" || echo "  ไม่มี Entry เดิม (ปกติ ถ้าเพิ่มครั้งแรก)"
 
-  claude mcp add nanobanana --scope user \
+  claude mcp add "$SERVER_NAME" --scope user \
     --env "GEMINI_API_KEY=$NEW_KEY" \
-    --env "IMAGE_OUTPUT_DIR=$IMAGE_OUTPUT_DIR" \
-    --env "NANOBANANA_MODEL=auto" \
-    -- "$UV_PATH" run --directory "$TARGET_DIR" python -m nanobanana_mcp_server.server
+    --env "GEMINI_IMAGE_MODEL=$GEMINI_IMAGE_MODEL" \
+    --env "GEMINI_OUTPUT_DIR=$GEMINI_OUTPUT_DIR" \
+    -- "$GEMINI_BIN"
 
   echo -e "${GREEN}✓ Code CLI: เสร็จ${NC}"
 else
   echo -e "${YELLOW}⚠️  ไม่พบ claude command — ข้าม Code CLI${NC}"
   echo "    หากต้องการ Setup ภายหลัง รัน:"
-  echo "    claude mcp add nanobanana --scope user \\"
+  echo "    claude mcp add $SERVER_NAME --scope user \\"
   echo "      --env GEMINI_API_KEY=<key> \\"
-  echo "      --env IMAGE_OUTPUT_DIR=$IMAGE_OUTPUT_DIR \\"
-  echo "      -- $UV_PATH run --directory \"$TARGET_DIR\" \\"
-  echo "         python -m nanobanana_mcp_server.server"
+  echo "      --env GEMINI_IMAGE_MODEL=$GEMINI_IMAGE_MODEL \\"
+  echo "      --env GEMINI_OUTPUT_DIR=$GEMINI_OUTPUT_DIR \\"
+  echo "      -- $GEMINI_BIN"
 fi
 echo ""
 
@@ -210,9 +210,9 @@ echo "ขั้นต่อไป (สำคัญ):"
 echo "  1. Cmd+Q ปิด Claude Desktop / Cowork สนิท → เปิดใหม่"
 echo "  2. ออกจาก Claude Code Session (Ctrl+D) → เปิดใหม่ → /mcp ตรวจ"
 echo "  3. ลองพรอมต์ทดสอบ:"
-echo "     'ใช้ nanobanana ทำภาพ logo มินิมอล สีน้ำเงิน 1:1'"
+echo "     'ทำภาพ logo มินิมอล สีน้ำเงิน 1:1' (เรียก gemini-generate-image)"
 echo ""
-if [[ -f "$BACKUP" ]]; then
+if [[ -n "${BACKUP:-}" && -f "$BACKUP" ]]; then
   echo -e "${YELLOW}⚠️  Backup เก่าอยู่ที่: $BACKUP${NC}"
   echo "    ลบทิ้งได้เมื่อยืนยันว่า Config ใหม่ใช้งานได้"
 fi
