@@ -1,0 +1,49 @@
+# Bridge Protocol — handoff, turn-taking, transcript
+
+## Roles
+- **Claude** = หลัก/ออกแบบ + **คุม loop** (ตัดสินใจว่าจะถกต่อ/จบ)
+- **Codex (gpt-5.5)** = peer reviewer / ผู้ช่วยเขียน / second opinion
+
+ต่างจาก phud.me agent-bridge (auto-loop ผ่าน fswatch + 2 terminal) — ที่นี่ Claude เรียก `codex exec` ผ่าน Bash ตรง ๆ จึง **ไม่ต้อง fswatch** เหลือแค่ helper เดียว. handoff/feedback กลายเป็น transcript log (audit) แทน IPC channel.
+
+## Turn shape: PROPOSE → CRITIQUE → REFINE
+1. **PROPOSE** (Claude `--new`) — เสนอ design/โค้ด/คำถาม พร้อม handoff fields
+2. **CRITIQUE** (Codex) — แย้ง/เสริม/ชี้ช่องโหว่
+3. **REFINE** (Claude `--resume`) — ปรับตาม feedback + ถามต่อ → วน
+4. หยุดเมื่อ converge หรือถึง LOOP CAP (~5 turn) → Claude สรุปให้ผู้ใช้
+
+## Handoff fields (ใส่ใน prompt แต่ละ turn)
+Codex เสนอเอง 4 field นี้ตอน prototype (ใช้เป็นโครง):
+- **objective** — เป้าหมายรอบนี้ / นิยาม "เสร็จ"
+- **context_delta** — อะไรเปลี่ยนจากรอบก่อน
+- **work_done** — Claude ทำ/ตัดสินใจอะไรไปแล้ว
+- **next_request** — อยากให้ Codex ทำอะไรต่อ (**สำคัญสุด** — กัน Codex เดาเอง)
+
+ไม่ต้องใส่ครบทุก field ทุก turn — turn แรกควรครบ, turn ต่อ ๆ ไป resume จำ context ให้แล้ว เน้น `next_request`.
+
+## Transcript (audit)
+helper append ทุก turn ลง `$BRIDGE_DIR/transcript.md`:
+```
+### CLAUDE → CODEX  (timestamp)  [--new|--resume]
+<prompt ที่ Claude ส่ง>
+
+### CODEX → CLAUDE  (timestamp)  [session <id>]
+<คำตอบ Codex>
+---
+```
+ใช้ตรวจย้อนบทสนทนา / debug / สรุปให้ผู้ใช้ได้
+
+## ตัวอย่าง session จริง (prototype 2026.06.22)
+3-turn ถก "handoff message ควรมี field อะไร":
+- **T1** (Claude --new): ถามโจทย์ → Codex เสนอ 4 field (objective/context_delta/work_done/next_request)
+- **T2** (Claude --resume): "เลือก field สำคัญสุด" → Codex ตอบ `next_request` + เหตุผล (**อ้างชื่อ field เดิม = จำได้**)
+- **T3** (Claude --resume): "สรุป 1 ประโยค" → Codex สรุปครบทั้ง 4 field (**จำทั้ง thread**)
+- session id เดียวตลอด, input_tokens โต 24k→47k (context สะสม)
+
+## ส่งโค้ดให้ Codex review (pattern)
+ใส่โค้ด/diff ใน prompt ตรง ๆ (helper รับ prompt เป็น arg). ถ้าโค้ดยาว:
+```bash
+ask-codex.sh --new "review โค้ดนี้ objective=หาบั๊ก next_request=ชี้ file:line ที่ผิด:
+$(cat path/to/file)"
+```
+หรือถ้าต้องให้ Codex **อ่าน/แก้ไฟล์เอง** → ต้อง `BRIDGE_SANDBOX=workspace-write` + `-C <repo>` (ถามผู้ใช้ก่อน).
