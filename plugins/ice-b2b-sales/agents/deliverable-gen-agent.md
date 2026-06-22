@@ -36,8 +36,9 @@ skills_used:
     #   edit ภาพ = session-based: gemini-start-image-edit → gemini-continue-image-edit (ซ้ำได้) → gemini-end-image-edit (ต่างจาก nanobanana one-shot เดิม)
     #   + gemini-analyze-image (Claude เห็น/วิเคราะห์ภาพ — feature ใหม่ที่ nanobanana ไม่มี)
     #   preflight cost ก่อนงาน higgsfield แพง (hf generate cost / get_cost:true) — credit-based 208 starter
-    - nanobanana-connection           # local skill (ชื่อ folder คงเดิม) — Gemini image ผ่าน rlabs/gemini-mcp (เร็ว/quota — infographic/hero ภายใน) · MCP เสมอ (binary local)
-    - higgsfield-connection           # local — connection layer: setup/auth/execution-path/troubleshoot · CLI(Claude Code)/MCP(อื่น)
+    # ⭐ PRIORITY: Higgsfield = engine หลัก (ทุกงานภาพ/วิดีโอ default) · gemini (rlabs) = FALLBACK เสริม (ภาพเร็ว/ร่าง/ประหยัด credit/multi-turn edit เท่านั้น)
+    - higgsfield-connection           # local — connection layer: setup/auth/execution-path/troubleshoot · CLI(Claude Code)/MCP(อื่น) · ⭐ engine หลัก
+    - nanobanana-connection           # local skill (ชื่อ folder คงเดิม) — Gemini image ผ่าน rlabs/gemini-mcp · FALLBACK เสริม: ภาพ hero/infographic ภายในเร็ว/ร่าง ที่ไม่ต้อง 4K + ประหยัด credit (quota Google) หรือ multi-turn image-edit · MCP เสมอ (binary local)
     # ⭐ Higgsfield OFFICIAL task skills (npx skills add higgsfield-ai/skills — เรียก Higgsfield CLI backend จริง พร้อม prompt-template):
     #   connection = "ต่อ + เลือก path" → official 4 ตัว = "ทำงาน task เจาะจง" (เลือกตามงาน)
     - higgsfield-generate             # local — generate image/video/3D/audio ทั่วไป (GPT Image 2 / Seedance 2.0 / Nano Banana 2-Pro / Kling 3.0 / Marketing Studio / Virality Predictor) · งานหลัก hero/clip/animate ใน deck

@@ -332,13 +332,13 @@ dot -Tsvg orgchart.dot -o orgchart.svg
 **Engine — เลือก skill ตามงาน:**
 | งาน | engine | skill (เปิดตัวนี้) |
 |---|---|---|
-| hero/divider/background ภายใน เร็ว | **Gemini image** (rlabs/gemini-mcp · Nano Banana Pro) `mcp__gemini__gemini-generate-image` | `nanobanana-connection` |
-| image/video/3D/audio ทั่วไป, 4K hero, animate, motion | **Higgsfield** (GPT Image 2 / Seedance 2.0 / Nano Banana Pro / Kling 3.0) | **`higgsfield-generate`** |
+| **PRIMARY** — image/video/3D/audio ทั่วไป, 4K hero, animate, motion | **Higgsfield** (GPT Image 2 / Seedance 2.0 / Nano Banana Pro / Kling 3.0) | **`higgsfield-generate`** |
 | product shot / DTC ad / brand visual (10 modes) | **Higgsfield product-photoshoot** (GPT Image 2 enhanced) | **`higgsfield-product-photoshoot`** |
 | character/avatar คงหน้าข้ามหลายสไลด์ | **Higgsfield Soul ID** → chain `--soul-id` เข้า generate | **`higgsfield-soul-id`** |
 | marketplace listing card / A+ content (e-commerce) | **Higgsfield marketplace-cards** | **`higgsfield-marketplace-cards`** |
+| FALLBACK — hero/divider/background ภายใน เร็ว/ประหยัด credit | **Gemini image** (rlabs/gemini-mcp · Nano Banana Pro) `mcp__gemini__gemini-generate-image` | `nanobanana-connection` |
 
-> **เลือกอย่างไร:** ภาพ hero/พื้นหลังภายในที่ไม่ต้อง 4K → **nanobanana** (เร็ว, quota Google, ไม่เปลืองเครดิต). งานคุณภาพสูง/video/ad/brand/character → **Higgsfield official skill** ที่ตรงงาน (generate ทั่วไป · product-photoshoot ภาพสินค้า · soul-id avatar · marketplace-cards e-commerce) — credit-based, **preflight cost (`hf generate cost` / `get_cost: true`) ก่อนสั่ง**. การต่อ/auth/execution-path (CLI Claude Code · MCP Desktop/Web) → `higgsfield-connection`. deliverable-gen-agent (เจนนี่) bind ครบทั้ง connection + 4 official + MCP แล้ว — เรียกได้ตอน build deck.
+> **เลือกอย่างไร (Higgsfield = หลัก, gemini = เสริม):** ค่าเริ่มต้นทุกงานภาพ/วิดีโอ → **Higgsfield official skill** ที่ตรงงาน (generate ทั่วไป/4K/animate · product-photoshoot ภาพสินค้า · soul-id avatar · marketplace-cards e-commerce) — credit-based, **preflight cost (`hf generate cost` / `get_cost: true`) ก่อนสั่ง**. การต่อ/auth/execution-path (CLI Claude Code · MCP Desktop/Web) → `higgsfield-connection`. **ใช้ gemini (rlabs) เป็นตัวเสริมเฉพาะเมื่อ** ต้องการภาพ hero/พื้นหลังภายในแบบเร็ว/ร่าง ที่ไม่ต้อง 4K และอยากประหยัด credit (gemini = quota Google, ไม่เปลือง credit Higgsfield) หรือเมื่อต้อง multi-turn image-edit (session-based). deliverable-gen-agent (เจนนี่) bind ครบทั้ง connection + 4 official + MCP แล้ว — เรียกได้ตอน build deck.
 
 **When NOT to use:**
 - Any diagram claiming to show the customer's actual system
