@@ -68,4 +68,12 @@ SEMANTIC: success #16A34A · warning #D97706 · error #DC2626
 
 ---
 
+## Off-Catalog Palette → Custom-Theme Generation (§4.9)
+
+เมื่อ brief ขอสีที่ไม่อยู่ใน catalog/CI (เช่น "moss/lichen/herbal", "neon cyber", "warm terracotta") → **อย่า outsource หรือ recolor มั่ว** ใช้ **§4.9 Custom-Theme Generation** ใน SKILL.md (สร้าง palette ใหม่: accent→paper→ink→greys, vibe-to-hue, WCAG check).
+
+**Tint-neutral rule (anti-slop §4.8):** greys/neutrals **ห้ามใช้ pure `#000` / `#FFF`** — ต้อง tint เข้าหา accent hue เล็กน้อย (accent ฟ้า → ink `#1E2937` ไม่ใช่ `#000000`, paper `#FAFBFC` ไม่ใช่ `#FFFFFF`). pure black/white = AI default tell.
+
+---
+
 *Reference: color-palette-selection.md | b2b-slide-designer V03R01 | 2026.06.01*

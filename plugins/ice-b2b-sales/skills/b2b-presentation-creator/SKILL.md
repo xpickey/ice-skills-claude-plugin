@@ -126,6 +126,22 @@ FLOW (สำหรับ infographic/deck ที่มีหลาย "แนว
 - preview = **PNG** (เร็ว, เห็นภาพจริง — render 1 slide ผ่าน LibreOffice/qlmanage) · ถ้า user ขอ interactive → HTML
 - ใช้กับงานที่ "แนว" ไม่ชัด (เลือกได้หลาย infographic) — งานที่แนวชัดอยู่แล้ว ข้าม preview ได้ (เร็ว)
 
+### 0.5.6 — 6-Axis Pre-Emit Critique ⭐⭐⭐ (self-critique ก่อนปล่อยงาน)
+
+> หลัง Adaptive Mix สร้าง spec/preview เสร็จ **แต่ก่อน build เต็ม/emit** — ให้คะแนนตัวเอง 6 แกน (1-5).
+> **ถ้าแกนใด `<3` = แก้ก่อน emit** (อย่าปล่อยงานที่รู้ตัวว่าหลุด). adapted from hallmark (MIT, ดู slide-designer NOTICE).
+
+| # | แกน | ถาม | 1 (slop) → 5 (คม) |
+|---|---|---|---|
+| 1 | **Philosophy** | งานนี้มี POV ชัดไหม หรือ default สวยลอย ๆ | 1=generic · 5=มีจุดยืน/เหตุผลออกแบบ |
+| 2 | **Hierarchy** | ตา่นำไปจุดสำคัญก่อนไหม | 1=ทุกอย่างเด่นเท่ากัน · 5=ลำดับชัด |
+| 3 | **Execution** | คม/เนี้ยบ ไม่มี element ค้าง/เพี้ยน | 1=placeholder ค้าง/ขอบเบี้ยว · 5=เนี้ยบ |
+| 4 | **Specificity** | ตรงเนื้อหา-แบรนด์-อุตสาหกรรมจริง | 1=template สำเร็จรูป · 5=ตรง CI/เนื้อ |
+| 5 | **Restraint** | ตัดส่วนเกินหรือยัดทุกอย่าง | 1=ยัดเต็ม/effect รก · 5=พอดี มี whitespace |
+| 6 | **Variety** | slide ต่าง ๆ ไม่ซ้ำแม่แบบเดียวรัว ๆ | 1=ทุก slide หน้าตาเดียว · 5=หลากแต่กลมกลืน |
+
+**กฎ:** stamp คะแนน 6 แกนใน comment ของ spec/build · `<3 ข้อใด → แก้ก่อน emit` · **revision ปกติ ≤2 รอบ · ถ้า 3 รอบยังไม่ผ่าน = brief ผิด** (กลับไปถาม Compass/user ไม่ใช่ขัดเงาต่อ) · ผูกกับ **Preview-First** (critique ก่อนทำ preview ให้ user — ปล่อย preview ที่ผ่าน critique แล้วเท่านั้น) · คู่กับ slide-designer §4.8 Anti-Slop (visual tells) + §4.10 Audit.
+
 ---
 
 ## 1. Operating Principle
@@ -547,6 +563,7 @@ You rarely need all 10 references. Pull only what the situation demands.
 
 | Version | Date | Change |
 |---|---|---|
+| **V01R11** | **2026-06-22** | **+6-Axis Pre-Emit Critique (§0.5.6) — adapted from hallmark (MIT).** หลัง Adaptive Mix ก่อน emit: ให้คะแนนตัวเอง 6 แกน (Philosophy/Hierarchy/Execution/Specificity/Restraint/Variety) 1-5 · **<3 ข้อใด = แก้ก่อน emit** · revision ≤2 รอบปกติ · 3 รอบยังไม่ผ่าน = brief ผิด (กลับถาม Compass/user) · stamp คะแนนใน comment · ผูก Preview-First (critique ก่อนทำ preview — ปล่อยเฉพาะที่ผ่าน). คู่กับ slide-designer §4.8 Anti-Slop (visual tells) + §4.10 Audit. ref: slide-designer NOTICE-hallmark.md.** |
 | **V01R10** | **2026-06-20** | **+Adaptive Mix Engine + Preview-First (§0.5).** ADAPTIVE MIX: 'ผสม' = เอาแนว/ลักษณะ template (decision-tree/matrix/funnel) + สร้าง object **เท่าเนื้อจริง** ไม่คงโครง template เป๊ะ (ข้อมูลน้อย=ลด object · มาก=แตก slide) — ห้ามเหลือ placeholder ค้าง · override color→iCE CI + font→ไทย · font-fit ย่อ size กันล้น · fallback draw-new ถ้า template ซับซ้อนเกิน map. PREVIEW-FIRST: เจนนี่ทำ 2-3 infographic preview (PNG) ให้ user เลือก+confirm ก่อน build เต็ม (ไม่เสียเวลา build จบแล้วผิดแนว). POC verified (decision-tree ERP: object เท่าเนื้อ 3 branch×2 leaf, font ไทยไม่ล้น). คู่กับ เจนนี่ ROLE 1 Preview-then-build.** |
 | **V01R09** | **2026-06-20** | **+Build from Design Spec (§0.5) + Content-Aware Font 3-mode.** รับ Design Spec จาก b2b-slide-designer §4.5 Router (template/color/icon/gradient/font_strategy) → build ตาม template จริง ทุก format (PPTX/HTML/PDF). build_html.py: +`apply_font_strategy()` + `--font-strategy` — 3 mode (TH-only/EN-only/TH+EN), TH+EN = unified (IBM Plex Sans Thai) หรือ pair latin+cs (ไทยมาก่อน Latin กันแตก), content-aware size (document→body เล็กลง · presenter→title ใหญ่). +71 framework .pptx (catalog-templates-ready) เปิดดึง layout. +ref 07/02 pointer → slide-designer catalog. font เลือกตามภาษา ไม่ตาม template (§5.5.1 single-source). คู่กับ b2b-slide-designer V02R04.** |
 | **V01R08** | **2026-06-20** | **+Dual Execution Path (ใช้ได้ทั้ง Claude Code / Cowork / Desktop / Web).** ref 13 เพิ่ม Execution Path Rule: PATH A (มี Bash → รัน scripts/build_html.py) · PATH B (ไม่มี shell → ประกอบ HTML inline จาก assets/html/html-template.md + viewport-base.css + animation-patterns.md, sanitize →→▸ เอง). +copy html-template.md + animation-patterns.md เข้า assets/html (inline skeleton). Step 5-HTML + เจนนี่ ROLE 2 ระบุ env detection. ผลลัพธ์เหมือนกันทุก env (single .html 16:9 zero-dep). เหมือน Higgsfield CLI/MCP pattern.** |

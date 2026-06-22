@@ -3,7 +3,7 @@ name: b2b-slide-designer
 description: "Presentation design advisor + Design Library for B2B (iCE). Selects style, theme, template, color/gradient, infographic layout, and icon by Corporate Identity and task. 8 core templates (Linen, Arctic, Cobalt, Onyx, Amber, Whiteboard, iCE-CI, iCE-Propose) + Design Library Router over 1,186 refs: 195 industry examples, 493 consulting decks (McKinsey/BCG/Bain/Big-4), 71 framework .pptx (SWOT/PESTEL/Porter/Gantt/Value-Chain/Customer-Journey), 29 gradients, 68 infographic types, 401 recolorable icons. Confidence-based selection (auto-pick or propose 5). Output for PPTX/HTML/PDF. Owns §5.5.1 font single-source + Font Strategy (TH-only/EN-only/TH+EN, font by language not template). Trigger for deck style, theme, template, color palette, gradient, infographic/framework (SWOT/Porter/Gantt), icon, consulting style, industry example, iCE document. Thai: หา template สไลด์, เลือกธีม/สีสไลด์, gradient, อินโฟกราฟิก, เลย์เอาต์, icon, สไลด์แนวที่ปรึกษา, ออกแบบ deck."
 ---
 
-# B2B Slide Designer + Design Library (V02R06 — 2026.06.20)
+# B2B Slide Designer + Design Library (V02R07 — 2026.06.22)
 
 Skill นี้ช่วยเลือกและออกแบบ Presentation Style ระดับมืออาชีพตาม **iCE Corporate Identity (CI)** —
 8 core template + **Design Library 1,186 references** (industry examples · consulting decks · framework .pptx ·
@@ -172,6 +172,68 @@ STEP 6 — ออก Design Spec (format-agnostic):
   → ประหยัด credit + consistent (ชุดเดียวทั้ง deck) + เร็วกว่า generate
 ```
 
+## 4.8 — Anti-Slop Gates ⭐⭐⭐ (visual AI tells — ตรวจก่อนปล่อย Design Spec)
+
+> **ปัญหา:** AI มี "default look" ที่ทุกคนได้เหมือนกัน → deck ดู generic. gate นี้กันก่อนปล่อยงาน.
+> **คนละชั้นกับของเดิม:** D5 (qa) = anti-AI **ภาษา** · design-principles 20 rules = **positive** "ทำให้ถูก" ·
+> นี่ = **visual negative gate** "ห้ามทำ AI tell". รายละเอียดเต็ม → `references/anti-slop-gates.md`.
+
+```
+🎯 5 TOP TELLS (จับบ่อยสุด — เช็คทุก deck):
+  1. ITALIC HEADER (#1 tell) → header roman เสมอ · เน้นด้วย weight/สี/underline ไม่ใช่ italic
+  2. PURPLE→BLUE gradient (esp. gradient text) → ห้าม · radial bloom bg ได้ ≤20%
+  3. CENTERED-EVERYTHING (title slide ทุก element แกนกลาง) → break alignment · กลาง ≤2 element
+  4. EMOJI feature icon (✨🚀⚡) → ใช้ catalog-icons 401 SVG · 1 library
+  5. INVENTED METRIC (กุตัวเลข) → "—" + "ยืนยันตัวเลข" · ตัวเลขมาจาก user เท่านั้น
+
++ 13 gate เสริม (anti-slop-gates.md): banned font · >3 families · weight<300 · accent>5% ·
+  pure #000/#fff · grey ไม่ tint · icon-card grid · card-in-card · side-stripe · arbitrary spacing ·
+  decorative-no-purpose · fake mockup · black-on-black contrast bug
+→ customer-facing = เข้มทุกข้อ · internal/draft = เน้น 5 top tells
+```
+
+## 4.9 — Custom-Theme Generation ⭐⭐⭐ (สร้าง palette ใหม่เมื่อ catalog ไม่เข้า)
+
+> **เดิม:** ถ้า palette ไม่เข้า → outsource coolors.co. **ใหม่:** สร้าง palette เอง (method จาก hallmark).
+> คง iCE default เป็นฐาน · ผูก §5.5 font discipline (ห้าม banned + bilingual).
+
+```
+TRIGGER (ยิงข้อใดข้อหนึ่ง — ไม่ยิง = ใช้ catalog ปกติ):
+  user ขอ "custom/ทำให้เป็นแบรนด์เรา" · ระบุสี brand (hex/ชื่อ) · 3+ vibe words off-catalog
+  ("moss/lichen/herbal") · แนบ moodboard/swatch
+  → ถาม 1 ครั้ง: "สร้าง palette custom ตาม vibe [สรุป] หรืออยู่ catalog (เร็ว+variety)?"
+
+PALETTE BUILD (ตามลำดับ — ทำต่อเนื่องไม่ถามเพิ่ม):
+  1. ACCENT: จาก brand color · หรือ derive จาก vibe (warm 30-60° · technical 220-250° ·
+     botanical 130-160° · neon 280-320° · sun 60-80°) · saturation กลาง (ไม่จัดเกิน)
+  2. PAPER: tint นิดไป accent hue — ⛔ห้าม pure #fff/#000 (bright L95-98% · archival 92-95% · dark 12-18%)
+  3. INK: contrast กับ paper (paper สว่าง→ink เข้ม L16-24% · paper เข้ม→ink อ่อน L88-96%) · tint นิด
+  4. GREYS: 5-9 step ระหว่าง paper/ink · tint ทุกตัวไป accent (warm accent→warm greys) — typographic depth
+  5. ACCENT-INK: text บน accent fill (accent สว่าง→ink · accent เข้ม→paper) · ✅ WCAG ≥4.5:1
+  FONT PAIR: display + body จาก §5.5 whitelist (ห้าม banned) · weight ต่าง ≥300 · bilingual latin+cs
+
+DIVERSIFICATION: บันทึก 3 axis (paper band: dark/mid/light · display style · accent hue band)
+  → รอบหน้าต่าง ≥1 axis (กัน custom สองรอบเหมือนกัน)
+```
+
+## 4.10 — Audit + Study modes ⭐ (2 verb ใหม่ — เดิมมีแค่ build)
+
+```
+AUDIT <deck/ภาพ> — ให้คะแนน deck เดิม (DIAGNOSIS ONLY ไม่แก้):
+  scan ตาม §4.8 Anti-Slop + design-principles 20 rules + 6-axis (presentation-creator §0.5)
+  → punch-list เรียงความสำคัญ + เหตุผลแต่ละข้อ → ส่ง Compass/user ตัดสินแก้ (ไม่แก้เอง)
+
+STUDY <deck/ภาพที่ชอบ> — ดูด "design DNA" (ไม่ copy pixel):
+  5-step: Surface (paper/accent hue+footprint) · Type (display/body role — ไม่ชื่อ font ตรงถ้าเป็นภาพ) ·
+          Structure (macrostructure/storyline + archetype) · Motion (reveal pattern) ·
+          Rhythm (density: generous/dense · asymmetry: centered/left/asymmetric)
+  → diagnosis 1 หน้า → "build ตาม DNA นี้ไหม? / เปลี่ยน 1 axis? / แค่ดู?"
+  ⛔ REFUSAL: ปฏิเสธ paid template (themeforest/ฯลฯ) · soft-refuse signature work
+     (ดูด DNA ได้ แต่ไม่ก๊อป signature move เป๊ะ) · ภาพ user เอง/public ref = OK
+
+(redesign = Adaptive Mix ที่มีใน presentation-creator §0.5 แล้ว — ไม่ซ้ำ)
+```
+
 ---
 
 ## 5. Quality Standards
@@ -334,6 +396,7 @@ font_family:
 
 | Version | Date | Highlights |
 | :--- | :--- | :--- |
+| **V02R07** | **2026-06-22** | **+Anti-Slop Gates §4.8 + Custom-Theme Generation §4.9 + Audit/Study modes §4.10 — adapted from hallmark (MIT). Visual anti-slop layer (≠ D5 ภาษา ≠ 20 positive rules) — 5 TOP TELLS (italic header / purple gradient / centered-everything / emoji icon / invented metric) + 18 transferable gates. Custom-Theme: สร้าง palette ใหม่เมื่อ catalog ไม่เข้า (accent→paper→ink→greys, vibe-to-hue, WCAG). Audit (diagnosis punch-list) + Study (5-step DNA, refuse paid/signature). Transferable-to-slide subset (web-only gates dropped ~55%). +§1D heuristics: color-palette pointer §4.9 + tint-neutral (ห้าม pure #000/#fff) · font italic-header = #1 AI tell. ref: anti-slop-gates.md + NOTICE-hallmark.md** |
 | **V02R06** | **2026-06-20** | **+Router Semantic Guard (STEP 3-4) — กัน keyword-match หลงทาง. SPECIFIC-FRAMEWORK list (six-sigma/scrum/agile/swot/pestel/porter/aida/mckinsey-7s/raci/blue-ocean/business-model-canvas): ถ้า candidate เป็น specific-framework แต่ intent ไม่ได้ขอชื่อนั้นตรง → PENALTY −3 (match keyword แต่ผิดเจตนา) · ถ้าขอตรง → BOOST +3. generic implementation/project intent → project-management/process/roadmap/gantt/milestone นำ. top เป็น specific ที่ไม่ได้ขอ → ห้าม auto-pick (เสนอ 5 เสมอ). บทเรียน: 'implementation methodology' เคยดึง 'Six Sigma' ผิด (match 'methodology'). verified 3 เคส.** |
 | **V02R05** | **2026-06-20** | **+Cache-on-Demand + Portability (เผื่อย้ายเครื่อง).** 2-layer cache: binary (`assets/templates-cache/`, .gitignore, local-only — ทยอย copy ตอนใช้) + metadata (`templates-cache-meta.json`, in git, portable — slide-count/shapes/size/src_path). `scripts/template_cache.py get/check` (resolution: cache→ต้นทาง→copy · ถ้าหาย→fallback graceful build จาก inspiration ไม่ crash) + `build_template_meta.py`. catalog-templates-ready.md +§Cache-on-Demand + Migration guide (ย้ายเครื่อง). Router STEP 5 + presentation-creator §0.5 ใช้ cache. health-check 73 หมวด.** |
 | **V02R04** | **2026-06-20** | **+Design Library (1,186 refs) + Router/Font/Icon logic.** ย้าย ppt-design-template เข้า: catalog-*.md (9) + library-index.json (1,186) + templates/(756) + gradients/(29) + 401 icon SVG. +800-Infographic dedup → catalog-templates-ready.md (71 framework .pptx ที่ไม่ซ้ำ, ชี้ path ต้นทาง). NEW §4.5 Design Library Router (confidence-based: fit ชัด→เลือกเอง · กำกวม→เสนอ 5) + §4.6 Font Strategy (TH-only/EN-only/TH+EN กล่องเดียว: unified/pair latin+cs · font เลือกตามภาษา ไม่ตาม template · override EN-only→swap กันไทยแตก · สี override CI/gradient ได้) + §4.7 Icon-First (recolor 401 SVG ก่อน MCP). Format-agnostic (PPTX/HTML/PDF). overlap: color-palette→catalog-gradients (instances) · consulting→catalog-by-firm · infographic→catalog-infographics. Source: ppt-design-template (archived) + iCE/800-Infographic (kept). §5.5.1 font single-source คงเดิม.** |

@@ -1,6 +1,6 @@
 ---
 name: qa-master-agent
-description: "Independent Adversarial Quality Gate for iCE Cognitive Compass.Next — the last line of defense before any deliverable reaches a customer or executive. Nicknames: เจ้ระเบียบ, ครูละเอียด, อริส. Runs 9-dimension QA (Requirement Alignment, Completeness, Consistency+Anti-Hallucination, Logical Flow, Anti-AI, Brand Compliance, Font/Layout, Wording Discipline, Full Compliance Q&A) plus an adversarial review in a SEPARATE context from the producer (Producer ≠ Checker — never lets a builder grade its own work). D5 Anti-AI loads the thesis-ai-det-col SKILL directly (24 patterns TH+EN, no agent dependency). D7 Font/Layout is a HARD BLOCK for customer-facing artifacts (tri-slot font, normalization, optical size, no-overlap, embed). D9 Full Compliance Q&A compares a deliverable against TOR/requirement line-by-line (COMPLY/PARTIAL/MISSING/EXTRA/DEVIATION) as a DETECTOR — it points out differences but does NOT decide fixes (Compass decides). Returns detected_issues with category routing-hints + Before/After. Cross-checks uncertain knowledge with Solution-Knowledge through Compass. Use for any pre-delivery QA, anti-AI scan, brand check, font check, or requirement-compliance review. Triggers (TH): ตรวจคุณภาพ, QA ก่อนส่ง, scan AI, ตรวจ AI, ตรวจ brand, ตรวจ font, ตรวจ compliance, เทียบ TOR, ตรวจก่อน save. Triggers (EN): quality check, pre-delivery QA, anti-AI scan, brand compliance, font check, compliance review, TOR comparison."
+description: "Independent Adversarial Quality Gate for iCE Cognitive Compass.Next — last line of defense before a deliverable reaches a customer/executive. Nicknames: เจ้ระเบียบ, ครูละเอียด, อริส. Runs 9-dimension QA (Requirement, Completeness, Consistency+Anti-Hallucination, Logic, Anti-AI, Brand, Font/Layout, Wording, Compliance Q&A) in a SEPARATE context from the producer (Producer ≠ Checker). D5 Anti-AI = thesis-ai-det-col (language). D7 Font/Layout = HARD BLOCK customer-facing. D7.S Visual Anti-Slop = FLAG visual AI tells (purple gradient/italic header/centered/emoji-icon/invented-metric). D9 = TOR line-by-line DETECTOR (Compass decides). Use for pre-delivery QA, anti-AI scan, brand/font check, anti-slop scan, TOR compliance. Triggers (TH): ตรวจคุณภาพ, QA ก่อนส่ง, scan AI, ตรวจ brand, ตรวจ font, ตรวจ slop, เทียบ TOR. Triggers (EN): quality check, pre-delivery QA, anti-AI scan, brand check, font check, anti-slop scan, TOR comparison."
 model: opus
 color: red
 nicknames: [เจ้ระเบียบ, ครูละเอียด, อริส]
@@ -19,10 +19,11 @@ skills_used:
 mcp_tools: 
   - gdrive
 ---
-> **Agent:** qa-master-agent | **Version:** V01R05 | **Date:** 2026.06.20
+> **Agent:** qa-master-agent | **Version:** V01R06 | **Date:** 2026.06.22
 > **Layer:** 2 (Specialist — Independent Quality Gate) | **Producer ≠ Checker**
 > **Design ref:** iCE-B2B-Compass.Next_V01R02 §10
 > **Status:** คงเดิม (ไม่ยุบ) — ตรวจงานต้องแยก context จากผู้สร้าง (กัน confirmation bias)
+> **R06 (2026.06.22):** +D7.S Visual Anti-Slop scan (DETECTION คู่กับ prevention ฝั่ง slide-designer §4.8) — scan deck ที่ build แล้วหา visual AI tells (purple gradient / italic header / centered / icon-grid / emoji-icon / invented-metric / fake-mockup) → **FLAG ไม่ auto-block** (เหมือน D6.lib) ส่ง Compass ตัดสิน · customer-facing+ชัด→recommend แก้ · ก้ำกึ่ง→revalidate. NOTE: D5=anti-AI ภาษา · D7.S=anti-slop visual (คนละ dimension). adapted from hallmark (MIT). คู่กับ slide-designer V02R07 anti-slop-gates.md.
 > **R05 (2026.06.20):** +Design-Library REVALIDATE (DETECTOR not DECIDER) — D6.lib template/brand fidelity + D7.5 icon coherence + D3.x gradient fidelity. **ไม่ใช่ HARD BLOCK** — template/color/icon = guidance ไม่ใช่ mandate ("ไม่ตรง template บางครั้งจำเป็น" CI ลูกค้า/งานพิเศษ) → FLAG "revalidate?" ส่ง Compass ตัดสิน. HARD BLOCK คงเฉพาะ D7 font/embed (ไฟล์พัง). คู่กับ slide-designer V02R04 Design Library Router.
 > **R04 (2026.06.20):** +D7-HTML track — ตรวจ HTML deck (จาก b2b-presentation-creator HTML capability): 16:9 lock · no-overflow · WCAG ≥4.5:1 · responsive · web-safe font (TH-first) · motion+nav · arrow sanitize. HARD BLOCK customer-facing เหมือน D7 PPTX. เปิด browser/screenshot จริง (LibreOffice ไม่เกี่ยวกับ HTML). D1-D9 + D7 PPTX เดิมไม่แตะ. คู่กับ deliverable-gen V01R08 + b2b-presentation-creator V01R07.
 > **R03 (2026.06.13):** เพิ่ม L1 Write-Clean Card pointer (prevention layer คู่กับ D5 detection) — register B-Business + B-Academic · pointer สั้น ชี้ skill ที่เดียว ไม่ fork เนื้อ card
@@ -169,7 +170,17 @@ D6.lib Brand/Template fidelity (REVALIDATE, ไม่ block):
 D7.5 Icon coherence (minor warn): stroke/สีเดียวกัน · จาก set เดียว (catalog-icons หรือ MCP) · 60-30-10
 D3.x Gradient fidelity (minor flag): gradient ตรง approved pairing (catalog-gradients) · hex ตรง spec
 
-VERDICT: ทุก check Design-Library = FLAG/ส่ง Compass · NO HARD BLOCK ใหม่
+D7.S Visual Anti-Slop scan (DETECTION คู่กับ prevention ฝั่ง slide-designer §4.8 — FLAG ไม่ auto-block):
+  scan deck ที่ build แล้ว หา visual AI tells (≠ D5 ภาษา — D7.S = visual คนละชั้น):
+    • purple gradient default · italic header · centered-everything · icon-grid รก ·
+      emoji เป็น icon · invented/fake metric (ตัวเลขลอย) · fake-mockup (UI ปลอม)
+  พบ → FLAG ส่ง Compass ตัดสิน (เหมือน D6.lib — visual = design choice อาจตั้งใจ):
+    • customer-facing + tell ชัดเจน → recommend แก้
+    • ก้ำกึ่ง/อาจตั้งใจ (CI ลูกค้า/brand jus) → revalidate?
+  NOTE: D5 = anti-AI ภาษา (thesis-ai-det-col) · D7.S = anti-slop visual (hallmark §4.8) — คนละ dimension ไม่ทับกัน
+  ref: slide-designer references/anti-slop-gates.md (5 TOP TELLS + 18 gates)
+
+VERDICT: ทุก check Design-Library + D7.S = FLAG/ส่ง Compass · NO HARD BLOCK ใหม่
   (HARD BLOCK คงเฉพาะ D7 font/layout/embed — เพราะ "ไฟล์พัง" ไม่ใช่ "design choice")
 ```
 
