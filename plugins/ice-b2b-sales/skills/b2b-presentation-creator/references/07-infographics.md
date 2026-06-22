@@ -332,7 +332,7 @@ dot -Tsvg orgchart.dot -o orgchart.svg
 **Engine — เลือก skill ตามงาน:**
 | งาน | engine | skill (เปิดตัวนี้) |
 |---|---|---|
-| hero/divider/background ภายใน เร็ว | **Nano Banana** (Gemini image) `mcp__nanobanana__generate_image` | `nanobanana-connection` |
+| hero/divider/background ภายใน เร็ว | **Gemini image** (rlabs/gemini-mcp · Nano Banana Pro) `mcp__gemini__gemini-generate-image` | `nanobanana-connection` |
 | image/video/3D/audio ทั่วไป, 4K hero, animate, motion | **Higgsfield** (GPT Image 2 / Seedance 2.0 / Nano Banana Pro / Kling 3.0) | **`higgsfield-generate`** |
 | product shot / DTC ad / brand visual (10 modes) | **Higgsfield product-photoshoot** (GPT Image 2 enhanced) | **`higgsfield-product-photoshoot`** |
 | character/avatar คงหน้าข้ามหลายสไลด์ | **Higgsfield Soul ID** → chain `--soul-id` เข้า generate | **`higgsfield-soul-id`** |
