@@ -6,7 +6,7 @@ trigger: /codex-bridge
 
 # Claude ↔ Codex Bridge
 
-**Version: V01R01 | 2026.06.22** — manual-turn conversation bridge. Claude (this agent) talks to OpenAI **Codex gpt-5.5** through the local `codex` CLI, one turn at a time, with Claude driving the loop and deciding when to continue or stop. Codex keeps its own session memory across turns via `codex exec resume`, so it remembers the thread (verified end-to-end).
+**Version: V01R02 | 2026.06.22** — manual-turn conversation bridge. Claude (this agent) talks to OpenAI **Codex gpt-5.5** through the local `codex` CLI, one turn at a time, with Claude driving the loop and deciding when to continue or stop. Codex keeps its own session memory across turns via `codex exec resume`, so it remembers the thread (verified end-to-end). **V01R02 เพิ่ม 4 presets** (anti-AI cross-check / deliverable review / code review / design debate) + fleet binding.
 
 > ทักษะนี้ทำให้ Claude "ปรึกษา/ถก/จับคู่งาน" กับ Codex ได้จริง — Claude เป็นหลัก/ออกแบบ, Codex เป็น peer reviewer / ผู้ช่วยเขียน. ต่างจาก MCP ตรงที่ Codex **จำบทสนทนาของตัวเอง** ข้าม turn ได้.
 
@@ -58,9 +58,22 @@ turn-shape ที่แนะนำ: **PROPOSE** (Claude เสนอ) → **CRI
 - ถ้าจะ **ให้ Codex แก้ไฟล์จริง** ต้องเปลี่ยนเป็น `workspace-write` — **ถามผู้ใช้ยืนยันก่อน** (ดู references/01 §sandbox)
 - helper ไม่ push git / ไม่ deploy — เป็นแค่ตัวคุย
 
+## Presets (เลือกตาม use-case)
+| # | Preset | เมื่อไร | template |
+|---|---|---|---|
+| 1 ⭐ | **Anti-AI cross-check** | ตรวจภาษา AI ไทย/อังกฤษ (ไม่ลิเก/ไม่ calque/ไม่อธิบายยาว) — Claude ตรวจด้วย `thesis-ai-det-col` → Codex ตรวจซ้ำ independent → รวม 2 model | ref 03 (เต็ม) |
+| 2 | **Sales/academic deliverable** | review proposal/บทความ/deliverable ก่อนส่ง | ref 04 |
+| 3 | **Code review** | Claude เขียน → Codex หา bug/security | ref 04 |
+| 4 | **Design/architecture debate** | ถก design ไปกลับ | ref 04 |
+
+**Fleet binding (high-stakes escalation, optional):** กัปตัน/ผู้ทรง/qa-master/แจนนี่/จารโป้ง เรียก Codex cross-check ได้ **เฉพาะงานสำคัญ/disputed + ผู้ใช้สั่งหรือ Claude เสนอแล้วผู้ใช้ OK** — ไม่ auto ทุกครั้ง (กัน token บาน). gatekeeper = กัปตัน/Kim/ผู้ทรง.
+
 ## References
 - `references/01_codex_cli_reference.md` — flag/output/quirk ของ `codex exec` ที่พิสูจน์แล้ว (รวม gotcha: `-a` ไม่มี, resume รับ flag น้อยกว่า exec)
 - `references/02_protocol.md` — รูปแบบ handoff/transcript + turn-taking + ตัวอย่าง session จริง
+- `references/03_antiAI_handoff.md` — Preset 1 template เต็ม (anti-AI patterns จาก thesis-ai-det-col + GUARD กัน false-positive)
+- `references/04_presets.md` — Preset 2-4 templates + fleet binding pattern
 
 ## CHANGELOG
+- **V01R02 (2026.06.22)** — +4 presets (ref 03 anti-AI cross-check เต็ม จาก thesis-ai-det-col patterns + GUARD · ref 04 deliverable/code/design templates) + fleet binding pattern (high-stakes escalation, gatekeeper-gated). Anti-AI use-case validated จริง: Codex ตรวจภาษา AI ไทยได้ + เสริมกับ skill (ไม่ซ้ำ).
 - **V01R01 (2026.06.22)** — initial. manual-turn bridge: helper `ask-codex.sh` (--new/--resume), session continuity via `codex exec resume`, clean output via `--output-last-message`, transcript audit log. Prototype verified 3-turn conversation with Codex memory intact. Corpus-correct flags (no `-a`; resume ≠ exec flag set) documented in ref 01.

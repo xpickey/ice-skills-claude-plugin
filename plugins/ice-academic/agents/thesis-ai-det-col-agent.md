@@ -290,3 +290,12 @@ Before returning Detection Report / Voice Profile / Corrected Text / Full Cycle 
   5. Voice Match Scoring — compute D1–D6 + D7 against VP-A2 reference; pass threshold ≥ 75%.
 - Verification applied: re-read each pass output, confirm Tipitaka citations preserved verbatim, confirm no fabricated numbers / authors, confirm Pass 1 and Pass 2 outputs separated and labeled, flag any unresolved `[NEEDS USER INPUT: ...]`.
 - Confirmation requested before final commit: present Detection Report (before/after), Pass 1 output, Pass 2 output, Voice Match Score, and ask user to confirm before any hand-off to deliverable-gen-agent for Word formatting.
+
+
+## ⭐ Codex Cross-Check (Optional — high-stakes escalation)
+
+ผูกกับ skill **claude-codex-bridge** (Codex gpt-5.5 เป็น peer reviewer / second detector). **ไม่เรียกทุกครั้ง** — เรียกเมื่อ:
+- AI-detection score เป็นที่ถกเถียง / register integrity หลายภาษา / ก่อนส่งวารสารงานสำคัญ — ขอ Codex ตรวจ AI ซ้ำ independent (Preset 1) แล้วรวมผล (Claude=calque/particle ลึก · Codex=surface/burstiness)
+- เงื่อนไข: งานสำคัญ/disputed **และ** ผู้ใช้สั่ง หรือ ฉันเสนอแล้วผู้ใช้ OK (manual + propose — ไม่ auto, กัน token บาน)
+
+วิธี: โหลด skill `claude-codex-bridge` → เลือก preset → `scripts/ask-codex.sh --new`/`--resume`. default sandbox `read-only`. รวมผล 2 model แล้วระบุ attribution (อะไรมาจาก Codex). gatekeeper = กัปตัน/Kim/ผู้ทรง (ไม่ใช่ทุก agent เรียกเอง). ดู skill ref 03 (anti-AI) / 04 (presets).

@@ -602,3 +602,12 @@ Compass อาจถูกเรียกจาก Claude(L0)/Workflow ตรง
 *Consolidates: iCE-b2b-Compass + sales-admin + gdrive + gmail + portfolio-intelligence (5→1)*
 *Peer: Kim (Personal Assistant L1) | Calls: Sales-Process, Solution-Knowledge, Deliverable-Gen, QA-Master*
 *Design ref: iCE-B2B-Compass.Next_V01R02_2026.06.01.MD*
+
+
+## ⭐ Codex Cross-Check (Optional — high-stakes escalation)
+
+ผูกกับ skill **claude-codex-bridge** (Codex gpt-5.5 เป็น peer reviewer / second detector). **ไม่เรียกทุกครั้ง** — เรียกเมื่อ:
+- ดีล/ข้อเสนอ high-stakes (margin/risk เกิน threshold) หรือ deliverable สำคัญก่อนส่งลูกค้า — เสนอผู้ใช้ขอ Codex second-opinion (Preset 2/4)
+- เงื่อนไข: งานสำคัญ/disputed **และ** ผู้ใช้สั่ง หรือ ฉันเสนอแล้วผู้ใช้ OK (manual + propose — ไม่ auto, กัน token บาน)
+
+วิธี: โหลด skill `claude-codex-bridge` → เลือก preset → `scripts/ask-codex.sh --new`/`--resume`. default sandbox `read-only`. รวมผล 2 model แล้วระบุ attribution (อะไรมาจาก Codex). gatekeeper = กัปตัน/Kim/ผู้ทรง (ไม่ใช่ทุก agent เรียกเอง). ดู skill ref 03 (anti-AI) / 04 (presets).

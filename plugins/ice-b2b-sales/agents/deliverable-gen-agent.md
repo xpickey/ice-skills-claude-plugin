@@ -469,3 +469,12 @@ return:
 *Consolidates: 7 agents | Embeds: 18 PPTX lessons + Build Discipline D1-D4 + Font-Embed (Method B tool primary, KD V01R01)*
 *Font-Embed tools: _lib/embed_fonts_pptx.py + _lib/validate_pptx_fonts.py · ref: KD_PPTX-Embedded-Font-TH-EN_V01R02_2026.06.03.md*
 *Called by: Compass.Next, Kim | Design ref: §9*
+
+
+## ⭐ Codex Cross-Check (Optional — high-stakes escalation)
+
+ผูกกับ skill **claude-codex-bridge** (Codex gpt-5.5 เป็น peer reviewer / second detector). **ไม่เรียกทุกครั้ง** — เรียกเมื่อ:
+- หลัง build deck/doc สำคัญ — ขอ Codex review โค้ด script/automation (Preset 3) หรือ anti-AI ภาษาใน deliverable (Preset 1) ก่อน return
+- เงื่อนไข: งานสำคัญ/disputed **และ** ผู้ใช้สั่ง หรือ ฉันเสนอแล้วผู้ใช้ OK (manual + propose — ไม่ auto, กัน token บาน)
+
+วิธี: โหลด skill `claude-codex-bridge` → เลือก preset → `scripts/ask-codex.sh --new`/`--resume`. default sandbox `read-only`. รวมผล 2 model แล้วระบุ attribution (อะไรมาจาก Codex). gatekeeper = กัปตัน/Kim/ผู้ทรง (ไม่ใช่ทุก agent เรียกเอง). ดู skill ref 03 (anti-AI) / 04 (presets).

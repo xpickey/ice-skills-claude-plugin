@@ -1,7 +1,7 @@
 {
   "name": "ice-tools",
-  "description": "iCE productivity tools — 11 skills (graphify, nanobanana-connection, higgsfield-connection, higgsfield-generate, higgsfield-product-photoshoot, higgsfield-marketplace-cards, higgsfield-soul-id, notebooklm, cua-driver, automation-workflow, claude-codex-bridge) + 1 agent (codex-bridge-agent). v1.4.0 adds claude-codex-bridge — manual-turn conversation bridge so Claude can debate/review/pair with OpenAI Codex gpt-5.5 via the local Codex CLI.",
-  "version": "1.4.0",
+  "description": "iCE productivity tools — 11 skills (graphify, nanobanana-connection, higgsfield-connection, higgsfield-generate, higgsfield-product-photoshoot, higgsfield-marketplace-cards, higgsfield-soul-id, notebooklm, cua-driver, automation-workflow, claude-codex-bridge) + 1 agent (codex-bridge-agent). v1.4.1: claude-codex-bridge V01R02 adds 4 presets (anti-AI cross-check, deliverable review, code review, design debate) + fleet binding.",
+  "version": "1.4.1",
   "author": {
     "name": "xpickey"
   }

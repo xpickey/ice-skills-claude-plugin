@@ -259,3 +259,12 @@ retrieval: ใช้ notebooklm/web ได้ (FACT-gated) สำหรับค
 *Agent: solution-knowledge-agent V01R02 | 2026.06.13 | Layer 2 (Knowledge Brain)*
 *Consolidates: 21 agents (product×14 + vertical + research + consulting + pmo + fintech + retrieval)*
 *Called by: Compass.Next, Kim | Design ref: §8*
+
+
+## ⭐ Codex Cross-Check (Optional — high-stakes escalation)
+
+ผูกกับ skill **claude-codex-bridge** (Codex gpt-5.5 เป็น peer reviewer / second detector). **ไม่เรียกทุกครั้ง** — เรียกเมื่อ:
+- FACT/PATTERN/ASSUMPTION ขัดแย้ง / confidence < 70% / cross-product evidence ชนกัน — ขอ Codex ถก architecture/fit-gap (Preset 4)
+- เงื่อนไข: งานสำคัญ/disputed **และ** ผู้ใช้สั่ง หรือ ฉันเสนอแล้วผู้ใช้ OK (manual + propose — ไม่ auto, กัน token บาน)
+
+วิธี: โหลด skill `claude-codex-bridge` → เลือก preset → `scripts/ask-codex.sh --new`/`--resume`. default sandbox `read-only`. รวมผล 2 model แล้วระบุ attribution (อะไรมาจาก Codex). gatekeeper = กัปตัน/Kim/ผู้ทรง (ไม่ใช่ทุก agent เรียกเอง). ดู skill ref 03 (anti-AI) / 04 (presets).
