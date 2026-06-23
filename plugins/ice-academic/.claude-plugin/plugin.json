@@ -1,7 +1,7 @@
 {
   "name": "ice-academic",
-  "description": "Thai academic writing fleet — 7 skills (PhD/MA dissertation MCU, TCI/AGJ/JPSPA articles, social-science, AI-detection, research-compass-nrct NRCT research-cycle) + thesis-ai-det-col-agent + shared _lib/reference. v1.3.2: thesis-ai-det-col-agent gains optional Codex anti-AI cross-check escalation (claude-codex-bridge).",
-  "version": "1.3.2",
+  "description": "Thai academic writing fleet — 7 skills (PhD/MA dissertation MCU, TCI/AGJ/JPSPA articles, social-science, AI-detection, research-compass-nrct NRCT research-cycle) + thesis-ai-det-col-agent + shared _lib/reference. v1.3.3: thesis-ai-det-col V06R02 adds term-localization (TL-A/B/C + MG1 product-feature-misname guard, §6.6/B-Check 11) + Card B6 — VFIN case.",
+  "version": "1.3.3",
   "author": {
     "name": "xpickey"
   }

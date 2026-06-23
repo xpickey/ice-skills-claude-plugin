@@ -1,7 +1,7 @@
 {
   "name": "ice-b2b-sales",
-  "description": "iCE B2B enterprise sales fleet — 29 skills (Oracle/SAP/NetSuite/MS Dynamics, B2B methodology, Thai GFMIS/e-GP/tax, pricing) + 6 Compass.Next agents (iCE-Compass-Next, kim-assistant, sales-process, solution-knowledge, deliverable-gen, qa-master) + shared _lib/reference/_infra. v1.2.2: 4 agents (Compass, qa-master, deliverable-gen, solution-knowledge) gain optional Codex cross-check escalation (claude-codex-bridge).",
-  "version": "1.2.2",
+  "description": "iCE B2B enterprise sales fleet — 29 skills (Oracle/SAP/NetSuite/MS Dynamics, B2B methodology, Thai GFMIS/e-GP/tax, pricing) + 6 Compass.Next agents (iCE-Compass-Next, kim-assistant, sales-process, solution-knowledge, deliverable-gen, qa-master) + shared _lib/reference/_infra. v1.2.3: term-localization fleet update (VFIN) — Compass term_policy at brief-time, qa-master D5.TL detector, deliverable-gen Card-B6 write-clean prevention.",
+  "version": "1.2.3",
   "author": {
     "name": "xpickey"
   }
