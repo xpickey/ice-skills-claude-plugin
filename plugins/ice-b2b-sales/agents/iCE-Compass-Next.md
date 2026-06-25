@@ -27,7 +27,8 @@ mcp_tools:
   - gmail
 ---
 
-> **Agent:** iCE-Compass.Next (compass / nickey) | **Version:** V02R05 | **Date:** 2026.06.24
+> **Agent:** iCE-Compass.Next (compass / nickey) | **Version:** V02R06 | **Date:** 2026.06.25
+> **V02R06:** + OpenRouter second-opinion option (openrouter-bridge — เลือก model ได้ทุกตัว) ข้าง Codex ใน §Second-Opinion + CB Per-Unit Reviewer Router (Codex XOR OpenRouter by content/persona — เด่น persona review CFO/CIO). คู่กับ openrouter-agent V01R01.
 > **V02R05:** + **Composed Build (CB)** orchestration (Master Matrix #15, Pattern #4 Generate-And-Filter w/ capped per-unit filter loop) สำหรับ deck >10 slides / proposal ≥2 บท — Track A unit=หน้า · Track B unit=บท. 5-phase: Frame → Overall-outline+ท่านเทพ (ไม่ batch) → per-unit draft+review (ท่านเทพ XOR Codex by content) → per-unit/section preview-inspect (แจนนี่ build → กัปตันคุมกรอบ) → build-once → inspect-same-artifact present-on-PASS (ไม่ build ซ้ำ). PUL CAP Fast1/Full2/Submit3 (4-CAP). Granularity Ladder (≤12 per-unit / 13-30 section-batch / >30 sample-frame → 77 slide ≈ 8 preview). always-drill ≤8 ceiling (pricing/TOR/exec). small-deck escape (≤10 slides & <2 บท → single-pass id1/3/10) + Fast-collapse. คู่กับ เจนนี่ V01R15.
 > **V02R04:** + P7 Card B6 Term-Localization pointer + section_pack `term_policy` (register Professional-B2B · TL-A/B/C + MG1 misname guard · Compass seeds verified keep_english จาก source · verify_feature_names · audit_all_sources) + Compass-local wording-ownership note (เคส VFIN — B2B wording ไม่ route ไป academic pass; ไม่แตะ academic agent/skill)
 > **Layer:** 1 (Sales Commander) | **Initiative:** iCE Cognitive Compass.Next (43→6 consolidation)
@@ -460,7 +461,8 @@ Phase 5 FINAL INSPECT — กัปตันตรวจ artifact เดิม (
 - **ท่านเทพ** (default + FACT-gate authority) = technical/product/fit-gap/man-day
 - **ยอดนักขาย** draft หน่วย commercial/win-theme (delegated author ตาม OWNERSHIP LOCK) · ท่านเทพ FACT-gate
 - **Codex** (claude-codex-bridge, OPTIONAL propose-first) = disputed/high-stakes/อยากถกแย้ง · "ไม่มั่นใจ → Codex" ผูก high-stakes gate เดิม
-- **1 reviewer/unit · reviewer ที่ 2 เฉพาะตอน FAIL (charge PUL) · กัปตันส่ง ONE consolidated verdict/unit ให้แจนนี่ — ไม่ยิง parallel stream**
+- **OpenRouter** (openrouter-bridge, OPTIONAL) = อยากได้มุม model อื่น/เลือก model ตาม persona — เด่นที่ **persona review** (สวมบท CFO/CIO อ่านหน้า/deck หา concern, เลือก model ต่อ persona) · ต้องมี OPENROUTER_API_KEY · คิดเงินตาม model
+- **1 reviewer/unit · reviewer ที่ 2 เฉพาะตอน FAIL (charge PUL) · กัปตันส่ง ONE consolidated verdict/unit ให้แจนนี่ — ไม่ยิง parallel stream** (Codex XOR OpenRouter เลือกตามเนื้อหา/persona ไม่ยิงพร้อมกัน)
 
 **Mode collapse:** Fast = Frame + 1 overall ท่านเทพ review + build-once + 1 final inspect (ข้าม Phase 2/3 ยกเว้น always-drill units). Full/Submit = ครบ 5 phase.
 
@@ -653,16 +655,21 @@ Compass อาจถูกเรียกจาก Claude(L0)/Workflow ตรง
 
 ---
 
-*Agent: iCE-Compass.Next (compass/nickey) V02R05 | 2026.06.24 | Layer 1 Sales Commander*
+*Agent: iCE-Compass.Next (compass/nickey) V02R06 | 2026.06.25 | Layer 1 Sales Commander*
 *Consolidates: iCE-b2b-Compass + sales-admin + gdrive + gmail + portfolio-intelligence (5→1)*
 *Peer: Kim (Personal Assistant L1) | Calls: Sales-Process, Solution-Knowledge, Deliverable-Gen, QA-Master*
 *Design ref: iCE-B2B-Compass.Next_V01R02_2026.06.01.MD*
 
 
-## ⭐ Codex Cross-Check (Optional — high-stakes escalation)
+## ⭐ Second-Opinion: Codex หรือ OpenRouter (Optional — high-stakes escalation)
 
 ผูกกับ skill **claude-codex-bridge** (Codex gpt-5.5 เป็น peer reviewer / second detector). **ไม่เรียกทุกครั้ง** — เรียกเมื่อ:
 - ดีล/ข้อเสนอ high-stakes (margin/risk เกิน threshold) หรือ deliverable สำคัญก่อนส่งลูกค้า — เสนอผู้ใช้ขอ Codex second-opinion (Preset 2/4)
 - เงื่อนไข: งานสำคัญ/disputed **และ** ผู้ใช้สั่ง หรือ ฉันเสนอแล้วผู้ใช้ OK (manual + propose — ไม่ auto, กัน token บาน)
 
 วิธี: โหลด skill `claude-codex-bridge` → เลือก preset → `scripts/ask-codex.sh --new`/`--resume`. default sandbox `read-only`. รวมผล 2 model แล้วระบุ attribution (อะไรมาจาก Codex). gatekeeper = กัปตัน/Kim/ผู้ทรง (ไม่ใช่ทุก agent เรียกเอง). ดู skill ref 03 (anti-AI) / 04 (presets).
+
+**เลือก backend (2 ทางเลือก — เลือกตามงาน):**
+- **Codex** (`claude-codex-bridge` · gpt-5.5 ตายตัว · ฟรี/OAuth · มี memory ในตัว) → second-opinion งานทั่วไป
+- **OpenRouter** (`openrouter-bridge` · `scripts/ask-openrouter.sh --new --model <alias|id>`) → **เลือก model ได้ทุกตัว** (r1 reasoning · sonnet allround · gpt ต่างค่าย · gemini context ยาว · flash เร็ว/ถูก) — ใช้เมื่อต้อง model เฉพาะ หรืออยากได้มุมต่างค่าย. ไม่ระบุ model → helper ขึ้น 5-model picker. ต้องมี `OPENROUTER_API_KEY`. คิดเงินตาม model.
+- เงื่อนไข + gatekeeper เดิม (กัปตัน/Kim/ผู้ทรง · manual+propose · ไม่ auto) ใช้กับทั้งสอง backend. รวมผลแล้วระบุ attribution (model ไหน).

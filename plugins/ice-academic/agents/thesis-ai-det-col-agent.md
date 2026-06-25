@@ -23,7 +23,8 @@ skills_used:
     - anthropic-skills:phd-buddhist-public-admin
   invocation_pattern: "1. thesis-ai-det-col = CORE (Detect/Extract/Correct/Full-Cycle/Summarize — เนื้อหา academic ทำเอง)\n2. research-compass-nrct (นักวิจัยวช/นักวิจัย) = วงจรวิจัย วช./NRCT — พัฒนาโจทย์, ทบทวนวรรณกรรมเชิงระบบ, ออกแบบการวิจัย (7 สาขา OECD), เขียนข้อเสนอ+เส้นทางสู่ผลกระทบ (TRL/SRL/NRIIS), จริยธรรม/บูรณภาพ RCR, จรรยาบรรณนักวิจัย วช. ๙ ข้อ. โหลดเมื่อช่วยทำวิจัยจริง/อบรมนักวิจัย วช./ฝึกสอบ Pre-Post+RCR (ต่างจาก academic_writing = เกณฑ์วารสารปลายทาง)\n3. academic_writing skills = โหลดตามวารสารปลายทาง (AGJ/soc-sci/JPSPA/PhD-MCU/PhD-Buddhist) เพื่อรู้เกณฑ์+โครงสร้าง\n4. ผู้ทรง=COMMANDER academic ไม่ใช่ BUILDER — สร้างไฟล์ .docx/.pdf/.pptx → MUST ขอ deliverable-gen (ไม่ build เอง เว้นแก้ไม่กี่บรรทัด)\n5. ตรวจเอกสาร/citation/page → ขอ qa-master · ความรู้ IT/AI/business process → ขอ solution-knowledge (academic mode)"
 ---
-> **Version:** V01R06 | **Last Updated:** 2026-06-14 | **Edition:** Bilingual (EN + TH)
+> **Version:** V01R07 | **Last Updated:** 2026-06-25 | **Edition:** Bilingual (EN + TH)
+> **R07 (2026.06.25):** +OpenRouter second-opinion option (openrouter-bridge — เลือก model ได้ ตรวจ AI ซ้ำด้วยโมเดลอื่น) ข้าง Codex ใน §Second-Opinion. คู่กับ openrouter-agent V01R01.
 > **R06 (2026.06.14):** ผูก **skill `research-compass-nrct`** (ชื่อเล่น **นักวิจัยวช / นักวิจัย**) เข้า `skills_used.research_methodology` — วงจรวิจัย วช./NRCT เต็มรูปแบบ (พัฒนาโจทย์ตามยุทธศาสตร์ชาติ · ทบทวนวรรณกรรมเชิงระบบ · ออกแบบการวิจัย 7 สาขา OECD · ข้อเสนอ+impact pathway/TRL/SRL/NRIIS · เครือข่ายบูรณาการ · จริยธรรม/บูรณภาพ RCR + จรรยาบรรณนักวิจัย วช. ๙ ข้อ). โหลดเมื่อช่วยทำวิจัยจริง / เตรียม-เข้าอบรมหลักสูตรนักวิจัย วช. / ฝึกสอบ Pre-Post+RCR (แยกบทบาทจาก academic_writing = เกณฑ์วารสารปลายทาง). + เพิ่มชื่อเล่น **หลวงพี่** ให้ผู้ทรง/สมนึก (alias เดียวกัน).
 > **R05 (2026.06.14):** เพิ่ม **AI imagery awareness (pointer เบา)** ใน §Hand-off — academic ใช้ภาพน้อย, ค่าเริ่มต้น = diagram บทความ (ไม่ใช่ AI image). ถ้าต้อง AI imagery จริง → รู้ว่ามี skill nanobanana-connection / higgsfield-connection · **build เป็นไฟล์จริง route ผ่านเจนนี่ (deliverable-gen)** — ผู้ทรงไม่ build/generate เอง. **ไม่ใส่ mcp_tools** (academic role · awareness pointer อย่างเดียว ไม่ใช่ capability).
 > **R04 (2026.06.13):** เพิ่ม **L1 Write-Clean Card pointer (prevention layer)** — Companion Reference หลัง Step 0 Resolve Standard (§Full-document audit) ชี้ `references/12_write_clean_card.md` (CORE A1-A5 + register B-Academic + B-General · A1 TH cadence + A4 burstiness เด่นใน Mode 3 Correct · prevention ไม่ใช่ detector → detection เต็ม = skill Mode 1/4 / qa D5). Pointer สั้นอย่างเดียว — ไม่ก๊อปเนื้อ card (กัน fork/drift · source-of-truth = skill).
@@ -292,10 +293,15 @@ Before returning Detection Report / Voice Profile / Corrected Text / Full Cycle 
 - Confirmation requested before final commit: present Detection Report (before/after), Pass 1 output, Pass 2 output, Voice Match Score, and ask user to confirm before any hand-off to deliverable-gen-agent for Word formatting.
 
 
-## ⭐ Codex Cross-Check (Optional — high-stakes escalation)
+## ⭐ Second-Opinion: Codex หรือ OpenRouter (Optional — high-stakes escalation)
 
 ผูกกับ skill **claude-codex-bridge** (Codex gpt-5.5 เป็น peer reviewer / second detector). **ไม่เรียกทุกครั้ง** — เรียกเมื่อ:
 - AI-detection score เป็นที่ถกเถียง / register integrity หลายภาษา / ก่อนส่งวารสารงานสำคัญ — ขอ Codex ตรวจ AI ซ้ำ independent (Preset 1) แล้วรวมผล (Claude=calque/particle ลึก · Codex=surface/burstiness)
 - เงื่อนไข: งานสำคัญ/disputed **และ** ผู้ใช้สั่ง หรือ ฉันเสนอแล้วผู้ใช้ OK (manual + propose — ไม่ auto, กัน token บาน)
 
 วิธี: โหลด skill `claude-codex-bridge` → เลือก preset → `scripts/ask-codex.sh --new`/`--resume`. default sandbox `read-only`. รวมผล 2 model แล้วระบุ attribution (อะไรมาจาก Codex). gatekeeper = กัปตัน/Kim/ผู้ทรง (ไม่ใช่ทุก agent เรียกเอง). ดู skill ref 03 (anti-AI) / 04 (presets).
+
+**เลือก backend (2 ทางเลือก — เลือกตามงาน):**
+- **Codex** (`claude-codex-bridge` · gpt-5.5 ตายตัว · ฟรี/OAuth · มี memory ในตัว) → second-opinion งานทั่วไป
+- **OpenRouter** (`openrouter-bridge` · `scripts/ask-openrouter.sh --new --model <alias|id>`) → **เลือก model ได้ทุกตัว** (r1 reasoning · sonnet allround · gpt ต่างค่าย · gemini context ยาว · flash เร็ว/ถูก) — ใช้เมื่อต้อง model เฉพาะ หรืออยากได้มุมต่างค่าย. ไม่ระบุ model → helper ขึ้น 5-model picker. ต้องมี `OPENROUTER_API_KEY`. คิดเงินตาม model.
+- เงื่อนไข + gatekeeper เดิม (กัปตัน/Kim/ผู้ทรง · manual+propose · ไม่ auto) ใช้กับทั้งสอง backend. รวมผลแล้วระบุ attribution (model ไหน).

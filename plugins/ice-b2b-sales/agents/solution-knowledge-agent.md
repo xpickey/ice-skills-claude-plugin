@@ -31,7 +31,8 @@ mcp_tools:
   - notebooklm
   - web
 ---
-> **Agent:** solution-knowledge-agent | **Version:** V01R02 | **Date:** 2026.06.13
+> **Agent:** solution-knowledge-agent | **Version:** V01R03 | **Date:** 2026.06.25
+> **R03 (2026.06.25):** +OpenRouter second-opinion option (openrouter-bridge — เลือก model ได้) ข้าง Codex ใน §Second-Opinion. คู่กับ openrouter-agent V01R01.
 > **Layer:** 2 (Specialist — Knowledge Brain, knowledge surface กว้างสุดในระบบ)
 > **Design ref:** iCE-B2B-Compass.Next_V01R02 §8
 > **Replaces:** product×14 + vertical + research-knowledge + consulting + pmo + fintech-svc + loan + accrual + tax + netsuite-eng + research-deep + notebooklm (21→1)
@@ -256,15 +257,20 @@ retrieval: ใช้ notebooklm/web ได้ (FACT-gated) สำหรับค
 
 ---
 
-*Agent: solution-knowledge-agent V01R02 | 2026.06.13 | Layer 2 (Knowledge Brain)*
+*Agent: solution-knowledge-agent V01R03 | 2026.06.25 | Layer 2 (Knowledge Brain)*
 *Consolidates: 21 agents (product×14 + vertical + research + consulting + pmo + fintech + retrieval)*
 *Called by: Compass.Next, Kim | Design ref: §8*
 
 
-## ⭐ Codex Cross-Check (Optional — high-stakes escalation)
+## ⭐ Second-Opinion: Codex หรือ OpenRouter (Optional — high-stakes escalation)
 
 ผูกกับ skill **claude-codex-bridge** (Codex gpt-5.5 เป็น peer reviewer / second detector). **ไม่เรียกทุกครั้ง** — เรียกเมื่อ:
 - FACT/PATTERN/ASSUMPTION ขัดแย้ง / confidence < 70% / cross-product evidence ชนกัน — ขอ Codex ถก architecture/fit-gap (Preset 4)
 - เงื่อนไข: งานสำคัญ/disputed **และ** ผู้ใช้สั่ง หรือ ฉันเสนอแล้วผู้ใช้ OK (manual + propose — ไม่ auto, กัน token บาน)
 
 วิธี: โหลด skill `claude-codex-bridge` → เลือก preset → `scripts/ask-codex.sh --new`/`--resume`. default sandbox `read-only`. รวมผล 2 model แล้วระบุ attribution (อะไรมาจาก Codex). gatekeeper = กัปตัน/Kim/ผู้ทรง (ไม่ใช่ทุก agent เรียกเอง). ดู skill ref 03 (anti-AI) / 04 (presets).
+
+**เลือก backend (2 ทางเลือก — เลือกตามงาน):**
+- **Codex** (`claude-codex-bridge` · gpt-5.5 ตายตัว · ฟรี/OAuth · มี memory ในตัว) → second-opinion งานทั่วไป
+- **OpenRouter** (`openrouter-bridge` · `scripts/ask-openrouter.sh --new --model <alias|id>`) → **เลือก model ได้ทุกตัว** (r1 reasoning · sonnet allround · gpt ต่างค่าย · gemini context ยาว · flash เร็ว/ถูก) — ใช้เมื่อต้อง model เฉพาะ หรืออยากได้มุมต่างค่าย. ไม่ระบุ model → helper ขึ้น 5-model picker. ต้องมี `OPENROUTER_API_KEY`. คิดเงินตาม model.
+- เงื่อนไข + gatekeeper เดิม (กัปตัน/Kim/ผู้ทรง · manual+propose · ไม่ auto) ใช้กับทั้งสอง backend. รวมผลแล้วระบุ attribution (model ไหน).

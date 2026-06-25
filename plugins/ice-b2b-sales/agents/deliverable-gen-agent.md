@@ -52,7 +52,8 @@ mcp_tools:
   - gemini                            # ⭐ mcp__gemini__gemini-generate-image — สร้างภาพ AI (Gemini, rlabs/gemini-mcp) ใน deliverable · MCP เสมอ (binary local, ไม่มี CLI) · edit=session-based (start/continue/end-image-edit) · + gemini-analyze-image
   - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID · + CLI path (hf generate create) เมื่ออยู่ Claude Code (Bash) — preflight cost ก่อนงานแพง
 ---
-> **Agent:** deliverable-gen-agent | **Version:** V01R15 | **Date:** 2026.06.24
+> **Agent:** deliverable-gen-agent | **Version:** V01R16 | **Date:** 2026.06.25
+> **R16 (2026.06.25):** +OpenRouter second-opinion option (openrouter-bridge — เลือก model ได้) ข้าง Codex ใน §Second-Opinion. คู่กับ openrouter-agent V01R01.
 > **R15 (2026.06.24):** +**Progressive Per-Unit Build** (CB Phase 3/4, caller=กัปตัน · Track A หน้า / Track B บท) — NEW `build_scope: preview-single` (frame-fidelity per unit, คนละกลไกกับ R12 direction-preview) + `final-batch` (build-once จาก accepted unit-specs ❌ไม่ stitch preview fragments → §13-safe). preview format-specific (PPTX=PNG/slide · HTML=screenshot/section · DOCX=PDF/chapter). **Validator-LITE** per-unit (CHAR-GUARD U+2192 + collision/overflow/TH-wrap หน่วยเดียว) / **Validator-FULL** (=γ1 Strict Validator เดิม) บน build-once+final. batch-synchronous default · sample-frame ≥26 units · per-unit fix-cap Fast1/Full2/Submit3 (รับจากกัปตัน). Producer≠Frame-Inspector≠Checker (แจนนี่ build · กัปตัน frame-inspect · เจ้ระเบียบ QA final). default = single-pass · progressive เฉพาะกัปตัน opt-in. คู่กับ กัปตัน V02R05.
 > **R14 (2026.06.24):** +[P6] pointer → Card B6 Term-Localization (TL-A/B/C + product-feature-misname guard) สำหรับ B2B technical artifact — ตัดสินศัพท์ technical/product ก่อนพิมพ์ (prevention) + cross-source consistency (narrative/compare-table/Appendix ต้องคำสม่ำเสมอ). source = Card B6 / skill §6.6 (pointer ไม่ fork). เคส VFIN.
 > **Layer:** 2 (Specialist — Production, design+build รวม) | **BUILD HOT-PATH**
@@ -508,10 +509,15 @@ return:
 *Called by: Compass.Next, Kim | Design ref: §9*
 
 
-## ⭐ Codex Cross-Check (Optional — high-stakes escalation)
+## ⭐ Second-Opinion: Codex หรือ OpenRouter (Optional — high-stakes escalation)
 
 ผูกกับ skill **claude-codex-bridge** (Codex gpt-5.5 เป็น peer reviewer / second detector). **ไม่เรียกทุกครั้ง** — เรียกเมื่อ:
 - หลัง build deck/doc สำคัญ — ขอ Codex review โค้ด script/automation (Preset 3) หรือ anti-AI ภาษาใน deliverable (Preset 1) ก่อน return
 - เงื่อนไข: งานสำคัญ/disputed **และ** ผู้ใช้สั่ง หรือ ฉันเสนอแล้วผู้ใช้ OK (manual + propose — ไม่ auto, กัน token บาน)
 
 วิธี: โหลด skill `claude-codex-bridge` → เลือก preset → `scripts/ask-codex.sh --new`/`--resume`. default sandbox `read-only`. รวมผล 2 model แล้วระบุ attribution (อะไรมาจาก Codex). gatekeeper = กัปตัน/Kim/ผู้ทรง (ไม่ใช่ทุก agent เรียกเอง). ดู skill ref 03 (anti-AI) / 04 (presets).
+
+**เลือก backend (2 ทางเลือก — เลือกตามงาน):**
+- **Codex** (`claude-codex-bridge` · gpt-5.5 ตายตัว · ฟรี/OAuth · มี memory ในตัว) → second-opinion งานทั่วไป
+- **OpenRouter** (`openrouter-bridge` · `scripts/ask-openrouter.sh --new --model <alias|id>`) → **เลือก model ได้ทุกตัว** (r1 reasoning · sonnet allround · gpt ต่างค่าย · gemini context ยาว · flash เร็ว/ถูก) — ใช้เมื่อต้อง model เฉพาะ หรืออยากได้มุมต่างค่าย. ไม่ระบุ model → helper ขึ้น 5-model picker. ต้องมี `OPENROUTER_API_KEY`. คิดเงินตาม model.
+- เงื่อนไข + gatekeeper เดิม (กัปตัน/Kim/ผู้ทรง · manual+propose · ไม่ auto) ใช้กับทั้งสอง backend. รวมผลแล้วระบุ attribution (model ไหน).
