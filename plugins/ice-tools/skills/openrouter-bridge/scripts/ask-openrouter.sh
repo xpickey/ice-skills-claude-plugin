@@ -57,14 +57,17 @@ require_key() {
 
 # ── alias → model id ────────────────────────────────────────────────────
 resolve_model() {
+  # ids verified live on this account 2026.06.25 via --models (note: openai/* not
+  # available on this OpenRouter account → 'gpt' alias maps to a current Anthropic
+  # model; for a true OpenAI model pass a full id that --models shows).
   case "$1" in
-    gpt)     echo "openai/gpt-5.1" ;;
-    sonnet)  echo "anthropic/claude-sonnet-4" ;;
-    opus)    echo "anthropic/claude-opus-4" ;;
+    sonnet)  echo "anthropic/claude-sonnet-4.6" ;;
+    opus)    echo "anthropic/claude-opus-4.8" ;;
+    gpt)     echo "anthropic/claude-sonnet-4.6" ;;   # openai/* not on this acct → fallback
     gemini)  echo "google/gemini-2.5-pro" ;;
     flash)   echo "google/gemini-2.5-flash" ;;
     r1)      echo "deepseek/deepseek-r1" ;;
-    llama)   echo "meta-llama/llama-3.3-70b-instruct" ;;
+    llama)   echo "meta-llama/llama-3.1-70b-instruct" ;;
     *)       echo "$1" ;;   # already a full id
   esac
 }
@@ -73,11 +76,12 @@ resolve_model() {
 print_picker() {
   cat >&2 <<'MENU'
 เลือก model สำหรับงานนี้ (เรียงเก่งสุด → เหมาะพอดี) — ส่ง --model <alias|id>:
-  1. r1       deepseek/deepseek-r1            — reasoning หนัก ถกเชิงลึก (ราคากลาง)
-  2. sonnet   anthropic/claude-sonnet-4       — allround เขียน/วิเคราะห์ดีรอบด้าน
-  3. gpt      openai/gpt-5.1                  — second opinion ต่างค่าย/persona review
+  1. opus     anthropic/claude-opus-4.8       — งานยากสุด/ตัดสินใจสำคัญ
+  2. r1       deepseek/deepseek-r1            — reasoning หนัก ถกเชิงลึก (ถูก)
+  3. sonnet   anthropic/claude-sonnet-4.6     — allround เขียน/วิเคราะห์ดีรอบด้าน
   4. gemini   google/gemini-2.5-pro           — context ยาว/เอกสารใหญ่
   5. flash    google/gemini-2.5-flash         — เร็ว/ถูก ร่าง-สรุปเร็ว
+(ต่างค่าย: ส่ง full id จาก --models — openai/* ไม่มีบน account นี้)
 (ดูรายการ+ราคาเต็ม: ask-openrouter.sh --models)
 MENU
 }

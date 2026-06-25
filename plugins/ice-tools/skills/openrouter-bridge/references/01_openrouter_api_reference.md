@@ -23,17 +23,17 @@ OpenRouter = OpenAI-compatible gateway สู่ model ทุกค่าย ผ
 - error: JSON `{"error":{"message":..,"code":..}}` — **อาจมาพร้อม HTTP 200** → helper เช็ก `.error` เสมอ ไม่พึ่งแค่ HTTP code
 - helper exit codes: 2=usage · 4=no-key · 5=API error · 6=empty reply · 7=ต้องเลือก model (picker)
 
-## Alias → model id (ใน helper)
+## Alias → model id (ใน helper) — verified live 2026.06.25
 | alias | id | เหมาะกับ |
 |---|---|---|
-| `r1` | deepseek/deepseek-r1 | reasoning หนัก, ถกเชิงลึก |
-| `sonnet` | anthropic/claude-sonnet-4 | allround เขียน/วิเคราะห์ |
-| `opus` | anthropic/claude-opus-4 | งานยากสุด |
-| `gpt` | openai/gpt-5.1 | second opinion ต่างค่าย |
+| `opus` | anthropic/claude-opus-4.8 | งานยากสุด/ตัดสินใจสำคัญ |
+| `r1` | deepseek/deepseek-r1 | reasoning หนัก, ถกเชิงลึก (ถูก) |
+| `sonnet` | anthropic/claude-sonnet-4.6 | allround เขียน/วิเคราะห์ |
 | `gemini` | google/gemini-2.5-pro | context ยาว/เอกสารใหญ่ |
 | `flash` | google/gemini-2.5-flash | เร็ว/ถูก ร่าง-สรุป |
-| `llama` | meta-llama/llama-3.3-70b-instruct | open model |
-> alias = best-guess id ปัจจุบัน — **verify live ด้วย `--models`** (ราคา+id เปลี่ยนได้). ถ้า id ตาย → ส่ง full id ตรง ๆ ได้เลย (resolve_model คืนค่าเดิมถ้าไม่ใช่ alias).
+| `llama` | meta-llama/llama-3.1-70b-instruct | open model |
+| `gpt` | anthropic/claude-sonnet-4.6 (fallback) | ⚠️ openai/* ไม่มีบน account นี้ |
+> alias verified live แล้ว — แต่ **id drift ได้** → `--models` ตรวจเสมอ. **openai/* ไม่มีบน OpenRouter account นี้** (grep ว่าง 2026.06.25) → ถ้าต้อง OpenAI จริง ส่ง full id ที่ `--models` แสดงเท่านั้น. id ที่ไม่ใช่ alias = ส่งตรง ๆ ได้ (resolve_model คืนค่าเดิม).
 
 ## Cost note (สำคัญ — ต่างจาก Codex)
 stateless → ส่ง history ทั้งหมดทุก turn → **token โตเชิงเส้นทุกรอบ** (turn 5 ส่ง 5 turns). เทียบ Codex (server จำเอง ส่งแค่ prompt ใหม่). ⇒ **LOOP CAP ~5 turn สำคัญกว่า** + เลือก model ถูกลงสำหรับงานยาว ๆ (flash) / model แพงเฉพาะรอบสำคัญ.
