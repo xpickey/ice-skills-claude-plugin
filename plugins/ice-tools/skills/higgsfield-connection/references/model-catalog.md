@@ -2,6 +2,44 @@
 
 > **เช็คจริงเสมอ:** model list เปลี่ยนได้ — ใช้ `models_explore(action='list'|'search', type='image'|'video'|'audio')` ดู catalog ปัจจุบัน + `action='get', model_id='...'` ดู constraint (aspect_ratio, duration, medias roles). ตารางด้านล่างเป็น default-pick guide ไม่ใช่รายการตายตัว.
 
+> **Version-Agnostic Policy:** อย่า hardcode version number ใน logic — ค้นจาก family แล้ว pick latest ที่ MCP คืนมา. ตารางนี้บันทึก model_id ที่ verified ณ 2026-06 ไว้เป็น reference เท่านั้น. เมื่อ Higgsfield upgrade (เช่น veo3 → veo4) ให้ใช้ family search ไม่ต้อง update skill.
+
+---
+
+## Verified Models (2026-06) + Version-Agnostic Guide
+
+### IMAGE models (verified via models_explore — 2026-06)
+
+| Family | model_id ที่ verified | Use-case | หมายเหตุ |
+|---|---|---|---|
+| **GPT Image** | `gpt_image`, `gpt_image_2` | org/infographic/text/diagram | `gpt_image` = 1.5; `gpt_image_2` = higher res 1k/2k/4k |
+| **Nano Banana** | `nano_banana_pro` | 4K, text, diagram, product, photoreal | text fidelity สูงสุด |
+| **Recraft** | `recraft-v4-1` | logo, icon, vector graphic | model_type: standard/vector/utility — เลือก vector |
+| **FLUX** | `flux_2` (variants: pro/flex/max) | concept art, illustration, high-detail | ใช้ `flux_2` + variant |
+| **Flux Kontext** | `flux_kontext` | context-aware edit, style transfer, retouch | **substitute สำหรับ "Reve" ที่ไม่มีใน MCP** |
+| **Auto** | `image_auto` | ให้ Higgsfield เลือก model ที่เหมาะจาก prompt | verified EXISTS — ใช้ได้เลย |
+| Soul | `soul_2`, `soul_cinematic` | portrait/fashion/UGC, cinematic stills | stable — ไม่เปลี่ยนบ่อย |
+| Marketing | `marketing_studio_image` | ad/product commercial | stable |
+| MS Image (DTC) | `ms_image` | DTC ads | ต้องมี `style_id` |
+| Soul Cast | `soul_cast` | character/avatar จาก text ล้วน | ไม่ต้อง ref image |
+
+> ⚠️ **"Reve" ไม่มีใน MCP** (ณ 2026-06) — substitute = `flux_kontext` (context-aware edit ใกล้เคียงที่สุด). เมื่อผู้ใช้ขอ Reve → fuzzy suggest flux_kontext + ถามยืนยัน
+
+### VIDEO models (verified via models_explore — 2026-06)
+
+| Family | model_id ที่ verified | Use-case | หมายเหตุ |
+|---|---|---|---|
+| **Veo** | `veo3`, `veo3_1`, `veo3_1_lite` | storytelling, long-form, complex scenes | `veo3_1` = newer; pick latest via search |
+| **Kling 2.x** | `kling2_6` | character consistency, cinematic motion | search `kling2` → pick latest 2.x |
+| **Kling 3** | `kling3_0` | multi-shot, audio sync | search `kling3` → pick latest |
+| Higgsfield cinematic | `cinematic_studio_video_v2`, `cinematic_studio_3_0` | cinematic quality | |
+| Marketing Studio Video | `marketing_studio_video` | TikTok/Reels/DTC | stable |
+| Seedance | `seedance_2_0` | identity/face-consistency | stable |
+| Higgsfield preset | `higgsfield_preset` | ใช้ preset | ต้องมี `preset_id` จาก `presets_show` |
+| Grok Video | `grok_video` | text+image-to-video | |
+
+---
+
 ## IMAGE models
 
 | Model | เหมาะกับ | หมายเหตุ |

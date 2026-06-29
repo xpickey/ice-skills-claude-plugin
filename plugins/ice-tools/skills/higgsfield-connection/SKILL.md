@@ -2,8 +2,8 @@
 name: higgsfield-connection
 description: เชื่อมต่อและสั่งงาน Higgsfield AI MCP Server (image + video + Marketing Studio + Soul ID + Virality Predictor) จาก Claude Desktop, Cowork และ Code CLI. ใช้เมื่อผู้ใช้ต้องการ สร้าง/แก้ภาพ AI คุณภาพสูง (FLUX.2/Soul/Nano Banana Pro), สร้างวิดีโอ AI (Kling/Veo/Seedance), ทำ DTC/Product Ads, Product Photoshoot, Brand Video, UGC, สร้าง Avatar/Character หน้าตาคงเส้นคงวา (Soul ID), วิเคราะห์โอกาสไวรัล (Virality Predictor), upscale ภาพ/วิดีโอ, generate เสียง/voiceover, หรือ Setup/Troubleshoot Higgsfield. ต่างจาก nanobanana (Gemini image-only) — Higgsfield = full image+video+marketing+audio suite. Triggers ภาษาไทย — ทำวิดีโอ AI, สร้าง ad/โฆษณา, product shot, ภาพสินค้า, avatar, character คงหน้า, hero/banner คุณภาพสูง, วิเคราะห์วิดีโอไวรัล, upscale, voiceover, Higgsfield, FLUX, Kling, Veo, Soul ID, Marketing Studio. English — generate video, AI ad, product photoshoot, DTC ad, brand video, consistent character/avatar, soul id, virality predictor, upscale video, higgsfield, kling, veo, flux, marketing studio.
 metadata:
-  version: V01R03
-  date: "2026-06-14"
+  version: V01R04
+  date: "2026-06-29"
   author: Trusted Transformation Strategist
 ---
 
@@ -67,33 +67,59 @@ Higgsfield เรียกได้ 2 ทาง — **เลือกตาม e
 
 ## STEP 1 — Model Selection (เลือก model ให้ถูกงาน) ⭐
 
-Higgsfield มี 30+ models. **อย่าเดา model เอง** — ใช้ `models_explore` ค้นเมื่อไม่แน่ใจ. Decision tree เริ่มต้น:
+Higgsfield มี 30+ models ที่อัปเดตต่อเนื่อง — **อย่า hardcode version number** ใช้ family + `models_explore` verify at runtime แทน (กัน reskill เมื่อ model upgrade). เดิน 4 tier ตามลำดับ:
 
-### ภาพ (image)
-| งาน | model เริ่มต้น | เหตุผล |
+### Tier A — ผู้ใช้ระบุ model ชื่อหรือ family มา
+
+1. **Fuzzy map** ชื่อที่ผู้ใช้พิมพ์ → family (ดูตาราง verified ใน `references/model-catalog.md`)
+2. **Verify runtime:** `models_explore(action='get', model_id='<best-guess>')` — ถ้าพบ → ใช้
+3. ไม่พบ → `models_explore(action='search', query='<family-name>')` → เลือก version ล่าสุดที่ค้นได้
+4. ยังไม่ชัด → **ถามผู้ใช้ 1 คำถาม** พร้อมเสนอ substitute ที่ใกล้เคียงที่สุด
+
+> ตัวอย่าง fuzzy: "Veo" → search `veo` → เลือก latest · "Kling 2.x" → search `kling2` → ใช้ version ล่าสุดในสาย · "Reve" → ไม่พบใน MCP → เสนอ `flux_kontext` (context-aware edit, ใกล้เคียงที่สุด) → ถามยืนยัน
+
+### Tier B — ผู้ใช้พิมพ์ "auto" หรือไม่ระบุ model
+
+- **Image:** ใช้ `image_auto` (verified EXISTS — Higgsfield เลือกให้อัตโนมัติจาก prompt)
+- **Video:** delegate ไปยัง skill `higgsfield-generate` ซึ่งมี marketing-deep workflow ในตัว
+- **connection = gateway (เลือก model) · generate = deep executor** — ถ้างานซับซ้อน/ต้องการ virality predictor หรือ full marketing workflow → ส่งต่อ generate
+
+### Tier C — ผู้ใช้ระบุ use-case (ไม่ใช่ model)
+
+เลือก family จาก Default Table แล้ว **verify version ล่าสุดที่ runtime** ด้วย `models_explore(action='search')`:
+
+#### ภาพ (image) — Default Family Table
+| ลำดับ | Family | Use-case | Runtime verify |
+|---|---|---|---|
+| 1 | **GPT Image** | องค์กร, อินโฟกราฟิก, ไดอะแกรม, ภาพมีข้อความ | `models_explore(search, 'gpt_image')` → latest |
+| 2 | **Nano Banana** | ภาพสมจริง, บุคคล, สินค้า, สถาปัตยกรรม | `models_explore(search, 'nano_banana')` |
+| 3 | **Recraft** | โลโก้, ไอคอน, กราฟิกเวกเตอร์ | `models_explore(search, 'recraft')` → เลือก vector model_type |
+| 4 | **FLUX** | Concept Art, Illustration, งานสร้างสรรค์รายละเอียดสูง | `models_explore(search, 'flux_2')` |
+| 5 | **Flux Kontext** | รีทัช, แก้ไขภาพ, style transfer | `models_explore(search, 'flux_kontext')` |
+| — | Soul / Marketing Studio | portrait/UGC/character, ad/product | `soul_2`, `marketing_studio_image` (stable — ไม่เปลี่ยนบ่อย) |
+
+#### วิดีโอ (video) — Default Family Table
+| ลำดับ | Family | Use-case | Runtime verify |
+|---|---|---|---|
+| 1 | **Higgsfield** | โฆษณา, Camera Motion, Luxury, Product | `models_explore(recommend, 'higgsfield ad camera motion')` |
+| 2 | **Veo** | เล่าเรื่อง, วิดีโอยาว, ฉากซับซ้อน | `models_explore(search, 'veo')` → latest |
+| 3 | **Kling** | คงหน้าตัวละคร, character consistency | `models_explore(search, 'kling')` → latest |
+
+#### audio
+| งาน | model | param พิเศษ |
 |---|---|---|
-| commercial / product / ads | `marketing_studio_image` | optimized สำหรับ ad |
-| character/avatar (text-only) | `soul_cast` | สร้างจาก text ล้วน |
-| **character คงหน้า reusable** | `soul_2` + `soul_id` | train Soul ID (5-20 รูป, ~10 นาที) |
-| character ref one-off | `soul_2` หรือ `nano_banana_pro` | ไม่ต้อง train |
-| portrait/fashion/UGC/editorial | `soul_2` | คุณภาพ photoreal |
-| 4K / มี text / diagram | `nano_banana_pro` | text fidelity สูง |
+| เพลง | `sonilo_music` | ต้องมี `duration` |
+| sound effect | `mirelo_text_to_audio` | ต้องมี `duration` |
+| voiceover/พูด | `inworld_text_to_speech` | ต้องมี `voice` · ไม่ต้อง duration |
 
-### วิดีโอ (video)
-| งาน | model เริ่มต้น |
-|---|---|
-| ads / product video | `marketing_studio_video` |
-| identity (คงหน้า) | `seedance_2_0` |
-| multi-shot / audio / motion transfer | `kling3_0` |
+### Tier D — use-case ยังไม่ชัดพอ
 
-### audio
-| งาน | model |
-|---|---|
-| เพลง | `sonilo_music` (ต้องมี duration) |
-| sound effect | `mirelo_text_to_audio` (ต้องมี duration) |
-| voiceover/พูด | `inworld_text_to_speech` (ต้องมี voice, ไม่ต้อง duration) |
+`models_explore(action='recommend', query='<งานที่ต้องการ>', type='image'|'video'|'audio')` → เสนอผลให้ผู้ใช้เลือก
 
-> **ค้น model จริงเสมอเมื่อไม่ชัด:** `models_explore(action='recommend', query='...', type='image'|'video'|'audio')` หรือ `action='get', model_id='...'` ดู constraints (aspect_ratio, duration, medias roles). อย่า hardcode param ที่ model ไม่รองรับ.
+---
+
+> **กฎ version-agnostic:** ห้าม hardcode version number เช่น `veo3_1`, `kling2_6`, `gpt_image_2` ใน logic — ค้นจาก family แล้วใช้ตัวล่าสุดที่ MCP คืนมา ทุกครั้ง. รายการ model_id verified ดู `references/model-catalog.md`
+> **ค้น constraint เสมอ:** `models_explore(action='get', model_id='...')` ดู aspect_ratio/duration/medias roles ก่อนสั่ง generate.
 
 ---
 
@@ -242,5 +268,6 @@ prompt cookbook ไทย-อังกฤษ + ตัวอย่างแยก
 ---
 
 ## CHANGELOG
+- **V01R04 (2026-06-29)** — **STEP 1 ใหม่ทั้งหมด**: 4-Tier model selection (A: user-specified fuzzy+verify · B: auto → image_auto/higgsfield-generate delegate · C: use-case → Default Family Table · D: unclear → models_explore recommend). +**Version-Agnostic** — ห้าม hardcode version number ใช้ family search + runtime verify แทน. +**Default Family Table** image (GPT Image/Nano Banana/Recraft/FLUX/Flux Kontext) + video (Higgsfield/Veo/Kling). +**Fuzzy match** "Reve" → flux_kontext substitute. +**Cross-ref** higgsfield-generate (connection = gateway · generate = deep executor).
 - **V01R02 (2026-06-14)** — +**Execution Path Rule** (Claude Code → CLI `hf generate ...` ผ่าน Bash · Claude Desktop/Web/Cowork → MCP tool · Nano Banana = MCP เสมอ ไม่มี CLI). +`references/cli-commands.md` (CLI v0.2.1 brew, alias hf/higgs, auth login แล้ว — command + CLI↔MCP mapping verify จาก `hf --help` จริง). STEP 0 pre-flight + ref table แยก 2 path. CLI ติดตั้งจริงแล้ว (208 credit starter — preflight cost สำคัญ).
 - **V01R01 (2026-06-13)** — สร้างครั้งแรก. Connection/orchestration skill สำหรับ Higgsfield AI MCP (image+video+marketing+soul+virality). ขนานกับ nanobanana-connection แต่ครอบ full suite + credit-based (preflight cost) + model-selection decision tree (30+ models) + async job polling + Marketing Studio workflow. คู่กับ b2b-presentation-creator / deliverable-gen-agent.
