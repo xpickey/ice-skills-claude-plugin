@@ -69,6 +69,11 @@ DOMAIN 1 — PRODUCT KNOWLEDGE (lazy-load ตาม primary_product):
   Oracle:  oracle-cloud-applications-consulting · oracle-ebs-consulting · oracle-netsuite-consulting · ice-netsuite-thailand-advisory
   SAP/MS/Anaplan/Coupa: knowledge module (training-based)
   ครอบคลุม: module map · version capability · fit-gap L1+ · SuiteScript/SDF/API · man-day · architecture
+  ⭐ COMPETITIVE TOR KB (NetSuite vs Oracle Fusion vs SAP) — lazy-load เมื่องานเป็น competitive TOR / weaponize spec / defend TOR ที่ bias / เทียบ NetSuite-Fusion-SAP:
+    • oracle-netsuite-consulting/references/tor-competitive-kb/   — มุม NetSuite: จุดอ่อน + counter/mitigation (first-party add-on/SuiteApp/over-spec rebuttal) — ใช้ตอนขาย/ป้องกัน NetSuite
+    • oracle-cloud-applications-consulting/references/tor-competitive-kb/ — มุม Fusion: จุดแข็ง + TOR wording (TH+EN) weaponize — ใช้ตอนขาย Fusion
+    จัดตาม 11 industry: by-industry/<vertical>.md + cross-cutting.md (เปิด vertical ที่ตรง + cross-cutting เสมอ). README.md = index. _AMS-update-workflow.md = เติม TOR รายปี. _ACCESS.md = internal-only (ห้าม paste ตรงเข้า customer-facing — ใช้เฉพาะ TOR wording ที่ derive แบบ outcome-based)
+    ⚠️ BALANCED (FACT-gate): ดึง gap ต้องดึง counter/caveat มาด้วยเสมอ — ข้อมูลดิบเป็น TOR เชิงแข่งขัน (bias) · การ lock spec เฉพาะผลิตภัณฑ์ = ความเสี่ยงจัดซื้อ (สตง.) · แต่ละ record มี confidence + citation → mark ตามจริง ไม่ยก high ถ้าไม่มีแหล่ง
 
 DOMAIN 2 — VERTICAL/INDUSTRY (Hybrid):
   11 industries (BFSI/Manufacturing/Public-Sector-TH/Energy/Retail/Healthcare/Hospitality/Logistics/Telco/Education/Reinsurance)
@@ -252,12 +257,13 @@ retrieval: ใช้ notebooklm/web ได้ (FACT-gated) สำหรับค
 
 # Changelog
 
+- **V01R04 (2026.07.02)** — DOMAIN 1 เพิ่ม pointer **Competitive TOR KB** (NetSuite vs Oracle Fusion vs SAP): oracle-netsuite-consulting/references/tor-competitive-kb/ (มุม NetSuite จุดอ่อน+counter) + oracle-cloud-applications-consulting/references/tor-competitive-kb/ (มุม Fusion จุดแข็ง+weaponize), จัดตาม 11 industry + cross-cutting + AMS yearly workflow + access-note. ⚠️ BALANCED FACT-gate: ดึง gap ต้องดึง counter/caveat (bias-source), lock-spec = procurement risk, confidence/citation ต่อ record. lazy-load เมื่องาน competitive TOR / weaponize / defend biased TOR.
 - **V01R02 (2026.06.13)** — เพิ่ม [P4] L1 Write-Clean Card pointer (prevention layer): เขียนสะอาดตั้งแต่ร่างแรก, อ้าง core A1-A5 + register B-Business + B-Academic จาก skill `thesis-ai-det-col` (pointer-only, ไม่ copy card — กัน fork/drift). detection เต็มยังอยู่ที่ skill / qa-master D5.
 - **V01R01 (2026.06.01)** — Initial release. Router-Shell Knowledge Brain, consolidates 21 agents.
 
 ---
 
-*Agent: solution-knowledge-agent V01R03 | 2026.06.25 | Layer 2 (Knowledge Brain)*
+*Agent: solution-knowledge-agent V01R04 | 2026.07.02 | Layer 2 (Knowledge Brain)*
 *Consolidates: 21 agents (product×14 + vertical + research + consulting + pmo + fintech + retrieval)*
 *Called by: Compass.Next, Kim | Design ref: §8*
 

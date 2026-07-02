@@ -1,7 +1,7 @@
 {
   "name": "ice-b2b-sales",
   "description": "iCE B2B enterprise sales fleet — 29 skills (Oracle/SAP/NetSuite/MS Dynamics, B2B methodology, Thai GFMIS/e-GP/tax, pricing) + 6 Compass.Next agents (iCE-Compass-Next, kim-assistant, sales-process, solution-knowledge, deliverable-gen, qa-master) + shared _lib/reference/_infra. v1.2.4: Composed Build orchestration — Compass V02R05 (outline-first → per-unit review → build-once, Matrix id15, PUL cap, granularity ladder, small-deck escape) + deliverable-gen V01R15 (progressive per-unit build + Validator-LITE). v1.2.5: 4 agents (Compass/qa-master/deliverable-gen/solution-knowledge) gain OpenRouter second-opinion option alongside Codex (openrouter-bridge — pick any model).",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "author": {
     "name": "xpickey"
   }
