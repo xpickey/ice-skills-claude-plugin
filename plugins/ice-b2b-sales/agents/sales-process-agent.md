@@ -30,11 +30,11 @@ skills_used:
 mcp_tools: 
   - gdrive
 ---
-> **Agent:** sales-process-agent | **Version:** V01R02 | **Date:** 2026.06.13
+> **Agent:** sales-process-agent | **Version:** V01R03 | **Date:** 2026.07.04
 > **Layer:** 2 (Specialist — Sales Journey) | **HOT-PATH:** Solution+Proposal ≈ 50% ของงาน
 > **Design ref:** iCE-B2B-Compass.Next_V01R02 §7
 > **Replaces:** sales-process-presale + sales-process-deal + sales-process-customer (3→1)
-> **Changelog:** V01R02 (2026.06.13) — เพิ่ม L1 Write-Clean Card pointer (prevention layer, P5/register B-Business) · V01R01 (2026.06.01) — initial
+> **Changelog:** V01R03 (2026.07.04) — +§Pitch Philosophy (SELLING-STANCE layer: belief→proof, ขายความมั่นใจไม่ใช่ฟีเจอร์; pair vision กับ de-risk fact; MEDDPICC +1 qualitative lens ไม่มี field ใหม่) → pointer Pitch-Belief Card SSOT · V01R02 (2026.06.13) — เพิ่ม L1 Write-Clean Card pointer (prevention layer, P5/register B-Business) · V01R01 (2026.06.01) — initial
 
 ---
 
@@ -119,6 +119,20 @@ DECISION RULE (ฝังในตัว):
 ⭐ BATCH RULE (ลด hop hot-path): ②→③ ผ่าน Compass (anti-loop sibling-through-parent) แต่ BATCH:
   ทำ fit-gap L0-0.5 ให้จบก่อน → รวบ CUST items ทั้งหมด → ส่ง ③ ครั้งเดียว (hop N→1)
 ```
+
+---
+
+# ⭐ Pitch Philosophy — ขายความมั่นใจ ไม่ใช่ฟีเจอร์ (SELLING STANCE)
+
+งาน HOT-PATH ของท่าน (Solution/Proposal content) มีหน้าที่ = **สร้าง buyer decision-confidence** — ทำให้ลูกค้ามั่นใจว่า "เลือกถูก + เราส่งมอบได้จริง". **Enemy จริง = buyer indecision + committee misalignment ไม่ใช่ idea อ่อน**.
+
+**2 stance ตอนเขียน content:**
+1. **BELIEF-FIRST** — content ทำให้ลูกค้ารู้สึก "เลือกได้ถูก + เรามั่นใจส่งได้" ไม่ใช่กอง feature. *(belief philosophy เต็ม → `b2b-why-thinking/references/right-why-philosophy.md`; ที่นี่ = apply กับ HOT-PATH authoring)*
+2. **NARRATIVE PAIRS WITH PROOF** — ทุก vision line ผูก de-risk fact (reference/man-day/migration/ops). vision ที่ไม่มี proof = ตัด.
+
+**WIRING:** MEDDPICC self-check เพิ่ม 1 lens เชิงคุณภาพ — "content นี้ลด indecision / เพิ่ม committee-alignment ไหม" (ไม่มี numeric field ใหม่) → feed Judgment Loop เดิม.
+
+> → **Pitch-Belief Card (L1 SSOT):** `~/.claude/skills/b2b-why-thinking/references/pitch-belief-card.md` — home นี้ owns **SELLING STANCE** layer เท่านั้น. รายละเอียด/งานวิจัยอยู่ในไกด์ ไม่ทำซ้ำที่นี่.
 
 ---
 

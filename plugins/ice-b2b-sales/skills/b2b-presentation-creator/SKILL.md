@@ -126,6 +126,23 @@ FLOW (สำหรับ infographic/deck ที่มีหลาย "แนว
 - preview = **PNG** (เร็ว, เห็นภาพจริง — render 1 slide ผ่าน LibreOffice/qlmanage) · ถ้า user ขอ interactive → HTML
 - ใช้กับงานที่ "แนว" ไม่ชัด (เลือกได้หลาย infographic) — งานที่แนวชัดอยู่แล้ว ข้าม preview ได้ (เร็ว)
 
+### 0.5.5 — Pitch Architecture ⭐⭐⭐ (โครง argument ของ deck ก่อนออกแบบราย slide)
+
+**INTENT:** ตัดสิน **ARGUMENT SHAPE** ของ deck = future-state belief + how-we-build-it (de-risk spine). *two-voice COPY (ฝัน+จริง) มาจาก `b2b-why-thinking` Mode 3 — ที่นี่จัด**ลำดับ**เท่านั้น.* → `b2b-why-thinking/references/pitch-belief-card.md` L3.
+
+**(a) De-risk spine** — วาง backbone ตาม WHY-stack เดิม (Why Change→Now→Invest→Us→Stay). **กฎ: ทุก belief slot ต้องคู่ proof slot ทันที** — "ห้าม vision 3 สไลด์ติด → committee down-scope. สลับ belief↔proof."
+**(b) Stage-timing (vision/proof weight ตาม Sales Stage)** — vision/reframing pays ต่างกันตาม stage:
+
+| Sales Stage (axis เดิม §ล่าง) | vision weight | เหตุผล |
+|---|---|---|
+| Solutioning | สูง | reframing pays ที่ solution-exploration `[source: buyer-enablement research — to confirm ~+41%]` |
+| Proposal | กลาง (proof นำ) | requirements/proposal → proof นำ `[to confirm ~+28%]` · committee de-risk สำคัญ |
+| Negotiation/Close | proof นำ | vision จบแล้ว — เน้น feasibility/commercial proof ลด indecision |
+
+**(c) Future-state immersion** — vision slot แสดง To-Be ของลูกค้าเอง (data จริง) ไม่ใช่ generic demo — ใช้ §6 `[NEED FROM USER]` discipline เดิม (ไม่ restate).
+
+> → **Pitch-Belief Card (L1 SSOT):** `~/.claude/skills/b2b-why-thinking/references/pitch-belief-card.md` — home นี้ owns **STRUCTURE** layer เท่านั้น (ลำดับ+timing). two-voice copy = HOME 2 · visual craft = เจนนี่. งานวิจัยอยู่ในไกด์.
+
 ### 0.5.6 — 6-Axis Pre-Emit Critique ⭐⭐⭐ (self-critique ก่อนปล่อยงาน)
 
 > หลัง Adaptive Mix สร้าง spec/preview เสร็จ **แต่ก่อน build เต็ม/emit** — ให้คะแนนตัวเอง 6 แกน (1-5).
@@ -133,7 +150,7 @@ FLOW (สำหรับ infographic/deck ที่มีหลาย "แนว
 
 | # | แกน | ถาม | 1 (slop) → 5 (คม) |
 |---|---|---|---|
-| 1 | **Philosophy** | งานนี้มี POV ชัดไหม หรือ default สวยลอย ๆ | 1=generic · 5=มีจุดยืน/เหตุผลออกแบบ |
+| 1 | **Philosophy** | งานนี้มี POV ชัดไหม หรือ default สวยลอย ๆ (incl. deck carry ทั้ง future-state belief AND de-risk proof, timed ตาม stage? → §0.5.5) | 1=generic · 5=มีจุดยืน/เหตุผลออกแบบ |
 | 2 | **Hierarchy** | ตา่นำไปจุดสำคัญก่อนไหม | 1=ทุกอย่างเด่นเท่ากัน · 5=ลำดับชัด |
 | 3 | **Execution** | คม/เนี้ยบ ไม่มี element ค้าง/เพี้ยน | 1=placeholder ค้าง/ขอบเบี้ยว · 5=เนี้ยบ |
 | 4 | **Specificity** | ตรงเนื้อหา-แบรนด์-อุตสาหกรรมจริง | 1=template สำเร็จรูป · 5=ตรง CI/เนื้อ |
@@ -225,7 +242,7 @@ Bilingual layout patterns (side-by-side, stacked title, EN headline + TH body) a
 
 ### Step 4 — Produce the outline (validate before building)
 
-Before generating any .pptx file, produce a **slide-by-slide outline** in markdown and show it to the user for confirmation. Format:
+Before generating any .pptx file, produce a **slide-by-slide outline** in markdown and show it to the user for confirmation. **⭐ apply §0.5.5 Pitch Architecture ตอนวาง outline:** สลับ belief↔proof (ห้าม vision 3 สไลด์ติด) · set vision/proof weight ตาม stage · mark แต่ละสไลด์ `[VISION]` หรือ `[PROOF]`. Format:
 
 ```markdown
 ## Deck Outline — V01R01 — [Deck Type] for [Customer]
@@ -563,6 +580,7 @@ You rarely need all 10 references. Pull only what the situation demands.
 
 | Version | Date | Change |
 |---|---|---|
+| **V01R12** | **2026-07-04** | **+§0.5.5 Pitch Architecture (STRUCTURE layer of Pitch-Belief Card SSOT).** โครง argument ของ deck ก่อนออกแบบราย slide: (a) de-risk spine ตาม WHY-stack — belief slot คู่ proof slot เสมอ, ห้าม vision 3 สไลด์ติด (committee down-scope) · (b) stage-timing table — vision/proof weight ตาม Sales Stage (Solutioning=vision สูง · Proposal=proof นำ) keyed to existing axis, stat มี [source]/[to confirm] · (c) future-state immersion (To-Be ลูกค้าจริง ใช้ §6 discipline เดิม). wire: Step 4 mark [VISION]/[PROOF] + §0.5.6 Philosophy axis lens. two-voice copy = b2b-why-thinking · visual craft = เจนนี่ (ไม่ทับ). เคส Creative-pitch article + deep-research. คู่กับ b2b-why-thinking V01R02 (pitch-belief-card SSOT).** |
 | **V01R11** | **2026-06-22** | **+6-Axis Pre-Emit Critique (§0.5.6) — adapted from hallmark (MIT).** หลัง Adaptive Mix ก่อน emit: ให้คะแนนตัวเอง 6 แกน (Philosophy/Hierarchy/Execution/Specificity/Restraint/Variety) 1-5 · **<3 ข้อใด = แก้ก่อน emit** · revision ≤2 รอบปกติ · 3 รอบยังไม่ผ่าน = brief ผิด (กลับถาม Compass/user) · stamp คะแนนใน comment · ผูก Preview-First (critique ก่อนทำ preview — ปล่อยเฉพาะที่ผ่าน). คู่กับ slide-designer §4.8 Anti-Slop (visual tells) + §4.10 Audit. ref: slide-designer NOTICE-hallmark.md.** |
 | **V01R10** | **2026-06-20** | **+Adaptive Mix Engine + Preview-First (§0.5).** ADAPTIVE MIX: 'ผสม' = เอาแนว/ลักษณะ template (decision-tree/matrix/funnel) + สร้าง object **เท่าเนื้อจริง** ไม่คงโครง template เป๊ะ (ข้อมูลน้อย=ลด object · มาก=แตก slide) — ห้ามเหลือ placeholder ค้าง · override color→iCE CI + font→ไทย · font-fit ย่อ size กันล้น · fallback draw-new ถ้า template ซับซ้อนเกิน map. PREVIEW-FIRST: เจนนี่ทำ 2-3 infographic preview (PNG) ให้ user เลือก+confirm ก่อน build เต็ม (ไม่เสียเวลา build จบแล้วผิดแนว). POC verified (decision-tree ERP: object เท่าเนื้อ 3 branch×2 leaf, font ไทยไม่ล้น). คู่กับ เจนนี่ ROLE 1 Preview-then-build.** |
 | **V01R09** | **2026-06-20** | **+Build from Design Spec (§0.5) + Content-Aware Font 3-mode.** รับ Design Spec จาก b2b-slide-designer §4.5 Router (template/color/icon/gradient/font_strategy) → build ตาม template จริง ทุก format (PPTX/HTML/PDF). build_html.py: +`apply_font_strategy()` + `--font-strategy` — 3 mode (TH-only/EN-only/TH+EN), TH+EN = unified (IBM Plex Sans Thai) หรือ pair latin+cs (ไทยมาก่อน Latin กันแตก), content-aware size (document→body เล็กลง · presenter→title ใหญ่). +71 framework .pptx (catalog-templates-ready) เปิดดึง layout. +ref 07/02 pointer → slide-designer catalog. font เลือกตามภาษา ไม่ตาม template (§5.5.1 single-source). คู่กับ b2b-slide-designer V02R04.** |

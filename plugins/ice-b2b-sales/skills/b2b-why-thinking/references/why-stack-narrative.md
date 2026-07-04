@@ -12,6 +12,8 @@ Why Change? → Why Now? → Why Invest? → Why Us? → Why Stay?
 
 Most deals fail at Why Now (status quo wins), then at Why Invest (seen as cost, not investment), then at Why Us (no belief gap vs. competitor). Always stress-test all five before shipping.
 
+> **⭐ Two languages per WHY (de-risk):** ทุก WHY เล่า 2 เสียง — **DREAM** (Executive pitch pattern / pain ladder ข้างบน) **+ REALITY** (Reality anchor = proof/feasibility ที่ลด perceived risk). ขาดเสียงจริง → deal stall ที่ indecision. → `pitch-belief-card.md` L4 (SSOT).
+
 ---
 
 ## 1. Why CHANGE — the status quo is broken
@@ -29,6 +31,12 @@ Move the pain from functional → strategic → emotional.
 - **Functional:** "The close takes 15 days."
 - **Strategic:** "Finance can't give the board timely data."
 - **Emotional:** "The CFO is being called a back-office function, not a strategic leader."
+
+### Reality anchor (second language — de-risk)
+> DREAM ข้างบนต้องคู่กับ REALITY: proof ว่าการเปลี่ยนทำได้จริง ไม่ใช่แค่ pain ชัด.
+- **Feasibility proof:** baseline วันนี้ (metric ปัจจุบัน) + gap ที่วัดได้ → การเปลี่ยนมี target ตัวเลข ไม่ใช่ความรู้สึก
+- **Precedent:** องค์กรลักษณะเดียวกันที่เปลี่ยนแล้วสำเร็จ (reference/pattern — `[to confirm]` ถ้ายังไม่ verify)
+- **Risk-of-change addressed:** สิ่งที่ลูกค้ากลัวตอนเปลี่ยน (downtime/adoption) + วิธีคุม → ลด indecision (`pitch-belief-card.md` L4)
 
 ### Red flags Why Change is weak
 - Customer asks to reduce scope — the pain isn't strong enough.
@@ -89,6 +97,10 @@ Goal: move the deal into the "Buy Now" cell by raising *both* external urgency a
 >
 > Delaying 12 months is not "saving" — it is paying more in forms you can't see on the P&L.
 
+### Reality anchor (second language — de-risk)
+- **Timing proof:** cost-of-delay ที่คำนวณได้ (เดือนละ X `[to confirm]`) + external trigger จริง (regulation/EOL/renewal date) → "ตอนนี้" มีหลักฐาน ไม่ใช่เร่งรัด
+- **Readiness:** ทีม/ระบบ/งบ พร้อมจริงไหม — ระบุ prerequisite ที่มีแล้ว ลด "ยังไม่พร้อม" objection
+
 ### Red flags Why Now is weak
 - "Let's revisit next quarter" heard more than once.
 - No time-bound external event cited.
@@ -137,6 +149,10 @@ Goal: move the deal into the "Buy Now" cell by raising *both* external urgency a
 >
 > The question is not "can we afford this?" — it is "can we afford *not* to?"
 
+### Reality anchor (second language — de-risk)
+- **Numbers you can defend:** ROI/NPV ผูก assumption ที่ลูกค้ายืนยันได้เอง (ไม่ใช่ตัวเลข vendor ลอย) — 3-Lens ข้างบนต้องมี source
+- **Downside bounded:** worst-case / phased-investment option → ลด financial risk ที่ committee กลัว
+
 ### Red flags Why Invest is weak
 - "Budget is tight" repeated multiple times.
 - Only functional ROI, no strategic narrative — the board will not sponsor.
@@ -173,6 +189,10 @@ The strongest position is the intersection of all three: *proven + believed + de
 >
 > We are not selling a solution. We are selling *proof that you chose right*.
 
+### Reality anchor (second language — de-risk)
+- **Proof of the unfair advantage:** cert/track-record/team จริง (`[to confirm]` ถ้ายังไม่ verify) — 3-Dimensions ข้างบนต้องมีหลักฐาน ไม่ใช่ claim
+- **Delivery evidence:** reference site + man-day + methodology จริง → "เราทำได้" มี proof (`pitch-belief-card.md` L1 confidence)
+
 ### Common mistakes in Why Us
 - Listing credentials (Gartner Leader, ISO 27001, etc.) — competitors list them too.
 - Saying "we are the best" — nobody believes it.
@@ -193,6 +213,10 @@ The strongest position is the intersection of all three: *proven + believed + de
 
 ### Executive pitch pattern (Why Stay)
 > You are not buying [solution]. You are buying a three-year journey to [destination]. Phase 1 lands [outcome]; Phase 2 unlocks [outcome]; by Year 3 you have [capability]. Our role shifts from implementer to partner — measured on *your* outcomes, not our deliverables.
+
+### Reality anchor (second language — de-risk)
+- **Partnership proof:** roadmap/SLA/AMS ที่ committed จริง → multi-year thesis มีหลักฐาน ไม่ใช่สัญญาปาก
+- **Exit-risk addressed:** สิ่งที่ลูกค้ากลัวเรื่อง lock-in + วิธีคุม → ลด long-term perceived risk
 
 ### Red flags Why Stay is weak
 - No named account executive / partner past go-live.

@@ -52,7 +52,8 @@ mcp_tools:
   - gemini                            # ⭐ mcp__gemini__gemini-generate-image — สร้างภาพ AI (Gemini, rlabs/gemini-mcp) ใน deliverable · MCP เสมอ (binary local, ไม่มี CLI) · edit=session-based (start/continue/end-image-edit) · + gemini-analyze-image
   - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID · + CLI path (hf generate create) เมื่ออยู่ Claude Code (Bash) — preflight cost ก่อนงานแพง
 ---
-> **Agent:** deliverable-gen-agent | **Version:** V01R16 | **Date:** 2026.06.25
+> **Agent:** deliverable-gen-agent | **Version:** V01R17 | **Date:** 2026.07.04
+> **R17 (2026.07.04):** +Credibility Lens (VISUAL CREDIBILITY layer ของ Pitch-Belief Card SSOT) — อ่านคะแนน 6-Axis เป็น buyer delivery-signal (deck = ผลงานชิ้นแรก) + 2 prune-don't-pile rules (visual เด่นชี้หลักฐาน · polish ช่วย comprehension) + boundary (§4.8 slop vs lens นี้ delivery-signal · qa-master D7.S detect vs ท่าน prevent). pointer ไป card L2+L5 (Signal Map อยู่ในไกด์ ไม่ fork). เคส Creative-pitch + deep-research. คู่กับ b2b-why-thinking V01R02.
 > **R16 (2026.06.25):** +OpenRouter second-opinion option (openrouter-bridge — เลือก model ได้) ข้าง Codex ใน §Second-Opinion. คู่กับ openrouter-agent V01R01.
 > **R15 (2026.06.24):** +**Progressive Per-Unit Build** (CB Phase 3/4, caller=กัปตัน · Track A หน้า / Track B บท) — NEW `build_scope: preview-single` (frame-fidelity per unit, คนละกลไกกับ R12 direction-preview) + `final-batch` (build-once จาก accepted unit-specs ❌ไม่ stitch preview fragments → §13-safe). preview format-specific (PPTX=PNG/slide · HTML=screenshot/section · DOCX=PDF/chapter). **Validator-LITE** per-unit (CHAR-GUARD U+2192 + collision/overflow/TH-wrap หน่วยเดียว) / **Validator-FULL** (=γ1 Strict Validator เดิม) บน build-once+final. batch-synchronous default · sample-frame ≥26 units · per-unit fix-cap Fast1/Full2/Submit3 (รับจากกัปตัน). Producer≠Frame-Inspector≠Checker (แจนนี่ build · กัปตัน frame-inspect · เจ้ระเบียบ QA final). default = single-pass · progressive เฉพาะกัปตัน opt-in. คู่กับ กัปตัน V02R05.
 > **R14 (2026.06.24):** +[P6] pointer → Card B6 Term-Localization (TL-A/B/C + product-feature-misname guard) สำหรับ B2B technical artifact — ตัดสินศัพท์ technical/product ก่อนพิมพ์ (prevention) + cross-source consistency (narrative/compare-table/Appendix ต้องคำสม่ำเสมอ). source = Card B6 / skill §6.6 (pointer ไม่ fork). เคส VFIN.
@@ -106,6 +107,11 @@ ROLE 1 — DESIGN/ORCHESTRATE:
     • slide-designer มี §4.8 Anti-Slop Gates (visual AI tells) + §4.9 Custom-Theme Gen (palette ใหม่เมื่อ catalog ไม่เข้า) + §4.10 Audit/Study
     • presentation-creator มี §0.5.6 6-Axis Pre-Emit Critique (ให้คะแนนตัวเอง 6 แกน ก่อน emit · <3=แก้ก่อน)
     → ปล่อยเฉพาะงานที่ผ่าน anti-slop + critique แล้ว (qa-master D7.S detect ซ้ำหลัง build)
+  ⭐ CREDIBILITY LENS (อ่านคะแนน 6-Axis เป็น buyer delivery-signal — VISUAL CREDIBILITY layer):
+    • อย่าอ่านคะแนน 6 แกน (§0.5.6) แค่ "slop ไหม" — อ่านเป็น "visual นี้ signal อะไรเรื่อง delivery-capability" (deck = ตัวอย่างงานชิ้นแรกในสายตาลูกค้า)
+    • prune ไม่ pile (2 กฎ): (a) ทุก visual เด่นต้อง *ชี้ไปที่* หลักฐานบนสไลด์ ไม่ตกแต่งที่ว่าง · (b) polish เพิ่มเฉพาะที่ช่วย comprehension — density สูง = ลูกค้า down-scope
+    • ต่างกัน: §4.8 = visual เป็น AI-slop ไหม · lens นี้ = visual signal delivery-capability ไหม (คนละคำถาม ทำต่อเนื่อง) · qa-master D7.S = detect หลัง build, ท่านป้องกันก่อน emit
+    → **Pitch-Belief Card L2+L5 (SSOT):** `~/.claude/skills/b2b-why-thinking/references/pitch-belief-card.md` — Signal Map 6-แกน + งานวิจัยอยู่ในไกด์ (ท่าน owns VISUAL CREDIBILITY เท่านั้น)
 
   ⭐ PREVIEW-FIRST (infographic ที่มีหลายแนว — ก่อน build เต็ม):
     1. สร้าง 2-3 PREVIEW (แนวต่างกัน: decision-tree/matrix/flow) — แต่ละอัน build 1 slide → render PNG

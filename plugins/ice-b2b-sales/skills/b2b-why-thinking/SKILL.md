@@ -67,7 +67,7 @@ These principles come from the two source frameworks and should shape every outp
 2. **WHY doesn't replace MEDDPICC — it enriches it.** Hard qualification without belief = price war. Belief without qualification = stalled deal.
 3. **Every MEDDPICC letter has a WHY question behind it.** Metrics have a purpose, Economic Buyers have a legacy, Champions take political risk for a reason. Surface those reasons.
 4. **The biggest competitor is "do nothing".** 60–70% of B2B deals are lost to status-quo, not to named competitors. Why Now is usually the weakest link.
-5. **Executives buy in five questions.** Why Change / Why Now / Why Invest / Why Us / Why Stay — in that order, always.
+5. **Executives buy in five questions.** Why Change / Why Now / Why Invest / Why Us / Why Stay — in that order, always. **แต่ละข้อต้องตอบด้วย 2 ภาษา — DREAM (vision) + REALITY (proof/feasibility ที่ลด perceived risk)** มิฉะนั้น deal stall ที่ indecision. → `references/pitch-belief-card.md` L4 (SSOT).
 6. **WHY is a filter, not a magnet.** Its job is to *repel* prospects who don't share the belief, so LTV and margin compound on the ones who do.
 7. **Every red flag = a missing WHY.** Price pressure → Why Invest weak. Deal stall → Why Now weak. Competitive loss → Why Us weak. "Let's revisit next quarter" → all three are weak.
 8. **Bilingual by default.** For Thai-market deals and advisory, produce Thai + English side-by-side unless the user asks for one language only.
@@ -137,6 +137,7 @@ Each mode has a lightweight workflow, the reference file to consult, and the def
    - the 3 strongest supporting points,
    - the pitch-pattern paragraph in the executive's language,
    - evidence anchors (reference customers, KPIs, third-party data — with `[to confirm]` markers where user didn't supply).
+   - **⭐ emit แต่ละ WHY เป็นคู่ (DREAM | REALITY):** DREAM = pitch-pattern (vision) · REALITY = Reality anchor (proof/feasibility ลด risk) จาก `why-stack-narrative.md`. ขาดเสียงจริง = deal stall. → `pitch-belief-card.md` L4.
 3. Stress-test each WHY with its red-flag checklist (e.g. for Why Now: the "Why Not Next Year" test).
 4. Assemble the *Executive Bridge Slide* — one page with Why Change / Now / Invest / Us / Stay, success metrics, decision date, sponsor, champion.
 5. Output: the full 5-WHY narrative block + the Executive Bridge slide + suggested phrasings in both Thai and English.
@@ -225,6 +226,7 @@ Before returning any artifact, check:
 - [ ] **Bilingual** (Thai + English) if the customer/user is in Thai market.
 - [ ] **One artifact, one purpose** — a proposal is not a pitch is not a workbook.
 - [ ] **Risks, not just upside** — mentions the cost of inaction and the risk of choosing us.
+- [ ] **Two languages present** — every WHY has BOTH a DREAM (vision) and a REALITY anchor (proof/feasibility). Vision alone → stalls on indecision.
 
 If any check fails, iterate before handing back.
 
@@ -236,7 +238,8 @@ Do not load everything at once. Read the relevant reference file when the mode c
 
 - `references/right-why-philosophy.md` — *Finding the Right WHY* in full: R-I-G-H-T attributes, 5-level Maturity Ladder, Anatomy of the Right WHY, 7-Step Questioning Protocol, 7-Point Clarity Test, Red Flags, Apple case study, 10 Commandments, Sales-stage application.
 - `references/meddpicc-bridge.md` — MEDDPICC primer, the 8-letter WHY Bridge Map, the 65-point Integrated Scorecard, the 4 deal archetypes (Aligned Believer / Technical Fit / Spiritual Connection / Lost Cause), the Red-Flag-to-WHY diagnosis table.
-- `references/why-stack-narrative.md` — Why Change / Why Now / Why Invest (3-Lens) / Why Us (3-Dimensions) / Why Stay with discovery questions, frameworks (Burning Platform matrix, Executive Pitch Patterns), red flags.
+- `references/why-stack-narrative.md` — Why Change / Why Now / Why Invest (3-Lens) / Why Us (3-Dimensions) / Why Stay with discovery questions, frameworks (Burning Platform matrix, Executive Pitch Patterns), red flags, **+ per-WHY Reality anchors (two-language de-risk)**.
+- `references/pitch-belief-card.md` — **⭐ L1 SSOT: Pitch-Belief framework** (5 บทเรียน Pitch + งานวิจัย + application map 4 homes). belief > idea · 2 ภาษา · visual credibility · deck = design piece. skill นี้ owns NARRATIVE layer; homes อื่นชี้มาที่การ์ดนี้.
 - `references/presentation-proposal.md` — WHY-Driven 10-section proposal structure, 60-minute executive presentation flow with MEDDPICC hooks, Apple-style B2B pitch template, Executive Bridge Slide pattern, 7 tips for communicating WHY in B2B.
 - `references/question-bank.md` — Bilingual (Thai + English) question bank covering Discovery, Qualification, Narrative, Deal Review, and Objection Handling.
 
@@ -270,5 +273,11 @@ Do not load everything at once. Read the relevant reference file when the mode c
 ║                                                            ║
 ╚════════════════════════════════════════════════════════════╝
 ```
+
+---
+
+## Version History
+- **V01R02 (2026.07.04)** — +Two-Language (dream+reality) lens on WHY-stack: per-WHY Reality anchors in `why-stack-narrative.md` (proof/feasibility ลด perceived risk คู่กับ vision) + Core principle 5 extended + Mode 3 emits paired DREAM|REALITY + Output-bar checkbox. **Hosts `references/pitch-belief-card.md` (L1 SSOT)** — Pitch-Belief framework (5 lessons + deep-research) that 4 fleet homes point to. Body-only (frontmatter untouched — note: description is over the ~1024 Web cap, separate fix).
+- **V01R01** — initial (Start-With-Why + MEDDPICC + 5-WHY narrative).
 
 > *"You don't sell a solution. You sell a belief — backed by a qualified plan."*
