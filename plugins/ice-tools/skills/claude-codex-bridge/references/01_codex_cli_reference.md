@@ -19,6 +19,17 @@ Codex CLI **v0.137.0**, login = OAuth ("Logged in using ChatGPT"), model `gpt-5.
 → ถ้าใส่ `-s` หรือ `-C` กับ `resume` = `error: unexpected argument '-s' found` (exit 2).
 → ไม่มี `-a` ที่ subcommand ไหนเลย — **approval คุมผ่าน sandbox mode เท่านั้น**.
 
+## ⭐ Probe 2026.07.10 (codex-cli 0.137.0 — ข้อเท็จจริงเพิ่มที่ตารางบนยังไม่มี)
+
+| flag/ความสามารถ | `codex exec` | `codex exec resume` | ใช้ทำอะไรใน bridge |
+|---|---|---|---|
+| `--output-schema <FILE>` | ✅ | ✅ | **บังคับคำตอบเป็น JSON ตาม schema** → helper V02R01 รับ `--schema <file>` ส่งต่อ (ใช้กับ `references/verdict.schema.json` ตาม ref 05 Review Contract) |
+| `resume [SESSION_ID]` positional | — | ✅ รับ **UUID หรือ thread name** · มี `--last` (ล่าสุด) + `--all` (ปิด cwd filter) | multi-session native — helper V02R01 เก็บ id ต่อชื่อ session |
+| `-c key=value` config override · `-p profile` | ✅ | ✅ (-c) | ยังไม่ใช้ default — จดไว้ |
+| `codex exec review` subcommand | ✅ (review ทั้ง git repo) | — | ไม่ใช้ในงานเอกสารธุรกิจ |
+
+**กติกาบำรุงรักษา:** helper V02R01 มี runtime feature-detection สำหรับ `--output-schema` (เช็คจาก `--help` จริงก่อนใช้ — CLI อัปเดตแล้ว flag หาย = เตือน+ทำต่อแบบไม่มี schema ไม่พังเงียบ) · ใครแก้ helper ครั้งหน้า: **probe `codex --version` + `--help` ก่อนเสมอ** แล้วอัปเดตหมวดนี้พร้อมประทับวันที่
+
 ## Output (เอา text สะอาด)
 - `--output-last-message <FILE>` → เขียน **เฉพาะคำตอบสุดท้าย** ของ Codex (ไม่มี banner/ERROR/token) → `cat <FILE>`
 - `--json` → JSONL บน stdout, event สำคัญ:

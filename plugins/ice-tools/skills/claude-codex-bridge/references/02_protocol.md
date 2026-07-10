@@ -40,6 +40,26 @@ helper append ทุก turn ลง `$BRIDGE_DIR/transcript.md`:
 - **T3** (Claude --resume): "สรุป 1 ประโยค" → Codex สรุปครบทั้ง 4 field (**จำทั้ง thread**)
 - session id เดียวตลอด, input_tokens โต 24k→47k (context สะสม)
 
+## ⭐ REVIEW turn shape (Mode B/D/E — เพิ่ม V02R01 · ใช้คู่ ref 05 Review Contract)
+
+เมื่อ turn เป็น "การตรวจงาน" (ไม่ใช่ถกไอเดีย) — รูปทรงรอบเปลี่ยนเป็น:
+1. **SUBMIT** (Claude `--new` + `--schema references/verdict.schema.json`) — ส่งของครบตาม ref 05 §7: ตัวงานเต็ม + เกณฑ์ + scope/รอบ
+2. **VERDICT** (Codex) — JSON ตาม schema: issues (Files/Impact/Minimal fix) + `counts` + `context_repairs`
+3. **FIX** (Claude แก้ตามจริง — เปิดไฟล์แก้ ไม่ใช่แค่รับปาก)
+4. **RE-VERDICT** (Claude `--resume` + `--schema`) — แนบรายการ issue รอบก่อน → Codex ต้องตอบ fixed_verified/still_present ครบ
+5. จบเมื่อ **counts ผ่านเกณฑ์** (critical=0 & high≤2 default) · **หยุดเมื่อ critical ไม่ลด 2 รอบติด** (stagnation — ref 05 §4) · เพดาน ~5 turns
+- OpenRouter ไม่มี --output-schema → ใช้ format markdown + trailer `<!-- counts: ... -->` + บันไดสำรอง ref 05 §9
+
+## ⭐ Shard pattern (Mode D — งานใหญ่ ตรวจขนานหลายมุม)
+
+```bash
+S=~/.claude/skills/claude-codex-bridge
+"$S/scripts/ask-codex.sh" --session shard-fact  --schema "$S/references/verdict.schema.json" --new "ตรวจเฉพาะมุมข้อเท็จจริง/ตัวเลข: <งาน+เกณฑ์>"
+"$S/scripts/ask-codex.sh" --session shard-risk  --schema "$S/references/verdict.schema.json" --new "ตรวจเฉพาะมุมความเสี่ยง/compliance: <งาน+เกณฑ์>"
+"$S/scripts/ask-codex.sh" --session shard-compl --schema "$S/references/verdict.schema.json" --new "ตรวจเฉพาะความครบถ้วนเทียบ requirement: <งาน+เกณฑ์>"
+```
+→ Claude รวมผล: ตัดซ้ำ (เรื่องเดียวกันเก็บ severity สูงกว่า) → counts รวม → ตัดสินตามเกณฑ์เดียว · แต่ละ shard resume ต่อได้อิสระ
+
 ## ส่งโค้ดให้ Codex review (pattern)
 ใส่โค้ด/diff ใน prompt ตรง ๆ (helper รับ prompt เป็น arg). ถ้าโค้ดยาว:
 ```bash

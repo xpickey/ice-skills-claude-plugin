@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReviewVerdict",
+  "description": "Structured review verdict per claude-codex-bridge references/05_review_contract.md (V01R02). STRICT-MODE compliant for codex --output-schema (OpenAI structured outputs: every object lists ALL properties in required, additionalProperties false). Verified working 2026.07.10.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scope_check", "critical", "high", "medium", "counts", "fixed_verified", "still_present", "context_repairs"],
+  "properties": {
+    "scope_check": {
+      "type": "string",
+      "description": "'ok' if inputs complete and scope matched; otherwise 'REVIEW_BLOCKED: INPUT_INCOMPLETE - <missing>' and all issue arrays must be empty"
+    },
+    "critical": { "type": "array", "items": { "$ref": "#/$defs/issue" } },
+    "high": { "type": "array", "items": { "$ref": "#/$defs/issue" } },
+    "medium": { "type": "array", "items": { "$ref": "#/$defs/issue" } },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["critical", "high", "medium"],
+      "properties": {
+        "critical": { "type": "integer" },
+        "high": { "type": "integer" },
+        "medium": { "type": "integer" }
+      }
+    },
+    "fixed_verified": {
+      "type": "array",
+      "description": "Issue IDs from previous round confirmed FIXED by checking the actual file (empty array on round 1)",
+      "items": { "type": "string" }
+    },
+    "still_present": {
+      "type": "array",
+      "description": "Issue IDs from previous round that remain — mark RECURRING (empty array on round 1)",
+      "items": { "type": "string" }
+    },
+    "context_repairs": {
+      "type": "array",
+      "description": "Systemic rule-gap proposals; empty array = none",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target_file", "why_systemic", "suggestion"],
+        "properties": {
+          "target_file": { "type": "string" },
+          "why_systemic": { "type": "string" },
+          "suggestion": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "recurring", "files", "impact", "minimal_fix"],
+      "properties": {
+        "id": { "type": "string", "description": "e.g. C1, H2, M3" },
+        "title": { "type": "string" },
+        "recurring": { "type": "boolean", "description": "true if same class of issue appeared before; false otherwise" },
+        "files": { "type": "string", "description": "file:location (slide/page/section); comma-separated if multiple" },
+        "impact": { "type": "string", "description": "concrete consequence + trigger condition; no vague wording" },
+        "minimal_fix": { "type": "string", "description": "smallest sufficient fix, max 3 steps" }
+      }
+    }
+  }
+}

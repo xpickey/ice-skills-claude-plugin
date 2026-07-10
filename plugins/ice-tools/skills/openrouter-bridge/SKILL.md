@@ -53,3 +53,7 @@ SK=~/.claude/skills/openrouter-bridge/scripts
 
 ## CHANGELOG
 - **V01R01 (2026.06.25)** — initial. curl+jq helper (--new/--resume/--models/--pick), stateless history-resend (messages.json), --model+alias+5-model-picker (no silent default), error-guard (.error inspect), transcript audit, key from ~/.hermes/.env. Mirror ของ claude-codex-bridge. +persona-review preset (KTC use-case).
+
+## ⭐ Review Mode Contract (เพิ่ม 2026.07.10 — ONE-HOME อยู่ที่ claude-codex-bridge)
+
+เมื่อใช้ bridge นี้ **ตรวจงาน** (ไม่ใช่ถกไอเดีย): ใช้ **Review Contract เดียวกับ Codex** ที่ `~/.claude/skills/claude-codex-bridge/references/05_review_contract.md` — counts trailer + เกณฑ์ผ่าน critical=0 & high≤2 + หยุดเมื่อ critical ไม่ลด 2 รอบติด + disposition (ACCEPTED_RISK = user เท่านั้น) + REVIEW_BLOCKED เมื่อของไม่ครบ. OpenRouter ไม่มี output-schema → เริ่มที่บันไดสำรองชั้น 2 ของ contract (สั่ง format ใน prompt → re-emit 1 ครั้ง → Claude นับเอง). Authorization Matrix (ใครเรียกได้เมื่อไร) อยู่ไฟล์เดียวกัน — ไม่ fork มาที่นี่.
