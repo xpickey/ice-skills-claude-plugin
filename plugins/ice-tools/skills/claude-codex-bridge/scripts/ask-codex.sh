@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
-# Claude ↔ Codex bridge helper (V02R01 | 2026.07.10).
+# Claude ↔ Codex bridge helper (V02R02 | 2026.07.10 — +--model passthrough · probed CLI 0.144.1).
 # Claude calls this via Bash to converse with Codex, turn by turn.
 # Claude drives the loop; Codex keeps its own session memory across turns.
 #
 # Usage:
-#   ask-codex.sh [--session <name>] [--schema <file>] --new     "<prompt>"   # start a fresh thread
-#   ask-codex.sh [--session <name>] [--schema <file>] --resume  "<prompt>"   # continue saved thread
+#   ask-codex.sh [--session <name>] [--schema <file>] [--model <m>] --new    "<prompt>"   # start a fresh thread
+#   ask-codex.sh [--session <name>] [--schema <file>] [--model <m>] --resume "<prompt>"   # continue saved thread
 #   ask-codex.sh --list-sessions                                             # show known threads
+#
+#   --model <m>  (V02R02): override model ต่อ call โดยไม่แก้ config.toml — เช่น gpt-5.5 / gpt-5.6-terra /
+#                gpt-5.6-luna (ดูรายชื่อจริงจาก ~/.codex/models_cache.json) · ไม่ใส่ = default จาก config ·
+#                feature-detected เหมือน --schema (CLI อนาคตตัด -m → เตือน+ใช้ default)
 #
 # New in V02R01 (all flags verified against codex-cli 0.137.0 --help on 2026.07.10):
 #   --session <name>   isolate threads per name (parallel shards / per-opportunity) —
@@ -35,6 +39,7 @@ SANDBOX="${BRIDGE_SANDBOX:-read-only}"
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SESSION=""            # empty = legacy default dir (back-compat)
 SCHEMA=""
+MODEL=""              # empty = default จาก ~/.codex/config.toml
 mode=""
 prompt=""
 
@@ -55,6 +60,10 @@ while [[ $# -gt 0 ]]; do
       SCHEMA="${2:-}"
       if [[ -z "$SCHEMA" ]]; then echo "--schema needs a file path" >&2; exit 2; fi
       if [[ ! -f "$SCHEMA" ]]; then echo "schema file not found: $SCHEMA" >&2; exit 2; fi
+      shift 2 ;;
+    --model)
+      MODEL="${2:-}"
+      if [[ -z "$MODEL" ]]; then echo "--model needs a model id (เช่น gpt-5.6-terra)" >&2; exit 2; fi
       shift 2 ;;
     --list-sessions|--new|--resume)
       # mode ถูกตั้งแล้ว = ผู้เรียกผสม flag ผิด (Codex review M4) → usage ไม่เดา
@@ -104,15 +113,24 @@ ERRLOG="$DIR/err.log"
 TRANSCRIPT="$DIR/transcript.md"
 mkdir -p "$DIR"
 
-# ---- schema feature-detection (runtime — CLI updates for sure) --------------
+# ---- schema + model feature-detection (runtime — CLI updates for sure) ------
 # ตรวจกับ command path ที่จะรันจริง (Codex review M2: exec กับ resume อาจต่างกันใน version หน้า)
-SCHEMA_ARGS=()
+SCHEMA_ARGS=(); MODEL_ARGS=(); HELP_OUT=""
+if [[ -n "$SCHEMA" || -n "$MODEL" ]]; then
+  if [[ "$mode" == "--resume" ]]; then HELP_OUT="$(codex exec resume --help 2>/dev/null)"; else HELP_OUT="$(codex exec --help 2>/dev/null)"; fi
+fi
 if [[ -n "$SCHEMA" ]]; then
-  if [[ "$mode" == "--resume" ]]; then HELP_CMD=(codex exec resume --help); else HELP_CMD=(codex exec --help); fi
-  if "${HELP_CMD[@]}" 2>/dev/null | grep -q -- "--output-schema"; then
+  if grep -q -- "--output-schema" <<<"$HELP_OUT"; then
     SCHEMA_ARGS=(--output-schema "$SCHEMA")
   else
-    echo "WARN: this codex CLI path (${HELP_CMD[*]}) has no --output-schema — proceeding WITHOUT schema; use contract fallback ladder (ref 05 §9)" >&2
+    echo "WARN: this codex CLI path has no --output-schema — proceeding WITHOUT schema; use contract fallback ladder (ref 05 §9)" >&2
+  fi
+fi
+if [[ -n "$MODEL" ]]; then
+  if grep -q -- "--model" <<<"$HELP_OUT"; then
+    MODEL_ARGS=(-m "$MODEL")
+  else
+    echo "WARN: this codex CLI path has no -m/--model — proceeding with config default model" >&2
   fi
 fi
 
@@ -128,14 +146,14 @@ if [[ "$mode" == "--new" ]]; then
   # full flag set: exec accepts -s and -C
   # '--' terminator กัน prompt ที่ขึ้นต้นด้วย - ถูกกินเป็น flag (Codex review H2 · clap รองรับ)
   codex exec --json -o "$LAST" --skip-git-repo-check -s "$SANDBOX" -C "$DIR" \
-    ${SCHEMA_ARGS[@]+"${SCHEMA_ARGS[@]}"} \
+    ${SCHEMA_ARGS[@]+"${SCHEMA_ARGS[@]}"} ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} \
     -- "$prompt" >"$EVENTS" 2>"$ERRLOG" || rc=$?
 elif [[ "$mode" == "--resume" ]]; then
   sid="$(cat "$SID_FILE" 2>/dev/null || true)"
   if [[ -z "$sid" ]]; then echo "no saved session-id for '${SESSION:-default}'; run --new first" >&2; exit 3; fi
-  # reduced flag set: resume rejects -s and -C (inherits from session) — but accepts --output-schema
+  # reduced flag set: resume rejects -s and -C (inherits from session) — but accepts --output-schema/-m
   codex exec resume --json -o "$LAST" --skip-git-repo-check \
-    ${SCHEMA_ARGS[@]+"${SCHEMA_ARGS[@]}"} \
+    ${SCHEMA_ARGS[@]+"${SCHEMA_ARGS[@]}"} ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} \
     -- "$sid" "$prompt" >"$EVENTS" 2>"$ERRLOG" || rc=$?
 fi
 

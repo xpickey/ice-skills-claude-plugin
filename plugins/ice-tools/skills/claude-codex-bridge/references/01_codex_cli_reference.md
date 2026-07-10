@@ -58,3 +58,8 @@ codex exec --json -o LAST --skip-git-repo-check -s read-only -C "$DIR" "<prompt>
 # resume (NO -s, NO -C)
 codex exec resume "<SID>" --json -o LAST --skip-git-repo-check "<prompt>" >EVENTS 2>err.log
 ```
+
+## ⭐ Probe 2026.07.10 (บ่าย — codex-cli 0.144.1 หลัง brew upgrade จาก 0.137.0)
+- `--output-schema` ✅ ยังอยู่ทั้ง `exec` และ `exec resume` · `resume` ยังไม่รับ `-s`/`-C` ตามเดิม
+- **Models ในบัญชี (จาก models_cache.json):** gpt-5.4 · gpt-5.4-mini · **gpt-5.5** · **gpt-5.6-luna** · **gpt-5.6-terra** · codex-auto-review — ⚠️ 5.6 ใช้ได้เฉพาะ CLI ≥0.144 (0.137 โดน API 400 "requires newer version")
+- config default = `gpt-5.6-terra` (backup pre-terra มี) · helper V02R02 `--model` สลับต่อ call — ทดสอบจริง terra/luna/5.5 + resume memory ผ่านครบ

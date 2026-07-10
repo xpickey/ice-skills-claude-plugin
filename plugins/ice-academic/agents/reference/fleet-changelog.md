@@ -63,6 +63,7 @@
 - V01R01 (2026.06.25) — initial. พี่น้อง codex-bridge (curl helper + history-resend + alias picker + persona preset)
 
 ## skill: claude-codex-bridge
+- **V02R02 (2026.07.10 บ่าย)** — +helper `--model` passthrough (terra/luna/5.5 ต่อ call · feature-detected) · config default → gpt-5.6-terra · CLI 0.137→0.144.1 re-probed · ทดสอบจริง 4 ข้อผ่าน
 - **V02R01 (2026.07.10)** — +Modes A-E · +ref 05 Review Contract + verdict.schema.json · +helper V02 (--session/--list-sessions/--schema + feature-detection + overwrite guard) · +Authorization Matrix + codex_scope (ONE-HOME) · +Degradation Ladder · ref 01 +Probe 2026.07.10 (--output-schema/resume-positional) · ref 02 +REVIEW shape + Shard
 - V01R02 (2026.06.22) — +4 presets + fleet binding · V01R01 (2026.06.22) — initial
 

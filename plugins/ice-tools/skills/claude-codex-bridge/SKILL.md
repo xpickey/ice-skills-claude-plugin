@@ -6,8 +6,9 @@ trigger: /codex-bridge
 
 # Claude ↔ Codex Bridge
 
-**Version: V02R01 | 2026.07.10** — manual-turn conversation bridge. Claude talks to OpenAI **Codex gpt-5.5** through the local `codex` CLI, one turn at a time, with Claude driving the loop. Codex keeps its own session memory across turns via `codex exec resume` (verified end-to-end).
-**V02R01 เพิ่ม:** ⭐ Modes A-E catalog · ⭐ Review Contract (ref 05 + `verdict.schema.json` บังคับ JSON ผ่าน `--output-schema`) · ⭐ multi-session (`--session` — ตรวจขนาน/แยก thread ต่องาน) · ⭐ Authorization Matrix + `codex_scope` (ONE-HOME ของ "ใครเรียกได้เมื่อไร") · ⭐ Degradation Ladder. **V01R02:** 4 presets + fleet binding.
+**Version: V02R02 | 2026.07.10** — manual-turn conversation bridge. Claude talks to OpenAI **Codex** (default model จาก `~/.codex/config.toml` — ปัจจุบัน **gpt-5.6-terra** · สลับต่อ call ได้ด้วย `--model`) through the local `codex` CLI, one turn at a time, with Claude driving the loop. Codex keeps its own session memory across turns via `codex exec resume` (verified end-to-end).
+**V02R02 เพิ่ม:** ⭐ `--model` passthrough (สลับ 5.5 ↔ terra ↔ luna ต่องานโดยไม่แก้ config — feature-detected · ทดสอบจริงครบ 3 model + resume memory บน CLI 0.144.1) · re-probe 0.144.1: `--output-schema` ยังอยู่ทั้ง exec/resume · resume ยังไม่รับ -s/-C ตามเดิม
+**V02R01:** Modes A-E · Review Contract (ref 05 + `verdict.schema.json`) · multi-session (`--session`) · Authorization Matrix + `codex_scope` · Degradation Ladder. **V01R02:** 4 presets + fleet binding.
 
 > ทักษะนี้ทำให้ Claude "ปรึกษา/ถก/ตรวจ/จับคู่งาน" กับ Codex ได้จริง — Claude เป็นหลัก/ออกแบบ, Codex เป็น peer reviewer / second detector / ผู้ช่วยเขียน. ต่างจาก MCP ตรงที่ Codex **จำบทสนทนาของตัวเอง** ข้าม turn ได้.
 
@@ -50,6 +51,8 @@ SKILL=~/.claude/skills/claude-codex-bridge
 "$SKILL/scripts/ask-codex.sh" --list-sessions
 # ⭐ Review Mode (Mode B/D/E) — บังคับ verdict JSON ด้วยกลไก
 "$SKILL/scripts/ask-codex.sh" --session review-x --schema "$SKILL/references/verdict.schema.json" --new "<submit ตาม ref 05 §7>"
+# ⭐ สลับ model ต่องาน (V02R02) — ไม่แก้ config · default = config.toml (ตอนนี้ gpt-5.6-terra)
+"$SKILL/scripts/ask-codex.sh" --session x --model gpt-5.6-luna --new "..."   # หรือ gpt-5.5 / gpt-5.4-mini
 ```
 
 ผลลัพธ์ = คำตอบสะอาดของ Codex บน stdout + transcript audit ที่ `$BRIDGE_DIR[/sessions/<name>]/transcript.md` · `--new` ทับวงเดิม → helper เตือน + เก็บ id เก่าไว้ `.prev`
@@ -114,6 +117,7 @@ Codex CLI ไม่พร้อม → (1) เสนอ OpenRouter (skill openro
 - ⭐ `references/verdict.schema.json` — JSON Schema สำหรับ `--schema` (บังคับ verdict format ด้วยกลไก)
 
 ## CHANGELOG
+- **V02R02 (2026.07.10)** — +`--model` passthrough ใน helper (สลับ model ต่อ call: gpt-5.5/gpt-5.6-terra/gpt-5.6-luna — feature-detected ต่อ command path เหมือน --schema) · config default → gpt-5.6-terra (backup: config.toml.bak.2026.07.10-pre-terra) · re-probe CLI 0.144.1 (brew upgrade จาก 0.137.0 — เดิม 5.6 ใช้ไม่ได้ API ตอบ "requires newer version"): --output-schema คงอยู่ทั้ง exec/resume · ทดสอบจริง 4 ข้อผ่าน (terra default/luna/5.5/resume memory)
 - **V02R01 (2026.07.10)** — +Modes A-E · +Review Contract (ref 05 + verdict.schema.json — M1-M8 business-adapted จาก ai-auto-work) · +helper V02R01 (--session multi-thread/--list-sessions/--schema passthrough + runtime feature-detection + overwrite guard + session log) · +Authorization Matrix + codex_scope (ONE-HOME — คำสั่ง user) · +Degradation Ladder · ref 01 +Probe 2026.07.10 · ref 02 +REVIEW shape + Shard pattern. Backward-compatible: ไม่ใส่ --session = พฤติกรรม V01 เดิม.
 - **V01R02 (2026.06.22)** — +4 presets (ref 03 anti-AI เต็ม + ref 04 deliverable/code/design) + fleet binding pattern (gatekeeper-gated). Anti-AI use-case validated จริง.
 - **V01R01 (2026.06.22)** — initial. manual-turn bridge: helper ask-codex.sh (--new/--resume), session continuity via codex exec resume, clean output via --output-last-message, transcript audit log. Prototype verified 3-turn with memory intact.
