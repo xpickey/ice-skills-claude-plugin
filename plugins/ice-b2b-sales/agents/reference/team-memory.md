@@ -22,7 +22,7 @@ CREATE:   lazy — L1 สร้างจาก template นี้ครั้ง
 - [ ] KI-01 <ปัญหาที่ทีมต้องรู้ · ใครเจอ · วันที่>
 
 ## Observations (1 บรรทัด = 1 ข้อเท็จจริง · เนื้อยาวชี้ path ไม่ copy มาแปะ)
-- [bug|decision|lesson|watch-out|fact] <ข้อเท็จจริง> (ใคร · YYYY.MM.DD)
+- [bug|decision|lesson|watch-out|fact|EXCEPTION] <ข้อเท็จจริง> (ใคร · YYYY.MM.DD)
 
 ## Session Digests (ล่าสุดบนสุด · เก็บ ~10 — เกินลบเก่าสุด)
 - YYYY.MM.DD {agent}: ทำ<อะไร> · เรียนรู้<อะไร> · เสร็จ<อะไร>
@@ -54,9 +54,17 @@ CREATE:   lazy — L1 สร้างจาก template นี้ครั้ง
 - **ฝั่ง L2:** ห้ามเปิดอ่าน team-memory ของโปรเจกต์อื่นแม้รู้ path · ได้ path นอกโปรเจกต์มา → รายงานเป็น blocker ไม่อ่าน
 - **Cross-project learning:** ทางเดียวที่อนุญาต = Portfolio Mode (กัปตัน Job 7) เป็น **pattern ถอดชื่อลูกค้าแล้วเท่านั้น** (สอดคล้อง Conditional Customer Naming anti-leak)
 
+## ⭐ [EXCEPTION] Entry (V01R03 — คู่กับ FAILURE PROTOCOL ของ L1)
+
+เมื่อ user อนุมัติ inline exception (L1 ทำงานแทน L2 เพราะ infra ล่ม — FAILURE PROTOCOL ในไฟล์กัปตัน §6) → L1 **ต้อง**บันทึก 1 บรรทัดใน Observations:
+```
+- [EXCEPTION] <L1 ใด>ทำ<งานอะไร>แทน<L2 ใด> · เหตุ: <ConnectionRefused/classifier down/...> · ขอบเขต: <ไฟล์/ขั้นที่ทำแทน> · อนุมัติโดย user YYYY.MM.DD · QA ย้อนหลัง: <done/pending>
+```
+กติกา: exception ที่ไม่มี entry นี้ = การละเมิด ไม่ใช่ exception · `QA ย้อนหลัง: pending` ต้องถูกปิด (⑤ ตรวจเมื่อ infra กลับ) แล้วอัปเดตเป็น done — ค้างเกิน 1 session → ยกเป็น Known Issue
+
 ## Prevention & Remediation (ตาม D4 ของแผน)
 
 - **ป้องกัน:** cap 120 + L2 อ่าน 2 หมวดบน + เขียน 1 ครั้ง/งาน + single-writer + dedup + prune บังคับ + Goal ≤10 บรรทัด + ISOLATION by project
 - **แก้ไข:** ไฟล์หาย → สร้างใหม่จาก template+ledger (ไม่หยุดงาน) · บวม → prune procedure → archive · ข้อมูลขัด context → context ชนะ + จด observation · เนื้อหาผิด → ลบ/แก้ทันทีที่พิสูจน์ (ไม่เก็บของผิดไว้หลอกตัวเอง)
 
-*Version V01R02 (2026.07.13 — +ISOLATION) · ใช้โดย: กัปตัน V03R03 (S0/S6 + §8 memory_paths) · คิม V02R02 (K0/K6) · สมนึก V02R02 (T0/T6) · L2 ทั้ง 4 V02R02 (E1 อ่าน · E5 ส่ง observations)*
+*Version V01R03 (2026.07.13 — +[EXCEPTION] entry คู่ FAILURE PROTOCOL) · V01R02 +ISOLATION · ใช้โดย: กัปตัน V03R04 (S0/S6 + §8 memory_paths + FAILURE PROTOCOL §6) · คิม V02R03 (K0/K6) · สมนึก V02R03 (T0/T6) · L2 (E1 อ่าน · E5 ส่ง observations)*

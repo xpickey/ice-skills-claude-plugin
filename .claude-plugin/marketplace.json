@@ -1,12 +1,25 @@
 {
   "name": "ice-skills",
-  "owner": { "name": "xpickey" },
+  "owner": {
+    "name": "xpickey"
+  },
   "metadata": {
     "description": "iCE complete marketplace — 40 skills + 7 agents + shared reference/_lib, in 3 plugins (academic / b2b-sales / tools)."
   },
   "plugins": [
-    { "name": "ice-academic", "source": "./plugins/ice-academic" },
-    { "name": "ice-b2b-sales", "source": "./plugins/ice-b2b-sales" },
-    { "name": "ice-tools", "source": "./plugins/ice-tools" }
+    {
+      "name": "ice-academic",
+      "source": "./plugins/ice-academic",
+      "version": "1.4.2"
+    },
+    {
+      "name": "ice-b2b-sales",
+      "source": "./plugins/ice-b2b-sales",
+      "version": "1.5.1"
+    },
+    {
+      "name": "ice-tools",
+      "source": "./plugins/ice-tools"
+    }
   ]
 }

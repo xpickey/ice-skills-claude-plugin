@@ -88,3 +88,11 @@
 - **helper ask-codex.sh:** R1 พบ 0C/3H/4M (H1 dot-session ทะลุทับ default thread · H2 dash-prompt กินเป็น flag · H3 UUID fallback เสี่ยงผิด thread · M1-M4) → แก้ครบ + ทดสอบจริง 5 ข้อ → **R2: 0/0/0 · fixed_verified ทั้ง 7 — CONVERGE**
 - **deliverable-gen (เจนนี่) knowledge-loss audit:** R1 พบ 0C/1H (xlsx formula-integrity หลุดจาก E4 บังคับ) + context_repair (E4 แยกตาม format) → แก้ทั้งคู่ → **R2: 0/0/0 · H1 fixed_verified — CONVERGE**
 - บทเรียนใหม่: (1) OpenAI --output-schema = strict mode (ทุก object ต้อง required ครบทุก property — verdict.schema.json V01R02 แก้แล้ว) (2) error "models cache: unknown variant max" ของ codex = noise ไม่ fatal (3) network DNS หลุดชั่วคราว → retry 1 ครั้งพอ
+
+## 2026.07.13 (บ่าย) — DOC-PIPELINE V2 + FAILURE PROTOCOL (root cause: MEA/Akara/Viriyah audit)
+- **กัปตัน V03R04**: DOC-PIPELINE V2 (D-P1 READ-FIRST กัปตันอ่าน source เองเป็นหลัก + ผู้อ่าน ≤3 · D-P2 +Codex option · D-P4 อริส+Codex → กัปตัน FINAL รายข้อ · D-P5 ④ fix-only) + FAILURE PROTOCOL §6 (retry 1 → หยุดถาม user · ห้าม silent fallback · [EXCEPTION] ลง team-memory) + EVIDENCE FRESHNESS (S5) + Process Compliance ใน DELIVERY REPORT + QA-log บังคับ (§9 → reference/doc-qa-log.md)
+- **คิม V02R03 / สมนึก V02R03**: DOC-PIPELINE V2 ฉบับตัวเอง (ผู้อ่านหลัก + FINAL = ตนเอง) + FAILURE PROTOCOL ย่อ + Process Compliance · สมนึก: Codex option ทุกจุด = user ระบุเท่านั้น (Matrix เดิม)
+- **เจนนี่ V02R03**: BUILD MARKER `ICE_BUILDER=jenny` ทุกคำสั่ง build (ผูก PreToolUse hook) + D-P5 fix-executor (รับเฉพาะ fix list ที่ L1 FINAL แล้ว)
+- **อริส V02R02**: EVIDENCE FRESHNESS Hard Rule ใน E4 (render สดเท่านั้น + บันทึกคำสั่ง/dpi/เวลา — บทเรียน Akara PNG เก่า → regression) + บท D-P4 detector→L1 FINAL
+- **refs**: team-memory V01R03 (+[EXCEPTION] entry) · doc-qa-log V01R01 (ใหม่ — template จาก EuroFood) · folder CLAUDE.md ×4 V01R02 · hook ice-prebuild-guard.sh V01R01 (ทดสอบ live: block ✓ / marker pass ✓)
+- Evidence audit: EuroFood = reference implementation (pipeline ถูกครบ) · Akara = กัปตัน build+QA inline เมื่อ subagent+classifier ล่ม · MEA = ไม่มี spec/QA-log · Viriyah = เจนนี่ถูกสั่ง content + workflow generic
