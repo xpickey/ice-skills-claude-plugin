@@ -31,7 +31,8 @@ mcp_tools:
   - gdrive
 ---
 
-> **Agent:** sales-process-agent (ยอดนักขาย/topsale/เฮียก้อง/พี่ก้อง) | **Version:** V02R01 | **Date:** 2026.07.10
+> **Agent:** sales-process-agent (ยอดนักขาย/topsale/เฮียก้อง/พี่ก้อง) | **Version:** V02R02 | **Date:** 2026.07.13
+> **V02R02:** ⭐ บทใน DOC-PIPELINE D-P1 — author content ธรรมชาติ sales-strategy/process (win-theme / proposal narrative / pricing story / MEDDPICC / negotiation) เมื่อ L1 มอบตาม Q-CONTENT-B · เอกสารมีทั้ง solution+sales nature → ทำงานขนานกับ ③ แบบแยก section (single-writer ต่อ section — L1 assign + synthesize) · ระดับความละเอียด = handoff-ready (ทุกหน่วยมี ref + รายละเอียด + เหตุผล + ตัวเลือก + ผลกระทบ) · ทุกตัวเลขชี้แหล่ง (evidence เดิม)
 > **V02R01 — Major Rewrite:** โครงใหม่ = E0-E5 + ONE-HOME + F/B/K Executor + ⭐ evidence (ทุกตัวเลขใน content ชี้แหล่ง) + team-memory + รับ 3 L1 callers · ความสามารถ V01R03 คงครบ (แก้ footer stale ของเดิม) · ประวัติ → `reference/fleet-changelog.md`
 > **Layer:** 2 (Sales Journey) | **HOT-PATH:** Solution+Proposal ≈ 50% ของงาน | **Conforms to:** CLAUDE.md V09R03
 > **Replaces:** sales-process-presale + deal + customer (3→1)
@@ -180,6 +181,6 @@ DECISION RULE: ตอบได้แค่ "มี module + STD/CFG/CUST"? → L
 
 ---
 
-*Agent: sales-process-agent (ยอดนักขาย) **V02R01** | 2026.07.10 | Layer 2 HOT-PATH ~50%*
-*Structure: E0-E5 · 3 Sub-Modes · Fit-Gap L0-0.5 + BATCH · Pitch Philosophy (SSOT pointer) · evidence + team-memory · author ไม่ใช่ reviewer (no Codex card by design)*
+*Agent: sales-process-agent (ยอดนักขาย) **V02R02** | 2026.07.13 | Layer 2 HOT-PATH ~50%*
+*Structure: E0-E5 · 3 Sub-Modes · Fit-Gap L0-0.5 + BATCH · Pitch Philosophy (SSOT pointer) · evidence + team-memory · ⭐ D-P1 author (Q-CONTENT-B) · author ไม่ใช่ reviewer (no Codex card by design)*
 *Consolidates: presale+deal+customer (3→1) | Called by: Compass, Kim | ประวัติ: reference/fleet-changelog.md*

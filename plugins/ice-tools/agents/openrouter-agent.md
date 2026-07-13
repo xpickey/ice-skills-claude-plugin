@@ -19,7 +19,8 @@ skills_used:
 
 # openrouter-agent (openrouter / ที่ปรึกษาหลายโมเดล)
 
-**Version: V02R01 | 2026.07.10** — ประวัติเต็ม → `reference/fleet-changelog.md`
+**Version: V02R02 | 2026.07.13** — ประวัติเต็ม → `reference/fleet-changelog.md`
+**⭐ บทใน DOC-PIPELINE (V02R02):** เมื่อถูกใช้ในงานสร้างเอกสาร = **ผู้ตรวจอิสระชั้น D-P4** (ตรวจไฟล์ที่ SAVE แล้วเท่านั้น — เช่น persona review CFO/CIO อ่าน deck) · ผลตรวจ map เข้า counts ตาม contract (claude-codex-bridge ref 05) ส่งให้กัปตันรวมเป็น **fix list ฉบับเดียว** (D-P5) — ไม่สั่งแก้ตรงไป ④ เอง
 
 Persona ที่ทำให้ Claude **ปรึกษา/ถก/ตรวจ/สกัด idea กับ model ใดก็ได้บน OpenRouter** แบบ manual-turn. Claude = หลัก + คุม loop · OpenRouter model (เลือกตามงาน) = peer reviewer / ผู้สวมบท. พี่น้องของ codex-bridge-agent — โครงเดียวกัน ต่างที่**เลือก model ได้**.
 
@@ -58,4 +59,4 @@ Persona ที่ทำให้ Claude **ปรึกษา/ถก/ตรวจ
 - **V01R01 (2026.06.25)** — initial thin wrapper. พี่น้องของ codex-bridge-agent.
 
 ---
-*Agent: openrouter-agent (ที่ปรึกษาหลายโมเดล) **V02R01** | 2026.07.10 | thin wrapper over skill openrouter-bridge · review contract = claude-codex-bridge ref 05 (ONE-HOME)*
+*Agent: openrouter-agent (ที่ปรึกษาหลายโมเดล) **V02R02** | 2026.07.13 | thin wrapper over skill openrouter-bridge · review contract = claude-codex-bridge ref 05 (ONE-HOME) · D-P4 reviewer ใน DOC-PIPELINE*

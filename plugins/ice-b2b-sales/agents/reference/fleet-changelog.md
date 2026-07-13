@@ -1,6 +1,21 @@
 # Fleet Changelog — ประวัติเวอร์ชันของ agent ทั้ง fleet (ยกเว้นกัปตันที่มี compass-changelog.md)
 
-> **Version: V01R01 | 2026.07.10** — history ที่ย้ายออกจาก body ของแต่ละ agent ตอน Fleet Rewrite V2 (2026.07.10) เพื่อให้ main prompt เหลือเฉพาะกฎที่ใช้ตอนนี้ · อ่านเมื่อต้องการเหตุผลเบื้องหลัง/ทำ version ถัดไป
+> **Version: V01R02 | 2026.07.13** — history ที่ย้ายออกจาก body ของแต่ละ agent ตอน Fleet Rewrite V2 (2026.07.10) เพื่อให้ main prompt เหลือเฉพาะกฎที่ใช้ตอนนี้ · อ่านเมื่อต้องการเหตุผลเบื้องหลัง/ทำ version ถัดไป
+
+---
+
+## ⭐ DOC-PIPELINE Wave (2026.07.13 — ทุกตัวพร้อมกัน · กัปตัน V03R03 + fleet V02R02 + CLAUDE.md V09R04)
+
+**Root cause (หลักฐานจาก transcript Viriyah `0d9285cb` + EuroFood `7b2c7bd2` + Akara `0477f9ca`):** ผู้เล่นบทกัปตันตัวจริงคือ L0 ที่เปิด ultracode → content+build หลุดไป **Workflow generic subagent** (ไม่มี agentType สักตัว) + **build Excel inline 400+ จุด** — **เจนนี่ถูกเรียก 0 ครั้ง** ใน session ที่มีการ build · เทพถูกห้าม author content → content เชิง solution เป็นเด็กกำพร้าใน Routing
+
+**สิ่งที่ทุกตัวได้ (2026.07.13):**
+- **2-Tier Invocation** — Tier 1 spawn L1 ได้เฉพาะงานเดี่ยว · Tier 2 orchestration = L0 Read ไฟล์ L1 adopt เป็น **Operating Manual** (encode ใน description ทั้ง 3 L1 กัน harness auto-spawn ผิด tier)
+- **Persona Loading 3 ชั้น** — ชั้น A: CLAUDE.md V09R04 PART 4 · ชั้น B: folder CLAUDE.md ×4 ใหม่ (Projects→กัปตัน · Academic→สมนึก · Customer+Working Email→คิม) · ชั้น C: ไฟล์ L1
+- **DOC-PIPELINE (id16 ในกัปตัน §5)** — default ทุก file deliverable: D-P1 content (กัปตัน+③ CO-AUTHOR +② เมื่อ sales-process · CONTENT-READY GATE) → D-P2 visual (กัปตัน+④) → D-P3 ④ build+SAVE → D-P4 ⑤+Codex review บนไฟล์ที่ save → D-P5 fix ฉบับเดียว+SAVE · PLAN-CARD-FIRST + DELIVERY REPORT
+- **WORKFLOW GUARD** — ทุก stage ต้องระบุ agentType (②③④⑤/Explore · ชื่อ user-level) · generic ห้าม content/build/QA
+- **MEMORY ISOLATION by project** — memory_paths ใน Pack แนบได้เฉพาะโปรเจกต์ปัจจุบัน (team-memory ref V01R02)
+
+**รายตัว:** กัปตัน V03R03 (8 จุด — ดู compass-changelog) · คิม V02R02 (OPERATING MANUAL + K3 DOC-PIPELINE + GUARD) · สมนึก V02R02 (OPERATING MANUAL + GUARD) · เจนนี่ V02R02 (⭐ CONTENT-DESIGN REJECT ใน E0 + D-P2/D-P3 roles + SAVE ทันที) · เทพ V02R02 (⭐ CO-AUTHOR MODE ใน E3 — FACT Gate + handoff-ready) · ก้อง V02R02 (D-P1 author ตาม Q-CONTENT-B) · bridges×2 V02R02 (D-P4 reviewer + counts→fix list เดียว) · อริส = ไม่แก้ (detector เดิมถูกอยู่แล้ว)
 
 ---
 

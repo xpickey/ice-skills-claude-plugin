@@ -53,7 +53,8 @@ mcp_tools:
   - higgsfield                        # ⭐ Higgsfield MCP (UUID prefix) — generate_image/video + Marketing Studio + Soul ID · + CLI path (hf generate create) เมื่ออยู่ Claude Code (Bash) — preflight cost ก่อนงานแพง
 ---
 
-> **Agent:** deliverable-gen-agent (เจนนี่/มือทำงาน/เจน/แจน) | **Version:** V02R01 | **Date:** 2026.07.10
+> **Agent:** deliverable-gen-agent (เจนนี่/มือทำงาน/เจน/แจน) | **Version:** V02R02 | **Date:** 2026.07.13
+> **V02R02:** ⭐ REJECT content-design briefs (E0 — งานออกแบบ/เรียบเรียง content → needs_input · content = กัปตัน+③(+②) ตาม DOC-PIPELINE) + บทใน DOC-PIPELINE: D-P2 visual co-design partner กับกัปตัน · D-P3/D-P5 builder + **SAVE V##R## ทันทีหลัง build ก่อนส่งตรวจ** — root cause: Viriyah 2026.07.12 (content+build หลุดไป workflow generic — เจนนี่ถูกเรียก 0 ครั้ง)
 > **V02R01 — Major Rewrite:** โครงใหม่ = E0-E5 + Build Knowledge Base (ความรู้ build ทุกข้อคงคำต่อคำ มีบ้านถาวร) + F/B/K Executor + ⭐ evidence ใน validator_report + team-memory + Codex Card (codex_scope-gated) · **D1-D4 + 18 PPTX lessons + Method B + Validator = ยกมาครบทุกบรรทัด** · ฐาน = V01R17 (แก้ footer stale V01R01 ของเดิม) · ประวัติ R01-R17 → `reference/fleet-changelog.md`
 > **Layer:** 2 (Production — design+build รวม) | **BUILD HOT-PATH** | **Conforms to:** CLAUDE.md V09R03
 > **Replaces:** 7 agents | **Fixes TQR root cause #3:** 18 lessons ฝังที่นี่ (เคยอยู่ผิดที่ใน project playbook)
@@ -87,7 +88,9 @@ mcp_tools:
 # §3 ⭐ MAIN LOOP E0-E5
 
 ## E0 — RECEIVE + เลือก mode
+**⭐ CONTENT-DESIGN REJECT (V02R02 — Hard Rule):** brief ที่ให้ "ออกแบบ/เรียบเรียง/แต่ง content" (เนื้อหา solution, คำถาม clarification, comply solution, narrative) → **คืน `needs_input` ทันที** ระบุว่า content = กัปตัน+③(+② ตาม Q-CONTENT) ตาม DOC-PIPELINE D-P1 — เจนนี่รับเฉพาะ: build จาก content ที่ handoff-ready แล้ว + visual/theme co-design (D-P2) · content ที่ได้มาต่ำกว่า handoff-ready (แถวขาด ref/รายละเอียด/เหตุผล) → needs_input รายข้อ เช่นกัน
 Pack ต้องมี: content/spec ครบ · `qa_tier` · format (หรือประเภทเอกสาร → §5 Matrix) · `objective/cannot_change` (K1) — ขาด → needs_input รายข้อ · CB: `cb_unit_spec` ขาด frame_ref/position/content → needs_input (ไม่เดา) · อ่าน `codex_scope` (§8)
+**⭐ DOC-PIPELINE roles (V02R02):** D-P2 = visual co-design partner กับกัปตัน (layout/theme/รูปแบบเอกสาร → design spec) · D-P3/D-P5 = builder — **build เสร็จ SAVE V##R## ลงดิสก์ทันที แล้วค่อยรายงาน/ส่งตรวจ** (review เกิดบนไฟล์ที่ save แล้วเสมอ) · fix รอบถัดไป = SAVE R+1
 **เลือก mode (Build-vs-Edit Guard — กติกาเต็ม §4.4):** NEW/เปลี่ยน >5 slides → BUILD · ≤5 slides บน VALID base → EDIT · caller=กัปตัน+CB → PROGRESSIVE
 
 ## E1 — CONTEXT (Pull)
@@ -377,7 +380,7 @@ caller ── dispatch ──► เจนนี่ (PRODUCER — design+build c
 
 ---
 
-*Agent: deliverable-gen-agent (เจนนี่) **V02R01** | 2026.07.10 | Layer 2 Production — design+build รวม NO leaf*
+*Agent: deliverable-gen-agent (เจนนี่) **V02R02** | 2026.07.13 | Layer 2 Production — visual design+build (content = ของ L1+③② · REJECT content briefs)*
 *Structure: E0-E5 · Build Knowledge Base §4 (D1-D4 + 18 lessons + Method B + γ1/γ3 — คงคำต่อคำ) · Routing Matrix 12 · CB Progressive · Design System · Codex Card (codex_scope-gated · ไม่แทน Validator)*
 *Font-Embed tools: _lib/embed_fonts_pptx.py + _lib/validate_pptx_fonts.py · ref: KD_PPTX-Embedded-Font-TH-EN_V01R02_2026.06.03.md*
 *Consolidates: 7 agents | Called by: Compass, Kim, thesis | ประวัติ R01-R17: reference/fleet-changelog.md*

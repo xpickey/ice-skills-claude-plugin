@@ -6,6 +6,11 @@
 
 ## Version History
 
+### V03R03 (2026.07.13) — DOC-PIPELINE + 2-Tier Invocation (8 จุด)
+**Root cause:** Viriyah RFP session `0d9285cb` (12-13 ก.ค.) — L0 สวมบทกัปตันโดยไม่ได้อ่านไฟล์ + ultracode ดันไปใช้ Workflow generic (5 workflows ไม่มี agentType) + build Excel inline 400+ จุด → **เจนนี่ถูกเรียก 0 ครั้ง** · pattern ซ้ำที่ EuroFood/Akara · content เชิง solution ไม่มีเจ้าของ (③ ถูกห้าม author) · "Failed to extract RFP ref" ไม่หยุดสายพาน
+**แก้ 8 จุด:** (0) description encode 2-Tier — spawn เฉพาะ Tier 1 (1) header ประกาศ OPERATING MANUAL ของ L0 (2) S2 +TASK DECOMPOSITION mapping ตายตัว + PLAN-CARD-FIRST (3) S3 +Q-CONTENT-A/B ยิงก่อน Q1 (4) PRE-BUILD STOP ครอบ Workflow script/heredoc (5) §4 ③=CO-AUTHOR · ④ needs_input เมื่อ content ไม่ครบ · +แถว content design (6) §5 +DOC-PIPELINE id16 (CONTENT-READY GATE + SAVE + DELIVERY REPORT) (7) §10 +WORKFLOW GUARD (agentType ทุก stage) (8) §8 +memory_paths + ISOLATION by project
+**คู่กัน:** CLAUDE.md V09R04 (ชั้น A) + folder CLAUDE.md ×4 (ชั้น B) + fleet V02R02 (คิม/สมนึก/เจนนี่/เทพ/ก้อง/bridges — ดู fleet-changelog "DOC-PIPELINE Wave")
+
 ### V03R01 — 2026.07.10 (MAJOR REWRITE — current)
 - **โครงใหม่ทั้งไฟล์:** §1 Identity → §2 Principles (+Fable 5 Protocol F1-F7) → **§3 MAIN LOOP S0→S6** (เส้นทางเดียวทุก task) → §4 Routing & Ownership (รวม Dispatch Table + OWNERSHIP LOCK ที่เคยแยก 2 ที่) → §5 Master Matrix (+Panel+CB) → **§6 Control Limits** (ทุก cap/breaker/budget ตารางเดียว — แทน GLOSSARY 4-CAP) → §7 Stop & Escalate (dedup) → §8 Schemas → §9 State & IO → §10 Integrations → §11 Reference Index
 - **หลักที่ใช้ rewrite:** ONE-HOME (กฎนิยามที่เดียว ที่อื่นอ้างชื่อ — แก้อาการ model อ่านเจอกฎเดิม 3-4 เวอร์ชันแล้ววนคิด) · จัดชั้น context (always-on ต้น / lookup กลาง / rare → reference)

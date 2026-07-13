@@ -47,9 +47,16 @@ CREATE:   lazy — L1 สร้างจาก template นี้ครั้ง
 | Two-Tier Pack | push คำสั่งเฉพาะ task | pack = คำสั่งครั้งเดียว · memory = ยืนข้าม session |
 | QA log ต่อ artifact | ประวัติ issue ราย artifact | QA log ละเอียดราย artifact · memory = ภาพรวมที่ทีมต้องรู้ |
 
+## ⭐ MEMORY ISOLATION by Project (V01R02 — Hard Rule · คำสั่ง user 2026.07.13)
+
+- **ระดับการแชร์ = PROJECT:** ทุก agent ที่ทำงานในโปรเจกต์เดียวกันอ่าน `_team-memory.md` ชุดเดียวกัน — **ข้ามโปรเจกต์ห้ามมองเห็นกัน**
+- **ฝั่ง dispatch (L0/L1):** `memory_paths` ใน Pack แนบได้เฉพาะ path ใต้โปรเจกต์ปัจจุบัน (path-prefix check แบบเดียวกับ PATH ENFORCEMENT ใน state-io) — path นอกโปรเจกต์ = violation แจ้ง user
+- **ฝั่ง L2:** ห้ามเปิดอ่าน team-memory ของโปรเจกต์อื่นแม้รู้ path · ได้ path นอกโปรเจกต์มา → รายงานเป็น blocker ไม่อ่าน
+- **Cross-project learning:** ทางเดียวที่อนุญาต = Portfolio Mode (กัปตัน Job 7) เป็น **pattern ถอดชื่อลูกค้าแล้วเท่านั้น** (สอดคล้อง Conditional Customer Naming anti-leak)
+
 ## Prevention & Remediation (ตาม D4 ของแผน)
 
-- **ป้องกัน:** cap 120 + L2 อ่าน 2 หมวดบน + เขียน 1 ครั้ง/งาน + single-writer + dedup + prune บังคับ + Goal ≤10 บรรทัด
+- **ป้องกัน:** cap 120 + L2 อ่าน 2 หมวดบน + เขียน 1 ครั้ง/งาน + single-writer + dedup + prune บังคับ + Goal ≤10 บรรทัด + ISOLATION by project
 - **แก้ไข:** ไฟล์หาย → สร้างใหม่จาก template+ledger (ไม่หยุดงาน) · บวม → prune procedure → archive · ข้อมูลขัด context → context ชนะ + จด observation · เนื้อหาผิด → ลบ/แก้ทันทีที่พิสูจน์ (ไม่เก็บของผิดไว้หลอกตัวเอง)
 
-*ใช้โดย: กัปตัน V03R02 (S0/S6) · คิม V02R01 (K0/K6) · สมนึก V02R01 (T0/T6) · L2 ทั้ง 4 V02R01 (E1 อ่าน · E5 ส่ง observations)*
+*Version V01R02 (2026.07.13 — +ISOLATION) · ใช้โดย: กัปตัน V03R03 (S0/S6 + §8 memory_paths) · คิม V02R02 (K0/K6) · สมนึก V02R02 (T0/T6) · L2 ทั้ง 4 V02R02 (E1 อ่าน · E5 ส่ง observations)*

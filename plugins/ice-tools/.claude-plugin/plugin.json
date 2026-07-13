@@ -1,7 +1,7 @@
 {
   "name": "ice-tools",
   "description": "iCE productivity tools — 12 skills (graphify, nanobanana-connection, higgsfield-connection, higgsfield-generate, higgsfield-product-photoshoot, higgsfield-marketplace-cards, higgsfield-soul-id, notebooklm, cua-driver, automation-workflow, claude-codex-bridge, openrouter-bridge) + 2 agents (codex-bridge-agent, openrouter-agent). V2: Fleet Rewrite 2026.07.10 — codex-bridge/openrouter agents V02R01 (Modes A-E, Review Contract counts/stagnation, Degradation Ladder), claude-codex-bridge skill V02R01 (ref05 review contract + verdict.schema.json strict-mode + helper multi-session --session/--schema/feature-detection).",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "author": {
     "name": "xpickey"
   }

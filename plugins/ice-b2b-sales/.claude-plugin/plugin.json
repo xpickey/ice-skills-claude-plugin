@@ -1,7 +1,7 @@
 {
   "name": "ice-b2b-sales",
   "description": "iCE B2B enterprise sales fleet — 29 skills (Oracle/SAP/NetSuite/MS Dynamics, B2B methodology, Thai GFMIS/e-GP/tax, pricing) + 6 Compass.Next agents (iCE-Compass-Next, kim-assistant, sales-process, solution-knowledge, deliverable-gen, qa-master) + shared _lib/reference/_infra. V2: Fleet Rewrite 2026.07.10 — Compass V03R02 (MAIN LOOP S0-S6 + Loop-Eng L1-L8 + Fable5 F/B/K + codex_scope + team-memory), Kim V02R01 (K0-K6 + gatekeeper Codex), L2 x4 V02R01 (E0-E5 + evidence + team-memory). +reference: loop-engineering, compass-changelog, team-memory, fleet-changelog. v1.3.1: b2b-slide-designer V02R08 +DESIGN.md brand token library (12 curated, MIT VoltAgent) with BRAND GUARD.",
-  "version": "1.3.1",
+  "version": "1.5.0",
   "author": {
     "name": "xpickey"
   }
