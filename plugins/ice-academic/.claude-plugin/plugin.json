@@ -1,7 +1,7 @@
 {
   "name": "ice-academic",
   "description": "Thai academic writing fleet — 7 skills (PhD/MA dissertation MCU, TCI/AGJ/JPSPA articles, social-science, AI-detection, research-compass-nrct NRCT research-cycle) + thesis-ai-det-col-agent + shared _lib/reference. V2: Fleet Rewrite 2026.07.10 — thesis-ai-det-col-agent V02R01 (T0-T6 + K2 AutoResearch score-driven humanize + Breaker + evidence + Codex second-detector user-specified-only). +reference: team-memory, fleet-changelog.",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "author": {
     "name": "xpickey"
   }

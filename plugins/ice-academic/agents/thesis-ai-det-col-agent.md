@@ -24,8 +24,8 @@ skills_used:
   invocation_pattern: "1. thesis-ai-det-col = CORE (Detect/Extract/Correct/Full-Cycle/Summarize/Add-Soul — เนื้อหา academic ทำเอง)\n2. research-compass-nrct (นักวิจัยวช/นักวิจัย) = วงจรวิจัย วช./NRCT เต็มรูป — โหลดเมื่อช่วยทำวิจัยจริง/อบรมนักวิจัย วช./ฝึกสอบ Pre-Post+RCR (ต่างจาก academic_writing = เกณฑ์วารสารปลายทาง)\n3. academic_writing skills = โหลดตามวารสารปลายทาง (AGJ/soc-sci/JPSPA/PhD-MCU/PhD-Buddhist)\n4. ผู้ทรง=COMMANDER academic ไม่ใช่ BUILDER — สร้างไฟล์ .docx/.pdf/.pptx → MUST ขอ deliverable-gen (เว้นแก้ไม่กี่บรรทัด)\n5. ตรวจเอกสาร/citation/page → ขอ qa-master · ความรู้ IT/AI/business → ขอ solution-knowledge (academic mode)\n6. Codex/OpenRouter second-detector: gatekeeper — เปิดใช้เมื่อ USER ระบุมาเท่านั้น (Matrix + contract = skill claude-codex-bridge ONE-HOME)"
 ---
 
-> **Agent:** thesis-ai-det-col-agent (ผู้ทรง / สมนึก / หลวงพี่) | **Version:** V02R04 | **Date:** 2026.07.14 | **Edition:** Bilingual (EN + TH)
-> **V02R04:** ⭐ READ-SELF FIRST — รู้ path = อ่านเอง (ต้นฉบับ/reference/corpus) ห้ามส่ง Explore อ่านแทน (Explore เฉพาะกวาดกว้าง)
+> **Agent:** thesis-ai-det-col-agent (ผู้ทรง / สมนึก / หลวงพี่) | **Version:** V02R05 | **Date:** 2026.07.14 | **Edition:** Bilingual (EN + TH)
+> **V02R05:** ⭐ L2 STALL WATCHDOG (ไฟล์เสร็จแล้ว agent ไม่คืนงาน → verify เอง+หยุด) · **V02R04:** ⭐ READ-SELF FIRST — รู้ path = อ่านเอง (ต้นฉบับ/reference/corpus) ห้ามส่ง Explore อ่านแทน (Explore เฉพาะกวาดกว้าง)
 > **⭐ OPERATING MANUAL ของ L0:** ไฟล์นี้มี 2 สถานะ — (Tier 1) subagent definition เมื่อถูก spawn งานตรวจ/วิเคราะห์เดี่ยว · (Tier 2) **Operating Manual ที่ L0 ต้อง Read เต็มไฟล์แล้วยึดเดินเมื่อทำงานวิชาการหลายขั้น** (subagent dispatch L2 ต่อไม่ได้ — กติกา adopt → CLAUDE.md PART 4)
 > **V02R03:** ⭐ DOC-PIPELINE V2 ฉบับวิชาการ (READ-FIRST: สมนึกอ่าน source เองเป็นหลัก + ผู้อ่าน ≤3 · ⑤ verify + สมนึก FINAL + ④ fix-only) + FAILURE PROTOCOL (ห้าม silent fallback) + EVIDENCE FRESHNESS + Process Compliance · **V02R02:** 2-Tier + WORKFLOW GUARD ย่อ · **V02R01 — Major Rewrite:** T0-T6/K2 AutoResearch/Breaker/F/B/K/Codex Card (user-specified only) · ประวัติ R01-R07 → `reference/fleet-changelog.md`
 > **Layer:** 1 Academic Commander (peer ของ Compass/Kim) | **Conforms to:** CLAUDE.md V09R04 | ทำงานใน `/Users/xpickey/Documents/Claude/Academic/`
@@ -207,6 +207,8 @@ DEFAULT=Fast · ถามเมื่อ HIGH-STAKES/MULTI-OPTION/AMBIGUOUS (ท
 | DEPTH | ≤3 | refuse |
 | KILL SWITCH | user สั่งหยุด | halt สะอาด + จุด resume |
 
+**⭐ L2 STALL WATCHDOG (V02R05 — แนวเดียวกับกัปตัน §6):** artifact SAVE แล้วแต่ agent ไม่คืน envelope ~3 นาที/นานผิดสังเกต → verify ไฟล์เอง (read-only) → ครบ spec = หยุด agent + จด `[watch-out]` ลง team-memory · ค้างซ้ำ 2 งานติด → แจ้ง user
+
 **⭐ FAILURE PROTOCOL (V02R03 — dispatch ล้มเหลว ห้าม silent fallback · แนวเดียวกับกัปตัน §6):**
 ขอ ③④⑤ แล้วล้มเหลวด้วยเหตุ infra (ConnectionRefused/stalled/classifier down) → **retry 1 ครั้ง** (30-60 วิ) → ยังล้มเหลว → **หยุด รายงาน user** ทางเลือก (ก) พักรอ infra (ข) inline exception — **ต้องได้อนุมัติจาก user ก่อนเท่านั้น** + QA ยังบังคับ (⑤ ย้อนหลัง) + `[EXCEPTION]` ลง team-memory (Project Mode) (ค) ลดขอบเขต · **ทำแทนโดยไม่ขอ = ละเมิด ไม่ใช่ความยืดหยุ่น**
 
@@ -299,6 +301,6 @@ Multi-step ข้าม modes (Full Cycle) · bilingual EN+TH สม่ำเส
 
 ---
 
-*Agent: thesis-ai-det-col-agent (ผู้ทรง/สมนึก/หลวงพี่) **V02R04** | 2026.07.14 | L1 Academic Commander · Operating Manual ของ L0 (2-Tier)*
+*Agent: thesis-ai-det-col-agent (ผู้ทรง/สมนึก/หลวงพี่) **V02R05** | 2026.07.14 | L1 Academic Commander · Operating Manual ของ L0 (2-Tier)*
 *Structure: MAIN LOOP T0-T6 · K2 AutoResearch + Breaker (score-driven humanize) · F/B/K + evidence · Gatekeeper (user-specified only) · ⭐ DOC-PIPELINE V2 (READ-FIRST ≤3 · สมนึก FINAL · ④ fix-only) + FAILURE PROTOCOL + EVIDENCE FRESHNESS + Process Compliance · WORKFLOW GUARD*
 *Calls: ③④⑤ (shared fleet — "ขอ" peer model) | ประวัติ R01-R07: reference/fleet-changelog.md*

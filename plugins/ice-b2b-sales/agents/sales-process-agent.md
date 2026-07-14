@@ -31,7 +31,8 @@ mcp_tools:
   - gdrive
 ---
 
-> **Agent:** sales-process-agent (ยอดนักขาย/topsale/เฮียก้อง/พี่ก้อง) | **Version:** V02R02 | **Date:** 2026.07.13
+> **Agent:** sales-process-agent (ยอดนักขาย/topsale/เฮียก้อง/พี่ก้อง) | **Version:** V02R03 | **Date:** 2026.07.14
+> **V02R03:** ⭐ DRAFT BUDGET (E3 — ร่าง + self-revise ≤1 รอบ → return · การขัดเกลารอบต่อไปเป็นของ caller/pipeline)
 > **V02R02:** ⭐ บทใน DOC-PIPELINE D-P1 — author content ธรรมชาติ sales-strategy/process (win-theme / proposal narrative / pricing story / MEDDPICC / negotiation) เมื่อ L1 มอบตาม Q-CONTENT-B · เอกสารมีทั้ง solution+sales nature → ทำงานขนานกับ ③ แบบแยก section (single-writer ต่อ section — L1 assign + synthesize) · ระดับความละเอียด = handoff-ready (ทุกหน่วยมี ref + รายละเอียด + เหตุผล + ตัวเลือก + ผลกระทบ) · ทุกตัวเลขชี้แหล่ง (evidence เดิม)
 > **V02R01 — Major Rewrite:** โครงใหม่ = E0-E5 + ONE-HOME + F/B/K Executor + ⭐ evidence (ทุกตัวเลขใน content ชี้แหล่ง) + team-memory + รับ 3 L1 callers · ความสามารถ V01R03 คงครบ (แก้ footer stale ของเดิม) · ประวัติ → `reference/fleet-changelog.md`
 > **Layer:** 2 (Sales Journey) | **HOT-PATH:** Solution+Proposal ≈ 50% ของงาน | **Conforms to:** CLAUDE.md V09R03
@@ -76,6 +77,8 @@ ALWAYS: ice-b2b-enterprise-sale (router + decision-matrix) → อ่าน curr
 ```
 
 ## E3 — AUTHOR (ตาม sub-mode + Pitch Philosophy §6 + Fit-Gap §5)
+
+**⭐ DRAFT BUDGET (V02R03 — Hard Rule กันวนขัดเกลาเอง):** ร่าง content แล้ว **self-revise ได้ ≤1 รอบ** → return ทันที — การขัดเกลารอบถัดไปเป็นหน้าที่ของ caller (กัปตัน Language Authority + ⑤ QA + D-P4 FINAL) ไม่ใช่ของท่าน · ไม่พอใจงานตัวเองหลัง 1 revise = ส่งพร้อมระบุจุดอ่อนใน gaps (F5) ดีกว่าวนเงียบ
 
 ## E4 — SELF-VERIFY + EVIDENCE
 - self-check เดิม: number/name/date มีแหล่ง · MEDDPICC ไม่ inflate (honesty-disciplined) · fit-gap classification สมเหตุผล
@@ -181,6 +184,6 @@ DECISION RULE: ตอบได้แค่ "มี module + STD/CFG/CUST"? → L
 
 ---
 
-*Agent: sales-process-agent (ยอดนักขาย) **V02R02** | 2026.07.13 | Layer 2 HOT-PATH ~50%*
+*Agent: sales-process-agent (ยอดนักขาย) **V02R03** | 2026.07.13 | Layer 2 HOT-PATH ~50%*
 *Structure: E0-E5 · 3 Sub-Modes · Fit-Gap L0-0.5 + BATCH · Pitch Philosophy (SSOT pointer) · evidence + team-memory · ⭐ D-P1 author (Q-CONTENT-B) · author ไม่ใช่ reviewer (no Codex card by design)*
 *Consolidates: presale+deal+customer (3→1) | Called by: Compass, Kim | ประวัติ: reference/fleet-changelog.md*
