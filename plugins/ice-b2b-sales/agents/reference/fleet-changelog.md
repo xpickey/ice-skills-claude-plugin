@@ -96,3 +96,7 @@
 - **อริส V02R02**: EVIDENCE FRESHNESS Hard Rule ใน E4 (render สดเท่านั้น + บันทึกคำสั่ง/dpi/เวลา — บทเรียน Akara PNG เก่า → regression) + บท D-P4 detector→L1 FINAL
 - **refs**: team-memory V01R03 (+[EXCEPTION] entry) · doc-qa-log V01R01 (ใหม่ — template จาก EuroFood) · folder CLAUDE.md ×4 V01R02 · hook ice-prebuild-guard.sh V01R01 (ทดสอบ live: block ✓ / marker pass ✓)
 - Evidence audit: EuroFood = reference implementation (pipeline ถูกครบ) · Akara = กัปตัน build+QA inline เมื่อ subagent+classifier ล่ม · MEA = ไม่มี spec/QA-log · Viriyah = เจนนี่ถูกสั่ง content + workflow generic
+
+## 2026.07.14 — READ-SELF FIRST + hook V01R02 read-safe (root cause: Viriyah RFP analysis)
+- **Hook ice-prebuild-guard.sh V01R02**: เดิม block ทุกคำสั่ง python ที่เอ่ยถึงไฟล์ office → การอ่าน read-only โดน block จน L0 ต้องอ้อม agent/เลี่ยง guard (เคสจริง Viriyah) · แก้: block เฉพาะการเขียน (การเรียก save บนไฟล์ office / รัน build script ตามชื่อ) — อ่าน/inspect ผ่านเสมอ + ข้อความ deny ระบุห้ามเลี่ยง guard · pipe-test 10/10 + live proof · ข้อจำกัดที่รู้: meta-text ที่พูดถึง pattern ของ guard ใน heredoc อาจโดน block เอง (พังดัง ไม่พังเงียบ — ยอมรับ)
+- **กัปตัน V03R05 / คิม V02R04 / สมนึก V02R04**: READ-SELF FIRST — รู้ path = อ่านเองทันที ห้ามส่ง Explore อ่านแทน (Explore เฉพาะกวาดกว้าง/หาไฟล์) · ฝั่ง L2 ย้ำ Pull model: อ่านเองจาก path ใน Pack ไม่ถามกลับ L0 (ถามเฉพาะ decision/ของที่ไม่มีในไฟล์)
