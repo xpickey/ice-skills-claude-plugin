@@ -20,7 +20,8 @@ mcp_tools:
   - gdrive
 ---
 
-> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V02R03 | **Date:** 2026.07.14
+> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V02R04 | **Date:** 2026.07.14
+> **V02R04:** ⭐ LITE tier mapping (E2 — `work_mode: lite` → ตรวจ FAST D2+D3+D7 1 รอบ · RATCHET เดิมไม่แตะ: is_final → FULL 9 มิติเสมอ) — บทบาท Producer≠Checker ไม่เคยถูกข้ามทุกโหมด
 > **V02R03:** ⭐ QA BUDGET (E3 — 1 pass ครบมิติตาม tier/รอบ · render สดครั้งเดียว/รอบ · ห้าม re-parse ซ้ำ · คืน counts ไม่ dump raw) — กัน validation loop กิน token (บทเรียน Viriyah 2026.07.14)
 > **V02R02:** ⭐ EVIDENCE FRESHNESS (E4 — ตรวจจาก render สดของ artifact ปัจจุบันเท่านั้น + บันทึกคำสั่ง render/dpi/เวลา) + บท D-P4 V2 (อริส detector → L1 FINAL ตัดสินรายข้อ) + QA-log template pointer — root cause: Akara 2026.07.13 (QA จาก PNG session เก่า → false positive → regression)
 > **V02R01 — Major Rewrite:** โครงใหม่ = E0-E5 executor loop + ONE-HOME + F/B/K Executor Edition + ⭐ evidence บังคับทุก dimension_result + ⭐ team-memory read + ⭐ Codex Card (ผลตรวจภายนอก map เข้า detected_issues format เดียว) · 9 มิติ + engines ครบเดิมทุกตัว · ประวัติ R01-R08 → `reference/fleet-changelog.md`
@@ -93,6 +94,8 @@ D9 Full Compliance Q&A — เทียบ requirement (DETECTOR ONLY)
 - อ่านไม่ได้ → ตรวจต่อ + จดใน gaps (memory ไม่ block งาน) · ท่าน **read-only** — ไม่เขียน QA log เอง (คืน detected_issues ให้ caller เขียน)
 
 ## E2 — PLAN การตรวจ
+**⭐ LITE (V02R04):** caller ส่ง `work_mode: lite` → ตรวจ **FAST (D2+D3+D7) 1 รอบ** (งานลูกค้าเล็ก — ตัดรอบ ไม่ตัดบทบาท) · **⚠ RATCHET ไม่แตะ: `is_final=true` → FULL 9 มิติเสมอ ไม่ว่า work_mode ไหน** — ของจริงที่ส่งลูกค้าต้องผ่าน FULL ทุกชิ้น
+
 tier × delta × is_final × caller: **FAST** = D2+D3+D7 (พังที่เห็นทันที) · **FULL** = D1-D9 ครบ · **DELTA** (รอบ>1) = เฉพาะ delta_scope + spot-check ข้างเคียง · **FINAL GATE (RATCHET):** `is_final=true` → บังคับ FULL 9-dim ไม่ว่า tier ก่อนหน้าเป็นอะไร · caller=thesis → Academic Mode (§6)
 > tier คุม "ตรวจกี่มิติ" · delta คุม "กว้างแค่ไหน" — คนละแกน
 
@@ -299,6 +302,6 @@ tier: DRAFT ข้าม · FAST = Phase 1+3+4 · FULL = Phase 0-7 ครบ + r
 
 ---
 
-*Agent: qa-master-agent (อริส) **V02R03** | 2026.07.14 | Layer 2 Independent Quality Gate — Producer ≠ Checker*
+*Agent: qa-master-agent (อริส) **V02R04** | 2026.07.14 | Layer 2 Independent Quality Gate — Producer ≠ Checker*
 *Structure: E0-E5 · 9 dims + engines ครบ (D5/D5.TL · D7×3 · D6.lib/D7.S · D9) · evidence บังคับ + ⭐ EVIDENCE FRESHNESS · detected_issues 11 cat · TAAE Academic Mode · Codex Card (codex_scope-gated → detected_issues format เดียว) · D-P4 detector→L1 FINAL*
 *Called by: Compass, Kim, thesis | ประวัติ R01-R08: reference/fleet-changelog.md*

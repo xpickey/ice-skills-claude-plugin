@@ -11,3 +11,4 @@ node_modules/
 *.bak
 *.bak.*
 **/*.bak
+agt-skill-pack/
