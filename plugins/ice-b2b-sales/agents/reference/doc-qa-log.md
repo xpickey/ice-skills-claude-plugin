@@ -19,7 +19,7 @@ CREATE:   ตอนเริ่ม D-P3 BUILD ครั้งแรกของ 
 ## บันทึกการตรวจคุณภาพต่อเอกสาร (ต่อเนื่องทุกรอบ — ไม่ใส่ version ในชื่อไฟล์)
 
 Artifact: <ชื่อ + ชนิด> · Deal/Project: <ชื่อ>
-Producer: เจนนี่ (deliverable-gen) · Checker: อริส (qa-master) · Coordinator: <L1>
+Producer: <L1 (V3 default) | jenny-shell (user เรียกตรง)> · Checker: อริส (qa-master) · Coordinator: <L1> · **builder = L1|jenny-shell**
 
 ---
 
