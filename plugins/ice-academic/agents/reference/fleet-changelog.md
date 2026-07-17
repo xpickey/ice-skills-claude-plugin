@@ -114,3 +114,8 @@
 - **hook V01R03**: + marker `ICE_SMARTFIX=1` (Smart Fix ≤5 slides ที่ user อนุมัติใน rules §1.6) · pipe-test 13/13 + live 2/2 (SMARTFIX ผ่าน · build ไม่มี marker ยัง block)
 - **refs**: doc-qa-log V01R02 (+`mode` ใน Process Compliance = หลักฐาน PROVENANCE LOCK) · rules/deliverable.md §1.6 (+ICE_SMARTFIX) · folder CLAUDE.md ×4 V01R03 (ตาราง 3 โหมด + Run Line บังคับ)
 - **หลักการที่ล็อก:** ความเร็วมาจาก **ตัดรอบใน pipeline** ไม่ใช่ข้าม pipeline · งานลูกค้า (= งานส่วนใหญ่ของ user) ห้าม L0 take-over เด็ดขาด
+
+## 2026.07.17 — MANDATORY LENS ใน PANEL (root cause: Viriyah TOC — กัปตันเขียน demo story เดี่ยว → ภาษาละคร "องก์/ฉาก")
+- **กัปตัน V03R08**: §5 PANEL DISCIPLINE กติกาข้อ 4 — content ธรรมชาติ sales (demo/POC/narrative/pitch/win-theme) → ② ก้องต้องเป็น 1 lens เสมอ (+Write-Clean B-Business) · content ธรรมชาติ solution/knowledge (product/fit-gap/architecture/fact) → ③ เทพต้องเป็น 1 lens เสมอ · มีทั้งสอง → ②+③ · **L1 ห้ามเขียน content เฉพาะทางเดี่ยว** (skill ไม่ได้หาย — คนถือ skill ไม่ได้ถูกเรียกมาทำงาน)
+- **คิม V02R07**: K2 PANEL DISCIPLINE ข้อ ④ ฉบับย่อเดียวกัน · (สมนึกไม่แตะ — ตามคำสั่ง user)
+- หมายเหตุเคสเจนนี่ Viriyah build ไม่จบ: วินิจฉัยแล้ว = 400 xhigh+thinking (ตาย 9 ครั้ง — แก้ด้วย alwaysThinkingEnabled:true) + guard block ก่อนใช้ marker (10 ครั้ง) + คำสั่งแก้แทรกกลาง build (2 ครั้ง) — ไม่ต้องแก้ไฟล์เจนนี่ · operational: เปิด session ใหม่ + รวบ fix เป็นชุดเดียวหลัง SAVE
