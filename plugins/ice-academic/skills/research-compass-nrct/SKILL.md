@@ -10,7 +10,11 @@ description: >-
   ระเบียบวิธีวิจัย, mixed methods, sampling, power analysis, validity/reliability, สถิติ/SEM/PLS, แบบสอบถาม,
   เขียนข้อเสนอวิจัย/proposal, NRIIS, pathway to impact, TRL/SRL, เครือข่ายวิจัย, จริยธรรม/บูรณภาพการวิจัย, RCR,
   authorship, plagiarism, COI, data management, reproducibility, IRB, IACUC, จรรยาบรรณนักวิจัย วช., ยุทธศาสตร์ ววน.
-  Version: V02R02 | Date: 2026.06.14
+  V03: ผนวกคลังเนื้อหาจริงระดับหน้า (nrct-kb) — สกัดจากเอกสารอบรม "นักวิจัยรุ่นใหม่ วช." พ.ศ.2567 จริง
+  (RCR 10 บท · สไลด์วิทยากรทุกหมวด · แบบฟอร์มทุนจริง FF ปีงบ 2570 / Strategic Fund 6 แบบ · กำหนดการรุ่น 2569)
+  ทุก claim ตามรอยกลับไฟล์+เลขหน้าได้ · Triggers เพิ่ม: "นักวิจัยวช", "นักวิจัยรุ่นใหม่", "อบรม วช", "ข้อเสนอ FF",
+  "Fundamental Fund", "แบบฟอร์มทุน", "แบบปฏิบัติการ", "ลูกไก่", "วุฒิบัตร", "กำหนดการอบรม".
+  Version: V03R01 | Date: 2026.07.17
 ---
 
 # Research Compass NRCT — เข็มทิศนักวิจัย วช.
@@ -99,6 +103,19 @@ ELO ทั้งสี่กระจายลงสามด้าน **KSA** (
 - ต้องการเทคนิคขั้นสูง (SEM/PLS, meta-analysis, bibliometrics, open science, pre-registration) → `11-advanced-toolkit.md`
 - ติว/สอบ RCR และ Pre-Post test → `09-quiz-bank.md`
 
+### 4.1 คลังเนื้อหาจริงระดับหน้า — `references/nrct-kb/` (V03 · ผนวกจาก nrct-researcher)
+
+เมื่อผู้ใช้ต้องการ **ข้อเท็จจริง/เกณฑ์/แบบฟอร์ม/เนื้อหาบรรยายจริง** (ไม่ใช่กรอบวิธีคิด) — เปิด `nrct-kb/` ซึ่งสกัดจากเอกสารอบรมจริง อ้างอิงไฟล์+เลขหน้าตามรอยกลับได้ทุก claim (`nrct-kb/10-sources.md` = ทะเบียนแหล่ง). ใช้ **คู่กับ** ไฟล์ framework 00–11 ด้านบน (framework = วิธีคิด/สองชั้น · nrct-kb = fact/form/เนื้อบรรยาย)
+
+- แบบฟอร์มทุนจริง FF ปีงบ 2570 / Strategic Fund 6 แบบ / กรอก NRIIS → `nrct-kb/08-funding-forms.md`
+- ELO/สมรรถนะ/เกณฑ์วุฒิบัตร ตามหลักสูตรจริง → `nrct-kb/00-course-elo.md`
+- กำหนดการรุ่น 2569 / logistics การอบรม / "ลูกไก่" → `nrct-kb/09-training-logistics.md`
+- RCR 10 บทฉบับเต็ม + จรรยาบรรณ วช. → `nrct-kb/07-rcr-10.md` + `nrct-kb/01-ethics-standards.md`
+- เนื้อหาบรรยายรายหมวด (โจทย์/ทบทวน/ออกแบบ/proposal/เครือข่าย) → `nrct-kb/02`–`06`
+- ดัชนีคลัง + วิธีใช้ + กฎอ้างอิง → `nrct-kb/00-INDEX-nrct-kb.md`
+
+> **กฎเมื่อใช้ nrct-kb:** แนบรหัสอ้างอิง `(รหัสย่อ น.X)` ตาม `nrct-kb/10-sources.md` ทุก claim · เกณฑ์ทุนเปลี่ยนรายปี (ฟอร์ม = ปีงบ 2570) → งานยื่นจริงเตือนผู้ใช้ตรวจประกาศล่าสุดใน NRIIS ก่อนเสมอ
+
 ---
 
 ## 5. หลักการทำงานของ skill (ยึดเสมอ)
@@ -117,4 +134,10 @@ ELO ทั้งสี่กระจายลงสามด้าน **KSA** (
 **ภาษา** ตอบเป็นภาษาเดียวกับผู้ใช้ ศัพท์เทคนิคใส่ภาษาอังกฤษกำกับในวงเล็บ
 
 > การติดตั้ง: วางทั้งโฟลเดอร์นี้ไว้ที่ตำแหน่ง skills ของคุณ หรือเปิดผ่าน Settings > Capabilities แล้วเรียกใช้ชื่อ
-> `research-compass-nrct` ที่มาและการอ้างอิงทั้งหมดอยู่ใน `references/10-sources.md`
+> `research-compass-nrct` ที่มาและการอ้างอิงทั้งหมดอยู่ใน `references/10-sources.md` (framework) + `references/nrct-kb/10-sources.md` (คลังเนื้อหาจริง)
+
+---
+
+## CHANGELOG
+- **V03R01 (2026.07.17)** — ผนวกคลังเนื้อหาจริงระดับหน้าจาก skill `nrct-researcher` (V01R01) เข้าเป็น `references/nrct-kb/` (11 ไฟล์: course-elo, ethics, research-problem, literature-review, research-design, proposal-impact, network, rcr-10, funding-forms, training-logistics, sources + INDEX). Framework 00–11 เดิมคงครบ. เพิ่ม §4.1 routing ไป nrct-kb + Triggers งานอบรม/แบบฟอร์มทุนจริง. `nrct-researcher` เดิม deprecated → ใช้ skill นี้แทน (canonical). ผูกกับ agent thesis-ai-det-col-agent (ผู้ทรง/สมนึก) §5 SKILLS ROUTING.
+- **V02R02 (2026.06.14)** — framework 6 หมวด + ELO + RCR 10 บท + สองชั้น (Baseline/Advanced).

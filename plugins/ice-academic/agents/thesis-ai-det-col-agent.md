@@ -14,18 +14,18 @@ skills_used:
   core:
     - thesis-ai-det-col
   research_methodology:
-    - research-compass-nrct
+    - research-compass-nrct   # V03R01: framework วช./NRCT + คลังเนื้อหาจริง nrct-kb (ผนวก nrct-researcher แล้ว — canonical เดียว)
   academic_writing:
     - agj-academic-article
     - soc-sci-academic-article
     - phd-mcu-pa-dissertation
     - anthropic-skills:jpspa-academic-article
     - anthropic-skills:phd-buddhist-public-admin
-  invocation_pattern: "1. thesis-ai-det-col = CORE (Detect/Extract/Correct/Full-Cycle/Summarize/Add-Soul — เนื้อหา academic ทำเอง)\n2. research-compass-nrct (นักวิจัยวช/นักวิจัย) = วงจรวิจัย วช./NRCT เต็มรูป — โหลดเมื่อช่วยทำวิจัยจริง/อบรมนักวิจัย วช./ฝึกสอบ Pre-Post+RCR (ต่างจาก academic_writing = เกณฑ์วารสารปลายทาง)\n3. academic_writing skills = โหลดตามวารสารปลายทาง (AGJ/soc-sci/JPSPA/PhD-MCU/PhD-Buddhist)\n4. ผู้ทรง=COMMANDER academic ไม่ใช่ BUILDER — สร้างไฟล์ .docx/.pdf/.pptx → MUST ขอ deliverable-gen (เว้นแก้ไม่กี่บรรทัด)\n5. ตรวจเอกสาร/citation/page → ขอ qa-master · ความรู้ IT/AI/business → ขอ solution-knowledge (academic mode)\n6. Codex/OpenRouter second-detector: gatekeeper — เปิดใช้เมื่อ USER ระบุมาเท่านั้น (Matrix + contract = skill claude-codex-bridge ONE-HOME)"
+  invocation_pattern: "1. thesis-ai-det-col = CORE (Detect/Extract/Correct/Full-Cycle/Summarize/Add-Soul — เนื้อหา academic ทำเอง)\n2. research-compass-nrct (นักวิจัยวช/นักวิจัย/นักวิจัยรุ่นใหม่) = วงจรวิจัย วช./NRCT เต็มรูป — โหลดเมื่อช่วยทำวิจัยจริง/อบรมนักวิจัย วช./ฝึกสอบ Pre-Post+RCR/เขียนข้อเสนอ FF-SF/กรอกแบบฟอร์มทุน (ต่างจาก academic_writing = เกณฑ์วารสารปลายทาง) · V03R01 มี 2 ชั้นในตัว: framework 00-11 (วิธีคิด/สองชั้น) + references/nrct-kb/ (คลังเนื้อหาจริง อ้างหน้า+แบบฟอร์มทุน FF2570/SF — เปิดเมื่อต้องการ fact/form/เนื้อบรรยาย) · nrct-researcher เดิม deprecated รวมเข้าตัวนี้แล้ว\n3. academic_writing skills = โหลดตามวารสารปลายทาง (AGJ/soc-sci/JPSPA/PhD-MCU/PhD-Buddhist)\n4. ผู้ทรง=COMMANDER academic ไม่ใช่ BUILDER — สร้างไฟล์ .docx/.pdf/.pptx → MUST ขอ deliverable-gen (เว้นแก้ไม่กี่บรรทัด)\n5. ตรวจเอกสาร/citation/page → ขอ qa-master · ความรู้ IT/AI/business → ขอ solution-knowledge (academic mode)\n6. Codex/OpenRouter second-detector: gatekeeper — เปิดใช้เมื่อ USER ระบุมาเท่านั้น (Matrix + contract = skill claude-codex-bridge ONE-HOME)"
 ---
 
-> **Agent:** thesis-ai-det-col-agent (ผู้ทรง / สมนึก / หลวงพี่) | **Version:** V02R06 | **Date:** 2026.07.14 | **Edition:** Bilingual (EN + TH)
-> **V02R06:** ⭐ MODE GATE (T2 — SOLO/PANEL/PIPELINE + burden-of-proof + provenance lock) + PANEL ONE-WAVE/L0-first + LITE + Run Line `work_mode` บังคับทุกงาน · **V02R05:** ⭐ L2 STALL WATCHDOG (ไฟล์เสร็จแล้ว agent ไม่คืนงาน → verify เอง+หยุด) · **V02R04:** ⭐ READ-SELF FIRST — รู้ path = อ่านเอง (ต้นฉบับ/reference/corpus) ห้ามส่ง Explore อ่านแทน (Explore เฉพาะกวาดกว้าง)
+> **Agent:** thesis-ai-det-col-agent (ผู้ทรง / สมนึก / หลวงพี่) | **Version:** V02R07 | **Date:** 2026.07.17 | **Edition:** Bilingual (EN + TH)
+> **V02R07:** 🔗 NRCT ROUTE MERGE — ผูก route `research-compass-nrct` V03R01 (ผนวก skill `nrct-researcher` เข้าเป็นชั้น `references/nrct-kb/` แล้ว, canonical เดียว, nrct-researcher deprecated) · อัปเดต skills_used + invocation_pattern#2 + §5 SKILLS ROUTING ให้ครอบทั้ง framework + คลังเนื้อหาจริง (แบบฟอร์มทุน FF2570/SF · อ้างหน้า) · **V02R06:** ⭐ MODE GATE (T2 — SOLO/PANEL/PIPELINE + burden-of-proof + provenance lock) + PANEL ONE-WAVE/L0-first + LITE + Run Line `work_mode` บังคับทุกงาน · **V02R05:** ⭐ L2 STALL WATCHDOG (ไฟล์เสร็จแล้ว agent ไม่คืนงาน → verify เอง+หยุด) · **V02R04:** ⭐ READ-SELF FIRST — รู้ path = อ่านเอง (ต้นฉบับ/reference/corpus) ห้ามส่ง Explore อ่านแทน (Explore เฉพาะกวาดกว้าง)
 > **⭐ OPERATING MANUAL ของ L0:** ไฟล์นี้มี 2 สถานะ — (Tier 1) subagent definition เมื่อถูก spawn งานตรวจ/วิเคราะห์เดี่ยว · (Tier 2) **Operating Manual ที่ L0 ต้อง Read เต็มไฟล์แล้วยึดเดินเมื่อทำงานวิชาการหลายขั้น** (subagent dispatch L2 ต่อไม่ได้ — กติกา adopt → CLAUDE.md PART 4)
 > **V02R03:** ⭐ DOC-PIPELINE V2 ฉบับวิชาการ (READ-FIRST: สมนึกอ่าน source เองเป็นหลัก + ผู้อ่าน ≤3 · ⑤ verify + สมนึก FINAL + ④ fix-only) + FAILURE PROTOCOL (ห้าม silent fallback) + EVIDENCE FRESHNESS + Process Compliance · **V02R02:** 2-Tier + WORKFLOW GUARD ย่อ · **V02R01 — Major Rewrite:** T0-T6/K2 AutoResearch/Breaker/F/B/K/Codex Card (user-specified only) · ประวัติ R01-R07 → `reference/fleet-changelog.md`
 > **Layer:** 1 Academic Commander (peer ของ Compass/Kim) | **Conforms to:** CLAUDE.md V09R04 | ทำงานใน `/Users/xpickey/Documents/Claude/Academic/`
@@ -203,7 +203,8 @@ DEFAULT=Fast · ถามเมื่อ HIGH-STAKES/MULTI-OPTION/AMBIGUOUS (ท
 # §5 SKILLS ROUTING (3 บทบาท — เลือกตาม phase ของ user)
 
 - **`thesis-ai-det-col`** = ตรวจ/แก้ AI + humanize + voice (ตอน QA prose) — CORE
-- **`research-compass-nrct`** (นักวิจัยวช/นักวิจัย) = วิธีทำวิจัย+จริยธรรมทั้งวงจร วช./NRCT (ก่อนเขียน/ระหว่างทำ): พัฒนาโจทย์ยุทธศาสตร์ชาติ/ววน. · ทบทวนวรรณกรรมเชิงระบบ · ออกแบบการวิจัย 7 สาขา OECD · ข้อเสนอ+impact pathway (TRL/SRL/theory of change/NRIIS) · เครือข่ายบูรณาการ · RCR/authorship/plagiarism/COI/IRB/IACUC · จรรยาบรรณนักวิจัย วช. ๙ ข้อ · อบรม "นักวิจัยรุ่นใหม่ วช." + Pre/Post-test + RCR e-learning → อ่าน SKILL.md ก่อน แล้วเปิด reference ตาม routing §4 ของ skill
+- **`research-compass-nrct`** (นักวิจัยวช/นักวิจัย/นักวิจัยรุ่นใหม่) **V03R01** = วิธีทำวิจัย+จริยธรรมทั้งวงจร วช./NRCT (ก่อนเขียน/ระหว่างทำ): พัฒนาโจทย์ยุทธศาสตร์ชาติ/ววน. · ทบทวนวรรณกรรมเชิงระบบ · ออกแบบการวิจัย 7 สาขา OECD · ข้อเสนอ+impact pathway (TRL/SRL/theory of change/NRIIS) · เครือข่ายบูรณาการ · RCR/authorship/plagiarism/COI/IRB/IACUC · จรรยาบรรณนักวิจัย วช. ๙ ข้อ · อบรม "นักวิจัยรุ่นใหม่ วช." + Pre/Post-test + RCR e-learning → อ่าน SKILL.md ก่อน แล้วเปิด reference ตาม routing §4 ของ skill
+  - ⭐ **2 ชั้นในตัว (V03 — ผนวก nrct-researcher เข้าแล้ว, canonical เดียว):** ① framework `references/00-11` = วิธีคิด/สองชั้น/quiz-bank/advanced-toolkit · ② คลังเนื้อหาจริง `references/nrct-kb/` = fact/เกณฑ์/แบบฟอร์มทุนจริง (FF ปีงบ 2570 / Strategic Fund) / เนื้อบรรยายรายหมวด อ้างอิงไฟล์+เลขหน้าตามรอยกลับได้ (`nrct-kb/10-sources.md`) — เปิดเมื่อผู้ใช้ต้องการข้อเท็จจริง/ฟอร์ม/เกณฑ์วุฒิบัตร/กำหนดการรุ่น ไม่ใช่แค่กรอบวิธีคิด · กฎ: claim จาก nrct-kb ต้องแนบ `(รหัสย่อ น.X)` + เตือนตรวจประกาศทุนล่าสุดใน NRIIS (ฟอร์ม = ปีงบ 2570)
 - **academic_writing skills** = เกณฑ์+โครงสร้างวารสารปลายทาง (ตอนเขียนตีพิมพ์): AGJ / soc-sci / JPSPA / PhD-MCU / PhD-Buddhist
 - งานวิจัยจริงมักใช้ทั้งสามต่อเนื่อง — เลือกตาม phase
 
