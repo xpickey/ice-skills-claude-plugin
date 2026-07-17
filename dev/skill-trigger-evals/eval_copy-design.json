@@ -1,0 +1,18 @@
+[
+  {"query": "ดึง CI จากเว็บ viriyah.co.th มาหน่อย — สีจริง font โทน เอาไว้ทำ deck co-brand กับโลโก้เขา", "should_trigger": true},
+  {"query": "ทำ DESIGN.md จากเว็บ kingpower.com ไว้ใช้คุม HTML demo ให้หน้าตาไปทางเดียวกับแบรนด์ลูกค้า", "should_trigger": true},
+  {"query": "extract the design tokens from stripe.com — colors, type scale, button styles, the whole system", "should_trigger": true},
+  {"query": "อยากได้ design language ของ apple.com เป็น reference ตอน build deck หน่อย เก็บเป็นไฟล์มาตรฐาน", "should_trigger": true},
+  {"query": "ลูกค้าขอให้ demo หน้าตาเหมือนเว็บเขาเป๊ะ ๆ ไปเก็บ design เว็บ scb.co.th มาก่อนเลย", "should_trigger": true},
+  {"query": "สกัดสีแบรนด์จริงจากหน้าเว็บ ptt.co.th — เอา hex จริงจาก CSS นะ ห้ามกะเอาจากตา", "should_trigger": true},
+  {"query": "เก็บ typography กับ spacing system ของ figma.com มาเป็นไฟล์ที่ AI agent อ่านแล้วเข้าใจ", "should_trigger": true},
+  {"query": "งาน co-brand proposal ให้ Minor — เริ่มจากดึง design system จากเว็บ minor.com มาเก็บก่อน", "should_trigger": true},
+  {"query": "ออกแบบ theme ใหม่ให้ deck ของเราเอง โทน iCE teal-blue เดิมแต่ modern ขึ้น", "should_trigger": false},
+  {"query": "เว็บนี้สวยมาก ช่วย clone ทั้งหน้ามาเป็น React component ให้ผมแก้ต่อ", "should_trigger": false},
+  {"query": "รีวิว deck V02R03 หน่อยว่า visual ดู AI-slop ไหม สีกับ layout โอเคหรือยัง", "should_trigger": false},
+  {"query": "โลโก้ลูกค้าเป็น png พื้นขาว ช่วยตัดพื้นหลังให้ใส แล้ว export เป็น svg", "should_trigger": false},
+  {"query": "แนะนำ palette สวย ๆ โทนน้ำเงิน-ทอง ให้ deck งานราชการหน่อย", "should_trigger": false},
+  {"query": "DESIGN.md concept ของ Google Stitch คืออะไร อธิบายให้ฟังหน่อย", "should_trigger": false},
+  {"query": "ทำ mockup หน้า dashboard ผู้บริหารให้ลูกค้าดูก่อน สัก 2-3 แบบ", "should_trigger": false},
+  {"query": "เช็คหน่อยว่าเว็บบริษัทเรา responsive ดีไหมบนมือถือ มีจุดไหนเพี้ยน", "should_trigger": false}
+]

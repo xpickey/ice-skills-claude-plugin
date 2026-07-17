@@ -1,0 +1,18 @@
+[
+  {"query": "เก็บหน้า pricing ของ oracle.com/netsuite เป็น MD ไว้ใน project TQR หน่อย เอาไว้อ้างอิงตอนทำ commercial", "should_trigger": true},
+  {"query": "save บทความนี้เก็บเข้าคลังหน่อย https://example.com/ifrs17-thailand-impact — เอาเป็น markdown พร้อมระบุที่มาและวันที่ดึง", "should_trigger": true},
+  {"query": "TOR ประกาศบนเว็บ e-GP แล้ว ดูดเนื้อหามาเก็บลงดิสก์ก่อนหน้าเว็บหมดอายุ", "should_trigger": true},
+  {"query": "archive หน้า SuiteScript API docs 5 หน้านี้เป็น md ไว้อ่าน offline ตอน dev", "should_trigger": true},
+  {"query": "เสี่ยวป้อ เก็บข่าว 3 ลิงก์นี้เข้า _retrieved ของ Viriyah ให้หน่อย", "should_trigger": true},
+  {"query": "grab this blog post as clean markdown — keep the tables and code blocks, drop the nav junk and cookie banners", "should_trigger": true},
+  {"query": "มีไฟล์ html ที่ save ไว้ในโฟลเดอร์ Downloads หลายไฟล์ แปลงเป็น md รวมไว้ที่เดียว", "should_trigger": true},
+  {"query": "release notes NetSuite 2026.1 หน้ายาวมาก เก็บฉบับเต็มเป็นไฟล์ md พร้อม frontmatter ที่มา", "should_trigger": true},
+  {"query": "อ่านหน้าเว็บนี้แล้วสรุปสั้น ๆ ให้ฟังหน่อยว่าประเด็นหลักคืออะไร ตอบในแชทพอ", "should_trigger": false},
+  {"query": "ค้นราคาตลาด ERP ไทยล่าสุด แล้ววิเคราะห์ว่าดีลนี้เราควรตั้งราคาช่วงไหน", "should_trigger": false},
+  {"query": "แปลงไฟล์ notes.md ของผมเป็น docx สวย ๆ ส่งอาจารย์", "should_trigger": false},
+  {"query": "เว็บลูกค้าใช้สีอะไรบ้าง ดึงโทนสีกับ font มาไว้ทำ deck co-brand", "should_trigger": false},
+  {"query": "ตั้ง schedule ดึงราคาหุ้น OR ทุกเช้า 8 โมงแล้วแจ้งเตือนผม", "should_trigger": false},
+  {"query": "เปิดเว็บ NetSuite ให้หน่อย ผมจะ login เข้าไปตั้งค่า role", "should_trigger": false},
+  {"query": "หา best practice การทำ QBR จากเน็ต แล้วแนะนำว่ากระบวนการเราควรปรับอะไร", "should_trigger": false},
+  {"query": "ลิงก์นี้เปิดไม่ได้ตั้งแต่เมื่อวาน ช่วยเช็คหน่อยว่าเว็บล่มหรือโดน firewall บริษัทบล็อก", "should_trigger": false}
+]

@@ -1,0 +1,22 @@
+[
+  {"query": "ทำ proposal NetSuite ให้ลูกค้าประกันภัยเป็น deck 15 slides ไทย-อังกฤษ จาก BRD ที่อยู่ใน Projects/Viriyah/00 - Context/ เอา template iCE", "should_trigger": true},
+  {"query": "Word ที่ gen ออกมา font ไทยเพี้ยนมาก หัวข้อเป็น Calibri บ้าง Sarabun บ้าง ขนาดก็ไม่เท่ากัน แก้ให้สม่ำเสมอทั้งไฟล์หน่อย ไฟล์อยู่ 20 - Output/BRD_V02R01.docx", "should_trigger": true},
+  {"query": "สร้าง ROI workbook excel ให้ดีล MEA — sheet สมมติฐาน + cash flow 5 ปี + สูตร NPV IRR ที่กดดูได้จริงใน Excel", "should_trigger": true},
+  {"query": "เปิด pptx ที่ทำเมื่อวานแล้ว PowerPoint ขึ้น Repair ตลอดเลย ช่วย debug หน่อยว่าพังตรงไหน ไฟล์ TQR_Proposal_V03R02.pptx", "should_trigger": true},
+  {"query": "help me build a 20-slide QBR deck for the King Power account, bilingual TH/EN, our standard iCE look", "should_trigger": true},
+  {"query": "แก้ slide 3-5 ใน deck V03R06 เปลี่ยนตัวเลขราคาตามที่คุยเมื่อกี้ แล้วขยับ timeline ไป Q3 — ไม่ต้อง rebuild ทั้งไฟล์นะ", "should_trigger": true},
+  {"query": "ลูกค้าเปิดไฟล์ presentation แล้ว font ไทยหายกลายเป็นสี่เหลี่ยม ต้อง embed font ยังไงให้ชัวร์ว่าเครื่องเขาเห็นเหมือนเรา", "should_trigger": true},
+  {"query": "ทำ business case เป็น docx สัก 10 หน้า มี executive summary จาก content spec ที่ approve แล้วใน _specs/content-spec.md", "should_trigger": true},
+  {"query": "gen เอกสาร SoW จากที่เราคุยกันเมื่อกี้เป็นไฟล์ word ส่งลูกค้าพรุ่งนี้เช้า", "should_trigger": true},
+  {"query": "convert แผน implementation เป็น HTML deck แชร์ลิงก์ให้ทีมลูกค้าเปิดดูได้เลยไม่ต้องมี PowerPoint", "should_trigger": true},
+  {"query": "ช่วยคิดโครงเนื้อหา proposal ก่อน ยังไม่ต้องทำไฟล์ — อยากได้ win theme กับ storyline สัก 3 แนวมาเลือก", "should_trigger": false},
+  {"query": "อ่าน pptx ของคู่แข่งที่ลูกค้า forward มา สรุปหน่อยว่าเขาเสนอ scope อะไร ราคาประมาณไหน", "should_trigger": false},
+  {"query": "ส่งไฟล์ deck ที่ build เสร็จเมื่อวานให้อริสตรวจ font กับ layout ก่อนส่งลูกค้า", "should_trigger": false},
+  {"query": "NetSuite รองรับ e-Tax Invoice ของไทยไหม ตอบในแชทพอไม่ต้องทำเอกสาร", "should_trigger": false},
+  {"query": "เขียน email ตอบลูกค้าเรื่องขอเลื่อนประชุม demo เป็นศุกร์หน้า น้ำเสียงสุภาพ", "should_trigger": false},
+  {"query": "เทียบ TOR 2 ฉบับนี้ให้หน่อยว่าต่างกันตรงไหน สรุปเป็น .md ภายในทีมพอ", "should_trigger": false},
+  {"query": "ช่วยเขียนหน้า landing page ด้วย React + Tailwind ให้ startup ผม", "should_trigger": false},
+  {"query": "font Sarabun กับ TH Sarabun New ต่างกันยังไง งานราชการควรใช้ตัวไหน", "should_trigger": false},
+  {"query": "unzip ไฟล์ pptx นี้ดูหน่อยว่ามีรูปกี่รูป ขนาดรวมเท่าไหร่ทำไมไฟล์ใหญ่จัง", "should_trigger": false},
+  {"query": "วางแผน demo POC NetSuite 3 ชั่วโมงพรุ่งนี้ ลำดับ agenda ยังไงดีให้ CFO อยู่ถึงจบ", "should_trigger": false}
+]
