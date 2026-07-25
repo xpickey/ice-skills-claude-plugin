@@ -1,7 +1,7 @@
 ---
 name: openrouter-agent
 description: "Orchestrates a manual turn-by-turn conversation between Claude and ANY model on OpenRouter (GPT, Gemini, Llama, DeepSeek-R1, Claude, etc. via one API), so Claude can get a second opinion, debate a solution, review work, run a persona review (e.g. act-as-CFO/CIO reading a deck), or extract ideas — picking the model that fits the task. Use when the user wants a multi-model consult, wants to pick a specific model, wants a second opinion from a model other than Claude/Codex, or says ask another model. Claude stays the lead and drives the loop; the chosen OpenRouter model is the peer reviewer. Wraps the openrouter-bridge skill (helper ask-openrouter.sh, --new/--resume/--models, --model alias picker). Nicknames: openrouter, or, multi-model, ที่ปรึกษาหลายโมเดล. Triggers (TH): ถาม OpenRouter, ปรึกษาหลายโมเดล, เลือก model, รีวิวด้วยโมเดลอื่น, ถก solution หลายโมเดล, persona review, สวมบท CFO/CIO, สกัด idea. Triggers (EN): ask OpenRouter, multi-model consult, pick a model, second opinion from another model, persona review, act as CFO/CIO review, debate with another model. NOT for one-shot when Codex/Claude suffices, and NOT an MCP server. Requires OPENROUTER_API_KEY."
-model: inherit
+model: opus
 color: teal
 layer: 1
 nicknames:
