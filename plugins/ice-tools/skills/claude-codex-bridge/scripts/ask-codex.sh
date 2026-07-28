@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-# Claude ↔ Codex bridge helper (V02R02 | 2026.07.10 — +--model passthrough · probed CLI 0.144.1).
+# Claude ↔ Codex bridge helper (V02R03 | 2026.07.18 — ⭐ FIX STDIN HANG: codex exec อ่าน stdin —
+#   ผู้เรียกที่ถือ stdin เปิดค้าง (Bash tool/Workflow agent) ทำให้ค้างถาวร (เคสจริง 25 นาที
+#   "Revisit Compile after POC" 2026.07.18) → เติม </dev/null ในตัว script ทั้ง 2 จุดเรียก codex
+#   ผู้เรียกไม่ต้องจำ < /dev/null เองอีก · V02R02 2026.07.10 — +--model passthrough · probed CLI 0.144.1).
 # Claude calls this via Bash to converse with Codex, turn by turn.
 # Claude drives the loop; Codex keeps its own session memory across turns.
 #
@@ -147,14 +150,14 @@ if [[ "$mode" == "--new" ]]; then
   # '--' terminator กัน prompt ที่ขึ้นต้นด้วย - ถูกกินเป็น flag (Codex review H2 · clap รองรับ)
   codex exec --json -o "$LAST" --skip-git-repo-check -s "$SANDBOX" -C "$DIR" \
     ${SCHEMA_ARGS[@]+"${SCHEMA_ARGS[@]}"} ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} \
-    -- "$prompt" >"$EVENTS" 2>"$ERRLOG" || rc=$?
+    -- "$prompt" </dev/null >"$EVENTS" 2>"$ERRLOG" || rc=$?
 elif [[ "$mode" == "--resume" ]]; then
   sid="$(cat "$SID_FILE" 2>/dev/null || true)"
   if [[ -z "$sid" ]]; then echo "no saved session-id for '${SESSION:-default}'; run --new first" >&2; exit 3; fi
   # reduced flag set: resume rejects -s and -C (inherits from session) — but accepts --output-schema/-m
   codex exec resume --json -o "$LAST" --skip-git-repo-check \
     ${SCHEMA_ARGS[@]+"${SCHEMA_ARGS[@]}"} ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} \
-    -- "$sid" "$prompt" >"$EVENTS" 2>"$ERRLOG" || rc=$?
+    -- "$sid" "$prompt" </dev/null >"$EVENTS" 2>"$ERRLOG" || rc=$?
 fi
 
 if [[ $rc -ne 0 ]]; then
