@@ -3,7 +3,9 @@ name: b2b-slide-designer
 description: "Presentation design advisor + Design Library for B2B (iCE). Selects style, theme, template, color/gradient, infographic layout, and icon by Corporate Identity and task. 8 core templates (Linen, Arctic, Cobalt, Onyx, Amber, Whiteboard, iCE-CI, iCE-Propose) + Design Library Router over 1,186 refs: 195 industry examples, 493 consulting decks (McKinsey/BCG/Bain/Big-4), 71 framework .pptx (SWOT/PESTEL/Porter/Gantt/Value-Chain/Customer-Journey), 29 gradients, 68 infographic types, 401 recolorable icons. Confidence-based selection (auto-pick or propose 5). Output for PPTX/HTML/PDF. Owns §5.5.1 font single-source + Font Strategy (TH-only/EN-only/TH+EN, font by language not template). Trigger for deck style, theme, template, color palette, gradient, infographic/framework (SWOT/Porter/Gantt), icon, consulting style, industry example, iCE document. Thai: หา template สไลด์, เลือกธีม/สีสไลด์, gradient, อินโฟกราฟิก, เลย์เอาต์, icon, สไลด์แนวที่ปรึกษา, ออกแบบ deck."
 ---
 
-# B2B Slide Designer + Design Library (V02R08 — 2026.07.10)
+# B2B Slide Designer + Design Library (V02R09 — 2026.07.31)
+
+> **V02R09 (2026.07.31):** ⭐ §4.6 เขียนใหม่เป็น **FONT POLICY 2 ราง** (เอกชน = `IBM Plex Sans Thai Looped` ไทย=อังกฤษไม่บวก pt · ราชการ = `TH Sarabun New` 16pt) + **BLACKLIST 8 ตระกูล** + **SINGLE-FAMILY FIRST** + กฎชื่อ family ต้องตรง name table เป๊ะ — ฐานหลักฐาน: PDF สาธารณะ 45 ฉบับส่องด้วย `pdffonts` + วัด metric ฟอนต์จริง 9 ตระกูล + user ทดสอบสายตา · **กติกาเต็ม+เหตุผลรายตัว = `ice-doc-builder` §3.0** (ที่นี่คือ pointer)
 
 Skill นี้ช่วยเลือกและออกแบบ Presentation Style ระดับมืออาชีพตาม **iCE Corporate Identity (CI)** —
 8 core template + **Design Library 1,186 references** (industry examples · consulting decks · framework .pptx ·
@@ -145,19 +147,34 @@ STEP 6 — ออก Design Spec (format-agnostic):
 > **สี ≠ font:** สีปรับตาม CI/color-pattern ได้ (override) · font ผูก §5.5.1 SINGLE-SOURCE + §5.5 T1-T4.
 
 ```
-3 LANGUAGE MODE (ตรวจเนื้อหาก่อนเลือก font):
-  TH-only (ไทยล้วน)     → Sarabun · IBM Plex Sans Thai · TH SarabunPSK (ราชการ/TOR)
-  EN-only (อังกฤษล้วน)  → Inter · Raleway · Open Sans (ตาม template ได้)
-  TH+EN กล่องเดียว (ยากสุด) → 2 กลยุทธ์ เลือกตาม context:
-     • UNIFIED (default งานทั่วไป/เร็ว/cross-platform):
-         font ตัวเดียวมี TH+EN glyph → IBM Plex Sans Thai / Sarabun / Noto Sans Thai
-         → balance เอง ไม่ต้องจับคู่ (ปลอดภัยสุด)
-     • PAIR latin+cs (งาน premium/typography สูง):
-         TH font + EN font ที่ x-height ใกล้กัน → set latin slot + cs slot แยก (D1 tri-slot)
-         → typography ลึกกว่า แต่ต้องเช็ค balance (§5.5 Visual Parity Test)
+⭐⭐⭐ FONT POLICY 2 ราง (V02R04 · LOCKED โดย user 2026.07.31 — ฐาน: PDF จริง 45 ฉบับ + วัด metric
+   ฟอนต์ 9 ตระกูล + user ทดสอบสายตา · กติกาเต็ม+เหตุผลรายตัว → skill `ice-doc-builder` §3.0)
 
-  ⚠️ FONT-OVERRIDE RULE: template ระบุ EN-only font + งานมีไทย → SWAP เป็น unified/pair อัตโนมัติ
+  ราง 1 — งานเอกชน (proposal/deck/workbook/demo) ⭐ DEFAULT
+     ฟอนต์: IBM Plex Sans Thai Looped   ← ต้องมีคำว่า "Looped" (ตัวไม่มีหัว = โทน display ผิด register)
+     ขนาด : ไทย = อังกฤษ **ห้ามบวก pt** (cap 0.698 em · ละตินอยู่ในตัวเดียวกัน)
+     น้ำหนัก: เลี่ยง Bold ใช้ SemiBold/Medium (Material Design: Bold หนาเกินสำหรับไทย)
+     สำรอง : Tahoma (ติดมากับ Win+Mac — ใช้เมื่อคุมเครื่องปลายทางไม่ได้)
+     อ้างอิงจริง: ปตท. ใช้ใน 56-1 One Report
+
+  ราง 2 — งานราชการ / TOR / e-GP / รัฐวิสาหกิจ
+     ฟอนต์: TH Sarabun New  (ไม่ใช่ PSK · ⛔ ห้าม IT๙)
+     ขนาด : 16pt = ละติน 11-12pt (วัดได้ ×1.47) · ⚠ ที่ว่างวรรณยุกต์เหลือ 0.008 em → เผื่อ line spacing เสมอ
+     กฎหมาย: มติ ครม. 2553 ผูกพันส่วนราชการ **ไม่ผูกพันผู้ขาย** → TOR ระบุอะไร ทำตาม TOR (override)
+     อ้างอิงจริง: PwC ทำเป็นทางการ self-host 4 น้ำหนักใน design system
+
+  ⛔ BLACKLIST: TH Sarabun IT๙ (แปลงเลขอารบิก→ไทยเงียบ ๆ) · Angsana/Cordia/Browallia/Eucrosia/Jasmine
+     (ทำลาย สระอำ ในชั้นข้อความ 100%) · Microsoft Sans Serif · Calibri/Aptos/Arial บนข้อความไทย
+     ⚠ "Sarabun" ≠ "TH Sarabun New" — คนละฟอนต์ ขนาดต่าง 47%
+
+  🔑 SINGLE-FAMILY FIRST: ใส่ฟอนต์ตัวเดียวทุก slot — บริษัทไทย 30 ฉบับที่ส่องจริง
+     **ไม่มีฉบับไหนจงใจจับคู่ 2 ตระกูลสำหรับเนื้อความ** · จับคู่เมื่อลูกค้าบังคับ Latin brand font
+     เท่านั้น → ชดเชยด้วยสูตร cap-ratio: TH_pt = EN_pt × (cap_ละติน ÷ cap_ไทย)
+
+  ⚠️ FONT-OVERRIDE RULE: template ระบุ EN-only font + งานมีไทย → SWAP ตามนโยบายข้างบนอัตโนมัติ
      (ห้ามใช้ font ตาม template ดื้อ ๆ — กันไทยแตก/tofu/fallback Browallia New)
+  ⚠️ ชื่อ family ต้องตรงกับ name table เป๊ะ — ห้ามเติม subfamily ("... Regular") ต่อท้าย
+     (เคสจริง 2026.07.31: ชื่อผิด 1 คำ → Excel substitute เงียบ → ฟอนต์ปน 3 ตัวในไฟล์เดียว)
   COLOR-OVERRIDE: สีจาก customer-ci-finder หรือ catalog-gradients → override สีใน template ได้
 ```
 → font_strategy ใน Design Spec ส่งให้ presentation-creator build (§5.5.1 single-source + D1-D4 PPTX + §5.6 HTML)

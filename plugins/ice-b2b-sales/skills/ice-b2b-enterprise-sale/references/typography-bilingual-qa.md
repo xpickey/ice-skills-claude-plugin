@@ -1,5 +1,24 @@
 # Typography & Bilingual QA Gate
-**Version:** V02R01 | **Date:** 2026.05.14 | **Companion to:** `../SKILL.md`
+**Version:** V03R01 | **Date:** 2026.07.31 | **Companion to:** `../SKILL.md`
+
+> ## ⛔ V03R01 — SUPERSEDED BY EVIDENCE. อ่านก่อนใช้ตารางใด ๆ ในเอกสารนี้
+>
+> **แหล่งกติกาฟอนต์ที่เป็นทางการแล้วคือ skill `ice-doc-builder` §3.0 FONT POLICY** — เอกสารนี้เหลือไว้เป็น
+> checklist กระบวนการ (Section A/D/E) เท่านั้น · **ตารางจับคู่ฟอนต์ทั้งหมดด้านล่างถูกยกเลิก**
+>
+> **สิ่งที่พิสูจน์แล้วว่าผิด (2026.07.31 — PDF จริง 45 ฉบับ + วัด metric ฟอนต์ 9 ตระกูล):**
+> 1. ❌ **"Sarabun ตั้งใหญ่กว่า Open Sans 2pt"** — วัดจริง: cap height 0.700 vs 0.714 em = **ต่างกัน 2%**
+>    การบวก 2pt จะทำให้ไทย**ใหญ่เกิน** · ฟอนต์เดียวครอบ 2 ภาษา → **ขนาดเท่ากัน ห้ามบวก**
+> 2. ❌ **ยุทธศาสตร์ "จับคู่ Latin+Thai คนละตระกูล" เป็นค่าเริ่มต้น** — บริษัทไทย 30 ฉบับที่ส่องด้วย
+>    `pdffonts` **ไม่มีฉบับไหนจงใจจับคู่ 2 ตระกูลสำหรับเนื้อความ** · ค่าเริ่มต้นที่ถูกคือ **SINGLE-FAMILY**
+>    (จับคู่เมื่อลูกค้าบังคับ Latin brand font เท่านั้น → ชดเชยด้วยสูตร cap-ratio)
+> 3. ❌ **"IBM Plex Sans Thai"** (ในตาราง Backup) — เป็น cut **ไม่มีหัว** = โทน display ผิด register
+>    สำหรับ body เอกสารทางการ → ที่ถูกคือ **`IBM Plex Sans Thai Looped`**
+> 4. ❌ **"TH SarabunPSK บังคับโดยธรรมเนียม"** สำหรับงานราชการ — มติ ครม. 2553 + นร 0106/ว 2019
+>    **ผูกพันส่วนราชการ ไม่ผูกพันผู้ขาย** · และควรใช้ **TH Sarabun New** (maintained กว่า) ไม่ใช่ PSK
+>
+> **นโยบายที่ใช้แทน:** เอกชน = `IBM Plex Sans Thai Looped` (ไทย=อังกฤษ) · ราชการ = `TH Sarabun New` 16pt
+> **เอกสารหลักฐานเต็ม:** `Output/iCE_Thai-Latin_Font-Policy_PROPOSAL_V01R01_2026.07.31.md`
 
 # Section 0 — Why This Gate Exists
 
@@ -44,7 +63,9 @@ has an Approved Pair, a Backup Pair, and rules for when to apply.
 **Use when:** Customer is Public Listed, Mid-market, Trading, FMCG, Manufacturing,
 Healthcare-private. Pitch decks, investment proposals, demo decks, board papers.
 
-| Role | Latin | Thai |
+> ⛔ **ตารางนี้ยกเลิกแล้ว (V03R01)** — ใช้ `ice-doc-builder` §3.0 ราง 1: `IBM Plex Sans Thai Looped` ตัวเดียวทุก slot · เก็บไว้เป็นบันทึกประวัติเท่านั้น
+
+| ~~Role~~ | ~~Latin~~ | ~~Thai~~ |
 |---|---|---|
 | Headings (Major) | Raleway, weights 600–800 | Sukhumvit Set (Thick), weights 600–700 |
 | Headings (Backup) | Aptos Display | IBM Plex Sans Thai |
@@ -52,9 +73,10 @@ Healthcare-private. Pitch decks, investment proposals, demo decks, board papers.
 | Body (Backup) | Arial | Noto Sans Thai |
 | Numbers / Data | Open Sans Tabular, weight 500 | Sarabun Tabular, weight 500 |
 
-**Rationale:** Raleway / Sukhumvit Set carry similar geometric weight at heading sizes,
-keeping bilingual headers visually equal. Open Sans / Sarabun pair at body size with
-matched x-heights when Sarabun is set 2pt larger than Open Sans (see Section C).
+**⛔ RATIONALE ยกเลิกแล้ว (V03R01):** ข้อความเดิมอ้างว่า "Sarabun ต้องตั้งใหญ่กว่า Open Sans 2pt
+เพื่อให้ x-height ตรงกัน" — **วัดจากไฟล์ฟอนต์จริงแล้วผิด**: cap height Sarabun 0.700 em vs
+Open Sans 0.714 em = ต่างกันเพียง 2% · บวก 2pt จะทำให้ไทยใหญ่เกินจริง
+**ใช้แทน:** นโยบาย single-family ใน `ice-doc-builder` §3.0 (ไทย = อังกฤษ ไม่บวก)
 
 **Source patterns observed:**
 - `[CUSTOMER: Large Travel-Retail Group]` iCE EPM Presentation V02R01, 2026.05 —
@@ -86,7 +108,9 @@ like.
 e-Bidding / TOR Response under พรบ. 2560. RFI Response slide decks, TOR Comply
 documents, Compliance Matrix workbooks.
 
-| Role | Latin | Thai |
+> ⛔ **ตารางนี้ยกเลิกแล้ว (V03R01)** — ใช้ `ice-doc-builder` §3.0 ราง 2: **`TH Sarabun New` 16pt** ตัวเดียวทุก slot (ไม่ใช่ PSK · ห้าม IT๙) · และ **TOR ระบุอะไร ทำตาม TOR ก่อนเสมอ**
+
+| ~~Role~~ | ~~Latin~~ | ~~Thai~~ |
 |---|---|---|
 | Headings (Major) | Century Gothic, weight 700 | TH SarabunPSK, weight 700 |
 | Headings (Backup) | Aptos Display | Sarabun (regular), weight 700 |

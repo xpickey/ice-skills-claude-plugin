@@ -3,7 +3,10 @@ name: ice-doc-builder
 description: "iCE Document Build Craft — ความรู้ build .pptx/.docx/.xlsx/PDF/HTML ระดับ specialist (Build Discipline D1-D4 tri-slot Thai+EN font, 18 PPTX lessons, Method B font-embed, Strict Validator, SAVE-FIRST, VALIDATION BUDGET, renderer ladder) ที่ย้ายมาจาก deliverable-gen-agent เพื่อให้ทุก persona โหลดใช้ได้ (L0/กัปตัน/คิม/สมนึก build เองใน DOC-PIPELINE V3 · เจนนี่-shell ใช้ตอน background build). ถือ contract ของ marker ICE_BUILD=pipeline (PreToolUse hook). Triggers (TH): build deck, สร้าง slide, สร้างเอกสาร, ทำ proposal เป็นไฟล์, สร้าง .pptx, ทำ .docx, ทำ .xlsx, ทำ ROI excel, dashboard, font ไทย, font เพี้ยน, แก้ font, embed font, ไฟล์เปิดไม่ได้, Repair dialog. Triggers (EN): build deck, generate slides, build document, create pptx/docx/xlsx, ROI workbook, dashboard, font embed, Thai font, corrupted file, ICE_BUILD."
 ---
 
-> **Skill:** ice-doc-builder | **Version:** V01R02 | **Date:** 2026.07.18
+> **Skill:** ice-doc-builder | **Version:** V01R03 | **Date:** 2026.07.31
+> **V01R03 (2026.07.31) — FONT POLICY 2 ราง + Excel discipline + validator ใหม่ (LOCKED โดย user):** +**§3.0 FONT POLICY** (เอกชน = `IBM Plex Sans Thai Looped` ไทย=อังกฤษไม่บวก pt · ราชการ = `TH Sarabun New` 16pt · BLACKLIST 8 ตระกูลพร้อมเหตุผล · single-family-first) · +**§3.2 XLSX เขียนใหม่ E1-E6** (Excel ฝัง font ไม่ได้→PDF companion · row height = pt×1.45×บรรทัด+6 · vertical=center · ห้าม merge ในแถวไทย+wrap · ห้าม shrink-to-fit · ตั้ง default font ก่อนคำนวณ width) · +**§3.1 W1-W3** (ascii+hAnsi+cs ตัวเดียวกันเพราะสเปก MS ขัดกันเอง · bCs/iCs บังคับ · ห้าม lineRule=exact) · +**§6 V1-V3 validator** (⭐V1 font-name resolution ดักชื่อฟอนต์ที่ไม่มีจริง · V2 blacklist · V3 สระอำ integrity) · **แก้ D3** เลิกใช้ "+1-2pt" และ "line-height 1.8+" ที่**ตรวจแล้วไม่มีต้นทางจริง** → ใช้สูตร cap-height ratio ที่วัดเอง · **แก้ D1** single-family แทน paired
+> **ฐานหลักฐาน V01R03:** PDF สาธารณะ 45 ฉบับ (`pdffonts`+span) · วัด metric ฟอนต์จริง 9 ตระกูล · user ทดสอบสายตา · เคสจริง PWA TOR Matrix · เอกสารเต็ม → `Output/iCE_Thai-Latin_Font-Policy_PROPOSAL_V01R01_2026.07.31.md`
+> **V01R02 (2026.07.18):** ดูด้านล่าง
 > **V01R02 (2026.07.18):** +§2B DOCX/XLSX CORRUPTION LESSONS + RECOVERY LADDER (จ่ายราคาจริง VFIN V02R02 docx: Word Repair→error 3 รอบ — Word-strict vs LO-lenient · settings order CT_Settings · hand-rolled odttf = Word ปฏิเสธ · rels self-closing · false-green MCP/AppleScript · LO round-trip rescue) + แก้ §3.1 EMBED ("Word ทำได้เหมือน pptx" = ผิด — GUI-embed หรือ PDF companion เท่านั้น)
 > **กำเนิด:** DOC-PIPELINE V3 — สกัดจาก deliverable-gen-agent V02R08 §4/§5/E4 **คำต่อคำ** (ความรู้ที่แลกด้วยความเจ็บจริง) + เพิ่ม §3 FONT DISCIPLINE ข้ามฟอร์แมต (DOCX/XLSX/PDF — คำสั่ง user 2026.07.17: "Word font ไม่สม่ำเสมอ เอาบทเรียน PPTX มาใช้กับ PDF/Word/Excel")
 > **ผู้ใช้ skill นี้:** L0 (adopt กัปตัน/คิม/สมนึก) build เองใน pipeline · deliverable-gen-agent (เจนนี่-shell) ตอน background build · ทุกกรณี **QA โดยอริสยังบังคับ — skill นี้ไม่ใช่ใบผ่าน QA**
@@ -54,9 +57,9 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
   <a:cs    typeface="Sarabun"/>     ← Complex Script = THAI ⭐
 + theme1.xml majorFont/minorFont ต้อง set <a:cs> + <a:ea> ด้วย (ไม่ปล่อยว่าง — python-pptx default ว่าง)
 
-PAIRED FONTS (optical-matched, ติดตั้งแล้วในเครื่อง):
-  Heading: Raleway ExtraBold ↔ Kanit Bold · Body: Open Sans ↔ Sarabun ·
-  Alt: Inter ↔ IBM Plex Sans Thai · Govt: TH Sarabun New
+⭐ V01R03 — SINGLE-FAMILY FIRST: ใช้ฟอนต์ตัวเดียวใส่ทั้ง latin/ea/cs (ดู §3.0 FONT POLICY)
+  เพราะฟอนต์ที่เลือกมีละตินออกแบบคู่มาในตัว → ไม่ต้องจับคู่ ไม่ต้องชดเชยขนาด
+  จับคู่ 2 ตระกูลเมื่อจำเป็นเท่านั้น (เช่น ลูกค้าบังคับ Latin brand font) → ต้องชดเชยตาม D3
 ```
 
 ## D2 — FONT NORMALIZATION MAP แก้ font chaos (font_test.pptx มี 13 fonts ปน!)
@@ -67,11 +70,26 @@ PAIRED FONTS (optical-matched, ติดตั้งแล้วในเคร�
 → collapse ทุก font นอก approved set → report before/after count (EXIM 27→12 เคยทำมือ → auto)
 ```
 
-## D3 — OPTICAL SIZE + TH-FIRST-CLASS แก้ "ขนาดไม่เท่ากัน" + "TH ใหญ่อ่านง่าย"
+## D3 — OPTICAL SIZE (⭐ เขียนใหม่ V01R03 — เลิกท่องอัตราส่วน ใช้ cap-height ที่วัดได้)
+
+> **ทำไมต้องรื้อ:** กฎเดิม "TH +1-2pt (Google/MS ยืนยัน)" และ "line-height TH 1.8+" — ตรวจสอบย้อนแล้ว **ไม่มีต้นทางจริง** (เอกสาร Google Fonts ที่ถูกอ้างไม่พูดถึงไทยเลย) · กฎเดียวที่ตีพิมพ์จริงคือ **Material Design: ไทย +1px มีเพดาน + line-height +0.1em + เลี่ยง Bold** ซึ่งเป็น offset คงที่ ไม่ใช่อัตราส่วน
+
 ```
-• TH run sz > EN +1-2pt (Google/MS ยืนยัน) ผ่าน cs sz แยกจาก latin sz
+⭐ กฎตัดสินขนาด (ใช้ cap-height ratio แทนการเดา):
+  ① ฟอนต์เดียวครอบ 2 ภาษา (นโยบายหลัก §3.0) → TH sz = EN sz  ห้ามบวก
+     (วัดแล้ว: IBM Plex Sans Thai Looped / Sarabun cap ≈ 0.700 em = ละตินในตัวเดียวกัน)
+  ② จับคู่ 2 ตระกูล → ชดเชยด้วยสูตร:  TH_pt = EN_pt × (cap_ละติน ÷ cap_ไทย)
+     ค่าที่วัดจากไฟล์จริงบนเครื่องนี้ (em):
+       Sarabun 0.700 · IBM Plex Sans Thai (+Looped) 0.698 · Anuphan 0.698
+       Tahoma 0.727 · Noto Sans Thai 0.714 · Kanit 0.644 · TH Sarabun New/PSK 0.476
+       (ละติน: Open Sans 0.714 · Raleway 0.710 · Arial 0.716 · Helvetica 0.717)
+     → TH Sarabun New คู่ละติน 11pt = 11 × (0.714÷0.476) ≈ 16pt ✅ ตรงธรรมเนียมราชการพอดี
+  ③ ไม่มีค่าวัด → ใช้ Material Design: TH = EN +1pt (หยุดบวกเมื่อ ≥ ขนาดหัวข้อ)
 • TH-only object: body ≥18pt · heading ≥24pt (ห้าม TH <16pt customer-facing)
-• line-height TH 1.8+ (tonal marks ต้องพื้นที่แนวตั้ง)
+• ⭐ LINE HEIGHT ไม่ใช้เลขลอย — คำนวณจาก winAscent ของฟอนต์นั้นจริง (ดู §3.0 ตาราง)
+  rule of thumb ที่ทดสอบแล้ว: row/line = pt × 1.45 ต่อบรรทัด (ไม่ใช่ 1.8)
+• ⭐ Bold ไทย: Material Design แนะนำ**เลี่ยง Bold** (native speakers: หนาเกิน) →
+  ใช้ SemiBold/Medium แทนถ้าฟอนต์มี (IBM Plex Looped มี Medium/SemiBold ครบ)
 • Thai width budget = 1.15-1.20× Latin (คำนวณ box width)
 ```
 
@@ -192,6 +210,64 @@ STRICT VALIDATOR (mandatory ก่อนส่งเข้า ④):
 
 > หลักการเดียวกับ D1-D4 แต่ XML คนละตระกูล — สาเหตุ Word font เพี้ยน 90% = python-docx ปล่อย default (Calibri) รั่วบน run ที่ไม่ได้ set slot ไทย
 
+## 3.0 ⭐⭐⭐ FONT POLICY — 2 ราง (V01R03 · LOCKED โดย user 2026.07.31)
+
+> **ฐานหลักฐาน:** PDF สาธารณะ 45 ฉบับส่องด้วย `pdffonts`+span analysis (บริษัทไทย 30 · Big Four 15) · วัด metric จากไฟล์ฟอนต์จริง 9 ตระกูล · user ทดสอบสายตาเองในไฟล์ `ThaiFontTest_Excel_V01R01` · เอกสารเต็ม → `Output/iCE_Thai-Latin_Font-Policy_PROPOSAL_V01R01_2026.07.31.md`
+
+### รางที่ 1 — งานเอกชน (proposal · deck · workbook · business case · demo)
+```
+ฟอนต์หลัก : IBM Plex Sans Thai Looped      ← ชื่อ family ที่ถูกต้อง (มี Looped ต่อท้าย)
+ขนาด      : ไทย = อังกฤษ  ห้ามบวก pt      (cap 0.698 em · ละตินอยู่ในตัวเดียวกัน)
+น้ำหนัก    : Thin/ExtraLight/Light/Regular/Medium/SemiBold/Bold — เลี่ยง Bold ใช้ SemiBold แทน
+สำรอง     : Tahoma (ติดมากับ Win+Mac ทั้งคู่ — ใช้เมื่อคุมเครื่องปลายทางไม่ได้)
+หลักฐาน   : user ทดสอบผ่าน · ปตท. ใช้จริงใน 56-1 One Report · SIL OFL = embed ถูกกฎหมาย
+            ยอดวรรณยุกต์ 0.864 em เทียบกล่อง 1.239 → เหลือที่ว่าง 0.375 em (สบายที่สุดในกลุ่ม)
+```
+
+### รางที่ 2 — งานราชการ / TOR / e-GP / รัฐวิสาหกิจ
+```
+ฟอนต์หลัก : TH Sarabun New                 ← ไม่ใช่ PSK · ⛔ ห้าม IT๙ เด็ดขาด
+ขนาด      : 16pt  (= ละติน 11-12pt · วัดได้ 0.714÷0.476 = ×1.47 → ตรงธรรมเนียมพอดี)
+⚠ ระวัง    : ที่ว่างหัวเหลือแค่ 0.008 em (ยอด ้ 0.836 vs กล่อง 0.844)
+            → ต้องตั้ง row height / line spacing เผื่อเสมอ ห้ามใช้ค่า default
+ข้อกฎหมาย : มติ ครม. 2553 + นร 0106/ว 2019 ผูกพัน**ส่วนราชการ** ไม่ผูกพันผู้ขาย
+            → อ่าน TOR ก่อนเสมอ · TOR ระบุฟอนต์ = ทำตาม TOR (override นโยบายนี้)
+เหตุผลคุณภาพ: ชั้นข้อความไม่พัง — สระอำ รอด 100% (ต่างจาก Angsana/Cordia/Browallia ที่สูญ 100%)
+หลักฐาน   : PwC ทำเป็นทางการ self-host 4 น้ำหนักใน rebrand design system
+```
+
+### ⛔ BLACKLIST — ห้ามใช้ (พร้อมเหตุผลที่ตรวจสอบแล้ว)
+```
+TH Sarabun IT๙          — แปลงเลขอารบิก 1234 → เลขไทย ๑๒๓๔ เงียบ ๆ (หายนะในเอกสารราคา) ·
+                          ประกาศชื่อตัวเองว่า "TH SarabunPSK" ใน name record → สลับกันเงียบ ·
+                          ความกว้างตัวเลข +24% → ตารางเพี้ยน
+                          ⚠ กปภ./สตง./กรมเจรจาฯ ใช้ฟอนต์นี้ใน TOR — ถ้าเจอ ต้องแจ้ง user ก่อน
+Angsana New / AngsanaUPC \
+Cordia New / CordiaUPC    } — ทำลาย สระอำ (ำ) ในชั้นข้อความ 100% → copy-paste/ค้นหา/index พัง
+Browallia New / UPC      /    (วัดจริง: KPMG 0/81 · Deloitte 0/15 · EY 0/18 รอด) · UPC ยังไม่มีบน macOS
+EucrosiaUPC / JasmineUPC — ตระกูลเดียวกัน + ไม่ได้ติดตั้งบนเครื่องนี้
+Calibri / Aptos / Arial  — ไม่มี glyph ไทยเลย (Aptos ประกาศ script tag แค่ Cyrl/Grek/Latn) →
+                          ทุกตัวอักษรไทยตกไป fallback ที่ไม่ชดเชยขนาด = ต้นเหตุ "ไทยเล็กกว่าอังกฤษ"
+Microsoft Sans Serif     — ไม่มี Bold จริง + ที่ว่างวรรณยุกต์ = 0 (worst-case ink = กล่องพอดีเป๊ะ)
+Sarabun (Google)         — ไม่ใช่ blacklist แต่ user ปฏิเสธจากการทดสอบสายตา:
+                          ยอดวรรณยุกต์ 0.957 em สูงสุดในกลุ่ม + ขอที่ว่าง 1.286 em มากสุด
+                          → โดนบีบหนักที่สุดเมื่อพื้นที่แนวตั้งไม่พอ · ใช้ได้เมื่อคุม row height ได้เต็มที่
+⚠ ชื่อชนกัน: "Sarabun" ≠ "TH Sarabun New" — คนละฟอนต์ ขนาดต่าง 47% (cap 0.700 vs 0.476)
+            ระบุผิดตัว = เอกสารเพี้ยนทั้งฉบับ
+```
+
+### กติกาข้ามฟอร์แมต
+```
+① SINGLE-FAMILY FIRST — ใส่ฟอนต์ตัวเดียวทุก slot (latin/ea/cs หรือ ascii/hAnsi/eastAsia/cs)
+   หลักฐาน: บริษัทไทย 30 ฉบับ **ไม่มีฉบับไหนจงใจจับคู่ 2 ตระกูลสำหรับเนื้อความ**
+② จับคู่ 2 ตระกูลเมื่อลูกค้าบังคับ Latin brand font เท่านั้น → ชดเชยขนาดตาม D3 สูตร cap-ratio
+   (Big Four ทำแบบนี้ทุกราย ตั้งไทยใหญ่กว่า 1.18-1.77× — เพราะไม่มีฟอนต์ไทยของแบรนด์ตัวเอง)
+③ APPROVED SET เดียวทั้งชุดเอกสาร (deck+docx+xlsx ของงานเดียวต้องตรงกัน — ลูกค้าเห็นเป็นชุด)
+④ ชื่อ family ต้องเป็นชื่อจริงจาก name table — ห้ามเติม subfamily ต่อท้าย
+   ❌ "IBM Plex Sans Thai Regular"  ✅ "IBM Plex Sans Thai Looped"
+   (เคสจริง 2026.07.31: ไฟล์ PWA TOR Matrix ใส่ชื่อผิด → Excel substitute เงียบ → ฟอนต์ปน 3 ตัว)
+```
+
 ## 3.1 DOCX — TRI-SLOT ฉบับ WordprocessingML (คู่แฝด D1)
 ```
 ทุก run set <w:rFonts> ครบ 4 attributes (คู่แฝดของ latin/ea/cs):
@@ -203,6 +279,20 @@ STRICT VALIDATOR (mandatory ก่อนส่งเข้า ④):
   - docDefaults/rPrDefault → rFonts ครบ 4 + sz/szCs
   - Normal + Heading1-3 + Table styles → rFonts ครบ 4 ทุก style ที่ใช้
   - run ที่ไม่มี direct formatting จะ inherit ถูกต้องเอง = สม่ำเสมอทั้งไฟล์
+⭐ W1-W3 (V01R03 — จากสเปกจริง):
+W1 set w:ascii + w:hAnsi + w:cs **เป็นฟอนต์ตัวเดียวกัน** (นโยบาย single-family §3.0)
+   เหตุผล: สเปก Microsoft 2 ฉบับ**ขัดกันเอง**ว่าไทยใช้ slot ไหน — ECMA-376 บอก cs (จำแนกตาม
+   Unicode range) แต่ MS-OI29500 ซึ่งบันทึก algorithm จริงของ Word **ไม่มี Thai ในตาราง**
+   และสั่งว่า "range ที่ไม่อยู่ในตารางให้ใช้ hAnsi" → ตั้งเหมือนกันหมด = คำถามนี้ไร้ความหมาย
+   ⚠ w:cs ไม่ตั้ง → Word ถอยไป Times New Roman (ไม่มีไทย) → substitute เงียบเป็น Angsana/Cordia
+W2 ⭐ w:bCs + w:iCs ทุกครั้งที่มี w:b / w:i
+   เหตุผล: w:b และ w:i **ไม่มีผลกับ complex script** → นี่คือสาเหตุ "หัวข้อไทยไม่หนา แต่อังกฤษหนา"
+W3 🔴 ห้าม lineRule="exact" ในย่อหน้าที่มีไทย
+   ECMA ST_LineSpacingRule: exact = สูงเท่าที่กำหนดเป๊ะ "ถ้าเนื้อหาใหญ่เกิน จะถูกตัด"
+   → วรรณยุกต์ตายก่อนเพื่อน · ใช้ "auto"/multiple แทน
++ ⚠ ลบ w:cstheme / w:asciiTheme / w:hAnsiTheme / w:eastAsiaTheme ออกจาก styles.xml และทุก run
+   (theme attribute ที่ระดับ style จะ override docDefaults ของเรา)
+
 NORMALIZATION (D2 ใช้ตรง ๆ): enumerate ทุก w:rFonts ทั้ง document.xml+styles.xml
   → collapse variant/นอก approved set → report before/after
 VALIDATOR DOCX เพิ่ม: ✓ ทุก run มี cs font ที่เป็น Thai-capable
@@ -213,17 +303,50 @@ EMBED ⚠ (แก้ V01R02 — พิสูจน์แล้วว่า "ท�
   ทางที่ใช้ได้จริง: (ก) user ให้ Word GUI embed เอง (Preferences>Save) หรือ (ข) PDF companion (Method C) ⭐ default
 ```
 
-## 3.2 XLSX — SINGLE-FAMILY STRATEGY (โมเดล font ต่างจาก pptx/docx)
+## 3.2 XLSX — ⭐ เขียนใหม่ V01R03 (E1-E6 · จากหลักฐาน Microsoft + เคสจริง PWA TOR Matrix)
+
+> **ทำไม Excel ยากที่สุดใน 3 ฟอร์แมต:** (ก) เซลล์มีฟอนต์ได้**ชื่อเดียว** ไม่มี slot ไทยแยกเหมือน pptx/docx — ยืนยันจาก MS-XLSX + `openpyxl.styles.fonts.Font.__elements__` ไม่มี cs/ea/latin (ข) **ฝังฟอนต์ไม่ได้เลย** (ค) ไม่มีสูตรทางการแปลง pt → ความสูงแถว (Microsoft บอกขึ้นกับแอปตาม ISO 29500 §18.3.1.73)
+
 ```
-SpreadsheetML ไม่มี per-glyph slots (ไม่มี cs/latin แยก) → กติกา:
-  • เซลล์มีไทย (หรือปนไทย) → font เดียวที่ Thai-capable: "Sarabun" (ห้ามหวังพึ่ง fallback)
-  • เซลล์ EN/ตัวเลขล้วน → paired Latin ("Open Sans") ได้ — แต่ถ้า sheet ปนไทยมาก ใช้ Sarabun ทั้ง sheet = สม่ำเสมอกว่า
-  • ทำผ่าน NAMED STYLES (openpyxl NamedStyle: header/body/number/thai-note) — ห้าม set font ราย cell แบบ ad-hoc
-  • theme1.xml minorFont/majorFont set เป็น approved set กัน default Calibri โผล่ในกราฟ/element ใหม่
-  • ขนาด: ไทย ≥11pt (แนะนำ 12) — D3 spirit
-  • xlsx embed font ไม่ได้ → ส่งลูกค้าที่ต้อง layout เป๊ะ = แนบ PDF companion
-VALIDATOR XLSX เพิ่ม: ✓ enumerate fonts ใน styles.xml → ทุกตัวอยู่ใน approved set
-  ✓ ไม่มี Calibri (default leak) ✓ cell ไทยไม่ได้ font Latin-only
+พื้นฐาน:
+  • เซลล์ที่มีไทย (แม้ปนนิดเดียว) → ฟอนต์ Thai-capable ตาม §3.0 · ห้ามหวังพึ่ง fallback
+  • ทำผ่าน NamedStyle (header/body/number/thai-note) — ห้าม set ราย cell แบบ ad-hoc
+  • theme1.xml minorFont/majorFont ตั้งเป็น approved set (กัน Calibri/Aptos โผล่ในกราฟ/element ใหม่)
+  • ⚠ tri-slot (latin/ea/cs) มีอยู่ใน .xlsx จริง แต่**เฉพาะ DrawingML** (กราฟ/shape/text box)
+    — ใช้กับ "ค่าในเซลล์" ไม่ได้ · เอา discipline จาก pptx มาใช้ตรง ๆ = ทำงานเงียบ ๆ แต่ไม่มีผล
+
+E1 ⛔ EXCEL ฝังฟอนต์ไม่ได้ทุกแพลตฟอร์ม (Microsoft รองรับ embed เฉพาะ Word/PowerPoint)
+    → .xlsx ที่ส่งลูกค้า มี 2 ทางเท่านั้น:
+      (ก) ใช้ฟอนต์ที่ลูกค้ามีแน่ (Tahoma) หรือ
+      (ข) ⭐ แนบ PDF companion เสมอ (PDF ฝัง font 100% — ตรวจด้วย §3.3)
+    → ไฟล์ภายใน/ไฟล์ทำงาน = ใช้ฟอนต์ตามนโยบายได้เต็มที่
+
+E2 ⭐ ROW HEIGHT ตั้งชัดเจน ห้ามพึ่ง AutoFit
+    สูตรที่ทดสอบแล้ว:  height = pt × 1.45 × จำนวนบรรทัด + 6
+    เหตุผล: ไทยซ้อน mark ได้ 4 ชั้นบน + 2 ชั้นล่าง (Microsoft Thai shaping spec) ขณะละตินซ้อน 1 ชั้น
+    → AutoFit คำนวณจากบรรทัดละติน = ที่ว่างไม่พอโดยโครงสร้าง
+    ⚠ TH Sarabun New 16pt (ที่ว่างหัวเหลือ 0.008 em) → เผื่อมากกว่านี้ ทดสอบก่อนส่ง
+
+E3 ⭐ vertical = "center" ทุกเซลล์ที่มีไทย
+    เหตุผล: ค่าเริ่มต้นของ Excel = bottom → ยึดกล่องข้อความที่พื้นเซลล์ แล้วตัดส่วนเกิน**ด้านบน**
+    ซึ่งคือที่อยู่ของวรรณยุกต์พอดี
+
+E4 🔴 ห้าม merge cell ในแถวที่มีไทย + wrap
+    Microsoft ยืนยัน: AutoFit ความสูงแถว **ถูกปิดใช้งาน** ในแถว/คอลัมน์ที่มี merged cell
+    และ Wrap Text ก็ไม่ขยายแถวที่ merge → แถวโดนตัดโดยการออกแบบ
+    ทางเลือกแทน merge: "Center Across Selection" (จัดกลางข้ามคอลัมน์โดยไม่ merge จริง)
+
+E5 🔴 ห้ามใช้ "Shrink to fit" กับเซลล์ไทย
+    มันย่อขนาดฟอนต์ → วรรณยุกต์เล็กลงอีก = แย่ที่สุดในบรรดา 4 วิธีที่ Microsoft เสนอ
+
+E6 ตั้ง default font ของ workbook **ก่อน** คำนวณความกว้างคอลัมน์
+    เหตุผล: ความกว้างคอลัมน์วัดเป็น "จำนวนตัวอักษรของ default font" (default 8.43)
+    → เปลี่ยน default ทีหลัง = ทุกคอลัมน์ขยับเงียบ ๆ
+
+VALIDATOR XLSX (→ §6 V1-V3):
+  ✓ V1 ทุกชื่อฟอนต์ resolve ได้จริง  ✓ V2 ไม่มีตัวใน blacklist  ✓ ไม่มี Calibri/Aptos leak
+  ✓ เซลล์ไทยทุกเซลล์ได้ฟอนต์ Thai-capable  ✓ เซลล์ไทย+wrap ทุกแถวมี row height ตั้งชัดเจน
+  ✓ ไม่มี merged cell ในแถวที่มีไทย+wrap  ✓ ไม่มี shrink_to_fit บนเซลล์ไทย
 ```
 
 ## 3.3 PDF — EMBED-VERIFY เสมอ (ปลายทางของทุกฟอร์แมต)
@@ -302,8 +425,34 @@ _lib/patterns/gantt-timeline.md — Project Timeline/Gantt (สกัดจา�
 2. **FAIL → แก้ → re-check เฉพาะข้อที่ fail (delta)** · cap 2 รอบ → ยัง fail = หยุด รายงาน diagnostic ไม่ฝืนวน
 3. **SCALE-TO-SIZE:** artifact เล็ก (xlsx ≤~30 แถว · deck ≤5 slides · docx ≤3 หน้า) = ตรวจโครงสร้าง+ค่าพอ ไม่ render ภาพทุกหน้า
 4. **TOKEN DISCIPLINE:** parse/ตรวจด้วย script ที่คืนผลเป็น**ตัวเลข/counts** — ห้าม dump raw XML เข้า context (transcript บวม = ทำผิดข้อนี้)
-- **PPTX:** γ1 Strict Validator (§1 D4 ทุก ✓) · **XLSX:** formula-integrity + §3.2 · **DOCX:** §3.1 + academic → citation-verbatim · **HTML:** เปิด browser/screenshot จริง · **PDF:** pdffonts emb=yes
+- **PPTX:** γ1 Strict Validator (§1 D4 ทุก ✓) · **XLSX:** formula-integrity + §3.2 E1-E6 · **DOCX:** §3.1 W1-W3 + academic → citation-verbatim · **HTML:** เปิด browser/screenshot จริง · **PDF:** pdffonts emb=yes
 - ทุก format: validator report เป็น**ตัวเลขจริง** ("collision 0 · overflow 0 · fonts 4/4 embedded") — ห้ามรายงาน "ผ่านแล้ว" ลอย ๆ
+
+## ⭐ V1-V3 FONT VALIDATORS (V01R03 ใหม่ — บังคับทุก build ที่มีไทย · รันก่อนส่งเข้า ④)
+
+> **ทำไมเพิ่ง"มี":** 2026.07.31 พบไฟล์ `PWA_ERP_TOR_System-Module-User-Matrix_V01R04` ระบุฟอนต์ `IBM Plex Sans Thai Regular` ซึ่ง**ไม่มี family ชื่อนี้อยู่จริง** → Excel ทิ้งแล้ว substitute เงียบ → ฟอนต์ปน 3 ตัวในไฟล์เดียว → user เห็นเป็น "วรรณยุกต์เพี้ยน ขนาดไม่เท่ากัน" · **ระบบเดิมไม่มีตัวตรวจใดจับได้เลย**
+
+```
+V1 ⭐⭐⭐ FONT-NAME RESOLUTION (สำคัญสุด — ตัวที่จะดักบั๊กข้างบน)
+   ทุกชื่อฟอนต์ในไฟล์ต้อง match family name จริงจาก name table (nameID 1) ของฟอนต์ที่ติดตั้ง
+   แบบ **exact string** — ไม่ใช่ substring ไม่ใช่ fuzzy
+   วิธีตรวจ: enumerate ฟอนต์ที่ติดตั้ง → fontTools อ่าน getDebugName(1) → เทียบ set
+   ❌ FAIL ทันทีถ้าเจอชื่อที่ resolve ไม่ได้ — ห้ามปล่อยผ่านด้วยเหตุผลว่า "น่าจะได้"
+   กับดักที่พบบ่อย: เติม subfamily ต่อท้าย ("... Regular"/"... Bold") · สะกดต่าง · เว้นวรรคเกิน
+   หมายเหตุ: น้ำหนักนอก RIBBI เป็น **family แยก** (เช่น "IBM Plex Sans Thai Looped SemiBold"
+   เป็นคนละ family กับ "IBM Plex Sans Thai Looped") → ต้องระบุให้ตรงกับที่ติดตั้งจริง
+
+V2 BLACKLIST REJECT — reject ทันทีถ้าพบใน artifact ที่มีไทย:
+   TH Sarabun IT๙ · Angsana* · Cordia* · Browallia* · Eucrosia* · Jasmine* ·
+   Microsoft Sans Serif · และ Calibri/Aptos/Arial บนเซลล์/run ที่มีอักขระไทย
+   (เหตุผลรายตัว → §3.0 BLACKLIST)
+
+V3 สระอำ INTEGRITY (เฉพาะ output ที่เป็น PDF หรือจะถูก copy-paste)
+   export PDF → สกัดข้อความ → นับ U+0E33 (ำ) กับคู่ประกอบ U+0E4D+U+0E32 (ํา)
+   ✓ ผ่าน: เจอ ำ หรือ ํา ครบตามจำนวนในต้นฉบับ
+   ❌ FAIL: หายกลายเป็นช่องว่าง = ฟอนต์ตระกูล UPC (แก้ไม่ได้ ต้องเปลี่ยนฟอนต์)
+   หลักฐานที่มาของกฎ: KPMG 0/81 · Deloitte 0/15 · EY 0/18 รอด vs TH Sarabun New 409/409 รอด
+```
 
 ---
 
