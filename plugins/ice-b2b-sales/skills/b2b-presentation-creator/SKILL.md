@@ -439,6 +439,21 @@ The most common mistake in Thai+English decks is using a Thai font that doesn't 
 
 If a font is not installed, the skill must (a) install via `scripts/install_fonts.sh` (Linux/Mac) or (b) fall back to the closest system font and **note this in the QA report**.
 
+### 5.0 ⭐ Thai line breaking — PPTX vs HTML use DIFFERENT mechanisms (V01R11 · 2026.07.31)
+
+Thai has no spaces between words, so both engines will split words mid-syllable ("ภาคผนว" / "ก") unless told otherwise. **The fix is not the same in the two output formats** — do not carry one over to the other.
+
+| Output | Mechanism | What to emit | What NOT to do |
+|---|---|---|---|
+| **PPTX** | PowerPoint's own Thai dictionary | `lang="th-TH"` on every run containing Thai (`a:rPr lang`) — python-pptx: `run.font.language_id` | Don't inject ZWSP by default |
+| **HTML deck** | **The browser's** Thai dictionary (CSS-driven) | `lang="th"` on the element + `word-break: normal` + `line-break: loose` | 🔴 **Never `word-break: break-all`** — it splits every word at the box edge, which is exactly the defect |
+
+**Design-time prevention beats both:** size text boxes with ~1.15–1.20× the width of the same content in Latin, and keep long fixed Thai terms unbroken on one line — `การประปาส่วนภูมิภาค` · `ภาคผนวก` · `คณะกรรมการ` · `ระบบสารสนเทศ`.
+
+**Check before emit:** `python3 ~/.claude/agents/_lib/thai_wordbreak.py --check "<text>" --width <chars>` (PyThaiNLP, `newmm` engine — never `longest`, it lowercases English).
+
+**Last resort only — ZWSP (U+200B):** forces correct break points but **breaks Ctrl+F** for any word it splits, and rides along in copy-paste. Forbidden for TOR / e-GP and anything the reader will search. Full rules → `ice-doc-builder` §3.5. QA detects this as **D7.7 / D7.H8** (อริส).
+
 ### 5.1 Font Embedding (customer-facing decks) — pointer, single-source 2026.06.20
 
 A bilingual deck only renders correctly on the recipient's machine if its Thai+English fonts are **embedded**. Three things must line up — and each has ONE owner, so this skill does not restate them:

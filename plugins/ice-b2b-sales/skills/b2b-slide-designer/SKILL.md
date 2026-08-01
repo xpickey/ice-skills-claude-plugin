@@ -175,6 +175,16 @@ STEP 6 — ออก Design Spec (format-agnostic):
      (ห้ามใช้ font ตาม template ดื้อ ๆ — กันไทยแตก/tofu/fallback Browallia New)
   ⚠️ ชื่อ family ต้องตรงกับ name table เป๊ะ — ห้ามเติม subfamily ("... Regular") ต่อท้าย
      (เคสจริง 2026.07.31: ชื่อผิด 1 คำ → Excel substitute เงียบ → ฟอนต์ปน 3 ตัวในไฟล์เดียว)
+
+  ⭐ THAI WORD BREAK — เผื่อความกว้างตั้งแต่ตอนออกแบบ (V02R10 · คำสั่ง user 2026.07.31)
+     ไทยไม่มีช่องว่างระหว่างคำ → กล่อง/คอลัมน์แคบเกิน = engine ผ่ากลางคำ ("ภาคผนว"/"ก")
+     ตอนกำหนดขนาด text box / column width ให้:
+       ① เผื่อความกว้าง **1.15-1.20× ของละติน** สำหรับข้อความเดียวกัน
+       ② คำไทยยาวที่พบบ่อยในงานเรา ต้องอยู่จบใน 1 บรรทัด: "การประปาส่วนภูมิภาค" (19) ·
+          "ภาคผนวก" · "ผู้รับจ้าง" · "คณะกรรมการ" · "ระบบสารสนเทศ" → กล่องแคบกว่านี้ = ออกแบบผิด
+       ③ ตรวจก่อนส่ง design spec: `python3 ~/.claude/agents/_lib/thai_wordbreak.py --check "ข้อความ" --width N`
+     🔴 **ตัดบรรทัดกลางคำ = defect ระดับ layout** (อริส D7.7 จับ) — แก้ที่ความกว้าง **อย่าแก้ที่ตัวอักษร**
+     ⚠️ ห้ามเสนอ ZWSP ในขั้นออกแบบ — มันทำ Ctrl+F พัง เป็นทางเลือกสุดท้ายของขั้น build เท่านั้น
   COLOR-OVERRIDE: สีจาก customer-ci-finder หรือ catalog-gradients → override สีใน template ได้
 ```
 → font_strategy ใน Design Spec ส่งให้ presentation-creator build (§5.5.1 single-source + D1-D4 PPTX + §5.6 HTML)

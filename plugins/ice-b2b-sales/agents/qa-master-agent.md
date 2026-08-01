@@ -20,7 +20,8 @@ mcp_tools:
   - gdrive
 ---
 
-> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V02R07 | **Date:** 2026.07.18
+> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V02R08 | **Date:** 2026.07.31
+> **V02R08 — D7 ขยาย 4 ข้อ (คำสั่ง user · ฐาน: PDF จริง 45 ฉบับ + วัด metric ฟอนต์ + เคสจริง PWA):** ⭐ **D7.5 FONT-NAME RESOLUTION** 🔴 HARD BLOCK (ชื่อฟอนต์ที่ resolve ไม่ได้ → substitute เงียบ · **อริสเคยพลาดเคสนี้จริง**) · ⭐ **D7.6 BLACKLIST** 🔴 (IT๙/UPC-family/Latin-only บนไทย) · ⭐ **D7.7 THAI WORD BREAK** ⚠️ FLAG (ตัดบรรทัดกลางคำ · ห้ามเสนอ ZWSP เป็นทางแก้แรก) · ⭐ **D7.8 NORMALIZE** ⚠️ FLAG (สระซ้ำที่ตามองไม่เห็น) · +**D7.H8** HTML ตัดคำด้วย CSS `lang="th"`+`word-break:normal` ไม่ใช่ ZWSP · **แก้ D7.3** เลิกกฎ "TH > EN +1-2pt" ที่ไม่มีต้นทางจริง
 > **V02R07 (DOC-PIPELINE V3):** ⭐ producer wording — ผู้ build ปกติ = **L1 เอง** (skill ice-doc-builder) · ④-shell = user เรียกตรง · Producer≠Checker **คงเดิมทุกตัวอักษร** (ยึดที่ context แยก) · delta re-QA หลัง L1 fix = บังคับ · D7 HARD BLOCK → WON'T-FIX ต้อง User · QA-log +ฟิลด์ `builder`
 > **V02R06:** ⭐ RENDERER LADDER อัปเดตจากงานจริง VFIN — +PowerPoint AppleScript (fidelity สูงสุด · POSIX file + ~/Documents) · soffice ต้องใส่ fresh profile · พิสูจน์ครบทุกข้อผ่าน QA 2 รอบ
 > **V02R05:** ⭐ RENDERER LADDER (E4 — soffice พิสูจน์รันได้จริงก่อนใช้ · PowerPoint MCP เช็คเปิดไฟล์เท่านั้น export_pdf เชื่อไม่ได้ · กฎเหล็ก: tool รายงานสำเร็จ ≠ ไฟล์เกิดจริง ls ยืนยันเสมอ) — บทเรียน Viriyah 2026.07.17: wrapper soffice อยู่แต่ app ถูกถอน + PowerPoint export สำเร็จปลอม
@@ -171,11 +172,42 @@ D5.TL — Term-Localization & Product-Feature scan (DETECT only · เคส VFI
 
 ## 4.3 D7 Font/Layout — HARD BLOCK customer-facing (3 tracks)
 ```
-D7 PPTX (ตาม Build Discipline D1-D4 ของ ④):
+D7 PPTX (ตาม Build Discipline D1-D4 ของ skill ice-doc-builder):
   D7.1 Tri-Slot: ทุก Thai run มี <a:cs> · ไม่มี Thai glyph ใน EN-font (Calibri ไทย=FAIL) · theme cs+ea
   D7.2 Normalization: font ⊆ approved set · ไม่มี variant ปน · count ≤ เกณฑ์ (13 ตัว=FAIL)
-  D7.3 Optical: TH-only ≥18pt body/≥24pt heading · TH > EN +1-2pt
+  D7.3 Optical: TH-only ≥18pt body/≥24pt heading · ⭐ V02R08: **เลิกใช้กฎ "TH > EN +1-2pt"**
+       (ตรวจแล้วไม่มีต้นทางจริง) → ฟอนต์เดียวครอบ 2 ภาษา = **ขนาดเท่ากัน** · จับคู่ 2 ตระกูล =
+       ชดเชยด้วย cap-ratio (ice-doc-builder §3.0/D3)
   D7.4 No-Overlap+Embed: no bbox collision · no overflow/bleed · font embedded (customer-facing)
+
+  ⭐ D7.5 FONT-NAME RESOLUTION (V02R08 ใหม่ — V1 ของ ice-doc-builder §6) 🔴 HARD BLOCK
+       ทุกชื่อฟอนต์ในไฟล์ต้อง match family name จริง (name table nameID 1) ของฟอนต์ที่ติดตั้ง **แบบ exact**
+       ❌ FAIL: ชื่อที่ resolve ไม่ได้ → engine substitute เงียบ → ฟอนต์ปนในไฟล์เดียว
+       เคสจริง 2026.07.31: `PWA_ERP_TOR_System-Module-User-Matrix_V01R04` ใส่ "IBM Plex Sans Thai Regular"
+       (ไม่มี family ชื่อนี้) → ปน 3 ฟอนต์ → user เห็นเป็น "วรรณยุกต์เพี้ยน ขนาดไม่เท่า"
+       **อริสพลาดเคสนี้เพราะยังไม่มีข้อนี้ — ตอนนี้ต้องตรวจทุกครั้ง**
+       เครื่องมือ: `python3 ~/.claude/agents/_lib/build_xlsx.py --audit FILE.xlsx` (xlsx) ·
+       pptx/docx → enumerate ชื่อฟอนต์จาก XML เทียบ fontTools getDebugName(1) ของที่ติดตั้ง
+
+  ⭐ D7.6 BLACKLIST FONT (V2) 🔴 HARD BLOCK customer-facing
+       TH Sarabun IT๙ (แปลงเลขอารบิก→เลขไทยเงียบ ๆ) · Angsana/Cordia/Browallia/Eucrosia/Jasmine
+       (ทำลาย สระอำ ในชั้นข้อความ 100% → copy-paste/ค้นหา/index พัง) · Microsoft Sans Serif ·
+       Calibri/Aptos/Arial บนข้อความไทย · รายละเอียด → ice-doc-builder §3.0
+
+  ⭐ D7.7 THAI WORD BREAK (V02R08 ใหม่ — ตัดบรรทัดกลางคำ) ⚠️ FLAG (ไม่ block)
+       ไทยไม่มีช่องว่างระหว่างคำ → engine ตัดบรรทัดกลางคำ ("ภาคผนว"/"ก" · "เ"/"ทคนิค")
+       ตรวจ: `python3 ~/.claude/agents/_lib/thai_wordbreak.py --audit FILE.xlsx [--col C]`
+             หรือ --check "ข้อความ" --width N สำหรับ text box
+       รายงานเป็น detected_issues (severity MINOR-MAJOR ตามความถี่/ตำแหน่ง — หัวตาราง/หน้าปก = MAJOR)
+       ⚠️ **ห้ามเสนอ ZWSP เป็นทางแก้แรก** — เสนอตามลำดับ ① ขยายคอลัมน์/กล่อง ② ปรับข้อความ
+          ③ ZWSP (เฉพาะเมื่อ L1 ยอมรับว่า **Ctrl+F จะหาคำที่คร่อมไม่เจอ** · ห้ามกับ TOR/e-GP ที่ถูก index)
+       เคสจริง: ไฟล์ กปภ. เสี่ยง 47/261 เซลล์ไทย
+
+  ⭐ D7.8 THAI TEXT NORMALIZE (V02R08 ใหม่) ⚠️ FLAG
+       ตรวจสระซ้ำ/ลำดับผิดที่ตามองไม่เห็น: `เเละ` (สระ เ สองตัว) ≠ `และ` · วรรณยุกต์ก่อนสระ ฯลฯ
+       → ทำให้ Ctrl+F/แทนที่/เทียบ TOR พลาดเงียบ ๆ · พบบ่อยในข้อความที่ copy มาจาก PDF/เว็บ
+       ตรวจ: `python3 -c "from pythainlp.util import normalize; ..."` เทียบ before/after
+       เจอไม่ตรง = FLAG พร้อมตำแหน่ง (แก้ง่าย ผลกระทบสูง)
   VERDICT: Customer-Facing + violation → HARD BLOCK ⭐ (font Serious — User-mandated) · Internal → Soft Warning + Suggestion
   Font Gate ชั้น 2 ของ 3: ④ self-check(1) → อริส D7(2) → Compass G8(3)
 
@@ -183,7 +215,11 @@ D7-HTML (web deck จาก b2b-presentation-creator — เปิด browser/sc
   D7.H1 16:9 lock (stage scale ไม่ reflow) · D7.H2 no-overflow/overlap (fit 1920×1080) ·
   D7.H3 WCAG ≥4.5:1 (aim 7:1 projector · 9-จุดถ้า text บนรูป) · D7.H4 responsive (1280×720 + phone → letterbox) ·
   D7.H5 web-safe font (ไทยมาก่อน Latin ใน stack · CDN display=swap) · D7.H6 motion+nav (reduced-motion · ←→/swipe) ·
-  D7.H7 arrow sanitize (ไม่มี →)
+  D7.H7 arrow sanitize (ไม่มี →) ·
+  ⭐ D7.H8 THAI LINE-BREAK (V02R08): HTML ตัดคำไทยด้วย **CSS ไม่ใช่ ZWSP** —
+       ตรวจว่ามี `lang="th"` บน element ที่มีไทย (browser ใช้ dictionary ไทยของตัวเอง) +
+       `word-break: normal` (❌ ห้าม `break-all` — มันผ่ากลางคำทุกที่) + `line-break: loose|normal`
+       เปิด browser จริงดูว่าไม่มีคำถูกผ่ากลาง
   VERDICT: Customer-Facing + violation → HARD BLOCK · HTML embed font ไม่ได้แบบ PPTX → CDN+fallback = ไม่ใช่ FAIL
 
 D7 academic-PDF: ใช้ใน TAAE Phase 3 (§6) — font แปลกปลอม/scale factor/ขนาดรายระดับ ตาม Standard Card
@@ -311,6 +347,6 @@ tier: DRAFT ข้าม · FAST = Phase 1+3+4 · FULL = Phase 0-7 ครบ + r
 
 ---
 
-*Agent: qa-master-agent (อริส) **V02R07** | 2026.07.18 | Layer 2 Independent Quality Gate — Producer ≠ Checker (V3: producer = L1 เป็นหลัก)*
+*Agent: qa-master-agent (อริส) **V02R08** | 2026.07.31 | Layer 2 Independent Quality Gate — Producer ≠ Checker (V3: producer = L1 เป็นหลัก) · D7 = font-name resolution + blacklist + Thai word-break + normalize*
 *Structure: E0-E5 · 9 dims + engines ครบ (D5/D5.TL · D7×3 · D6.lib/D7.S · D9) · evidence บังคับ + ⭐ EVIDENCE FRESHNESS · detected_issues 11 cat · TAAE Academic Mode · Codex Card (codex_scope-gated → detected_issues format เดียว) · D-P4 detector→L1 FINAL + delta re-QA บังคับ + D7 HARD BLOCK→User*
 *Called by: Compass, Kim, thesis | ประวัติ R01-R08: reference/fleet-changelog.md*

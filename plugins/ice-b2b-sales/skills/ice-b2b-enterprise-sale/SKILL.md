@@ -281,8 +281,21 @@ Before saving any .docx, .pptx, or .pdf, run these checks in order:
    Frame Change applied to value sentences, Document Architecture follows 70/25/5 ratio,
    Cost of Inaction Section placed before Future State Vision, no Positive Wording masking
    negative facts in Escalation/Recovery deliverables
-6. **Typography & Bilingual QA** — run `references/typography-bilingual-qa.md` checklist
-   before declaring done
+6. **Typography & Bilingual QA** — ⚠️ **V03R01: ตารางจับคู่ฟอนต์ใน `references/typography-bilingual-qa.md`
+   ถูกยกเลิกแล้ว** (พิสูจน์ว่าผิดด้วย PDF จริง 45 ฉบับ) → **แหล่งกติกาฟอนต์ที่เป็นทางการ = skill
+   `ice-doc-builder` §3.0 FONT POLICY 2 ราง**: เอกชน `IBM Plex Sans Thai Looped` (ไทย=อังกฤษ ไม่บวก pt) ·
+   ราชการ/TOR `TH Sarabun New` 16pt · blacklist: IT๙/Angsana/Cordia/Browallia/Latin-only-บนไทย
+   ไฟล์ reference เดิมเหลือไว้เป็น checklist กระบวนการเท่านั้น
+
+7. ⭐ **Thai text finishing (V02R02 · 2026.07.31)** — ก่อนประกาศเสร็จ ตรวจ 2 อย่างด้วย PyThaiNLP:
+   - **ตัดบรรทัดกลางคำ**: `python3 ~/.claude/agents/_lib/thai_wordbreak.py --audit <file.xlsx>`
+     (หรือ `--check "<text>" --width N` สำหรับ text box) — เจอแล้ว **แก้ที่ความกว้าง อย่าแก้ตัวอักษร** ·
+     ⛔ ห้ามใช้ ZWSP กับเอกสาร TOR/e-GP (ระบบราชการ index เนื้อหา — ค้นไม่เจอคือปัญหาใหญ่กว่าบรรทัดสวย)
+   - **สระซ้ำที่ตามองไม่เห็น** (`เเละ` vs `และ`): `pythainlp.util.normalize` — ทำให้ Ctrl+F/เทียบ TOR พลาดเงียบ ๆ
+
+8. ⭐ **จำนวนเงินเป็นตัวหนังสือ** (ใบเสนอราคา/สัญญา/TOR ราชการ) — ห้ามพิมพ์เอง ใช้:
+   `python3 -c "from pythainlp.util import bahttext; print(bahttext(1234.50))"`
+   → `หนึ่งพันสองร้อยสามสิบสี่บาทห้าสิบสตางค์` · **ตรวจซ้ำกับตัวเลขต้นทางเสมอ** (H3 — ตัวเลขเงินห้ามพลาด)
 
 # Section 8 — Language & Voice
 
