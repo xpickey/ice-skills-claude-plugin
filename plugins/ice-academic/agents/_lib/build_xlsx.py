@@ -138,6 +138,26 @@ def audit(path: str, strict: bool = True) -> dict:
         if fams and name not in fams and name not in LATIN_ONLY:
             rep["unresolvable"].append(name)
 
+    # §3.5 T2 — ทำนายจุดตัดกลางคำ (เตือน ไม่ fail: แก้ที่ความกว้างคอลัมน์ ไม่ใช่ที่ข้อความ)
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from thai_wordbreak import find_bad_breaks
+        risky = 0
+        for ws in wb.worksheets:
+            for row in ws.iter_rows():
+                for c in row:
+                    if has_thai(c.value) and c.alignment and c.alignment.wrap_text:
+                        w = ws.column_dimensions[c.column_letter].width or 20
+                        if find_bad_breaks(c.value, w):
+                            risky += 1
+        rep["thai_midword_break"] = risky
+        if risky:
+            print(f"⚠ §3.5 T2: {risky} เซลล์เสี่ยงตัดบรรทัดกลางคำ → "
+                  f"`python3 _lib/thai_wordbreak.py --audit <file>` ดูรายจุด "
+                  f"(แก้: ①ขยายคอลัมน์ ②ปรับข้อความ ③ZWSP-แลกกับ Ctrl+F)")
+    except Exception:
+        pass
+
     fails = []
     if rep["unresolvable"]:
         fails.append(f"V1 FONT-NAME ไม่ resolve: {rep['unresolvable']}")

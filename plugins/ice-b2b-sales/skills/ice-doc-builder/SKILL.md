@@ -3,7 +3,8 @@ name: ice-doc-builder
 description: "iCE Document Build Craft — ความรู้ build .pptx/.docx/.xlsx/PDF/HTML ระดับ specialist (Build Discipline D1-D4 tri-slot Thai+EN font, 18 PPTX lessons, Method B font-embed, Strict Validator, SAVE-FIRST, VALIDATION BUDGET, renderer ladder) ที่ย้ายมาจาก deliverable-gen-agent เพื่อให้ทุก persona โหลดใช้ได้ (L0/กัปตัน/คิม/สมนึก build เองใน DOC-PIPELINE V3 · เจนนี่-shell ใช้ตอน background build). ถือ contract ของ marker ICE_BUILD=pipeline (PreToolUse hook). Triggers (TH): build deck, สร้าง slide, สร้างเอกสาร, ทำ proposal เป็นไฟล์, สร้าง .pptx, ทำ .docx, ทำ .xlsx, ทำ ROI excel, dashboard, font ไทย, font เพี้ยน, แก้ font, embed font, ไฟล์เปิดไม่ได้, Repair dialog. Triggers (EN): build deck, generate slides, build document, create pptx/docx/xlsx, ROI workbook, dashboard, font embed, Thai font, corrupted file, ICE_BUILD."
 ---
 
-> **Skill:** ice-doc-builder | **Version:** V01R03 | **Date:** 2026.07.31
+> **Skill:** ice-doc-builder | **Version:** V01R04 | **Date:** 2026.07.31
+> **V01R04 (2026.07.31) — THAI WORD BREAKING (คำสั่ง user):** +**§3.5** ตัดบรรทัดไม่ผ่ากลางคำ ด้วย **PyThaiNLP** (`newmm` — `longest` ห้ามใช้ มัน lowercase อังกฤษ) · **3 ชั้น**: T1 lang-tag `th-TH` (ไม่แตะข้อความ · docx/pptx) → T2 QA-only ทำนายจุดผ่ากลางคำแล้วขยายคอลัมน์แทน (⭐ default ของ xlsx) → T3 ZWSP (ทางสุดท้าย · **แลกกับ Ctrl+F หาไม่เจอ**) · tool: `_lib/thai_wordbreak.py` · เคสจริง: PWA TOR Matrix เสี่ยง **47/261 เซลล์**
 > **V01R03 (2026.07.31) — FONT POLICY 2 ราง + Excel discipline + validator ใหม่ (LOCKED โดย user):** +**§3.0 FONT POLICY** (เอกชน = `IBM Plex Sans Thai Looped` ไทย=อังกฤษไม่บวก pt · ราชการ = `TH Sarabun New` 16pt · BLACKLIST 8 ตระกูลพร้อมเหตุผล · single-family-first) · +**§3.2 XLSX เขียนใหม่ E1-E6** (Excel ฝัง font ไม่ได้→PDF companion · row height = pt×1.45×บรรทัด+6 · vertical=center · ห้าม merge ในแถวไทย+wrap · ห้าม shrink-to-fit · ตั้ง default font ก่อนคำนวณ width) · +**§3.1 W1-W3** (ascii+hAnsi+cs ตัวเดียวกันเพราะสเปก MS ขัดกันเอง · bCs/iCs บังคับ · ห้าม lineRule=exact) · +**§6 V1-V3 validator** (⭐V1 font-name resolution ดักชื่อฟอนต์ที่ไม่มีจริง · V2 blacklist · V3 สระอำ integrity) · **แก้ D3** เลิกใช้ "+1-2pt" และ "line-height 1.8+" ที่**ตรวจแล้วไม่มีต้นทางจริง** → ใช้สูตร cap-height ratio ที่วัดเอง · **แก้ D1** single-family แทน paired
 > **ฐานหลักฐาน V01R03:** PDF สาธารณะ 45 ฉบับ (`pdffonts`+span) · วัด metric ฟอนต์จริง 9 ตระกูล · user ทดสอบสายตา · เคสจริง PWA TOR Matrix · เอกสารเต็ม → `Output/iCE_Thai-Latin_Font-Policy_PROPOSAL_V01R01_2026.07.31.md`
 > **V01R02 (2026.07.18):** ดูด้านล่าง
@@ -358,6 +359,41 @@ PDF ที่ generate จาก pptx/docx (renderer ladder §7) หรือส
   • ห้ามมี font ชื่อ generic (Helvetica/Times) เหลือในงานไทย — สัญญาณ substitution
 VALIDATOR PDF: ✓ pdffonts ทุกแถว emb=yes ✓ เปิดดู 1 หน้า sample สระ/วรรณยุกต์ไม่ลอย
 ```
+
+## 3.5 ⭐ THAI WORD BREAKING — ตัดบรรทัดไม่ผ่ากลางคำ (V01R04 ใหม่ · คำสั่ง user 2026.07.31)
+
+> **ปัญหา:** ไทยไม่มีช่องว่างระหว่างคำ → Office ตัดบรรทัดกลางคำเป็นประจำ (`ระบบบัญ` / `ชีแยกประเภท`, `ภาคผนว` / `ก`) · เคสจริง: ไฟล์ PWA TOR Matrix มี **47 จาก 261 เซลล์ไทย** เสี่ยงตัดกลางคำ
+> **เครื่องมือ:** `~/.claude/agents/_lib/thai_wordbreak.py` (PyThaiNLP 5.3.4 · engine **`newmm`** เท่านั้น — `longest` แปลงอังกฤษเป็นตัวพิมพ์เล็กทิ้ง SAP→sap)
+
+```
+⭐ 3 ชั้น — ใช้ชั้นบนก่อนเสมอ เพราะชั้นล่างแลกด้วยการแก้ข้อความ
+
+T1 LANG-TAG (ดีที่สุด — ไม่แตะข้อความเลย)
+   ตั้ง language ให้ engine ของ Office ตัดคำเอง (มี dictionary ไทยในตัว):
+     DOCX : <w:lang w:bidi="th-TH"/> ใน rPr ของ run ที่มีไทย
+     PPTX : <a:rPr lang="th-TH" …> บน run ที่มีไทย (python-pptx: run.font.language_id)
+     XLSX : ❌ ไม่มี — cell ไม่มี slot ภาษา (ต้องใช้ T2/T3)
+   ✅ Ctrl+F ยังหาเจอ · copy-paste สะอาด · ไม่มีอักขระซ่อน
+
+T2 QA-ONLY (ตรวจอย่างเดียว ไม่แก้ — ⭐ ค่าเริ่มต้นของ .xlsx)
+   ใช้ PyThaiNLP ทำนายว่าที่ความกว้างนี้ บรรทัดจะผ่ากลางคำตรงไหน → **แก้ด้วยการขยายคอลัมน์
+   หรือปรับข้อความ** ไม่ใช่แก้ตัวอักษร
+     python3 _lib/thai_wordbreak.py --audit FILE.xlsx [--col C] [--width 45]
+     python3 _lib/thai_wordbreak.py --check "ข้อความ" --width 30
+   ⚠ การวัดความกว้างต้องไม่นับสระบน/ล่าง+วรรณยุกต์ (combining mark กินความกว้าง 0)
+     — helper คำนวณให้แล้วใน display_width()
+
+T3 ZWSP INJECTION (ทางสุดท้าย — แลกด้วยราคาที่ต้องรู้ตัว)
+   แทรก U+200B ที่ขอบคำ → บังคับจุดตัดบรรทัด
+     python3 _lib/thai_wordbreak.py --zwsp "ข้อความ"   /  --strip เพื่อถอดคืน
+   🔴 **ราคา: Ctrl+F หาคำที่คร่อม ZWSP ไม่เจอ** (ค้น "ระบบบัญชี" ในข้อความที่มี ZWSP คั่น = ไม่เจอ)
+      + copy-paste ติดอักขระซ่อนไปด้วย
+   ใช้เมื่อ: (ก) .xlsx cell ที่ T1 ใช้ไม่ได้ **และ** ขยายคอลัมน์ไม่ได้แล้ว
+            (ข) layout สำคัญกว่า search (เช่น หัวตารางสั้น ๆ ที่ต้องสวย)
+   ❌ ห้ามใช้กับ: เนื้อความยาวที่ลูกค้าจะ copy ไปใช้ต่อ · เอกสาร TOR/e-GP ที่ถูก index
+```
+
+**กติกาบังคับ:** ทุก build ที่มีไทย+wrap → **รัน T2 audit ก่อนส่งเข้า ④** · เจอเสี่ยง → แก้ตามลำดับ ① ขยายคอลัมน์ ② ปรับข้อความ ③ ZWSP (ต้องบอก user ว่าแลกอะไร)
 
 ## 3.4 กติการ่วมทุกฟอร์แมต
 - **APPROVED SET เดียวทั้งเอกสารชุดเดียวกัน** (deck+docx+xlsx ของงานเดียวต้อง family ตรงกัน — ลูกค้าเห็นเป็นชุด)
