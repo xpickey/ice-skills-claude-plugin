@@ -190,7 +190,8 @@ STRICT VALIDATOR (mandatory ก่อนส่งเข้า ④):
 ```
 ① ล้างสิ่งแวดล้อม: ~$lock + xattr -c + Cmd-Q Word → user เปิดใหม่ (อาการ permission มักจบตรงนี้)
 ② ตรวจ XML ทุก part ด้วย parseString + เทียบ element order (§2B.1) → แก้เฉพาะจุด (surgical)
-③ ⭐ LO ROUND-TRIP (พิสูจน์แล้ว 2026.07.17): soffice --convert-to "docx:MS Word 2007 XML"
+③ ⭐ LO ROUND-TRIP (พิสูจน์แล้ว 2026.07.17 · ⚠ V01R05: ต้องใช้ **absolute path** ไม่ใช่ soffice จาก PATH — §7 กฎข้อ 0):
+   /Applications/LibreOffice.app/Contents/MacOS/soffice --convert-to "docx:MS Word 2007 XML"
    → LO writer เขียนไฟล์ใหม่ทั้งใบแบบ Word-compatible · TOC field/PAGE field/ตาราง/สี/font รอดครบ
    → ใช้เมื่อหา culprit ไม่เจอ/เวลาบีบ — แลกกับ style detail เล็กน้อย · เก็บไฟล์เดิมเป็น forensic เสมอ
 ④ Word GUI "Open and Repair" / Text Recovery (ปลายทางสุดท้าย — ให้ user กด)
@@ -495,12 +496,38 @@ V3 สระอำ INTEGRITY (เฉพาะ output ที่เป็น PDF �
 # §7 🖨️ RENDERER LADDER (host นี้ — พิสูจน์จริง VFIN 2026.07.17 · ใช้เมื่อถูกสั่ง preview เท่านั้น)
 
 ```
-① soffice --headless -env:UserInstallation=file:///tmp/lo-profile-fresh --convert-to pdf
+🔴🔴 กฎข้อ 0 (V01R05 — บทเรียน Akara 2026.08.01): ⛔ ห้ามเรียก `soffice` เปล่า ๆ จาก PATH เด็ดขาด
+
+   บนเครื่องนี้ `which soffice` → /opt/homebrew/bin/soffice → **shim ของ codex runtime**
+   ("[soffice-headless V01R01] runtime=~/.cache/codex-runtimes/.../override/soffice")
+   shim **มองไม่เห็น /Library/Fonts → แทนฟอนต์ทั้งไฟล์ แล้วรายงานว่าสำเร็จ** (ไม่มี error)
+
+   หลักฐาน differential test (ไฟล์เดียวกัน render 2 ทาง):
+     shim → NotoSans · FrankRuhlHofshi (ฟอนต์ฮีบรู!) · LinuxLibertineG   — IBM Plex 0 ตัว
+     จริง → IBMPlexSansThaiLooped-Regular/Bold                            ✅
+   ผลกระทบที่แพงที่สุด: **QA render ด้วย shim → รายงานตัวอักษรล้น/เพี้ยนเป็นชุด = false positive
+   ทั้งหมด** → ทีมไล่แก้ layout ที่ไม่ได้พัง (เสียเวลาทั้งรอบ)
+
+⭐ ใช้ helper เสมอ — มันหา binary ตัวจริงให้ + ตรวจฟอนต์หลัง render ให้ในตัว:
+   bash ~/.claude/agents/_lib/render_pdf.sh <file> [outdir] --expect "IBMPlexSansThaiLooped"
+   bash ~/.claude/agents/_lib/render_pdf.sh --which     # ดูว่าเครื่องนี้จะใช้ตัวไหน
+
+① LibreOffice **absolute path** + fresh profile (helper ทำให้แล้ว · ถ้าทำมือ):
+   /Applications/LibreOffice.app/Contents/MacOS/soffice --headless \
+     -env:UserInstallation=file:///tmp/lo-run --convert-to pdf --outdir . "ไฟล์.pptx"
    (ไม่ใส่ fresh profile = พิมพ์ "convert..." แต่ไม่เขียนไฟล์เงียบ ๆ)
+   วิธียืนยันว่าได้ตัวจริง: `--version` ต้องขึ้นต้น "LibreOffice " — shim จะขึ้นอย่างอื่น
 ② PowerPoint AppleScript save-as-PDF (fidelity สูงสุด): dest ต้องเป็น POSIX file (string เฉย ๆ = "done" แต่ไม่เขียน) ·
    sandbox เขียน /private/tmp ไม่ได้ → save ใต้ ~/Documents แล้วย้าย
 ③ PowerPoint MCP = เช็ค "เปิดได้/ไม่ขึ้น Repair" เท่านั้น (export_pdf = false success ห้ามใช้ render)
 ④ ไม่มีทางไหนได้ = NOT-VERIFIABLE-ON-HOST บอกตรง ๆ — ห้ามหลุดไป loop สอบสวน
+
+⭐⭐ POST-RENDER FONT VERIFY (บังคับทุกครั้งที่ render — ด่านที่จับ renderer regression ทุกชนิด):
+   pdffonts OUT.pdf → ✓ ทุกแถว emb=yes  ✓ **เจอฟอนต์ที่เราตั้งจริง**
+   🔴 เจอ LinuxLibertine / FrankRuhl / DejaVu / Liberation = สัญญาณว่า renderer มองไม่เห็นฟอนต์ระบบ
+      → หยุด ตรวจ `render_pdf.sh --which` ก่อนสรุปว่าไฟล์พัง
+   หลักการ: **ผลตรวจที่ได้จาก renderer ผิดตัว = หลักฐานปลอม** — เช็ค renderer ก่อนโทษไฟล์เสมอ
+
 แล้ว pdftoppm -r 100..130 เป็น PNG รายหน้า · กฎเหล็ก: ls ยืนยันไฟล์เกิดจริงทุกขั้น
 ```
 

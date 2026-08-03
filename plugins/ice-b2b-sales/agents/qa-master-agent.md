@@ -20,7 +20,8 @@ mcp_tools:
   - gdrive
 ---
 
-> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V02R08 | **Date:** 2026.07.31
+> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V02R09 | **Date:** 2026.08.01
+> **V02R09 — RENDERER SHIM GUARD (บทเรียน Akara 2026.08.01 · ยืนยันด้วย differential test):** 🔴 **`soffice` ใน PATH = shim ของ codex runtime** (ไม่ใช่ LibreOffice · มองไม่เห็น `/Library/Fonts`) → render แล้ว**แทนฟอนต์ทั้งไฟล์เงียบ ๆ พร้อมรายงานว่าสำเร็จ** → **อริสจะรายงาน overflow/เพี้ยนเป็นชุด = false positive ทั้งหมด** · แก้: E4 ladder ① ใช้ **absolute path** + helper `_lib/render_pdf.sh` + **POST-RENDER FONT VERIFY บังคับ** (เจอ LinuxLibertine/FrankRuhl/DejaVu = หยุด อย่ารายงาน issue ตรวจ renderer ก่อน) · หลักการใหม่: **ผลตรวจจาก renderer ผิดตัว = หลักฐานปลอม**
 > **V02R08 — D7 ขยาย 4 ข้อ (คำสั่ง user · ฐาน: PDF จริง 45 ฉบับ + วัด metric ฟอนต์ + เคสจริง PWA):** ⭐ **D7.5 FONT-NAME RESOLUTION** 🔴 HARD BLOCK (ชื่อฟอนต์ที่ resolve ไม่ได้ → substitute เงียบ · **อริสเคยพลาดเคสนี้จริง**) · ⭐ **D7.6 BLACKLIST** 🔴 (IT๙/UPC-family/Latin-only บนไทย) · ⭐ **D7.7 THAI WORD BREAK** ⚠️ FLAG (ตัดบรรทัดกลางคำ · ห้ามเสนอ ZWSP เป็นทางแก้แรก) · ⭐ **D7.8 NORMALIZE** ⚠️ FLAG (สระซ้ำที่ตามองไม่เห็น) · +**D7.H8** HTML ตัดคำด้วย CSS `lang="th"`+`word-break:normal` ไม่ใช่ ZWSP · **แก้ D7.3** เลิกกฎ "TH > EN +1-2pt" ที่ไม่มีต้นทางจริง
 > **V02R07 (DOC-PIPELINE V3):** ⭐ producer wording — ผู้ build ปกติ = **L1 เอง** (skill ice-doc-builder) · ④-shell = user เรียกตรง · Producer≠Checker **คงเดิมทุกตัวอักษร** (ยึดที่ context แยก) · delta re-QA หลัง L1 fix = บังคับ · D7 HARD BLOCK → WON'T-FIX ต้อง User · QA-log +ฟิลด์ `builder`
 > **V02R06:** ⭐ RENDERER LADDER อัปเดตจากงานจริง VFIN — +PowerPoint AppleScript (fidelity สูงสุด · POSIX file + ~/Documents) · soffice ต้องใส่ fresh profile · พิสูจน์ครบทุกข้อผ่าน QA 2 รอบ
@@ -109,8 +110,15 @@ tier × delta × is_final × caller: **FAST** = D2+D3+D7 (พังที่เ�
 
 ## E4 — SELF-VERIFY + EVIDENCE (L4 — ของใหม่ที่ยกระดับ)
 - re-read artifact จริง (ไม่เชื่อว่าตัวเองตรวจครบ) — F3
-- **⭐ RENDERER LADDER (V02R06 — พิสูจน์จากงานจริง VFIN 2026.07.17 ครบทุกข้อ):**
-  ① `/opt/homebrew/bin/soffice --headless -env:UserInstallation=file:///tmp/lo-profile-fresh --convert-to pdf` — **ต้องใส่ fresh profile เสมอ** (ไม่ใส่ = พิมพ์ "convert...using filter" แต่ไม่เขียนไฟล์) + `/Applications/LibreOffice.app` ต้องมีจริง (wrapper อยู่ได้แม้ app ถูกถอน)
+- **⭐ RENDERER LADDER (V02R09 — บทเรียน Akara 2026.08.01 · แก้ขั้น ① ทั้งข้อ):**
+  🔴🔴 **กฎข้อ 0 — ⛔ ห้ามเรียก `soffice` เปล่า ๆ จาก PATH เด็ดขาด** (`/opt/homebrew/bin/soffice` = **shim ของ codex runtime** ไม่ใช่ LibreOffice · มองไม่เห็น `/Library/Fonts` → **แทนฟอนต์ทั้งไฟล์แล้วรายงานว่าสำเร็จ**)
+  **ทำไมเรื่องนี้เป็นเรื่องของอริสโดยตรง:** render ด้วย shim → ตัวอักษรถูกแทนด้วยฟอนต์ผิด (NotoSans/FrankRuhlHofshi-ฮีบรู/LinuxLibertineG) → **อริสจะเห็นข้อความล้น/เพี้ยนเป็นชุด แล้วรายงานเป็น issue ซึ่งเป็น false positive ทั้งหมด** → ทีมไล่แก้ layout ที่ไม่ได้พังจริง เสียเวลาทั้งรอบ
+  ⭐ **ใช้ helper เสมอ** (หา binary ตัวจริง + ตรวจฟอนต์หลัง render ให้ในตัว):
+    `bash ~/.claude/agents/_lib/render_pdf.sh <file> <outdir> --expect "<ชื่อฟอนต์ที่ควรเจอ>"`
+    `bash ~/.claude/agents/_lib/render_pdf.sh --which`   ← รันข้อนี้ก่อนถ้าสงสัยผลตรวจ
+  ① LibreOffice **absolute path** + fresh profile: `/Applications/LibreOffice.app/Contents/MacOS/soffice --headless -env:UserInstallation=file:///tmp/lo-run --convert-to pdf --outdir . FILE` — ยืนยันตัวจริงด้วย `--version` ต้องขึ้นต้น `LibreOffice ` (shim ขึ้นอย่างอื่น) · **ไม่ใส่ fresh profile = พิมพ์ "convert...using filter" แต่ไม่เขียนไฟล์**
+  ⭐ **POST-RENDER FONT VERIFY (บังคับก่อนตัดสินมิติ visual ใด ๆ):** `pdffonts OUT.pdf` → ✓ ทุกแถว emb=yes ✓ **เจอฟอนต์ที่ spec ตั้งไว้จริง** · 🔴 เจอ `LinuxLibertine`/`FrankRuhl`/`DejaVu`/`Liberation` = renderer มองไม่เห็นฟอนต์ระบบ → **หยุด อย่ารายงาน issue** ตรวจ renderer ก่อน
+  **หลักการ: ผลตรวจจาก renderer ผิดตัว = หลักฐานปลอม — เช็ค renderer ก่อนโทษไฟล์เสมอ (คู่กับ EVIDENCE FRESHNESS)**
   ② **MS PowerPoint ผ่าน AppleScript `save as PDF` — fidelity สูงสุด** (ใช้ผ่านจริง 2 รอบ VFIN): dest ต้องเป็น `POSIX file "..."` (ส่ง string เฉย ๆ = "done" แต่ไม่เขียนไฟล์เงียบ ๆ) · sandbox เขียน /private/tmp ไม่ได้ — save ใต้ `~/Documents` แล้วย้ายไป scratchpad
   ③ PowerPoint MCP: ใช้ได้เฉพาะ **เช็คเปิดไฟล์จริง/ไม่ Repair** — ⚠ `export_pdf` เชื่อไม่ได้ (success ปลอม ไม่เขียนไฟล์)
   ④ ทุกทางพัง → ประกาศ **NOT-VERIFIABLE-ON-HOST รายมิติ** ตรง ๆ — ห้ามเดา
