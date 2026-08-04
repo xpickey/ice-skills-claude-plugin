@@ -11,9 +11,22 @@ Usage:
 import argparse
 import json
 import logging
+import os
 import sys
 from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional
+
+# ⭐ FONT POLICY มาจาก SSOT เดียว (ice-doc-builder §3.0) — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้
+sys.path.insert(0, os.path.expanduser("~/.claude/agents/_lib"))
+from font_policy import RAILS  # noqa: E402
+
+RAIL = os.environ.get("ICE_RAIL", "private")
+RAIL_FONT = RAILS[RAIL if RAIL in RAILS else "private"]["font"]
+# คู่ละตินสำหรับ deck ภาษาอังกฤษล้วน — ไม่มีอักขระไทยจึงไม่อยู่ใต้ราง (§3.0 ครอบเฉพาะงานที่มีไทย)
+LATIN_HEADER = "Inter"
+LATIN_BODY = "Lora"
+# ฟอนต์สำหรับ glyph สัญลักษณ์ล้วน (▸ ฯลฯ) — ไม่ใช่ข้อความ ไม่อยู่ใต้ราง
+SYMBOL_FONT = "Arial"
 
 from pptx import Presentation
 from pptx.util import Inches, Pt, Emu
@@ -78,18 +91,15 @@ def pick_font(theme: Dict[str, Any], role: str, language: str) -> str:
     """
     fonts = theme.get("fonts", {})
 
+    # ⭐ V02R01 (2026.08.04): default มาจาก SSOT font_policy.RAILS — ไม่ hard-code อีก
+    #   เดิม default = "Sarabun" / "IBM Plex Sans Thai" (ไม่มี Looped = คนละ family, cut ไม่มีหัว)
+    #   theme.json ยัง override ได้เหมือนเดิม = เคสลูกค้าบังคับ Latin brand font (§3.0 ②)
     if language == "th":
-        key = f"{role}TH"
-        return fonts.get(key, "Sarabun" if role == "body" else "IBM Plex Sans Thai")
+        return fonts.get(f"{role}TH", RAIL_FONT)
     elif language == "en":
-        key = f"{role}EN"
-        return fonts.get(key, "Lora" if role == "body" else "Inter")
-    else:  # bilingual
-        # For bilingual, use TH for body, EN for headers (or vice versa per theme preference)
-        if role == "header":
-            return fonts.get("headerEN", "Inter")
-        else:
-            return fonts.get("bodyTH", "Sarabun")
+        return fonts.get(f"{role}EN", LATIN_BODY if role == "body" else LATIN_HEADER)
+    else:  # bilingual — ไทยครอบทั้งคู่ได้เพราะฟอนต์ราง single-family (มีละตินในตัว §3.0 ①)
+        return fonts.get(f"{role}EN" if role == "header" else "bodyTH", RAIL_FONT)
 
 
 def add_text_box(
@@ -189,7 +199,7 @@ def add_footer(slide, theme: Dict[str, Any], page_num: int, total: int) -> None:
         height=0.4,
         text=text,
         fontsize=11,
-        font_name="Inter",
+        font_name=LATIN_HEADER,
         color=hex_to_rgb(theme["colors"]["muted"]),
         align=PP_ALIGN.RIGHT,
     )
@@ -588,7 +598,7 @@ def add_process_flow(
                 height=0.4,
                 text="→",
                 fontsize=20,
-                font_name="Arial",
+                font_name=SYMBOL_FONT,
                 color=primary_color,
                 align=PP_ALIGN.CENTER,
             )

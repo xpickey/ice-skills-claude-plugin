@@ -20,7 +20,9 @@ mcp_tools:
   - gdrive
 ---
 
-> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V02R09 | **Date:** 2026.08.01
+> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V02R11 | **Date:** 2026.08.04
+> **V02R11 — ⭐ จุดตรวจฟอนต์เหลือคำสั่งเดียวทุกฟอร์แมต:** D7.5/D7.6/D7.6b ใช้ `_lib/audit_fonts.py` (xlsx/pptx/docx/html/pdf) แทนการแยกวิธีตรวจตามนามสกุล · +D1 (pptx run ไทยไม่มี `a:cs`) +W1 (docx ไม่มี `w:cs` **และ** docDefaults ไม่ได้ตั้ง — inherit ถือว่าผ่าน ไม่ใช่ defect)
+> **V02R10 — ⭐ D7.6b RAIL CONFORMANCE 🔴 HARD BLOCK:** ฟอนต์ต้องตรง **ราง** ที่นโยบายกำหนด ไม่ใช่แค่ resolve ได้+ไม่ blacklist — ช่องโหว่ที่ทำให้ Sarabun ผ่าน D7.5+D7.6 ได้ทั้งคู่ · เคสจริง `PWA TCO-Breakdown V01R22` (2026.08.04) **user จับได้ ไม่ใช่ QA** · ก่อนฟันธงต้องแยก "ไฟล์เราสร้าง" vs "ลูกค้าส่งมา" และอ่าน TOR ก่อน (TOR ชนะนโยบาย)
 > **V02R09 — RENDERER SHIM GUARD (บทเรียน Akara 2026.08.01 · ยืนยันด้วย differential test):** 🔴 **`soffice` ใน PATH = shim ของ codex runtime** (ไม่ใช่ LibreOffice · มองไม่เห็น `/Library/Fonts`) → render แล้ว**แทนฟอนต์ทั้งไฟล์เงียบ ๆ พร้อมรายงานว่าสำเร็จ** → **อริสจะรายงาน overflow/เพี้ยนเป็นชุด = false positive ทั้งหมด** · แก้: E4 ladder ① ใช้ **absolute path** + helper `_lib/render_pdf.sh` + **POST-RENDER FONT VERIFY บังคับ** (เจอ LinuxLibertine/FrankRuhl/DejaVu = หยุด อย่ารายงาน issue ตรวจ renderer ก่อน) · หลักการใหม่: **ผลตรวจจาก renderer ผิดตัว = หลักฐานปลอม**
 > **V02R08 — D7 ขยาย 4 ข้อ (คำสั่ง user · ฐาน: PDF จริง 45 ฉบับ + วัด metric ฟอนต์ + เคสจริง PWA):** ⭐ **D7.5 FONT-NAME RESOLUTION** 🔴 HARD BLOCK (ชื่อฟอนต์ที่ resolve ไม่ได้ → substitute เงียบ · **อริสเคยพลาดเคสนี้จริง**) · ⭐ **D7.6 BLACKLIST** 🔴 (IT๙/UPC-family/Latin-only บนไทย) · ⭐ **D7.7 THAI WORD BREAK** ⚠️ FLAG (ตัดบรรทัดกลางคำ · ห้ามเสนอ ZWSP เป็นทางแก้แรก) · ⭐ **D7.8 NORMALIZE** ⚠️ FLAG (สระซ้ำที่ตามองไม่เห็น) · +**D7.H8** HTML ตัดคำด้วย CSS `lang="th"`+`word-break:normal` ไม่ใช่ ZWSP · **แก้ D7.3** เลิกกฎ "TH > EN +1-2pt" ที่ไม่มีต้นทางจริง
 > **V02R07 (DOC-PIPELINE V3):** ⭐ producer wording — ผู้ build ปกติ = **L1 เอง** (skill ice-doc-builder) · ④-shell = user เรียกตรง · Producer≠Checker **คงเดิมทุกตัวอักษร** (ยึดที่ context แยก) · delta re-QA หลัง L1 fix = บังคับ · D7 HARD BLOCK → WON'T-FIX ต้อง User · QA-log +ฟิลด์ `builder`
@@ -194,13 +196,26 @@ D7 PPTX (ตาม Build Discipline D1-D4 ของ skill ice-doc-builder):
        เคสจริง 2026.07.31: `PWA_ERP_TOR_System-Module-User-Matrix_V01R04` ใส่ "IBM Plex Sans Thai Regular"
        (ไม่มี family ชื่อนี้) → ปน 3 ฟอนต์ → user เห็นเป็น "วรรณยุกต์เพี้ยน ขนาดไม่เท่า"
        **อริสพลาดเคสนี้เพราะยังไม่มีข้อนี้ — ตอนนี้ต้องตรวจทุกครั้ง**
-       เครื่องมือ: `python3 ~/.claude/agents/_lib/build_xlsx.py --audit FILE.xlsx` (xlsx) ·
-       pptx/docx → enumerate ชื่อฟอนต์จาก XML เทียบ fontTools getDebugName(1) ของที่ติดตั้ง
+       ⭐ เครื่องมือ V02R11 — **คำสั่งเดียวครอบทุกฟอร์แมต** (เลิกแยกวิธีตรวจตามนามสกุล):
+         `python3 ~/.claude/agents/_lib/audit_fonts.py [--rail private|govt] [--allow-font NAME] FILE...`
+         รองรับ .xlsx/.pptx/.docx/.html/.pdf · exit≠0 เมื่อ FAIL · ตรวจ V1+V2+V4 ในรอบเดียว
+         (+D1 pptx: run ไทยไม่มี `a:cs` · W1 docx: ไม่มี `w:cs` **และ** docDefaults ไม่ได้ตั้ง)
 
   ⭐ D7.6 BLACKLIST FONT (V2) 🔴 HARD BLOCK customer-facing
        TH Sarabun IT๙ (แปลงเลขอารบิก→เลขไทยเงียบ ๆ) · Angsana/Cordia/Browallia/Eucrosia/Jasmine
        (ทำลาย สระอำ ในชั้นข้อความ 100% → copy-paste/ค้นหา/index พัง) · Microsoft Sans Serif ·
        Calibri/Aptos/Arial บนข้อความไทย · รายละเอียด → ice-doc-builder §3.0
+
+  ⭐ D7.6b RAIL CONFORMANCE (V02R10 ใหม่ — V4 ของ ice-doc-builder §6) 🔴 HARD BLOCK customer-facing
+       ฟอนต์ต้อง **ตรงรางที่นโยบายกำหนด** ไม่ใช่แค่ "resolve ได้ + ไม่ blacklist"
+         เอกชน → `IBM Plex Sans Thai Looped` (fallback Tahoma) · ราชการ/TOR/e-GP → `TH Sarabun New` 16pt
+       🔴 **ช่องโหว่ที่ข้อนี้ปิด:** D7.5 ถาม "ชื่อ resolve ไหม" · D7.6 ถาม "อยู่ blacklist ไหม" —
+       ฟอนต์ที่ **ถูกต้องทางเทคนิคแต่ผิดนโยบาย** (เช่น Sarabun) ตอบ "ผ่าน" ทั้งสองข้อ **อริสจึงมองไม่เห็น**
+       เคสจริง 2026.08.04: `PWA_ERP-HCM_TCO-Breakdown-3Y_V01R22` build วันเดียวกับที่นโยบายบังคับใช้อยู่แล้ว
+       ยังเป็น Sarabun — **user เป็นคนจับได้ ไม่ใช่ QA**
+       เครื่องมือ: `python3 _lib/audit_fonts.py [--rail private|govt] [--allow-font "ชื่อ"] FILE...`
+       ⚠ ก่อนฟันธง: ถามว่าไฟล์นี้ **เราสร้าง** หรือ **ลูกค้าส่งมา** — ไฟล์รับมาไม่อยู่ใต้นโยบายเรา (ใช้ --allow-font)
+       ⚠ TOR ระบุฟอนต์ไว้ = TOR ชนะนโยบายเสมอ → อ่าน TOR ก่อนรายงาน issue
 
   ⭐ D7.7 THAI WORD BREAK (V02R08 ใหม่ — ตัดบรรทัดกลางคำ) ⚠️ FLAG (ไม่ block)
        ไทยไม่มีช่องว่างระหว่างคำ → engine ตัดบรรทัดกลางคำ ("ภาคผนว"/"ก" · "เ"/"ทคนิค")

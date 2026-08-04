@@ -36,11 +36,23 @@ spec.json schema:
   ]
 }
 """
-import sys, json
+import sys, os, json, subprocess
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
+from pptx.oxml.ns import qn
+from pptx.oxml import parse_xml
+from pptx.oxml.ns import nsdecls
+
+
+def OxmlElement(tag):
+    return parse_xml(f'<{tag} {nsdecls("a")}/>')
+
+
+# ⭐ นโยบายฟอนต์มาจาก SSOT เดียว — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้ (V02R01)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from font_policy import RAILS   # noqa: E402
 
 
 def hex_to_rgb(h):
@@ -173,6 +185,37 @@ def add_image(prs, slide, theme):
         s.shapes.add_picture(slide["image_path"], Inches(0.5), Inches(1.5), Inches(9), Inches(5))
 
 
+# ── ⭐ D1 TRI-SLOT FONT BINDING (V02R01 — 2026.08.04) ────────────────────────
+# บั๊กที่แก้: ไฟล์นี้ **ไม่เคย set ฟอนต์เลยสักบรรทัด** ตลอดอายุการใช้งาน — docstring
+# บอก "default Tahoma" และ spec key `font_family` แต่โค้ดไม่เคยอ่านทั้งคู่ (dead doc)
+# → output ได้ฟอนต์ default ของ python-pptx (Calibri) ซึ่งไม่มี glyph ไทยเลย
+# ทำเป็น post-pass เดินทุก run แทนการแก้ layout function ทั้ง 8 ตัว (ปลอดภัยกว่า)
+def _bind_font(tf, font):
+    for p in tf.paragraphs:
+        for r in p.runs:
+            rPr = r._r.get_or_add_rPr()
+            for tag in ("a:latin", "a:ea", "a:cs"):          # ครบ 3 slot — D1
+                for old in rPr.findall(qn(tag)):
+                    rPr.remove(old)
+                el = OxmlElement(tag)
+                el.set("typeface", font)
+                rPr.append(el)
+
+
+def apply_font(prs, font):
+    """เดินทุก shape/table cell ในทุก slide แล้วผูกฟอนต์ครบ 3 slot"""
+    n = 0
+    for s in prs.slides:
+        for sh in s.shapes:
+            if sh.has_text_frame:
+                _bind_font(sh.text_frame, font); n += 1
+            if getattr(sh, "has_table", False) and sh.has_table:
+                for row in sh.table.rows:
+                    for cell in row.cells:
+                        _bind_font(cell.text_frame, font); n += 1
+    return n
+
+
 LAYOUTS = {
     "title": add_title_slide,
     "section": add_section_slide,
@@ -203,8 +246,21 @@ def build(spec_path, out_path):
     for slide in spec["slides"]:
         layout = slide.get("layout", "bullets")
         LAYOUTS.get(layout, add_bullets_slide)(prs, slide, theme)
+
+    # ⭐ D1 — ฟอนต์มาจากราง (§3.0) · spec override ได้เมื่อลูกค้า/แบรนด์บังคับ
+    rail = spec.get("rail", "private")
+    if rail not in RAILS:
+        sys.exit(f"rail ต้องเป็น {'|'.join(RAILS)} (ได้: {rail})")
+    font = spec.get("font_family") or RAILS[rail]["font"]
+    n = apply_font(prs, font)
     prs.save(out_path)
-    print(f"OK: wrote {out_path} with {len(prs.slides)} slides")
+    print(f"OK: wrote {out_path} with {len(prs.slides)} slides · "
+          f"font='{font}' (rail={rail}) ผูกครบ 3 slot ใน {n} text frame")
+
+    # post-build gate — จุดตรวจเดียวกับทุกฟอร์แมต
+    subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                 "audit_fonts.py"), "--rail", rail,
+                    *(["--allow-font", font] if spec.get("font_family") else []), out_path])
 
 
 if __name__ == "__main__":

@@ -1,7 +1,22 @@
 #!/usr/bin/env python3
 """
 build_xlsx.py — XLSX builder ที่บังคับ FONT POLICY + Thai typography discipline อัตโนมัติ
-V02R01 | 2026.07.31 | ผูกกับ skill ice-doc-builder §3.0 FONT POLICY + §3.2 E1-E6 + §6 V1-V3
+V02R03 | 2026.08.04 | ผูกกับ skill ice-doc-builder §3.0 FONT POLICY + §3.2 E1-E6 + §6 V1-V4
+
+V02R03 — นโยบายย้ายไป `font_policy.py` (SSOT) ไฟล์นี้ import อย่างเดียว ไม่ประกาศซ้ำ
+  เหตุผล: RAILS อยู่ในไฟล์นี้ตัวเดียว → build script อีก 5 ตัวใช้ร่วมไม่ได้ → hard-code กันเอง
+  ตรวจฟอนต์ทุกฟอร์แมตในที่เดียว → `audit_fonts.py`
+
+V02R02 — ⭐ +V4 RAIL CONFORMANCE (ด่านที่หายไป): V1 ถามแค่ "ชื่อฟอนต์มีจริงไหม" · V2 ถามแค่
+"อยู่ blacklist ไหม" → ฟอนต์ที่ **มีจริง + ไม่ blacklist + แต่ผิดนโยบาย** (เช่น Sarabun) ลอดทั้งสองด่าน
+เคสจริง 2026.08.04: PWA TCO-Breakdown V01R22 build วันเดียวกับที่นโยบายใช้อยู่แล้ว ยังเป็น Sarabun
+และ validator ขึ้น ✅ PASS · ต้นเหตุ: build script เขียนมือตั้ง FONT เองเป็นค่าคงที่ ไม่เคยเรียก RAILS
+→ V4 เทียบกับ RAILS[rail] ตรง ๆ · CLI: --rail private|govt · --allow-font "ชื่อ" (TOR บังคับ/ไฟล์รับมา)
+
+V02R02 — แก้ E4 false positive: เดิมฟ้อง "merge ในแถวไทย+wrap" ทุกแถวโดยไม่ดูว่าแถวนั้นตั้ง
+row height ไว้แล้วหรือไม่ → ไฟล์ที่ builder ของเราสร้างสด (merge_put ตั้ง height ให้เสมอ) ก็ FAIL
+พิสูจน์ด้วย differential test: rebuild จาก script เดิม → FAIL เซลล์ชุดเดียวกันเป๊ะ = ปัญหาอยู่ที่
+เครื่องมือตรวจ ไม่ใช่ไฟล์ (หลักการเดียวกับบทเรียน renderer shim 2026.08.01)
 
 ทำไมต้องมีชั้นนี้: กฎที่เป็นตัวหนังสือใน skill ถูกลืมได้ · เคสจริง 2026.07.31 ไฟล์ PWA TOR Matrix
 ระบุฟอนต์ "IBM Plex Sans Thai Regular" (ไม่มี family ชื่อนี้จริง) → Excel substitute เงียบ →
@@ -33,74 +48,32 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 
 # ─────────────────────────────────────────────────────────────────────────────
-# §3.0 FONT POLICY — 2 ราง (LOCKED โดย user 2026.07.31)
+# §3.0 FONT POLICY — ⭐ import จาก SSOT (V02R03) · ห้าม re-declare ที่ไฟล์นี้อีก
+#   บทเรียน 2026.08.04: RAILS เคยถูกประกาศซ้ำในไฟล์นี้ → build script ฟอร์แมตอื่น
+#   (pptx/docx/dashboard/deck/html) ไม่มีทางใช้ร่วมได้ → hard-code กันเอง 5 ระบบ
+#   → นโยบายที่ LOCKED ไว้ บังคับใช้ไม่ได้จริงทั้งระบบ (เคส PWA TCO V01R22)
 # ─────────────────────────────────────────────────────────────────────────────
-RAILS = {
-    # เอกชน: ไทย=อังกฤษ ไม่บวก pt (cap 0.698 em — ละตินอยู่ในตัวเดียวกัน)
-    "private": {"font": "IBM Plex Sans Thai Looped", "size": 11, "fallback": "Tahoma"},
-    # ราชการ/TOR/e-GP: 16pt = ละติน 11-12pt (วัดได้ ×1.47)
-    "govt":    {"font": "TH Sarabun New",            "size": 16, "fallback": "Tahoma"},
-}
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from font_policy import (RAILS, BLACKLIST_PATTERNS, LATIN_ONLY, THAI_RE,   # noqa: E402
+                         has_thai, installed_families, blacklist_hit)
 
-# §3.0 BLACKLIST — เหตุผลรายตัวอยู่ใน skill
-BLACKLIST_PATTERNS = [
-    (r"^TH Sarabun ?IT", "แปลงเลขอารบิก→เลขไทยเงียบ ๆ + ชื่อชนกับ PSK + digit width +24%"),
-    (r"^Angsana",   "ทำลาย สระอำ ในชั้นข้อความ 100% (copy-paste/ค้นหา/index พัง)"),
-    (r"^Cordia",    "ทำลาย สระอำ 100% · ไม่มีบน macOS"),
-    (r"^Browallia", "ทำลาย สระอำ 100% · ไม่มีบน macOS"),
-    (r"^Eucrosia",  "ตระกูล UPC เดียวกัน"),
-    (r"^Jasmine",   "ตระกูล UPC เดียวกัน · ไม่ได้ติดตั้ง"),
-    (r"^Microsoft Sans Serif", "ไม่มี Bold จริง + ที่ว่างวรรณยุกต์ = 0"),
-]
-LATIN_ONLY = {"Calibri", "Aptos", "Arial", "Cambria", "Times New Roman", "Helvetica"}
-
-THAI_RE = re.compile(r"[฀-๿]")
 ROW_H_FACTOR = 1.45   # §3.2 E2 — ทดสอบแล้ว
 ROW_H_PAD = 6
-
-
-def has_thai(v) -> bool:
-    return isinstance(v, str) and bool(THAI_RE.search(v))
-
-
-def installed_families() -> set:
-    """§6 V1 — family name จริงจาก name table (nameID 1) ของฟอนต์ที่ติดตั้ง"""
-    fams = set()
-    try:
-        from fontTools.ttLib import TTFont
-    except ImportError:
-        return fams          # ไม่มี fontTools → V1 ข้าม (รายงานว่าข้าม ไม่ใช่ผ่าน)
-    roots = ["/System/Library/Fonts", "/System/Library/Fonts/Supplemental",
-             "/Library/Fonts", os.path.expanduser("~/Library/Fonts")]
-    for root in roots:
-        for ext in ("ttf", "otf", "ttc"):
-            for p in glob.glob(f"{root}/**/*.{ext}", recursive=True):
-                try:
-                    f = TTFont(p, fontNumber=0, lazy=True)
-                    n = f["name"].getDebugName(1)
-                    if n:
-                        fams.add(n)
-                except Exception:
-                    pass
-    return fams
-
-
-def blacklist_hit(name: str):
-    for pat, reason in BLACKLIST_PATTERNS:
-        if re.match(pat, name or "", re.I):
-            return reason
-    return None
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # VALIDATOR — §6 V1/V2 + §3.2 E2-E5
 # ─────────────────────────────────────────────────────────────────────────────
-def audit(path: str, strict: bool = True) -> dict:
+def audit(path: str, strict: bool = True, rail: str = "private",
+          allow_fonts=None) -> dict:   # ⚠ ไม่ใช้ `set | None` — python3 บนเครื่องนี้คือ 3.9
+    """rail = private|govt (ตาม §3.0) · allow_fonts = ฟอนต์ที่ยกเว้นได้ (TOR บังคับ / ไฟล์ที่ได้รับมา)"""
+    allow_fonts = allow_fonts or set()
     wb = load_workbook(path)
     fams = installed_families()
     rep = {"fonts_used": set(), "unresolvable": [], "blacklisted": [],
            "thai_cells": 0, "thai_latin_only_font": [], "thai_no_rowheight": [],
-           "merged_thai_rows": [], "shrink_to_fit": [], "formula_cells": 0,
+           "merged_thai_rows": [], "merged_thai_rows_ok": [],
+           "shrink_to_fit": [], "formula_cells": 0,
            "v1_skipped": not bool(fams)}
 
     for ws in wb.worksheets:
@@ -126,10 +99,16 @@ def audit(path: str, strict: bool = True) -> dict:
                     rep["shrink_to_fit"].append(loc)
                 wrapped = bool(c.alignment and c.alignment.wrap_text)
                 if wrapped:
-                    if ws.row_dimensions[c.row].height is None:
+                    has_h = ws.row_dimensions[c.row].height is not None
+                    if not has_h:
                         rep["thai_no_rowheight"].append(loc)
+                    # E4 — merge ฆ่า AutoFit จริง แต่เป็น "ข้อบกพร่อง" ก็ต่อเมื่อแถวนั้น *ต้องพึ่ง* AutoFit
+                    #   ตั้ง row height ไว้ชัดเจนแล้ว = escape hatch ที่ builder เราใช้ตั้งใจ (merge_put) → ผ่าน
+                    #   V02R02 (บทเรียน PWA 2026.08.04): เดิมไม่เช็คเงื่อนไขนี้ → ไฟล์ที่ script สร้างสด
+                    #   และผ่าน assert ตัวเอง ก็ยัง FAIL E4 = false positive ทุกแถว banner/band
                     if c.row in merged_rows:
-                        rep["merged_thai_rows"].append(loc)
+                        (rep["merged_thai_rows"] if not has_h
+                         else rep["merged_thai_rows_ok"]).append(loc)
 
     for name in sorted(rep["fonts_used"]):
         why = blacklist_hit(name)
@@ -158,15 +137,31 @@ def audit(path: str, strict: bool = True) -> dict:
     except Exception:
         pass
 
+    # ⭐ V4 RAIL CONFORMANCE (V02R02) — ด่านที่หายไปจนถึง 2026.08.04
+    #   V1 ถามแค่ "ชื่อนี้มีจริงไหม" · V2 ถามแค่ "อยู่ blacklist ไหม"
+    #   → ฟอนต์ที่ "มีจริง + ไม่ blacklist + แต่ผิดนโยบาย" (เช่น Sarabun) ลอดทั้งสองด่าน
+    #   เคสจริง: PWA TCO-Breakdown V01R22 (2026.08.04) ยังเป็น Sarabun แล้ว validator ขึ้น PASS
+    #   ต้นเหตุ: build script เขียนมือตั้ง FONT เองเป็นค่าคงที่ ไม่เคยเรียก RAILS
+    rail_font = RAILS[rail]["font"]
+    ok_fonts = {rail_font, RAILS[rail]["fallback"]} | allow_fonts
+    thai_fonts = {n for n in rep["fonts_used"] if n not in LATIN_ONLY}
+    rep["off_rail"] = sorted(thai_fonts - ok_fonts)
+    rep["rail"] = rail
+
     fails = []
     if rep["unresolvable"]:
         fails.append(f"V1 FONT-NAME ไม่ resolve: {rep['unresolvable']}")
     if rep["blacklisted"]:
         fails.append(f"V2 BLACKLIST: {[n for n, _ in rep['blacklisted']]}")
+    if rep["off_rail"]:
+        fails.append(f"V4 ผิดราง '{rail}' (ต้องเป็น '{rail_font}' หรือ fallback "
+                     f"'{RAILS[rail]['fallback']}'): {rep['off_rail']} "
+                     f"→ ถ้าเป็นไฟล์ที่ได้รับมา/TOR บังคับ ใช้ --allow-font \"ชื่อ\"")
     if rep["thai_latin_only_font"]:
         fails.append(f"เซลล์ไทยได้ฟอนต์ที่ไม่มี glyph ไทย: {rep['thai_latin_only_font'][:5]}")
     if rep["merged_thai_rows"]:
-        fails.append(f"E4 merge ในแถวไทย+wrap (AutoFit ตาย): {rep['merged_thai_rows'][:5]}")
+        fails.append(f"E4 merge ในแถวไทย+wrap *และไม่ตั้ง row height* (AutoFit ตาย ไม่มีอะไรกู้ได้): "
+                     f"{rep['merged_thai_rows'][:5]}")
     if rep["shrink_to_fit"]:
         fails.append(f"E5 shrink-to-fit บนเซลล์ไทย: {rep['shrink_to_fit'][:5]}")
     if rep["thai_no_rowheight"]:
@@ -176,6 +171,10 @@ def audit(path: str, strict: bool = True) -> dict:
     print(f"VALIDATOR | thai_cells={rep['thai_cells']} · fonts={len(rep['fonts_used'])} "
           f"· formulas={rep['formula_cells']} · V1={'SKIPPED(no fontTools)' if rep['v1_skipped'] else 'ran'}")
     print(f"  fonts: {', '.join(sorted(rep['fonts_used'])) or '(none)'}")
+    if rep["merged_thai_rows_ok"]:
+        # แสดงเสมอ — ไม่เงียบ: ผู้อ่านต้องรู้ว่าเรา "ยกเว้น" อะไรไป ไม่ใช่ "ไม่เจอ"
+        print(f"  ℹ E4 ยกเว้น {len(rep['merged_thai_rows_ok'])} เซลล์ merge+wrap ที่ตั้ง row height ไว้แล้ว "
+              f"(escape hatch ถูกกฎ) เช่น {rep['merged_thai_rows_ok'][:3]}")
     if fails:
         print("❌ FAIL:")
         for f in fails:
@@ -183,7 +182,7 @@ def audit(path: str, strict: bool = True) -> dict:
         if strict:
             sys.exit(3)
     else:
-        print("✅ PASS — V1 resolve ครบ · V2 ไม่มี blacklist · E2/E4/E5 ผ่าน")
+        print(f"✅ PASS — V1 resolve ครบ · V2 ไม่มี blacklist · V4 ตรงราง '{rail}' · E2/E4/E5 ผ่าน")
     return rep
 
 
@@ -281,14 +280,26 @@ def build(spec_path: str, out_path: str):
     print(f"OK: {out_path} · {len(wb.sheetnames)} sheets · rail={rail} · font={FONT} {SIZE}pt")
     print(f"⚠ §3.2 E1: Excel ฝังฟอนต์ไม่ได้ — ส่งลูกค้าต้องแนบ PDF companion หรือใช้ฟอนต์ที่ลูกค้ามี "
           f"(fallback: {RAILS[rail]['fallback']})")
-    audit(out_path)
+    # ⭐ V02R02: ต้องส่ง rail ที่ build ใช้จริง — ไม่งั้น build รางราชการจะ FAIL V4 กับ default private
+    audit(out_path, rail=rail, allow_fonts={FONT})
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 3 and sys.argv[1] == "--audit":
-        audit(sys.argv[2]); sys.exit(0)
-    if len(sys.argv) != 3:
-        print("usage: build_xlsx.py spec.json out.xlsx | build_xlsx.py --audit file.xlsx",
-              file=sys.stderr)
+    argv = sys.argv[1:]
+    rail, allow = "private", set()
+    while len(argv) >= 2 and argv[0] in ("--rail", "--allow-font"):
+        if argv[0] == "--rail":
+            rail = argv[1]
+            if rail not in RAILS:
+                sys.exit(f"--rail ต้องเป็น private|govt (ได้: {rail})")
+        else:
+            allow.add(argv[1])
+        argv = argv[2:]
+
+    if len(argv) == 2 and argv[0] == "--audit":
+        audit(argv[1], rail=rail, allow_fonts=allow); sys.exit(0)
+    if len(argv) != 2:
+        print("usage: build_xlsx.py [--rail private|govt] [--allow-font NAME]... "
+              "(spec.json out.xlsx | --audit file.xlsx)", file=sys.stderr)
         sys.exit(2)
-    build(sys.argv[1], sys.argv[2])
+    build(argv[0], argv[1])

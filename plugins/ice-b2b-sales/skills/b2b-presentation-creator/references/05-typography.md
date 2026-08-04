@@ -1,25 +1,55 @@
 # Reference 05 — Typography System
 
-This reference defines the font pairing strategy, sizing discipline, and language-specific typographic rules for B2B decks in Thai, English, or Bilingual (TH+EN).
+> **Version:** V02R01 | **Date:** 2026.08.04 | (V01 ไม่มี version header — เพิ่มใน V02R01)
+> **V02R01 — อยู่ใต้ FONT POLICY แล้ว:** เอกสารนี้เคยเป็น "นโยบายฟอนต์ฉบับที่ 3" ที่ขัดกับของจริง
+> (บอก Tahoma เป็น anti-pattern ขณะที่นโยบายให้เป็น fallback · บังคับจับคู่ 2 ตระกูลขณะที่นโยบายเป็น
+> single-family-first · ใช้ชื่อ `IBM Plex Sans Thai` ที่ไม่มี Looped = คนละ family)
+> ตอนนี้เหลือบทบาท **คู่มือการจับคู่เมื่อจำเป็น** — นโยบายอยู่ที่ `ice-doc-builder §3.0` ที่เดียว
 
-**Critical principle:** A bilingual deck fails visually when the Thai font and Latin font have mismatched visual weight. This guide prevents that failure by enforcing paired font sets where glyph height and stroke weight are balanced across scripts.
+## 0. ⭐ อ่านก่อนทุกครั้ง — ลำดับการตัดสินใจ (V02R01)
+
+```
+① SINGLE-FAMILY FIRST (ค่าเริ่มต้น · §3.0 ①)
+   เอกชน  → IBM Plex Sans Thai Looped   (ไทย = อังกฤษ ไม่บวก pt)
+   ราชการ → TH Sarabun New 16pt
+   ฟอนต์รางมีละตินออกแบบมาคู่ในตัว → **ไม่ต้องจับคู่ ไม่ต้องชดเชยขนาด** → ข้าม §2 ทั้งหมด
+② จับคู่ 2 ตระกูล (§2 ข้างล่าง) ใช้เมื่อ **ลูกค้า/แบรนด์บังคับ Latin brand font เท่านั้น**
+   → ต้องชดเชยขนาดด้วยสูตร cap-ratio ของ D3 (ไม่ใช่ตัวเลขลอย ๆ)
+③ TOR / ข้อบังคับวารสาร-มหาวิทยาลัย ระบุฟอนต์ไว้ → **ชนะทุกข้อข้างบน**
+```
+
+**เครื่องมือตรวจ (บังคับก่อนส่ง ④ อริส):**
+```bash
+python3 ~/.claude/agents/_lib/audit_fonts.py [--rail private|govt] FILE.pptx
+```
+`build_deck.py` / `build_html.py` อ่านค่าเริ่มต้นจาก `font_policy.RAILS` แล้ว — **ห้าม hard-code ชื่อฟอนต์ใน script**
+`theme.json` / Design Spec ยัง override ได้ตามข้อ ② และ ③
 
 ---
 
 ## 1. Why Font Pairing Matters
+
+> ⚠ **V02R01:** หัวข้อนี้ใช้กับกรณี ② เท่านั้น (ลูกค้าบังคับ Latin brand font) — งานทั่วไปใช้ single-family ตามข้อ ①
+> ข้อความเดิม "single universal font (e.g., Tahoma) → dated appearance" **ยกเลิก**: Tahoma เป็น fallback
+> ที่นโยบายรับรอง (ติดมากับทั้ง Windows และ macOS) ใช้เมื่อคุมเครื่องปลายทางไม่ได้
 
 When a Thai title (e.g., "ความสำเร็จด้านการขาย") sits next to its English equivalent ("Sales Achievement"), the Thai glyphs may appear heavier, lighter, or misaligned if the fonts are not chosen as a pair.
 
 **Common failures:**
 - IBM Plex Sans Thai paired with Calibri → Thai looks 20% heavier
 - Sarabun paired with Arial → glyph height mismatch, especially on ascenders
-- Using a single "universal" font (e.g., Tahoma) across both scripts → dated appearance, poor modern kerning
+- ~~Using a single "universal" font (e.g., Tahoma) across both scripts → dated appearance~~
+  🔴 **ยกเลิก V02R01** — ขัดกับนโยบาย: Tahoma = fallback ที่รับรอง · และฟอนต์รางเป็น single-family โดยตั้งใจ
 
-**The solution:** Each personality (Modern, Trust, Tech, Premium, Government) is assigned a canonical Thai font and a canonical English font *designed to pair together*.
+**The solution (กรณี ② เท่านั้น):** Each personality is assigned a canonical Thai font and a canonical English font *designed to pair together*.
 
 ---
 
-## 2. The Five Canonical Font Pairs
+## 2. The Five Canonical Font Pairs  ⚠ ใช้เฉพาะกรณี ② (ลูกค้า/แบรนด์บังคับ Latin font)
+
+> งานทั่วไป **ข้ามตารางนี้** → ใช้ single-family ตามราง §0 ①
+> `IBM Plex Sans Thai` ในตารางนี้ = ชื่อเก่า · family ที่ถูกต้องคือ **`IBM Plex Sans Thai Looped`**
+> (แบบไม่ Looped เป็น cut ไม่มีหัว = โทน display คนละ register)
 
 | Personality | Thai Font | EN Font | Download | When to Use | When NOT to Use |
 |---|---|---|---|---|---|
@@ -190,7 +220,8 @@ Playfair Display → Lora → Noto Serif Thai → [System Serif] (e.g., Times Ne
 
 | Mistake | Why It Fails | Correct Approach |
 |---|---|---|
-| Using **Tahoma** for both Thai and EN | Dated appearance, weak kern pairs, Thai looks heavier | Use IBM Plex Sans Thai + Inter (or paired set from Section 2) |
+| ~~Using **Tahoma** for both Thai and EN~~ 🔴 **ยกเลิก V02R01** | — | Tahoma = **fallback ที่นโยบายรับรอง** (ติดมากับ Windows+macOS ทั้งคู่) ใช้เมื่อคุมเครื่องปลายทางไม่ได้ · ค่าเริ่มต้นคือฟอนต์ราง §0 ① |
+| ระบุชื่อ family ผิด เช่น `IBM Plex Sans Thai Regular` | ไม่มี family ชื่อนี้จริง → engine ทิ้งแล้ว substitute **เงียบ ๆ** → ฟอนต์ปนทั้งไฟล์ | ใช้ชื่อจาก name table เป๊ะ · ตรวจด้วย `audit_fonts.py` (V1) |
 | Using **Cordia New** | Deprecated, no longer maintained; poor Thai glyph support | Use Prompt or Sarabun instead |
 | Mixing serif Thai (Noto Serif Thai) with sans EN (Inter) | Glyph weight mismatch; serif Thai is heavier, looks unbalanced | Keep both serif or both sans; use paired set |
 | Thai body at 14pt without line-height compensation | Tone marks and vowels jam together; unreadable | Use 1.6–1.8x line-height for Thai at any size |

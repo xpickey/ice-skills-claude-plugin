@@ -21,8 +21,20 @@ spec.json schema:
   ]
 }
 """
-import sys, json
+import sys, os, json
 from pathlib import Path
+
+# ⭐ นโยบายฟอนต์มาจาก SSOT เดียว — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้ (V02R01 · 2026.08.04)
+#   บั๊กที่แก้: CSS stack เดิมเป็นละตินล้วน (-apple-system,Segoe UI,Helvetica,Arial)
+#   → ข้อความไทยตกไป fallback ของ browser ที่ไม่ชดเชยขนาด = ไทยเล็กกว่าอังกฤษทั้งหน้า
+sys.path.insert(0, os.path.expanduser("~/.claude/agents/_lib"))
+from font_policy import RAILS   # noqa: E402
+
+RAIL = os.environ.get("ICE_RAIL", "private")
+if RAIL not in RAILS:
+    RAIL = "private"
+FONT_STACK = (f"'{RAILS[RAIL]['font']}', '{RAILS[RAIL]['fallback']}', "
+              f"-apple-system, 'Segoe UI', sans-serif")
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -72,7 +84,9 @@ def chart_html(chart):
         fig.update_layout(title_text=title)
     else:
         fig = px.bar(df, x=x, y=y, title=title)
-    fig.update_layout(margin=dict(l=20, r=20, t=50, b=20), template="plotly_white")
+    # กราฟก็ต้องใช้ฟอนต์เดียวกัน — ไม่งั้น label ไทยในกราฟตกไป fallback คนละตัวกับตัวหน้า
+    fig.update_layout(margin=dict(l=20, r=20, t=50, b=20), template="plotly_white",
+                      font=dict(family=FONT_STACK))
     return fig.to_html(full_html=False, include_plotlyjs=False)
 
 
@@ -87,7 +101,7 @@ def build(spec_path, out_path):
 <meta charset="utf-8"><title>{title}</title>
 <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
 <style>
-  body{{font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;max-width:1200px;margin:24px auto;padding:0 16px;color:#222;}}
+  body{{font-family:{FONT_STACK};max-width:1200px;margin:24px auto;padding:0 16px;color:#222;}}
   h1{{color:#1f4e79;margin-bottom:6px;}}
   .meta{{color:#5a6573;font-size:13px;margin-bottom:18px;}}
 </style>

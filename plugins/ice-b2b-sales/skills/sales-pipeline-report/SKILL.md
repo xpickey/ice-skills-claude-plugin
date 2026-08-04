@@ -193,6 +193,23 @@ Also read and follow the **pptx skill** (`/mnt/skills/public/pptx/SKILL.md`) whe
 **Mandatory gate before saving any .pptx, .xlsx, .docx, or .pdf output.**
 Runs after Step 6 (Build) and before Step 7 (Quality Checks).
 
+> ## ⛔ V01R04 (2026.08.04) — ตารางจับคู่ฟอนต์ด้านล่างถูกยกเลิก อ่านตรงนี้ก่อน
+>
+> เอกสารนี้เคยถือ **นโยบายฟอนต์ฉบับที่ 3** ที่ขัดกับของจริง (ตารางคู่ฟอนต์เอง + กฎขยายไทย
+> "+25-33%" ซึ่ง `ice-doc-builder` V01R03 **retire ไปแล้วเพราะตรวจสอบแล้วไม่มีต้นทางจริง**)
+>
+> **นโยบายฟอนต์มีบ้านเดียว = `ice-doc-builder §3.0`** — 2 ราง:
+> เอกชน `IBM Plex Sans Thai Looped` (ไทย = อังกฤษ ไม่บวก pt) · ราชการ `TH Sarabun New` 16pt
+>
+> **ตรวจด้วยคำสั่งเดียว ทุกฟอร์แมต (แทน checklist มือทั้งหมดด้านล่าง):**
+> ```bash
+> python3 ~/.claude/agents/_lib/audit_fonts.py [--rail private|govt] FILE...
+> ```
+> ครอบ .xlsx/.pptx/.docx/.html/.pdf · V1 ชื่อ family resolve · V2 blacklist · V4 ตรงราง · exit≠0 เมื่อ FAIL
+>
+> ยังใช้ได้จากเอกสารนี้: **ขั้นตอน/เวลาที่ต้องตรวจ** (When to Apply) + report template
+> ยกเลิก: ตารางคู่ฟอนต์ · ตารางขยายขนาดไทย · forbidden list ที่ซ้ำกับ §3.0 BLACKLIST
+
 ### When to Apply
 
 | Trigger | Action |
@@ -341,6 +358,7 @@ AT RISK) is retained.
   from ACTIVE → AT RISK. (Superseded by V01R06's 6-category model.)
 - V01R04 (2026-05-19) — Bundled 4 reference files into the .skill ZIP as a
   self-contained package. Skill logic unchanged from V01R03.
+- V01R04 (2026-08-04) — Step 6.5 อยู่ใต้ FONT POLICY ของ `ice-doc-builder §3.0` (2 ราง) · ตารางคู่ฟอนต์ + กฎขยายไทย +25-33% **ยกเลิก** (retire ไปแล้วเพราะไม่มีต้นทางจริง) · ตรวจด้วย `audit_fonts.py` คำสั่งเดียวทุกฟอร์แมต
 - V01R03 (2026-05-13) — Added Step 6.5 Typography & Bilingual Font QA
   (mandatory gate before saving .pptx / .xlsx / .docx / .pdf). Defaults
   to Sarabun + Inter for bilingual Thai-English consistency.

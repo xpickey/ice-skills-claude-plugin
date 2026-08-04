@@ -47,6 +47,14 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 VIEWPORT_CSS = os.path.join(HERE, "..", "assets", "html", "viewport-base.css")
 
+# ⭐ FONT POLICY มาจาก SSOT เดียว (ice-doc-builder §3.0) — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้
+sys.path.insert(0, os.path.expanduser("~/.claude/agents/_lib"))
+from font_policy import RAILS  # noqa: E402
+
+RAIL = os.environ.get("ICE_RAIL", "private")
+_R = RAILS[RAIL if RAIL in RAILS else "private"]
+RAIL_STACK = f"'{_R['font']}','{_R['fallback']}',system-ui,sans-serif"
+
 # ---- forbidden-char guard (mirror of PPTX Lesson #18; harmless in HTML but
 #      kept for cross-format consistency so copy pasted between PPTX/HTML is safe)
 ARROW_MAP = {"→": "▸", "⟶": "▸", "➙": "▸",
@@ -88,8 +96,8 @@ DEFAULT_VARS = {
     "--text-muted": "#6e6b66",
     "--accent": "#1E66A4",          # iCE Blue default
     "--accent-2": "#41A8B5",        # iCE Cyan
-    "--font-display": "'Kanit', 'Raleway', system-ui, sans-serif",
-    "--font-body": "'Sarabun', 'Open Sans', system-ui, sans-serif",
+    "--font-display": RAIL_STACK,   # ⭐ V02R01 — มาจาก SSOT ไม่ hard-code (เดิม Kanit/Sarabun)
+    "--font-body": RAIL_STACK,
     # authored at 1920x1080 stage size (power-design rule 8: title >=48px)
     "--title-size": "112px",
     "--subtitle-size": "40px",
@@ -101,6 +109,8 @@ DEFAULT_VARS = {
 
 # Google Fonts the default tokens rely on (web-safe per slide-designer §5.6)
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?'
+             # ⭐ ฟอนต์รางต้องมาก่อนเสมอ — HTML เปิดบนเครื่องที่ไม่ได้ติดตั้งฟอนต์
+             'family=IBM+Plex+Sans+Thai+Looped:wght@300;400;500;600;700&'
              'family=Kanit:wght@400;600;700&family=Sarabun:wght@300;400;600&'
              'family=Raleway:wght@600;800&family=Open+Sans:wght@400;600&'
              'family=IBM+Plex+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;800&'
@@ -110,11 +120,14 @@ FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?'
 # ---- Font Strategy (slide-designer §4.6) — font เลือกตามภาษา ไม่ตาม template ----
 # Web-safe stacks: ฟอนต์ไทยมาก่อน Latin เสมอ (กันไทยแตก/fallback)
 FONT_STACKS = {
-    # unified: ตัวเดียวมี TH+EN glyph (default งานทั่วไป — balance เอง)
-    "unified-plex":   "'IBM Plex Sans Thai','IBM Plex Sans',system-ui,sans-serif",
+    # ⭐ V02R01 (2026.08.04): "unified-rail" = ค่าเริ่มต้นเดียวที่มาจาก SSOT font_policy.RAILS
+    #   เดิม default เป็น Sarabun / 'IBM Plex Sans Thai' (ไม่มี Looped = คนละ family)
+    #   → HTML deck ออกมาคนละฟอนต์กับ pptx/docx/xlsx ของงานเดียวกัน (ผิด §3.0 ③ APPROVED SET)
+    "unified-rail":   RAIL_STACK,
+    # ทางเลือกอื่นยังเก็บไว้ — ใช้ได้เมื่อ Design Spec ระบุชัด (ลูกค้า/แบรนด์บังคับ §3.0 ②)
+    "unified-plex":   "'IBM Plex Sans Thai Looped','IBM Plex Sans',system-ui,sans-serif",
     "unified-sarabun":"'Sarabun','Open Sans',system-ui,sans-serif",
     "unified-noto":   "'Noto Sans Thai','Noto Sans',system-ui,sans-serif",
-    # TH-only / EN-only
     "th-sarabun":     "'Sarabun','Open Sans',system-ui,sans-serif",
     "en-inter":       "'Inter','Open Sans',system-ui,sans-serif",
     "display-kanit":  "'Kanit','Raleway',system-ui,sans-serif",
@@ -134,16 +147,17 @@ def apply_font_strategy(css_vars, fs):
     if mode == "EN-only":
         body = FONT_STACKS["en-inter"]; disp = "'Raleway','Inter',system-ui,sans-serif"
     elif mode == "TH-only":
-        body = FONT_STACKS["th-sarabun"]; disp = FONT_STACKS["display-kanit"]
+        # V02R01 — งานไทยใช้ฟอนต์ราง ไม่ใช่ Sarabun/Kanit ที่ hard-code ไว้เดิม
+        body = disp = FONT_STACKS["unified-rail"]
     else:  # TH+EN กล่องเดียว (ยากสุด)
         if approach == "pair" and fs.get("latin") and fs.get("cs"):
             # pair latin+cs: cs(ไทย) มาก่อน latin ใน stack
             cs, latin = fs["cs"], fs["latin"]
             body = f"'{cs}','{latin}',system-ui,sans-serif"
             disp = body
-        else:  # unified (default — ปลอดภัยสุด)
-            body = FONT_STACKS.get(f"unified-{fs.get('font','plex')}", FONT_STACKS["unified-plex"])
-            disp = FONT_STACKS["display-kanit"]
+        else:  # unified (default — ปลอดภัยสุด) · V02R01: default = ราง ไม่ใช่ plex/kanit
+            body = FONT_STACKS.get(f"unified-{fs.get('font','rail')}", FONT_STACKS["unified-rail"])
+            disp = body     # single-family §3.0 ① — display กับ body ตัวเดียวกัน ไม่ต้องจับคู่
     css_vars["--font-body"] = body
     css_vars["--font-display"] = disp
 

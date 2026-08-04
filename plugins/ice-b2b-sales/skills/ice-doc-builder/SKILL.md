@@ -3,7 +3,11 @@ name: ice-doc-builder
 description: "iCE Document Build Craft — ความรู้ build .pptx/.docx/.xlsx/PDF/HTML ระดับ specialist (Build Discipline D1-D4 tri-slot Thai+EN font, 18 PPTX lessons, Method B font-embed, Strict Validator, SAVE-FIRST, VALIDATION BUDGET, renderer ladder) ที่ย้ายมาจาก deliverable-gen-agent เพื่อให้ทุก persona โหลดใช้ได้ (L0/กัปตัน/คิม/สมนึก build เองใน DOC-PIPELINE V3 · เจนนี่-shell ใช้ตอน background build). ถือ contract ของ marker ICE_BUILD=pipeline (PreToolUse hook). Triggers (TH): build deck, สร้าง slide, สร้างเอกสาร, ทำ proposal เป็นไฟล์, สร้าง .pptx, ทำ .docx, ทำ .xlsx, ทำ ROI excel, dashboard, font ไทย, font เพี้ยน, แก้ font, embed font, ไฟล์เปิดไม่ได้, Repair dialog. Triggers (EN): build deck, generate slides, build document, create pptx/docx/xlsx, ROI workbook, dashboard, font embed, Thai font, corrupted file, ICE_BUILD."
 ---
 
-> **Skill:** ice-doc-builder | **Version:** V01R04 | **Date:** 2026.07.31
+> **Skill:** ice-doc-builder | **Version:** V01R07 | **Date:** 2026.08.04
+> **V01R07 (2026.08.04) — ⭐ ONE POLICY, ONE AUDITOR, ALL FORMATS:** นโยบายฟอนต์ย้ายเป็น SSOT `_lib/font_policy.py` (RAILS+BLACKLIST+check_fonts) · **§0.1 ข้อ 4 ยกเป็นกติกาบังคับ: build script ทุกตัว `from font_policy import RAILS` — ห้าม hard-code ชื่อฟอนต์** · **จุดตรวจเดียว `_lib/audit_fonts.py`** ครอบ xlsx/pptx/docx/html/pdf · build_pptx/docx/dashboard/deck/html แก้ให้อ่านจากรางแล้ว (build_pptx เดิม **ไม่เคย set ฟอนต์เลยสักบรรทัด** · build_docx ไม่มี `w:cs` · dashboard เป็น CSS ละตินล้วน) · เอกสารกำกับที่เคยขัดกันเอง (`05-typography` V02R01 · `sales-pipeline-report` V01R04 · `gantt-timeline` V01R02) ลดเหลือ pointer
+> **V01R06 (2026.08.04) — ⭐ V4 RAIL CONFORMANCE:** +**§6 V4** ตรวจว่าฟอนต์ **ตรงรางที่นโยบายกำหนด** ไม่ใช่แค่ "resolve ได้ + ไม่ blacklist" (V1/V2 ตอบคนละคำถามกับนโยบาย → Sarabun ลอดทั้งคู่) · เคสจริง `PWA TCO-Breakdown V01R22` build 2026.08.04 ยังเป็น Sarabun แล้ว validator ขึ้น PASS — **user จับได้ ไม่ใช่ระบบ** · ต้นเหตุ: build script เขียนมือ hard-code `FONT` เอง → bypass ตาราง RAILS · +**E4 แก้ false positive** (fail เฉพาะ merge **และ** ไม่ตั้ง row height — พิสูจน์ด้วย differential test ว่าไฟล์ที่ builder เราสร้างสดก็ FAIL) · `build_xlsx.py` **V02R02**
+> **V01R05 (2026.08.01) — RENDERER SHIM GUARD:** +**§7 กฎข้อ 0** `soffice` ใน PATH = shim ของ codex runtime ที่แทนฟอนต์ทั้งไฟล์เงียบ ๆ → ใช้ `_lib/render_pdf.sh` เสมอ + POST-RENDER FONT VERIFY
+> **V01R04 (2026.07.31)**
 > **V01R04 (2026.07.31) — THAI WORD BREAKING (คำสั่ง user):** +**§3.5** ตัดบรรทัดไม่ผ่ากลางคำ ด้วย **PyThaiNLP** (`newmm` — `longest` ห้ามใช้ มัน lowercase อังกฤษ) · **3 ชั้น**: T1 lang-tag `th-TH` (ไม่แตะข้อความ · docx/pptx) → T2 QA-only ทำนายจุดผ่ากลางคำแล้วขยายคอลัมน์แทน (⭐ default ของ xlsx) → T3 ZWSP (ทางสุดท้าย · **แลกกับ Ctrl+F หาไม่เจอ**) · tool: `_lib/thai_wordbreak.py` · เคสจริง: PWA TOR Matrix เสี่ยง **47/261 เซลล์**
 > **V01R03 (2026.07.31) — FONT POLICY 2 ราง + Excel discipline + validator ใหม่ (LOCKED โดย user):** +**§3.0 FONT POLICY** (เอกชน = `IBM Plex Sans Thai Looped` ไทย=อังกฤษไม่บวก pt · ราชการ = `TH Sarabun New` 16pt · BLACKLIST 8 ตระกูลพร้อมเหตุผล · single-family-first) · +**§3.2 XLSX เขียนใหม่ E1-E6** (Excel ฝัง font ไม่ได้→PDF companion · row height = pt×1.45×บรรทัด+6 · vertical=center · ห้าม merge ในแถวไทย+wrap · ห้าม shrink-to-fit · ตั้ง default font ก่อนคำนวณ width) · +**§3.1 W1-W3** (ascii+hAnsi+cs ตัวเดียวกันเพราะสเปก MS ขัดกันเอง · bCs/iCs บังคับ · ห้าม lineRule=exact) · +**§6 V1-V3 validator** (⭐V1 font-name resolution ดักชื่อฟอนต์ที่ไม่มีจริง · V2 blacklist · V3 สระอำ integrity) · **แก้ D3** เลิกใช้ "+1-2pt" และ "line-height 1.8+" ที่**ตรวจแล้วไม่มีต้นทางจริง** → ใช้สูตร cap-height ratio ที่วัดเอง · **แก้ D1** single-family แทน paired
 > **ฐานหลักฐาน V01R03:** PDF สาธารณะ 45 ฉบับ (`pdffonts`+span) · วัด metric ฟอนต์จริง 9 ตระกูล · user ทดสอบสายตา · เคสจริง PWA TOR Matrix · เอกสารเต็ม → `Output/iCE_Thai-Latin_Font-Policy_PROPOSAL_V01R01_2026.07.31.md`
@@ -20,6 +24,19 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
 1. **Spec อยู่บนดิสก์แล้ว** — content spec + design spec save เป็นไฟล์ก่อนเสมอ (D-P1/D-P2 ของ DOC-PIPELINE) · build อ่านจาก spec ไม่อ่านจากความจำใน context (spec-on-disk = build ใหญ่แค่ไหน context ก็ไม่บวม)
 2. **ประกาศโหมดใน PLAN-CARD แล้ว** (work_mode: lite|full) + คิว ④ อริส QA ไว้แล้ว
 3. **เขียน build script ลงดิสก์** (ไม่ heredoc ยาวใน context) → รันด้วย marker
+4. ⭐⭐ **ฟอนต์มาจาก SSOT เท่านั้น — ห้าม hard-code ชื่อฟอนต์ในโค้ดเด็ดขาด** (V01R07 · กติกาบังคับ)
+   ```python
+   import sys; sys.path.insert(0, os.path.expanduser("~/.claude/agents/_lib"))
+   from font_policy import RAILS
+   FONT = RAILS[rail]["font"]          # rail = "private" | "govt"
+   ```
+   ใช้กับ **ทุก** build script รวมที่เขียนมือรายโปรเจกต์ · `font_policy.py` = บ้านเดียวของ RAILS/BLACKLIST
+   > **ทำไมถึงเป็นกฎบังคับ (เคสจริง 2026.08.04):** นโยบาย 2 รางถูก LOCK ตั้งแต่ 2026.07.31 แต่
+   > `PWA TCO-Breakdown V01R22` ที่ build วันที่ 08.04 ยังออกมาเป็น Sarabun **และ validator ขึ้น PASS**
+   > เพราะ build script เขียนมือตั้ง `FONT = "Sarabun"` เองเป็นค่าคงที่ ไม่เคยแตะตาราง RAILS เลย
+   > สำรวจแล้วพบว่า build script **5 ใน 6 ตัว** ทำแบบเดียวกัน = นโยบายบังคับใช้ได้แค่ฟอร์แมตเดียว
+   > **user เป็นคนจับได้ ไม่ใช่ระบบ**
+5. **จบ build ต้องรัน `audit_fonts.py` ก่อนคิว ④ เสมอ** (§6) — build_* ของเราเรียกให้อัตโนมัติแล้ว
 
 ## 0.2 MARKER SEMANTICS (ผูก PreToolUse hook `ice-prebuild-guard.sh`)
 | Marker | ใคร | ความหมาย |
@@ -483,6 +500,41 @@ V2 BLACKLIST REJECT — reject ทันทีถ้าพบใน artifact ท
    TH Sarabun IT๙ · Angsana* · Cordia* · Browallia* · Eucrosia* · Jasmine* ·
    Microsoft Sans Serif · และ Calibri/Aptos/Arial บนเซลล์/run ที่มีอักขระไทย
    (เหตุผลรายตัว → §3.0 BLACKLIST)
+
+## ⭐⭐ จุดตรวจเดียว ทุกฟอร์แมต — `audit_fonts.py` (V01R07 · 2026.08.04)
+
+```bash
+python3 ~/.claude/agents/_lib/audit_fonts.py [--rail private|govt] [--allow-font NAME]... FILE...
+```
+| ฟอร์แมต | ตรวจอะไร |
+|---|---|
+| `.xlsx` | delegate `build_xlsx.audit()` → V1/V2/V4 + E2-E5 + T2 word-break |
+| `.pptx` | ฟอนต์บน run ที่มีไทยจริง (`a:cs`/`a:latin`) + **D1: run ไทยที่ไม่มี `<a:cs>`** |
+| `.docx` | `w:cs`/`w:ascii` + **W1: run ไทยไม่มี `w:cs` และ docDefaults ก็ไม่ได้ตั้ง** (inherit = ผ่าน) |
+| `.html` | ชื่อแรกของทุก `font-family` stack |
+| `.pdf` | ทุกแถว `emb=yes` + ไม่มี fallback Linux/LO + **พบฟอนต์ของรางจริง** (V1 ข้าม — ชื่อถูก subset) |
+
+**หลักที่ยึด:** ตรวจเฉพาะฟอนต์ที่ **ถูกใช้กับข้อความไทยจริง** ไม่ใช่ที่ประกาศใน theme table
+(sweep แรกของเคสนี้นับ Cordia/Angsana จาก theme ได้ 540 ไฟล์ = false positive ล้วน)
+`--allow-font` ใช้กับ: TOR บังคับ · ข้อบังคับวารสาร/มหาวิทยาลัย · ไฟล์ที่ลูกค้าส่งมา (ไม่ใช่ของเราสร้าง)
+
+---
+
+V4 ⭐⭐ RAIL CONFORMANCE (V01R06 · 2026.08.04 — ด่านที่ "หายไป" จนเกิดเคสจริง)
+   ฟอนต์ต้องเป็นตัวที่ **ราง** กำหนดใน §3.0 (หรือ fallback ของรางนั้น) — ไม่ใช่แค่ "มีจริง + ไม่ blacklist"
+     python3 _lib/build_xlsx.py [--rail private|govt] [--allow-font "ชื่อ"]... --audit FILE
+   🔴 **ทำไมต้องมี** — V1/V2 ตอบคนละคำถามกับนโยบาย:
+       V1 ถาม "ชื่อนี้ resolve ไหม"   → Sarabun resolve ✅
+       V2 ถาม "อยู่ blacklist ไหม"    → §3.0 เขียนเองว่า Sarabun **ไม่ใช่** blacklist ✅
+       → ฟอนต์ที่ **ถูกต้องทางเทคนิคแต่ผิดนโยบาย** ลอดทั้งสองด่านโดยไม่มีใครทัก
+   เคสจริง 2026.08.04: `PWA_ERP-HCM_TCO-Breakdown-3Y_V01R22` build วันเดียวกับที่นโยบายบังคับใช้อยู่แล้ว
+   ยังออกมาเป็น Sarabun และ validator ขึ้น **✅ PASS** — user เป็นคนจับได้ ไม่ใช่ระบบ
+   **ต้นเหตุที่แท้จริง (สำคัญกว่าตัวด่าน):** นโยบายอยู่ใน RAILS ซึ่งถูกเรียกเฉพาะ `build_xlsx.py build()`
+   ที่อ่าน spec.json — แต่ deliverable ส่วนใหญ่สร้างด้วย **build script เขียนมือ** ที่ตั้ง `FONT = "..."`
+   เองเป็นค่าคงที่แล้วสั่ง openpyxl ตรง ๆ → **bypass ตาราง RAILS ทั้งตาราง**
+   ⇒ กติกาใหม่: build script เขียนมือทุกตัวต้อง `from build_xlsx import RAILS` แล้วอ่านฟอนต์จากราง
+      ห้าม hard-code ชื่อฟอนต์ · และต้องรัน `--audit` ก่อนส่งเข้า ④ ทุกครั้ง
+   `--allow-font` ใช้เมื่อ: TOR บังคับฟอนต์ · ไฟล์ที่ลูกค้าส่งมา (ไม่ใช่ของเราสร้าง)
 
 V3 สระอำ INTEGRITY (เฉพาะ output ที่เป็น PDF หรือจะถูก copy-paste)
    export PDF → สกัดข้อความ → นับ U+0E33 (ำ) กับคู่ประกอบ U+0E4D+U+0E32 (ํา)

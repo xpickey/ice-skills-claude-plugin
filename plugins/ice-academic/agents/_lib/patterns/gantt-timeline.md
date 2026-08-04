@@ -116,7 +116,9 @@ risk/alert     #C0392B  (ถ้ามี)
 
 ## Build Discipline (ใช้ร่วม D1-D4 เสมอ)
 
-- Tri-slot font (latin+ea+cs) ทุก text run — TH ใน activity names ต้องมี `<a:cs>` Sarabun
+- Tri-slot font (latin+ea+cs) ทุก text run — TH ใน activity names ต้องมี `<a:cs>` **เป็นฟอนต์ตามราง §3.0**
+  (เอกชน `IBM Plex Sans Thai Looped` · ราชการ `TH Sarabun New`) — ⚠ V01R02 (2026.08.04): เดิมเขียน
+  `Sarabun` ตายตัว = ฟอนต์นอกนโยบาย · ค่าจริงมาจาก `font_policy.RAILS` ห้าม hard-code ใน build script
 - ไม่มี object ทับซ้อน (Strict Validator)
 - เปิด PowerPoint จริงก่อน return (qlmanage false-green)
 
