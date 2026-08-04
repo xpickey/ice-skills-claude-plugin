@@ -228,6 +228,9 @@ def audit_file(path, rail="private", allow=None, fams=None) -> bool:
         return True
 
     rep = check_fonts(fonts, rail=rail, allow_fonts=allow, fams=fams)
+    if rep.get("alt_used"):
+        print(f"   ℹ ใช้ตัวเลือกอนุมัติ (ไม่ใช่ฟอนต์ราง): {', '.join(rep['alt_used'])} "
+              f"— ผ่านได้ แต่ GAP ไทย-ละตินกว้างกว่าฟอนต์ราง ตรวจว่าไทยไม่ดูเล็กเกินไป")
     print(f"   fonts (บนข้อความไทย): {', '.join(rep['fonts_used']) or '(none)'}"
           + ("   ⚠ V1 SKIPPED (ไม่มี fontTools)" if rep["v1_skipped"] else ""))
     fails = rep["fails"] + extra

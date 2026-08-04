@@ -111,7 +111,7 @@ DEFAULT_VARS = {
 FONT_LINK = ('<link href="https://fonts.googleapis.com/css2?'
              # ⭐ ฟอนต์รางต้องมาก่อนเสมอ — HTML เปิดบนเครื่องที่ไม่ได้ติดตั้งฟอนต์
              'family=IBM+Plex+Sans+Thai+Looped:wght@300;400;500;600;700&'
-             'family=Kanit:wght@400;600;700&family=Sarabun:wght@300;400;600&'
+             'family=Kanit:wght@400;600;700&'   # Sarabun ถอดออก 2026.08.04
              'family=Raleway:wght@600;800&family=Open+Sans:wght@400;600&'
              'family=IBM+Plex+Sans+Thai:wght@400;600;700&family=Inter:wght@400;600;800&'
              'family=Noto+Sans+Thai:wght@400;600&'
@@ -124,13 +124,15 @@ FONT_STACKS = {
     #   เดิม default เป็น Sarabun / 'IBM Plex Sans Thai' (ไม่มี Looped = คนละ family)
     #   → HTML deck ออกมาคนละฟอนต์กับ pptx/docx/xlsx ของงานเดียวกัน (ผิด §3.0 ③ APPROVED SET)
     "unified-rail":   RAIL_STACK,
-    # ทางเลือกอื่นยังเก็บไว้ — ใช้ได้เมื่อ Design Spec ระบุชัด (ลูกค้า/แบรนด์บังคับ §3.0 ②)
+    # ทางเลือกที่อนุมัติแล้ว (font_policy.APPROVED_ALT)
+    "unified-leelawadee": "'Leelawadee','Leelawadee UI','Tahoma',system-ui,sans-serif",
+    # ทางเลือกอื่น — ใช้เมื่อ Design Spec ระบุชัด (ลูกค้า/แบรนด์บังคับ §3.0 ②)
     "unified-plex":   "'IBM Plex Sans Thai Looped','IBM Plex Sans',system-ui,sans-serif",
-    "unified-sarabun":"'Sarabun','Open Sans',system-ui,sans-serif",
     "unified-noto":   "'Noto Sans Thai','Noto Sans',system-ui,sans-serif",
-    "th-sarabun":     "'Sarabun','Open Sans',system-ui,sans-serif",
     "en-inter":       "'Inter','Open Sans',system-ui,sans-serif",
     "display-kanit":  "'Kanit','Raleway',system-ui,sans-serif",
+    # ⛔ ถอดออก 2026.08.04 (คำสั่ง user): unified-sarabun / th-sarabun
+    #    Sarabun ยอดวรรณยุกต์ 0.957 em สูงสุดในกลุ่ม → โดนบีบหนักสุดเมื่อพื้นที่แนวตั้งไม่พอ
 }
 
 

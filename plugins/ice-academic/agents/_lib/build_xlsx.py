@@ -55,7 +55,8 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 # ─────────────────────────────────────────────────────────────────────────────
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from font_policy import (RAILS, BLACKLIST_PATTERNS, LATIN_ONLY, THAI_RE,   # noqa: E402
-                         has_thai, installed_families, blacklist_hit)
+                         APPROVED_ALT, RETIRED,
+                         has_thai, installed_families, blacklist_hit, check_fonts)
 
 ROW_H_FACTOR = 1.45   # §3.2 E2 — ทดสอบแล้ว
 ROW_H_PAD = 6
@@ -137,26 +138,13 @@ def audit(path: str, strict: bool = True, rail: str = "private",
     except Exception:
         pass
 
-    # ⭐ V4 RAIL CONFORMANCE (V02R02) — ด่านที่หายไปจนถึง 2026.08.04
-    #   V1 ถามแค่ "ชื่อนี้มีจริงไหม" · V2 ถามแค่ "อยู่ blacklist ไหม"
-    #   → ฟอนต์ที่ "มีจริง + ไม่ blacklist + แต่ผิดนโยบาย" (เช่น Sarabun) ลอดทั้งสองด่าน
-    #   เคสจริง: PWA TCO-Breakdown V01R22 (2026.08.04) ยังเป็น Sarabun แล้ว validator ขึ้น PASS
-    #   ต้นเหตุ: build script เขียนมือตั้ง FONT เองเป็นค่าคงที่ ไม่เคยเรียก RAILS
-    rail_font = RAILS[rail]["font"]
-    ok_fonts = {rail_font, RAILS[rail]["fallback"]} | allow_fonts
-    thai_fonts = {n for n in rep["fonts_used"] if n not in LATIN_ONLY}
-    rep["off_rail"] = sorted(thai_fonts - ok_fonts)
-    rep["rail"] = rail
+    # ⭐ V02R04: V1/V2/V4/V5 เรียก check_fonts จาก SSOT — เลิกมีสำเนากฎในไฟล์นี้
+    #   (เดิม V02R02 เขียน logic ซ้ำที่นี่ = ตรงข้ามกับเหตุผลที่แยก font_policy ออกมาแต่แรก)
+    fc = check_fonts(rep["fonts_used"], rail=rail, allow_fonts=allow_fonts, fams=fams)
+    for k in ("off_rail", "retired", "alt_used", "rail"):
+        rep[k] = fc[k]
+    fails = list(fc["fails"])
 
-    fails = []
-    if rep["unresolvable"]:
-        fails.append(f"V1 FONT-NAME ไม่ resolve: {rep['unresolvable']}")
-    if rep["blacklisted"]:
-        fails.append(f"V2 BLACKLIST: {[n for n, _ in rep['blacklisted']]}")
-    if rep["off_rail"]:
-        fails.append(f"V4 ผิดราง '{rail}' (ต้องเป็น '{rail_font}' หรือ fallback "
-                     f"'{RAILS[rail]['fallback']}'): {rep['off_rail']} "
-                     f"→ ถ้าเป็นไฟล์ที่ได้รับมา/TOR บังคับ ใช้ --allow-font \"ชื่อ\"")
     if rep["thai_latin_only_font"]:
         fails.append(f"เซลล์ไทยได้ฟอนต์ที่ไม่มี glyph ไทย: {rep['thai_latin_only_font'][:5]}")
     if rep["merged_thai_rows"]:
@@ -171,6 +159,9 @@ def audit(path: str, strict: bool = True, rail: str = "private",
     print(f"VALIDATOR | thai_cells={rep['thai_cells']} · fonts={len(rep['fonts_used'])} "
           f"· formulas={rep['formula_cells']} · V1={'SKIPPED(no fontTools)' if rep['v1_skipped'] else 'ran'}")
     print(f"  fonts: {', '.join(sorted(rep['fonts_used'])) or '(none)'}")
+    if rep.get("alt_used"):
+        print(f"  ℹ ใช้ตัวเลือกอนุมัติ (ไม่ใช่ฟอนต์ราง): {', '.join(rep['alt_used'])} "
+              f"— ผ่านได้ แต่ GAP ไทย-ละตินกว้างกว่า ตรวจว่าไทยไม่ดูเล็กเกินไป")
     if rep["merged_thai_rows_ok"]:
         # แสดงเสมอ — ไม่เงียบ: ผู้อ่านต้องรู้ว่าเรา "ยกเว้น" อะไรไป ไม่ใช่ "ไม่เจอ"
         print(f"  ℹ E4 ยกเว้น {len(rep['merged_thai_rows_ok'])} เซลล์ merge+wrap ที่ตั้ง row height ไว้แล้ว "

@@ -3,7 +3,8 @@ name: ice-doc-builder
 description: "iCE Document Build Craft — ความรู้ build .pptx/.docx/.xlsx/PDF/HTML ระดับ specialist (Build Discipline D1-D4 tri-slot Thai+EN font, 18 PPTX lessons, Method B font-embed, Strict Validator, SAVE-FIRST, VALIDATION BUDGET, renderer ladder) ที่ย้ายมาจาก deliverable-gen-agent เพื่อให้ทุก persona โหลดใช้ได้ (L0/กัปตัน/คิม/สมนึก build เองใน DOC-PIPELINE V3 · เจนนี่-shell ใช้ตอน background build). ถือ contract ของ marker ICE_BUILD=pipeline (PreToolUse hook). Triggers (TH): build deck, สร้าง slide, สร้างเอกสาร, ทำ proposal เป็นไฟล์, สร้าง .pptx, ทำ .docx, ทำ .xlsx, ทำ ROI excel, dashboard, font ไทย, font เพี้ยน, แก้ font, embed font, ไฟล์เปิดไม่ได้, Repair dialog. Triggers (EN): build deck, generate slides, build document, create pptx/docx/xlsx, ROI workbook, dashboard, font embed, Thai font, corrupted file, ICE_BUILD."
 ---
 
-> **Skill:** ice-doc-builder | **Version:** V01R07 | **Date:** 2026.08.04
+> **Skill:** ice-doc-builder | **Version:** V01R08 | **Date:** 2026.08.04
+> **V01R08 (2026.08.04) — ตัวเลือกฟอนต์ (คำสั่ง user):** +**Leelawadee / Leelawadee UI / UI Semilight** เป็นตัวเลือกที่อนุมัติ (ผ่าน V4 ไม่ต้อง `--allow-font` · auditor แจ้ง ℹ เตือน GAP ทุกครั้ง) · ⛔ **ถอด Sarabun ออกจากตัวเลือก (V5 ใหม่)** — คนละตัวกับ TH Sarabun New/TH SarabunPSK ที่ยังใช้ได้ · **default ยังเป็น IBM Plex Sans Thai Looped** เพราะวัดแล้ว GAP ไทย-ละติน 18.9% ชนะ Leelawadee 27.3% (เกณฑ์ตัดสินตามคำสั่ง user "GAP ดีกว่าเอาตัวนั้น") · `font_policy` V01R02 (+APPROVED_ALT +RETIRED) · `build_xlsx` V02R04 (เลิกมีสำเนากฎ → เรียก `check_fonts` จาก SSOT)
 > **V01R07 (2026.08.04) — ⭐ ONE POLICY, ONE AUDITOR, ALL FORMATS:** นโยบายฟอนต์ย้ายเป็น SSOT `_lib/font_policy.py` (RAILS+BLACKLIST+check_fonts) · **§0.1 ข้อ 4 ยกเป็นกติกาบังคับ: build script ทุกตัว `from font_policy import RAILS` — ห้าม hard-code ชื่อฟอนต์** · **จุดตรวจเดียว `_lib/audit_fonts.py`** ครอบ xlsx/pptx/docx/html/pdf · build_pptx/docx/dashboard/deck/html แก้ให้อ่านจากรางแล้ว (build_pptx เดิม **ไม่เคย set ฟอนต์เลยสักบรรทัด** · build_docx ไม่มี `w:cs` · dashboard เป็น CSS ละตินล้วน) · เอกสารกำกับที่เคยขัดกันเอง (`05-typography` V02R01 · `sales-pipeline-report` V01R04 · `gantt-timeline` V01R02) ลดเหลือ pointer
 > **V01R06 (2026.08.04) — ⭐ V4 RAIL CONFORMANCE:** +**§6 V4** ตรวจว่าฟอนต์ **ตรงรางที่นโยบายกำหนด** ไม่ใช่แค่ "resolve ได้ + ไม่ blacklist" (V1/V2 ตอบคนละคำถามกับนโยบาย → Sarabun ลอดทั้งคู่) · เคสจริง `PWA TCO-Breakdown V01R22` build 2026.08.04 ยังเป็น Sarabun แล้ว validator ขึ้น PASS — **user จับได้ ไม่ใช่ระบบ** · ต้นเหตุ: build script เขียนมือ hard-code `FONT` เอง → bypass ตาราง RAILS · +**E4 แก้ false positive** (fail เฉพาะ merge **และ** ไม่ตั้ง row height — พิสูจน์ด้วย differential test ว่าไฟล์ที่ builder เราสร้างสดก็ FAIL) · `build_xlsx.py` **V02R02**
 > **V01R05 (2026.08.01) — RENDERER SHIM GUARD:** +**§7 กฎข้อ 0** `soffice` ใน PATH = shim ของ codex runtime ที่แทนฟอนต์ทั้งไฟล์เงียบ ๆ → ใช้ `_lib/render_pdf.sh` เสมอ + POST-RENDER FONT VERIFY
@@ -253,6 +254,41 @@ STRICT VALIDATOR (mandatory ก่อนส่งเข้า ④):
             → อ่าน TOR ก่อนเสมอ · TOR ระบุฟอนต์ = ทำตาม TOR (override นโยบายนี้)
 เหตุผลคุณภาพ: ชั้นข้อความไม่พัง — สระอำ รอด 100% (ต่างจาก Angsana/Cordia/Browallia ที่สูญ 100%)
 หลักฐาน   : PwC ทำเป็นทางการ self-host 4 น้ำหนักใน rebrand design system
+```
+
+### ⭐ ตัวเลือกที่อนุมัติเพิ่ม (V01R08 · 2026.08.04 — เลือกใช้ได้ ไม่ต้อง `--allow-font`)
+
+```
+Leelawadee · Leelawadee UI · Leelawadee UI Semilight   (ไทย+อังกฤษในตัวเดียว)
+  ⭐ จุดแข็ง : ยอดวรรณยุกต์เตี้ยที่สุดในกลุ่ม (~0.74 em) = ปลอดภัยสุดเมื่อความสูงแถว/บรรทัดถูกบีบ
+              + ติดมากับ Windows ทุกเครื่อง · fsType 0x0008 = embed ได้ถูกลิขสิทธิ์
+  ⚠ ข้อแลก  : GAP ไทย-ละติน 27.3% (กว้างสุดในกลุ่ม) → ไทยปนอังกฤษบรรทัดเดียวจะเห็นไทยเล็กกว่า
+              ถ้าเลือกใช้ ต้องเพิ่ม pt ให้ไทย · งานทั่วไปใช้ฟอนต์รางดีกว่า
+  ที่ตั้ง    : /Library/Fonts/leelawad.ttf (ตัวธรรมดา) · Leelawui.ttf (ตัว UI)
+```
+
+**ตารางวัดจริงบนเครื่องนี้ — ก/H = ความสูง ก เทียบ cap H *ในฟอนต์เดียวกัน*** (ยิ่งใกล้ 1.000 ยิ่งไม่ต้องชดเชย):
+
+| family | ก/H | ยอดไม้โท | GAP ไทยเล็กกว่าละติน |
+|---|---|---|---|
+| **IBM Plex Sans Thai Looped** | **0.811** | 0.924 | **18.9%** ← ราง private |
+| IBM Plex Sans Thai | 0.799 | 0.866 | 20.1% |
+| Noto Sans Thai | 0.782 | 0.840 | 21.8% |
+| Tahoma | 0.769 | 0.805 | 23.1% ← fallback |
+| Leelawadee / Leelawadee UI | 0.727 | 0.737 / 0.743 | 27.3% ← ตัวเลือกอนุมัติ |
+| ~~Sarabun~~ | 0.837 | **0.957** | 16.3% ← **ถอดออก** |
+
+> **ทำไม Sarabun GAP ดีที่สุดแต่ถูกถอด:** ตัวเลข ก/H ไม่ใช่เกณฑ์เดียว — Sarabun ยอดวรรณยุกต์
+> **0.957 em สูงสุดในกลุ่ม** และขอที่ว่างแนวตั้ง 1.286 em มากสุด → เป็นตัวที่โดนบีบและชนหนักที่สุด
+> เมื่อพื้นที่แนวตั้งไม่พอ ซึ่งคืออาการที่ผู้ใช้ทดสอบสายตาเองแล้วไม่ผ่าน (คำสั่งถอด 2026.08.04)
+
+### ⛔ ถอดออกจากตัวเลือก (V5 — ไม่ใช่ blacklist แต่ห้ามเลือกใช้ในงานใหม่)
+```
+Sarabun (+ ทุกน้ำหนัก Light/Medium/SemiBold/ExtraBold/Thin/ExtraLight)
+  เหตุผล: ยอดวรรณยุกต์ 0.957 em สูงสุด + ขอที่ว่าง 1.286 em มากสุด → โดนบีบหนักสุด
+  ⚠ คนละตัวกับ  'TH Sarabun New'  (รางราชการ — ใช้ได้ปกติ)
+              และ 'TH SarabunPSK' (ข้อบังคับ มจร./วารสาร — ใช้ได้ปกติ)
+  ไฟล์เก่าที่ใช้อยู่ = rebuild ตอนมี revision ถัดไป (ไม่ต้องไล่แก้ย้อนหลังทั้งหมด)
 ```
 
 ### ⛔ BLACKLIST — ห้ามใช้ (พร้อมเหตุผลที่ตรวจสอบแล้ว)

@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """
 font_policy.py — SSOT ของนโยบายฟอนต์ไทย+ละติน (skill ice-doc-builder §3.0)
-V01R01 | 2026.08.04
+V01R02 | 2026.08.04
+
+V01R02 (คำสั่ง user):
+  +APPROVED_ALT — ตัวเลือกที่อนุมัติเพิ่ม เลือกใช้ได้โดยไม่ต้อง --allow-font:
+     Leelawadee / Leelawadee UI / Leelawadee UI Semilight
+  +RETIRED      — Sarabun ถอดออกจากตัวเลือก (V5) · ⚠ คนละตัวกับ TH Sarabun New / TH SarabunPSK
+  default ยังเป็น IBM Plex Sans Thai Looped เพราะวัดแล้ว GAP ไทย-ละตินน้อยกว่า (18.9% vs 27.3%)
 
 ทำไมต้องแยกไฟล์นี้ออกมา (บทเรียน 2026.08.04):
   นโยบายเคยอยู่ใน build_xlsx.py ตัวเดียว → build script ฟอร์แมตอื่น (pptx/docx/dashboard/html)
@@ -24,6 +30,54 @@ RAILS = {
     "private": {"font": "IBM Plex Sans Thai Looped", "size": 11, "fallback": "Tahoma"},
     # ราชการ/TOR/e-GP: 16pt = ละติน 11-12pt (วัดได้ ×1.47)
     "govt":    {"font": "TH Sarabun New",            "size": 16, "fallback": "Tahoma"},
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ⭐ V01R02 (2026.08.04) — ตัวเลือกที่อนุมัติเพิ่ม + ตัวที่ถอดออก
+#
+# วัดจริงบนเครื่องนี้ (ก/H = ความสูงตัว ก เทียบ cap H **ในฟอนต์เดียวกัน**
+# → ยิ่งใกล้ 1.000 ยิ่งไม่ต้องชดเชยขนาดเมื่อไทยปนอังกฤษในกล่องเดียว):
+#
+#   family                      ก/H     ยอดไม้โท   GAP ไทยเล็กกว่าละติน
+#   IBM Plex Sans Thai Looped   0.811     0.924     18.9%   ← ดีสุด = default (ราง private)
+#   IBM Plex Sans Thai          0.799     0.866     20.1%
+#   Noto Sans Thai              0.782     0.840     21.8%
+#   Tahoma                      0.769     0.805     23.1%   ← fallback
+#   Leelawadee                  0.727     0.737     27.3%   ← ตัวเลือกอนุมัติ
+#   Leelawadee UI               0.727     0.743     27.3%   ← สัดส่วนเท่าตัวธรรมดาเป๊ะ
+#   Sarabun                     0.837     0.957     16.3%   ← ถอดออก (ดูด้านล่าง)
+#
+# ⭐ การตัดสิน default (คำสั่ง user 2026.08.04 "GAP ดีกว่าเอาตัวนั้น"):
+#   IBM Plex Sans Thai Looped (18.9%) ชนะ Leelawadee (27.3%) → คงเป็นฟอนต์รางเอกชนเหมือนเดิม
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ตัวเลือกที่อนุมัติแล้ว — เลือกใช้ได้โดยไม่ต้อง --allow-font (แต่ default ยังเป็นฟอนต์ราง)
+_LEELA_NOTE = (
+    "ไทย+อังกฤษในตัวเดียว · ⭐ จุดแข็ง: ยอดวรรณยุกต์เตี้ยที่สุดในกลุ่ม (~0.74 em) "
+    "= ปลอดภัยสุดเมื่อความสูงแถว/บรรทัดถูกบีบ · ติดมากับ Windows ทุกเครื่อง "
+    "(fsType 0x0008 = embed ได้ถูกลิขสิทธิ์) "
+    "· ⚠ แลกด้วย GAP 27.3% (ไทยเล็กกว่าละตินมากสุดในกลุ่ม) → ถ้าไทยปนอังกฤษในบรรทัดเดียว "
+    "ต้องเพิ่ม pt ให้ไทย ไม่งั้นไทยจะดูเล็ก — งานทั่วไปใช้ฟอนต์รางดีกว่า"
+)
+APPROVED_ALT = {
+    "Leelawadee":              _LEELA_NOTE,
+    "Leelawadee UI":           _LEELA_NOTE + " · รุ่น UI (hinting สำหรับหน้าจอ)",
+    "Leelawadee UI Semilight": "น้ำหนักบางของ Leelawadee UI — metric เดียวกันทุกค่า",
+}
+
+# ⛔ ถอดออกจากตัวเลือก (คำสั่ง user 2026.08.04) — ไม่ใช่ blacklist (ไม่ได้ทำลายชั้นข้อความ)
+#    แต่ห้ามเลือกใช้ในงานใหม่ · ไฟล์เก่าที่ใช้อยู่ = rebuild ตอนมี revision ถัดไป
+RETIRED = {
+    "Sarabun": ("user ถอดออก 2026.08.04 — ยอดวรรณยุกต์ 0.957 em สูงสุดในกลุ่ม "
+                "+ ขอที่ว่างแนวตั้ง 1.286 em มากสุด → โดนบีบ/ชนหนักที่สุดเมื่อพื้นที่ไม่พอ "
+                "(ผู้ใช้ทดสอบสายตาเองแล้วไม่ผ่าน) · ⚠ คนละตัวกับ 'TH Sarabun New' (รางราชการ) "
+                "และ 'TH SarabunPSK' (ข้อบังคับ มจร.) — สองตัวนั้นยังใช้ได้ตามปกติ"),
+    "Sarabun Light": "ตระกูลเดียวกับ Sarabun ที่ถอดออก",
+    "Sarabun Medium": "ตระกูลเดียวกับ Sarabun ที่ถอดออก",
+    "Sarabun SemiBold": "ตระกูลเดียวกับ Sarabun ที่ถอดออก",
+    "Sarabun ExtraBold": "ตระกูลเดียวกับ Sarabun ที่ถอดออก",
+    "Sarabun Thin": "ตระกูลเดียวกับ Sarabun ที่ถอดออก",
+    "Sarabun ExtraLight": "ตระกูลเดียวกับ Sarabun ที่ถอดออก",
 }
 
 # ⚠ ข้อยกเว้นที่ถูกต้อง — "ผู้บังคับภายนอก" ชนะนโยบายเราเสมอ ห้ามไป "แก้" ให้ตรงราง:
@@ -104,16 +158,29 @@ def check_fonts(fonts, rail: str = "private", allow_fonts=None, fams=None) -> di
         if fams and n not in fams and n not in LATIN_ONLY:
             rep["unresolvable"].append(n)
 
-    ok = {RAILS[rail]["font"], RAILS[rail]["fallback"]} | allow_fonts
-    rep["off_rail"] = sorted({n for n in fonts if n not in LATIN_ONLY} - ok)
+    # V01R02: ตัวเลือกที่อนุมัติแล้ว (APPROVED_ALT) ผ่านได้โดยไม่ต้อง --allow-font
+    ok = ({RAILS[rail]["font"], RAILS[rail]["fallback"]}
+          | set(APPROVED_ALT) | allow_fonts)
+    cand = {n for n in fonts if n not in LATIN_ONLY}
+    rep["off_rail"] = sorted(cand - ok)
+    # แยก "ถอดออกจากตัวเลือก" ออกจาก off-rail ทั่วไป — ผู้อ่านต้องรู้ว่าทำไมถึงห้าม
+    rep["retired"] = sorted((cand & set(RETIRED)) - allow_fonts)
+    rep["off_rail"] = [n for n in rep["off_rail"] if n not in rep["retired"]]
+    # ใช้ตัวเลือกอนุมัติ แต่ไม่ใช่ฟอนต์ราง → แจ้งเตือน ไม่ fail
+    rep["alt_used"] = sorted((cand & set(APPROVED_ALT)) - {RAILS[rail]["font"]})
 
     fails = []
     if rep["unresolvable"]:
         fails.append(f"V1 FONT-NAME ไม่ resolve: {rep['unresolvable']}")
     if rep["blacklisted"]:
         fails.append(f"V2 BLACKLIST: {[n for n, _ in rep['blacklisted']]}")
+    if rep["retired"]:
+        for n in rep["retired"]:
+            fails.append(f"V5 ฟอนต์ที่ถอดออกจากตัวเลือกแล้ว: '{n}' — {RETIRED[n]}")
     if rep["off_rail"]:
-        fails.append(f"V4 ผิดราง '{rail}' (ต้องเป็น '{RAILS[rail]['font']}' หรือ fallback "
-                     f"'{RAILS[rail]['fallback']}'): {rep['off_rail']} → {EXTERNAL_MANDATE_NOTE}")
+        alt = ", ".join(f"'{a}'" for a in sorted(APPROVED_ALT))
+        fails.append(f"V4 ผิดราง '{rail}' (ต้องเป็น '{RAILS[rail]['font']}' · fallback "
+                     f"'{RAILS[rail]['fallback']}' · ตัวเลือกอนุมัติ {alt}): "
+                     f"{rep['off_rail']} → {EXTERNAL_MANDATE_NOTE}")
     rep["fails"] = fails
     return rep

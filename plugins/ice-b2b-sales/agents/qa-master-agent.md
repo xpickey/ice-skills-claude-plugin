@@ -20,7 +20,8 @@ mcp_tools:
   - gdrive
 ---
 
-> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V02R11 | **Date:** 2026.08.04
+> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V02R12 | **Date:** 2026.08.04
+> **V02R12 — ตัวเลือกฟอนต์:** +D7.6c — `Sarabun` ถอดออกจากตัวเลือก (V5) 🔴 · `Leelawadee`/`Leelawadee UI` เป็นตัวเลือกอนุมัติ ผ่าน V4 ได้แต่ต้อง FLAG เตือน GAP 27.3% · ⚠ `TH Sarabun New`/`TH SarabunPSK` ถูกต้อง ห้ามรายงานเป็น issue
 > **V02R11 — ⭐ จุดตรวจฟอนต์เหลือคำสั่งเดียวทุกฟอร์แมต:** D7.5/D7.6/D7.6b ใช้ `_lib/audit_fonts.py` (xlsx/pptx/docx/html/pdf) แทนการแยกวิธีตรวจตามนามสกุล · +D1 (pptx run ไทยไม่มี `a:cs`) +W1 (docx ไม่มี `w:cs` **และ** docDefaults ไม่ได้ตั้ง — inherit ถือว่าผ่าน ไม่ใช่ defect)
 > **V02R10 — ⭐ D7.6b RAIL CONFORMANCE 🔴 HARD BLOCK:** ฟอนต์ต้องตรง **ราง** ที่นโยบายกำหนด ไม่ใช่แค่ resolve ได้+ไม่ blacklist — ช่องโหว่ที่ทำให้ Sarabun ผ่าน D7.5+D7.6 ได้ทั้งคู่ · เคสจริง `PWA TCO-Breakdown V01R22` (2026.08.04) **user จับได้ ไม่ใช่ QA** · ก่อนฟันธงต้องแยก "ไฟล์เราสร้าง" vs "ลูกค้าส่งมา" และอ่าน TOR ก่อน (TOR ชนะนโยบาย)
 > **V02R09 — RENDERER SHIM GUARD (บทเรียน Akara 2026.08.01 · ยืนยันด้วย differential test):** 🔴 **`soffice` ใน PATH = shim ของ codex runtime** (ไม่ใช่ LibreOffice · มองไม่เห็น `/Library/Fonts`) → render แล้ว**แทนฟอนต์ทั้งไฟล์เงียบ ๆ พร้อมรายงานว่าสำเร็จ** → **อริสจะรายงาน overflow/เพี้ยนเป็นชุด = false positive ทั้งหมด** · แก้: E4 ladder ① ใช้ **absolute path** + helper `_lib/render_pdf.sh` + **POST-RENDER FONT VERIFY บังคับ** (เจอ LinuxLibertine/FrankRuhl/DejaVu = หยุด อย่ารายงาน issue ตรวจ renderer ก่อน) · หลักการใหม่: **ผลตรวจจาก renderer ผิดตัว = หลักฐานปลอม**
@@ -216,6 +217,15 @@ D7 PPTX (ตาม Build Discipline D1-D4 ของ skill ice-doc-builder):
        เครื่องมือ: `python3 _lib/audit_fonts.py [--rail private|govt] [--allow-font "ชื่อ"] FILE...`
        ⚠ ก่อนฟันธง: ถามว่าไฟล์นี้ **เราสร้าง** หรือ **ลูกค้าส่งมา** — ไฟล์รับมาไม่อยู่ใต้นโยบายเรา (ใช้ --allow-font)
        ⚠ TOR ระบุฟอนต์ไว้ = TOR ชนะนโยบายเสมอ → อ่าน TOR ก่อนรายงาน issue
+
+  ⭐ D7.6c ฟอนต์ที่ถอดออก + ตัวเลือกอนุมัติ (V02R12 · 2026.08.04) 🔴 HARD BLOCK / ⚠️ FLAG
+       🔴 **ถอดออกแล้ว (V5)** — `Sarabun` ทุกน้ำหนัก · เจอในงานใหม่ = FAIL
+          ⚠ **คนละตัวกับ** `TH Sarabun New` (รางราชการ) และ `TH SarabunPSK` (ข้อบังคับ มจร.)
+            — สองตัวนั้นถูกต้อง ห้ามรายงานเป็น issue
+       ⚠️ **ตัวเลือกที่อนุมัติ (ผ่าน V4 ได้)** — `Leelawadee` / `Leelawadee UI` / `UI Semilight`
+          ผ่านได้ แต่ **FLAG เตือนเสมอ**: GAP ไทย-ละติน 27.3% (ฟอนต์ราง 18.9%)
+          → ถ้าเอกสารมีไทยปนอังกฤษในบรรทัดเดียวเยอะ ให้ดูด้วยตาว่าไทยเล็กเกินไปไหม
+       ไฟล์เก่าที่ยังเป็น Sarabun = แจ้งว่ารอ rebuild รอบหน้า ไม่ต้องบล็อกงานปัจจุบัน
 
   ⭐ D7.7 THAI WORD BREAK (V02R08 ใหม่ — ตัดบรรทัดกลางคำ) ⚠️ FLAG (ไม่ block)
        ไทยไม่มีช่องว่างระหว่างคำ → engine ตัดบรรทัดกลางคำ ("ภาคผนว"/"ก" · "เ"/"ทคนิค")
