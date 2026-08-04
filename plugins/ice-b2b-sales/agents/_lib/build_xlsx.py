@@ -55,7 +55,7 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 # ─────────────────────────────────────────────────────────────────────────────
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from font_policy import (RAILS, BLACKLIST_PATTERNS, LATIN_ONLY, THAI_RE,   # noqa: E402
-                         APPROVED_ALT, RETIRED, rail_fallbacks,
+                         APPROVED_ALT, RETIRED, rail_fallbacks, resolve_font_policy,
                          has_thai, installed_families, blacklist_hit, check_fonts)
 
 ROW_H_FACTOR = 1.45   # §3.2 E2 — ทดสอบแล้ว
@@ -195,11 +195,13 @@ def build(spec_path: str, out_path: str):
     if why:
         sys.exit(f"❌ V2 BLACKLIST: '{FONT}' — {why}")
     fams = installed_families()
-    if fams and FONT not in fams:
-        near = [f for f in fams if FONT.split()[0].lower() in f.lower()][:6]
-        sys.exit(f"❌ V1 FONT-NAME ไม่ resolve: '{FONT}' ไม่มีใน name table ของฟอนต์ที่ติดตั้ง\n"
-                 f"   ชื่อใกล้เคียงที่มีจริง: {near}\n"
-                 f"   (กับดักที่พบบ่อย: เติม subfamily ต่อท้าย เช่น '... Regular')")
+    # ⭐⭐ V02R05 (2026.08.04) — ด่านนโยบาย **ก่อน build** · แก้ให้อัตโนมัติ ไม่ fail
+    #   บทเรียน VFIN: spec ระบุ Sarabun → build ผ่าน → self-audit PASS (เพราะถูกยื่นเฉลย
+    #   `allow_fonts={FONT}` = self-approving checker) → เจอ FAIL ตอน audit แยก → เสีย 1 รอบเต็ม
+    #   ⇒ ย้ายการตัดสินมาก่อนเขียนไฟล์ + **แก้ให้เลยแทนที่จะ fail** (คำตอบถูกมีตัวเดียว = ฟอนต์ราง)
+    FONT, _notices, _allow = resolve_font_policy(FONT, rail, spec, fams)
+    for _n in _notices:
+        print(_n)
 
     wb = Workbook()
     wb.remove(wb.active)
@@ -271,8 +273,9 @@ def build(spec_path: str, out_path: str):
     print(f"OK: {out_path} · {len(wb.sheetnames)} sheets · rail={rail} · font={FONT} {SIZE}pt")
     print(f"⚠ §3.2 E1: Excel ฝังฟอนต์ไม่ได้ — ส่งลูกค้าต้องแนบ PDF companion หรือใช้ฟอนต์ที่ลูกค้ามี "
           f"(fallback ตามลำดับ: {' → '.join(rail_fallbacks(rail))})")
-    # ⭐ V02R02: ต้องส่ง rail ที่ build ใช้จริง — ไม่งั้น build รางราชการจะ FAIL V4 กับ default private
-    audit(out_path, rail=rail, allow_fonts={FONT})
+    # ⭐ V02R05: ส่ง **เฉพาะ** ที่ spec ประกาศเหตุผลไว้ — ห้ามส่ง {FONT} (= ยื่นเฉลยให้ผู้ตรวจ)
+    #   rail ที่ถูกต้องคือสิ่งที่กัน build รางราชการ FAIL กับ default private — ไม่ใช่ whitelist ตัวเอง
+    audit(out_path, rail=rail, allow_fonts=_allow)
 
 
 if __name__ == "__main__":

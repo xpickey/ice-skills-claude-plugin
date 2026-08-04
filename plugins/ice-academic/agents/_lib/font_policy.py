@@ -56,6 +56,65 @@ DISTRIBUTABLE = {"IBM Plex Sans Thai Looped", "IBM Plex Sans Thai", "Noto Sans T
 #      ซึ่งผู้แก้จะจัดรูปแบบเองอยู่แล้ว → fallback แทบไม่มีผลต่อความสวยที่ลูกค้าเห็น
 
 
+def resolve_font_policy(font, rail, spec=None, fams=None):
+    """⭐ ด่านนโยบาย **ก่อน build** — เรียกทันทีหลัง resolve ชื่อฟอนต์ ก่อนเขียนไฟล์ใด ๆ
+
+    คืน (font_ที่จะใช้จริง, notices, allow_fonts_สำหรับ audit)
+
+    ปรัชญา (คำสั่ง user 2026.08.04 "ให้ทำงานถูกต้อง ไม่ต้อง fail — เสียเวลาและ token"):
+      **แก้ให้อัตโนมัติแล้วแจ้ง ดีกว่าหยุดแล้วให้คนไปแก้ spec**
+      เพราะเมื่อฟอนต์ผิดนโยบาย คำตอบที่ถูกมีอยู่ **ตัวเดียวชัดเจน** = ฟอนต์ราง
+      การ fail จึงเป็นแค่การผลักงานที่ตัดสินใจได้เองกลับไปให้คน = เสียรอบเปล่า
+      ⚠ แต่ **ห้ามแก้เงียบ** — ทุกการเปลี่ยนต้องพิมพ์บอกว่าเปลี่ยนอะไร จากอะไร เพราะอะไร
+
+    บทเรียนที่หล่อกฎนี้ (VFIN NetSuite proposal 2026.08.04):
+      spec ระบุ Sarabun → build ผ่าน → self-audit ขึ้น PASS (เพราะถูกยื่นเฉลย allow_fonts={FONT})
+      → ไปเจอ FAIL ตอนรัน audit_fonts.py แยกทีหลัง → ย้อนแก้ spec → build ใหม่ = เสีย 1 รอบเต็ม
+
+    override ได้ ต้องประกาศเหตุผล: spec["font_override_reason"] = "TOR ข้อ 5.1 บังคับ"
+      (เจตนา: ออกนอกนโยบายได้ แต่ต้องมีร่องรอย ไม่ใช่ค่า default ที่ลืมแก้)
+    """
+    spec = spec or {}
+    notices = []
+    allow = set(spec.get("allow_fonts") or ())
+    reason = spec.get("font_override_reason")
+
+    if reason:                       # ผู้ใช้ตัดสินใจเองแล้วโดยมีเหตุผล → เคารพ
+        allow.add(font)
+        notices.append(f"ℹ ใช้ '{font}' นอกนโยบายตามที่ประกาศไว้: {reason}")
+        rep = check_fonts({font}, rail=rail, allow_fonts=allow, fams=fams)
+        for n, why in rep["blacklisted"]:
+            notices.append(f"🔴 เตือน: '{n}' อยู่ใน BLACKLIST — {why} "
+                           f"(ยังใช้ต่อตามที่ท่านระบุ แต่ผลกระทบนี้แก้ไม่ได้ด้วยการจัดรูปแบบ)")
+        return font, notices, allow
+
+    rep = check_fonts({font}, rail=rail, allow_fonts=allow, fams=fams)
+    if not rep["fails"]:
+        return font, notices, allow
+
+    # ── ผิดนโยบาย และไม่ได้ประกาศเหตุผล → แก้ให้เป็นฟอนต์ราง แล้วบอกให้ชัด
+    target = RAILS[rail]["font"]
+    why = []
+    if rep["retired"]:
+        why.append(f"'{font}' ถูกถอดออกจากตัวเลือกแล้ว ({RETIRED.get(font, '').split('·')[0].strip()})")
+    if rep["blacklisted"]:
+        why.append(f"'{font}' อยู่ใน BLACKLIST ({rep['blacklisted'][0][1]})")
+    if rep["unresolvable"]:
+        near = sorted(f for f in (fams or ()) if font.split()[0].lower() in f.lower())[:4]
+        why.append(f"ไม่มี family ชื่อ '{font}' ติดตั้งอยู่จริง"
+                   + (f" (ใกล้เคียง: {near})" if near else ""))
+    if rep["off_rail"] and not why:
+        why.append(f"'{font}' ไม่ใช่ฟอนต์ของ rail='{rail}' และไม่อยู่ในตัวเลือกที่อนุมัติ")
+
+    notices.append(f"⚙ เปลี่ยนฟอนต์อัตโนมัติ: '{font}' → '{target}'")
+    for w in why:
+        notices.append(f"   เหตุผล: {w}")
+    notices.append(f"   ทางเลือกอื่นที่อนุมัติ: {sorted(APPROVED_ALT)}")
+    notices.append(f"   ถ้าตั้งใจใช้ '{font}' จริง (TOR/วารสาร/แบรนด์ลูกค้า) "
+                   f"→ ใส่ \"font_override_reason\" ใน spec แล้ว build ใหม่")
+    return target, notices, allow
+
+
 def rail_fallbacks(rail: str) -> list:
     """คืนลำดับ fallback (ตัวแรก = แนะนำสุด) — รองรับทั้ง key เก่า 'fallback' และใหม่ 'fallbacks'"""
     r = RAILS[rail]

@@ -32,7 +32,7 @@ from docx.oxml import OxmlElement
 
 # ⭐ นโยบายฟอนต์มาจาก SSOT เดียว — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้ (V02R01)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from font_policy import RAILS   # noqa: E402
+from font_policy import RAILS, resolve_font_policy   # noqa: E402
 
 
 # ── ⭐ W1-W2 FONT BINDING ที่ระดับราก (V02R01 — 2026.08.04) ──────────────────
@@ -155,6 +155,10 @@ def build(spec_path, out_path):
     if rail not in RAILS:
         sys.exit(f"rail ต้องเป็น {'|'.join(RAILS)} (ได้: {rail})")
     font = spec.get("font") or RAILS[rail]["font"]
+    # ⭐ V02R02: ด่านนโยบายก่อนสร้างไฟล์ — ผิดนโยบาย = แก้ให้เป็นฟอนต์ราง + แจ้ง (ไม่ fail)
+    font, _notices, _ = resolve_font_policy(font, rail, spec)
+    for _n in _notices:
+        print(_n)
     size = spec.get("font_size") or RAILS[rail]["size"]
     n = apply_font(doc, font, size)
     doc.save(out_path)
