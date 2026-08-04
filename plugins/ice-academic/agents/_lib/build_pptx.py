@@ -5,17 +5,13 @@ build_pptx.py — generic PPTX builder for sales agents.
 Usage:
     python3 build_pptx.py spec.json out.pptx
 
-FONT RULE (CRITICAL — established 2026-05-24):
-  Default font is "Tahoma" for ALL text in mixed TH/EN decks.
-  Reason: Tahoma is the only universally-available font with TRUE
-  TH+Latin visual parity (cap-height + x-height + stroke-width match)
-  in PowerPoint on both Windows and macOS.
-
-  Do NOT use Sarabun (TH) + Calibri (EN) — Thai will look smaller.
-  See pptx-builder-agent.md "Font Selection" section for full rationale.
-
-  Override only when spec.json explicitly sets `"font_family": "..."` AND
-  caller confirms font embedding is acceptable (+2-5 MB file size).
+FONT RULE (V02R03 · 2026.08.05) — ⚠ ข้อความเดิมที่ว่า "default = Tahoma ทุกข้อความ"
+  **ยกเลิกแล้ว** (โค้ดไม่เคยอ่าน docstring นี้ · ตั้งแต่ V02R01 ฟอนต์มาจาก font_policy.RAILS)
+  • ฟอนต์มาจาก **ราง** ที่ infer_rail() เดาจากชนิดเอกสาร (เอกชน/ราชการ)
+  • สไลด์แน่น (>400 ตัวอักษร หรือ >8 บรรทัด หรือ ตาราง >40 ช่อง ในสไลด์ใดสไลด์หนึ่ง)
+    → สลับทั้งเด็คเป็น 'Leelawadee' (ยอดวรรณยุกต์เตี้ยสุด = ไม่ชนเมื่อบีบบรรทัด)
+    ปิด/บังคับด้วย spec["dense"] = false / true
+  • spec["font_family"] ระบุเอง = เคารพ ไม่แทรกแซง (แต่ยังผ่านด่านนโยบาย V1/V2/V4/V5)
 
 spec.json schema:
 {
@@ -52,7 +48,8 @@ def OxmlElement(tag):
 
 # ⭐ นโยบายฟอนต์มาจาก SSOT เดียว — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้ (V02R02)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from font_policy import RAILS, resolve_font_policy, infer_rail   # noqa: E402
+from font_policy import (RAILS, resolve_font_policy, infer_rail,
+                         measure_slide_density, DENSE_FONT)   # noqa: E402
 
 
 def hex_to_rgb(h):
@@ -253,6 +250,26 @@ def build(spec_path, out_path):
     if rail not in RAILS:
         sys.exit(f"rail ต้องเป็น {'|'.join(RAILS)} (ได้: {rail})")
     font = spec.get("font_family") or RAILS[rail]["font"]
+
+    # ⭐ V02R03 (คำสั่ง user 2026.08.05) — สไลด์แน่น/ต้องบีบบรรทัด → DENSE_FONT ทั้งเด็ค
+    #   เหตุผลเชิงตัวเลข: ยอดวรรณยุกต์ Leelawadee 0.737 em vs ฟอนต์ราง 0.924 em
+    #   → เมื่อบีบ line-height ตัวที่ยอดสูงกว่าชนก่อน · PPTX ฝังฟอนต์ได้จึงไม่ห่วงเครื่องผู้รับ
+    #   ปิดได้ด้วย spec["dense"] = false · บังคับเปิดด้วย spec["dense"] = true
+    if not spec.get("font_family"):          # ผู้ใช้ระบุฟอนต์เองแล้ว = เคารพ ไม่แทรกแซง
+        _forced = spec.get("dense")
+        _dense, _dwhy = measure_slide_density(spec.get("slides", []))
+        if _forced is True:
+            _dense, _dwhy = True, "spec ระบุ dense=true"
+        elif _forced is False:
+            _dense, _dwhy = False, "spec ระบุ dense=false — ไม่สลับ"
+        if _dense and font != DENSE_FONT:
+            print(f"🎚 สไลด์แน่น → เปลี่ยนทั้งเด็คเป็น '{DENSE_FONT}': {_dwhy}")
+            print(f"   (ยอดวรรณยุกต์ 0.737 em เทียบ '{font}' 0.924 em = ไม่ชนเมื่อบีบบรรทัด"
+                  f" · แลกกับไทยเล็กกว่าละตินมากขึ้น · ปิดด้วย \"dense\": false)")
+            font = DENSE_FONT
+        elif not _dense:
+            print(f"🎚 ความแน่น: {_dwhy} → ใช้ฟอนต์ราง")
+
     # ⭐ V02R02: ด่านนโยบายก่อนสร้างไฟล์ — ผิดนโยบาย = แก้ให้เป็นฟอนต์ราง + แจ้ง (ไม่ fail)
     font, _notices, _ = resolve_font_policy(font, rail, spec)
     for _n in _notices:

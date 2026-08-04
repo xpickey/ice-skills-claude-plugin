@@ -111,6 +111,63 @@ def infer_rail(spec=None, out_path="", default="private"):
     return default, f"ไม่พบสัญญาณชนิดเอกสาร → ใช้ค่าเริ่มต้น '{default}'"
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# ⭐ V01R06 (2026.08.05 · คำสั่ง user) — PPTX สไลด์แน่น → Leelawadee ทั้งเอกสาร
+#
+#   ทำไม: ยอดวรรณยุกต์ Leelawadee = 0.737 em · IBM Plex Looped = 0.924 em
+#   เมื่อสไลด์ต้องบีบบรรทัด (ข้อความเยอะ/กล่องเล็ก/normAutofit ย่อ) ตัวที่ยอดสูงกว่าจะ**ชนก่อน**
+#   → เลือกตัวที่ยอดเตี้ยสุดเพื่อซื้อที่ว่างแนวตั้ง แลกกับ GAP ที่กว้างขึ้น (27.3% vs 18.9%)
+#   PPTX **ฝังฟอนต์ได้** จึงไม่ต้องห่วงว่าเครื่องผู้รับมี Leelawadee หรือไม่
+#
+#   ⭐ สลับ **ทั้งเด็ค** ไม่ใช่ทีละสไลด์ — §3.0 ③ APPROVED SET เดียวต่อชุดเอกสาร
+#      (สไลด์เดียวในเด็คใช้ฟอนต์ต่าง = ผู้อ่านเห็นความไม่สม่ำเสมอทันที)
+# ─────────────────────────────────────────────────────────────────────────────
+DENSE_FONT = "Leelawadee"          # ตัวธรรมดา (ผู้ใช้ติดตั้งเอง /Library/Fonts/leelawad.ttf)
+DENSE_CHARS_PER_SLIDE = 400        # สไลด์ 16:9 อ่านสบาย ≈ 6 bullet × 60 ตัว ≈ 360
+DENSE_LINES_PER_SLIDE = 8          # เกินนี้ต้องย่อ font หรือบีบ line-height
+DENSE_TABLE_CELLS = 40             # ตารางคือ layout ที่แน่นที่สุดเสมอ
+
+
+def measure_slide_density(slides):
+    """คืน (is_dense, reason) — วัดจาก spec ก่อน build · ไม่เดา ใช้ตัวเลขจริง"""
+    worst = (0, 0, 0, -1)          # chars, lines, cells, slide_index
+    for i, sl in enumerate(slides or []):
+        texts, lines, cells = [], 0, 0
+        for k in ("title", "subtitle"):
+            if sl.get(k):
+                texts.append(str(sl[k]))
+        for k in ("bullets", "left", "right"):
+            items = sl.get(k) or []
+            texts += [str(x) for x in items]
+            lines += len(items)
+        if sl.get("headers") or sl.get("rows"):
+            hdr = sl.get("headers") or []
+            rows = sl.get("rows") or []
+            texts += [str(h) for h in hdr]
+            for r in rows:
+                texts += [str(c) for c in (r or [])]
+            cells = len(hdr) + sum(len(r or []) for r in rows)
+            lines += len(rows)
+        for kp in sl.get("kpis") or []:
+            texts += [str(kp.get(x, "")) for x in ("label", "value", "delta")]
+            lines += 1
+        chars = sum(len(t) for t in texts)
+        if (chars, lines, cells) > worst[:3]:
+            worst = (chars, lines, cells, i)
+
+    chars, lines, cells, idx = worst
+    hits = []
+    if chars > DENSE_CHARS_PER_SLIDE:
+        hits.append(f"{chars} ตัวอักษร (เกณฑ์ >{DENSE_CHARS_PER_SLIDE})")
+    if lines > DENSE_LINES_PER_SLIDE:
+        hits.append(f"{lines} บรรทัด (เกณฑ์ >{DENSE_LINES_PER_SLIDE})")
+    if cells > DENSE_TABLE_CELLS:
+        hits.append(f"ตาราง {cells} ช่อง (เกณฑ์ >{DENSE_TABLE_CELLS})")
+    if hits:
+        return True, f"สไลด์ที่ {idx + 1} แน่นสุด: " + " · ".join(hits)
+    return False, f"สไลด์แน่นสุด = {chars} ตัวอักษร / {lines} บรรทัด — ยังไม่ถึงเกณฑ์บีบ"
+
+
 def resolve_font_policy(font, rail, spec=None, fams=None):
     """⭐ ด่านนโยบาย **ก่อน build** — เรียกทันทีหลัง resolve ชื่อฟอนต์ ก่อนเขียนไฟล์ใด ๆ
 
