@@ -49,11 +49,11 @@ VIEWPORT_CSS = os.path.join(HERE, "..", "assets", "html", "viewport-base.css")
 
 # ⭐ FONT POLICY มาจาก SSOT เดียว (ice-doc-builder §3.0) — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้
 sys.path.insert(0, os.path.expanduser("~/.claude/agents/_lib"))
-from font_policy import RAILS  # noqa: E402
+from font_policy import RAILS, rail_fallbacks  # noqa: E402
 
 RAIL = os.environ.get("ICE_RAIL", "private")
 _R = RAILS[RAIL if RAIL in RAILS else "private"]
-RAIL_STACK = f"'{_R['font']}','{_R['fallback']}',system-ui,sans-serif"
+RAIL_STACK = "'" + _R['font'] + "'," + ",".join(f"'{x}'" for x in rail_fallbacks(RAIL)) + ",system-ui,sans-serif"
 
 # ---- forbidden-char guard (mirror of PPTX Lesson #18; harmless in HTML but
 #      kept for cross-format consistency so copy pasted between PPTX/HTML is safe)

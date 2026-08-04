@@ -27,10 +27,45 @@ import os, re, glob
 # ─────────────────────────────────────────────────────────────────────────────
 RAILS = {
     # เอกชน: ไทย=อังกฤษ ไม่บวก pt (cap 0.698 em — ละตินอยู่ในตัวเดียวกัน)
-    "private": {"font": "IBM Plex Sans Thai Looped", "size": 11, "fallback": "Tahoma"},
+    "private": {"font": "IBM Plex Sans Thai Looped", "size": 11,
+                "fallbacks": ["Leelawadee UI"]},
     # ราชการ/TOR/e-GP: 16pt = ละติน 11-12pt (วัดได้ ×1.47)
-    "govt":    {"font": "TH Sarabun New",            "size": 16, "fallback": "Tahoma"},
+    "govt":    {"font": "TH Sarabun New",            "size": 16,
+                "fallbacks": ["Leelawadee UI"]},
 }
+
+# ⭐ ฟอนต์ที่ **แจกจ่ายให้ลูกค้าได้ถูกกฎหมาย** (SIL OFL · fsType 0x0000 Installable)
+#   → นี่คือทางออกจริงของปัญหา "ลูกค้าไม่มีฟอนต์เรา" ที่ดีกว่าการยอมลดคุณภาพไปใช้ fallback
+#   IBM Plex Sans Thai Looped ครบ 7 น้ำหนัก = 0.8 MB เท่านั้น · แนบไปกับชุดเอกสารได้เลย
+#   ⛔ Leelawadee / Tahoma / TH Sarabun New = **แจกไม่ได้** (proprietary) — ได้แค่หวังว่าลูกค้ามี
+DISTRIBUTABLE = {"IBM Plex Sans Thai Looped", "IBM Plex Sans Thai", "Noto Sans Thai"}
+
+# ⭐ V01R03 (2026.08.04 · คำสั่ง user "Tahoma ไม่ค่อยสวย พยายามไม่ใช้")
+#   fallback เปลี่ยนจาก string เดี่ยว → **ลำดับ** · ใช้เมื่อ "ฝังฟอนต์ไม่ได้ + คุมเครื่องปลายทางไม่ได้"
+#   (= .xlsx เป็นหลัก · .docx ที่ส่งให้แก้ต่อ)
+#
+#   ความจริงที่ต้องยอมรับ: **ไม่มีฟอนต์ไทย "สวย" ตัวไหนที่มีทั้ง Windows และ macOS**
+#     Sukhumvit Set  GAP 15.7% (ดีสุดที่วัดได้) · ยอดไม้โท 0.964 · มากับ macOS   ไม่มีบน Windows
+#     Leelawadee UI  GAP 27.3%                  · ยอดไม้โท 0.743 · มากับ Windows ไม่มีบน macOS
+#     Tahoma         GAP 23.1%                  · ยอดไม้โท 0.805 · มีทั้งคู่      แต่ออกแบบปี 1994
+#   → Tahoma เคยเป็น fallback เพราะเป็น **ตัวเดียวที่ครอบ 2 OS** ไม่ใช่เพราะสวย
+#   → ลำดับใหม่วางตามผู้รับจริงของงานนี้ (องค์กรไทย = Windows เป็นหลัก) และดัน Tahoma ไปท้ายสุด
+#
+#   🔴 ทางแก้ที่ถูกจริงคือ **เลิกพึ่ง fallback**: .xlsx ที่ส่งลูกค้า ให้แนบ PDF companion เสมอ (§3.2 E1)
+#      PDF ฝังฟอนต์ 100% → สิ่งที่ลูกค้า "เห็น" ถูกต้องเสมอ ส่วน .xlsx คือฉบับให้แก้ต่อ
+#      ซึ่งผู้แก้จะจัดรูปแบบเองอยู่แล้ว → fallback แทบไม่มีผลต่อความสวยที่ลูกค้าเห็น
+
+
+def rail_fallbacks(rail: str) -> list:
+    """คืนลำดับ fallback (ตัวแรก = แนะนำสุด) — รองรับทั้ง key เก่า 'fallback' และใหม่ 'fallbacks'"""
+    r = RAILS[rail]
+    fb = r.get("fallbacks") or [r.get("fallback")]
+    return [f for f in fb if f]
+
+
+def rail_fallback(rail: str) -> str:
+    """ตัวเดียวสำหรับที่ที่ใส่ได้ชื่อเดียว (เซลล์ Excel) — ตัวแรกของลำดับ"""
+    return rail_fallbacks(rail)[0]
 
 # ─────────────────────────────────────────────────────────────────────────────
 # ⭐ V01R02 (2026.08.04) — ตัวเลือกที่อนุมัติเพิ่ม + ตัวที่ถอดออก
@@ -159,7 +194,7 @@ def check_fonts(fonts, rail: str = "private", allow_fonts=None, fams=None) -> di
             rep["unresolvable"].append(n)
 
     # V01R02: ตัวเลือกที่อนุมัติแล้ว (APPROVED_ALT) ผ่านได้โดยไม่ต้อง --allow-font
-    ok = ({RAILS[rail]["font"], RAILS[rail]["fallback"]}
+    ok = ({RAILS[rail]["font"], *rail_fallbacks(rail)}
           | set(APPROVED_ALT) | allow_fonts)
     cand = {n for n in fonts if n not in LATIN_ONLY}
     rep["off_rail"] = sorted(cand - ok)
@@ -180,7 +215,7 @@ def check_fonts(fonts, rail: str = "private", allow_fonts=None, fams=None) -> di
     if rep["off_rail"]:
         alt = ", ".join(f"'{a}'" for a in sorted(APPROVED_ALT))
         fails.append(f"V4 ผิดราง '{rail}' (ต้องเป็น '{RAILS[rail]['font']}' · fallback "
-                     f"'{RAILS[rail]['fallback']}' · ตัวเลือกอนุมัติ {alt}): "
+                     f"fallback {rail_fallbacks(rail)} · ตัวเลือกอนุมัติ {alt}): "
                      f"{rep['off_rail']} → {EXTERNAL_MANDATE_NOTE}")
     rep["fails"] = fails
     return rep

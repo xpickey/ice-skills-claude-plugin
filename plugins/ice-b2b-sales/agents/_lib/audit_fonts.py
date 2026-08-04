@@ -19,7 +19,8 @@ exit code: 0 = ผ่านทุกไฟล์ · 1 = มีไฟล์ FAIL 
 import sys, os, re, zipfile, subprocess
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from font_policy import RAILS, LATIN_ONLY, THAI_RE, check_fonts, installed_families
+from font_policy import (RAILS, LATIN_ONLY, THAI_RE, check_fonts, installed_families,
+                         rail_fallbacks)
 
 MAX_SHOW = 5          # §6 VALIDATION BUDGET — รายงาน counts + ตัวอย่าง ≤5 ห้าม dump XML
 # ฟอนต์ fallback ของ Linux/LibreOffice = สัญญาณว่า renderer มองไม่เห็นฟอนต์ระบบ (render_pdf.sh)
@@ -207,7 +208,7 @@ def audit_file(path, rail="private", allow=None, fams=None) -> bool:
         want = RAILS[rail]["font"]
         ok_present = any(_squash(want) == _squash(f) or _squash(f) in
                          {_squash(a) for a in (allow or ())} or
-                         _squash(RAILS[rail]["fallback"]) == _squash(f) for f in fonts)
+                         any(_squash(fb) == _squash(f) for fb in rail_fallbacks(rail)) for f in fonts)
         print(f"   fonts ที่ฝังใน PDF: {', '.join(sorted(fonts)) or '(none)'}")
         fails = list(extra)
         for n in sorted(fonts):

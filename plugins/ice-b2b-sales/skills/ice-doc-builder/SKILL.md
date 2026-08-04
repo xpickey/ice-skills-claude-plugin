@@ -3,7 +3,8 @@ name: ice-doc-builder
 description: "iCE Document Build Craft — ความรู้ build .pptx/.docx/.xlsx/PDF/HTML ระดับ specialist (Build Discipline D1-D4 tri-slot Thai+EN font, 18 PPTX lessons, Method B font-embed, Strict Validator, SAVE-FIRST, VALIDATION BUDGET, renderer ladder) ที่ย้ายมาจาก deliverable-gen-agent เพื่อให้ทุก persona โหลดใช้ได้ (L0/กัปตัน/คิม/สมนึก build เองใน DOC-PIPELINE V3 · เจนนี่-shell ใช้ตอน background build). ถือ contract ของ marker ICE_BUILD=pipeline (PreToolUse hook). Triggers (TH): build deck, สร้าง slide, สร้างเอกสาร, ทำ proposal เป็นไฟล์, สร้าง .pptx, ทำ .docx, ทำ .xlsx, ทำ ROI excel, dashboard, font ไทย, font เพี้ยน, แก้ font, embed font, ไฟล์เปิดไม่ได้, Repair dialog. Triggers (EN): build deck, generate slides, build document, create pptx/docx/xlsx, ROI workbook, dashboard, font embed, Thai font, corrupted file, ICE_BUILD."
 ---
 
-> **Skill:** ice-doc-builder | **Version:** V01R08 | **Date:** 2026.08.04
+> **Skill:** ice-doc-builder | **Version:** V01R09 | **Date:** 2026.08.04
+> **V01R09 (2026.08.04) — ⭐ ตารางตัดสินใจฟอนต์ถาวร (§3.0-A):** เกณฑ์ 5 ข้อเรียงตาม "อำนาจตัดสิน" (ฝังได้ไหม → สิทธิ์ → น้ำหนัก → GAP → ยอดวรรณยุกต์) + ตารางงาน×ฟอนต์ · **กฎใหม่ (user): PPTX สไลด์แน่นต้องบีบบรรทัด → `Leelawadee UI` แทนฟอนต์ราง** (ยอดวรรณยุกต์ 0.743 vs 0.924 → ไม่ชนเมื่อบีบ · PPTX ฝังได้จึงไม่ต้องห่วงเครื่องผู้รับ) · **fallback เปลี่ยนเป็นลำดับ** `Leelawadee UI → Sukhumvit Set → Tahoma` (user: "Tahoma ไม่ค่อยสวย") · +บันทึกความจริงว่า **ไม่มีฟอนต์ไทยสวยตัวไหนมีทั้ง Win+Mac** → ทางแก้จริงคือ PDF companion ไม่ใช่หา fallback สวย · `font_policy` V01R03 (`fallbacks` เป็น list + `rail_fallbacks()`)
 > **V01R08 (2026.08.04) — ตัวเลือกฟอนต์ (คำสั่ง user):** +**Leelawadee / Leelawadee UI / UI Semilight** เป็นตัวเลือกที่อนุมัติ (ผ่าน V4 ไม่ต้อง `--allow-font` · auditor แจ้ง ℹ เตือน GAP ทุกครั้ง) · ⛔ **ถอด Sarabun ออกจากตัวเลือก (V5 ใหม่)** — คนละตัวกับ TH Sarabun New/TH SarabunPSK ที่ยังใช้ได้ · **default ยังเป็น IBM Plex Sans Thai Looped** เพราะวัดแล้ว GAP ไทย-ละติน 18.9% ชนะ Leelawadee 27.3% (เกณฑ์ตัดสินตามคำสั่ง user "GAP ดีกว่าเอาตัวนั้น") · `font_policy` V01R02 (+APPROVED_ALT +RETIRED) · `build_xlsx` V02R04 (เลิกมีสำเนากฎ → เรียก `check_fonts` จาก SSOT)
 > **V01R07 (2026.08.04) — ⭐ ONE POLICY, ONE AUDITOR, ALL FORMATS:** นโยบายฟอนต์ย้ายเป็น SSOT `_lib/font_policy.py` (RAILS+BLACKLIST+check_fonts) · **§0.1 ข้อ 4 ยกเป็นกติกาบังคับ: build script ทุกตัว `from font_policy import RAILS` — ห้าม hard-code ชื่อฟอนต์** · **จุดตรวจเดียว `_lib/audit_fonts.py`** ครอบ xlsx/pptx/docx/html/pdf · build_pptx/docx/dashboard/deck/html แก้ให้อ่านจากรางแล้ว (build_pptx เดิม **ไม่เคย set ฟอนต์เลยสักบรรทัด** · build_docx ไม่มี `w:cs` · dashboard เป็น CSS ละตินล้วน) · เอกสารกำกับที่เคยขัดกันเอง (`05-typography` V02R01 · `sales-pipeline-report` V01R04 · `gantt-timeline` V01R02) ลดเหลือ pointer
 > **V01R06 (2026.08.04) — ⭐ V4 RAIL CONFORMANCE:** +**§6 V4** ตรวจว่าฟอนต์ **ตรงรางที่นโยบายกำหนด** ไม่ใช่แค่ "resolve ได้ + ไม่ blacklist" (V1/V2 ตอบคนละคำถามกับนโยบาย → Sarabun ลอดทั้งคู่) · เคสจริง `PWA TCO-Breakdown V01R22` build 2026.08.04 ยังเป็น Sarabun แล้ว validator ขึ้น PASS — **user จับได้ ไม่ใช่ระบบ** · ต้นเหตุ: build script เขียนมือ hard-code `FONT` เอง → bypass ตาราง RAILS · +**E4 แก้ false positive** (fail เฉพาะ merge **และ** ไม่ตั้ง row height — พิสูจน์ด้วย differential test ว่าไฟล์ที่ builder เราสร้างสดก็ FAIL) · `build_xlsx.py` **V02R02**
@@ -229,6 +230,79 @@ STRICT VALIDATOR (mandatory ก่อนส่งเข้า ④):
 # §3 ⭐ FONT DISCIPLINE ข้ามฟอร์แมต — DOCX / XLSX / PDF (V01R01 ใหม่ — คำสั่ง user 2026.07.17: "Word font ไม่สม่ำเสมอ")
 
 > หลักการเดียวกับ D1-D4 แต่ XML คนละตระกูล — สาเหตุ Word font เพี้ยน 90% = python-docx ปล่อย default (Calibri) รั่วบน run ที่ไม่ได้ set slot ไทย
+
+## 3.0-A ⭐⭐⭐ ตารางตัดสินใจ — "งานนี้ใช้ฟอนต์อะไร" (V01R09 · 2026.08.04)
+
+> ก่อนหน้านี้เกณฑ์อยู่ในหัวคน → เลือกไม่เหมือนกันทุกครั้ง · ตารางนี้คือคำตอบเดียวที่ตรวจย้อนได้
+
+### ขั้นที่ 1 — ถามเรียงตามนี้ (ข้อบนตัดสินก่อน ข้อล่างเป็นแค่รสนิยม)
+
+| # | คำถาม | ทำไมอยู่ลำดับนี้ |
+|---|---|---|
+| **①** | **ฟอร์แมตนี้ฝังฟอนต์ได้ไหม** | ฝังได้ → เครื่องปลายทาง**ไม่สำคัญเลย** เลือกตามสวยได้เต็มที่ · ฝังไม่ได้ → ต้องคิดถึงเครื่องผู้รับก่อน |
+| **②** | **สิทธิ์ใช้งานอนุญาตไหม** | OFL = ฝัง/แจก/host ได้หมด · Microsoft proprietary = ฝังในเอกสารได้ แต่ **host เป็น webfont ไม่ได้** |
+| **③** | **มีน้ำหนักที่ต้องใช้ครบไหม** | ไม่มี Bold จริง → Word/PPT **ปลอมหนาให้** (รีดตัวอักษร) = หัวข้อเละ · **ชดเชยไม่ได้** |
+| ④ | GAP ไทย-ละติน | ชดเชยได้ด้วยการเพิ่ม pt ให้ไทย |
+| ⑤ | ยอดวรรณยุกต์ | ชดเชยได้ด้วยความสูงแถว/line-height |
+
+### ขั้นที่ 2 — เปิดตารางตามงาน
+
+| งาน | ฝังได้? | ⭐ ฟอนต์ | เหตุผล |
+|---|---|---|---|
+| **PPTX ทั่วไป** | ✅ Method B | `IBM Plex Sans Thai Looped` | GAP ดีสุด 18.9% + น้ำหนักครบ 7 ตัว |
+| **⭐ PPTX สไลด์แน่น/ต้องบีบบรรทัด** | ✅ | **`Leelawadee UI`** | ยอดวรรณยุกต์ **0.743** vs IBM Plex 0.924 → บีบ line-height แล้ว**ไม่ชน** · ฝังได้จึงไม่ต้องห่วงเครื่องผู้รับ (กฎนี้ user กำหนด 2026.08.04) |
+| **DOCX** | ⚠️ มือไม่ได้ | `IBM Plex Sans Thai Looped` + **PDF companion** | ฝังด้วยมือ = Word ปฏิเสธ (§2B.1) |
+| **XLSX ทั่วไป** | ❌ **ฝังไม่ได้** | `IBM Plex Sans Thai Looped` + **PDF companion บังคับ** | PDF คือฉบับที่ลูกค้า "เห็น" · xlsx คือฉบับให้แก้ต่อ |
+| **XLSX ที่รู้ว่าผู้รับ Windows** | ❌ | `Leelawadee UI` | มากับ Windows ทุกเครื่อง → ไม่ substitute |
+| **HTML / webfont** | webfont | `IBM Plex Sans Thai Looped` | **OFL host ได้** · ⛔ Leelawadee เป็น MS proprietary **host ไม่ได้** |
+| **PDF** | ✅ เสมอ | ตามต้นทาง | ฝัง 100% |
+| ราชการ / TOR / e-GP | — | `TH Sarabun New` 16pt | รางราชการ · **TOR ระบุฟอนต์ = TOR ชนะ** |
+| วิชาการ มจร./วารสาร | — | `TH SarabunPSK` | ข้อบังคับมหาวิทยาลัย **ชนะนโยบายเรา** |
+
+### ⭐ ปัญหา "ลูกค้าไม่มีฟอนต์เรา" — แก้ตามลำดับนี้ ไม่ใช่ยอมลดคุณภาพไปใช้ fallback
+
+**ขั้น 0 — ฝังฟอนต์ก่อนเสมอ (ทดสอบจริง 2026.08.04 ไม่ใช่อ้างเอกสาร)**
+
+| ฟอร์แมต | ฝังได้ไหม | วิธี | หลักฐาน |
+|---|---|---|---|
+| **PPTX** | ✅ **ได้** | `_lib/embed_fonts_pptx.py` (Method B) | ทดสอบ: `ppt/fonts/font1-2.fntdata` 239 KB · `embedTrueTypeFonts="1"` ✅ · `validate_pptx_fonts.py` PASS |
+| **DOCX** | ⚠️ สคริปต์ไม่ได้ | (ก) Word GUI: Preferences > Save > Embed fonts (ข) PDF companion | ประกอบ odttf เองครบตำรา → **Word ปฏิเสธทั้งไฟล์** (VFIN V02R02 §2B.1) |
+| **XLSX** | ❌ **ไม่ได้เลย** | — | Microsoft รองรับ embed เฉพาะ Word/PowerPoint |
+| PDF | ✅ เสมอ | — | ตรวจ `pdffonts` ทุกแถว emb=yes |
+
+⇒ **PPTX/PDF จบตั้งแต่ขั้นนี้** — ฝังแล้วเครื่องปลายทางไม่เกี่ยวเลย ใช้ฟอนต์ที่สวยที่สุดได้เต็มที่
+
+**ขั้น 1 — เหลือแค่ XLSX (+DOCX ที่ไม่ได้ฝัง) → ส่งฟอนต์ให้ลูกค้าติดตั้ง**
+
+```bash
+bash ~/.claude/agents/_lib/make_font_kit.sh "<โฟลเดอร์ deliverable>"
+```
+สร้าง `_Fonts/` = ไฟล์ฟอนต์ครบทุกน้ำหนัก + README ภาษาไทย (เหตุผล/วิธีติดตั้ง/ลิขสิทธิ์)
+
+| | ลูกค้ามีอยู่แล้ว | **เราส่งให้ได้ไหม** |
+|---|---|---|
+| **IBM Plex Sans Thai Looped** | ❌ | ✅ **ได้** — SIL OFL · fsType 0x0000 · 7 น้ำหนัก = **0.8 MB** |
+| Leelawadee / Tahoma / TH Sarabun New | ✅/บางส่วน | ⛔ **ไม่ได้** — proprietary (ได้แค่หวังว่าลูกค้ามี) |
+
+> ⭐ **นี่คือจุดที่พลิกข้อโต้แย้ง "Leelawadee หาง่ายกว่า"** — ข้อโต้แย้งนั้นตั้งอยู่บนสมมติฐานว่า
+> เราใช้ได้แค่ฟอนต์ที่ลูกค้ามีอยู่แล้ว · แต่ฟอนต์ราง **แจกได้ถูกกฎหมาย 0.8 MB** จึงไม่ต้องยอมลดคุณภาพ
+
+**ขั้น 2 — PDF companion (บังคับสำหรับ .xlsx/.docx ที่ส่งลูกค้า · §3.2 E1)**
+PDF ฝังฟอนต์ 100% → สิ่งที่ลูกค้า **เห็น** ถูกเสมอ แม้ไม่ติดตั้งอะไรเลย
+
+**ขั้น 3 — fallback (ทางสุดท้ายจริง ๆ)**
+```
+fallbacks = ["Leelawadee UI"]     ← เหลือตัวเดียว
+```
+🔴 **ตัดออกแล้วทั้งคู่ (คำสั่ง user 2026.08.04):**
+- ~~Tahoma~~ — ออกแบบปี 1994 · ไทย+อังกฤษด้วยกันไม่สวยจริง
+- ~~Sukhumvit Set~~ — GAP ดีสุด 15.7% ก็จริง แต่เป็นฟอนต์ UI ของ Apple **โทนมนเป็นกันเอง ไม่ใช่โทนเอกสารทางการของเอกชน** + มีเฉพาะ macOS
+
+> **ความจริงที่ต้องยอมรับ: ไม่มีฟอนต์ไทยที่ทั้งสวย ทั้งทางการ ทั้งมีบน Windows และ macOS**
+> Tahoma เคยถูกใช้เพราะเป็น**ตัวเดียวที่ครอบ 2 OS** ไม่ใช่เพราะสวย
+> ⇒ อย่าเสียเวลาหา fallback ที่ดีกว่า — **ไต่ขั้น 0-2 ให้ fallback ไม่ถูกใช้เลย**
+
+---
 
 ## 3.0 ⭐⭐⭐ FONT POLICY — 2 ราง (V01R03 · LOCKED โดย user 2026.07.31)
 

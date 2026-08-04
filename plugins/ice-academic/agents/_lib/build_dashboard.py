@@ -28,13 +28,15 @@ from pathlib import Path
 #   บั๊กที่แก้: CSS stack เดิมเป็นละตินล้วน (-apple-system,Segoe UI,Helvetica,Arial)
 #   → ข้อความไทยตกไป fallback ของ browser ที่ไม่ชดเชยขนาด = ไทยเล็กกว่าอังกฤษทั้งหน้า
 sys.path.insert(0, os.path.expanduser("~/.claude/agents/_lib"))
-from font_policy import RAILS   # noqa: E402
+from font_policy import RAILS, rail_fallbacks   # noqa: E402
 
 RAIL = os.environ.get("ICE_RAIL", "private")
 if RAIL not in RAILS:
     RAIL = "private"
-FONT_STACK = (f"'{RAILS[RAIL]['font']}', '{RAILS[RAIL]['fallback']}', "
-              f"-apple-system, 'Segoe UI', sans-serif")
+# ลำดับ: ฟอนต์ราง → fallback ตามลำดับใน font_policy (Leelawadee UI → Sukhumvit Set → Tahoma)
+FONT_STACK = ", ".join([f"'{RAILS[RAIL]['font']}'"]
+                       + [f"'{x}'" for x in rail_fallbacks(RAIL)]
+                       + ["-apple-system", "'Segoe UI'", "sans-serif"])
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
