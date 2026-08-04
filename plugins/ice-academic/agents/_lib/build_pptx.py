@@ -50,7 +50,7 @@ def OxmlElement(tag):
     return parse_xml(f'<{tag} {nsdecls("a")}/>')
 
 
-# ⭐ นโยบายฟอนต์มาจาก SSOT เดียว — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้ (V02R01)
+# ⭐ นโยบายฟอนต์มาจาก SSOT เดียว — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้ (V02R02)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from font_policy import RAILS, resolve_font_policy, infer_rail   # noqa: E402
 

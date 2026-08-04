@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
 build_xlsx.py — XLSX builder ที่บังคับ FONT POLICY + Thai typography discipline อัตโนมัติ
-V02R03 | 2026.08.04 | ผูกกับ skill ice-doc-builder §3.0 FONT POLICY + §3.2 E1-E6 + §6 V1-V4
+V02R06 | 2026.08.04
+V02R06 — infer_rail: ไม่มี rail ใน spec → เดาจากชนิดเอกสาร + ประกาศเหตุผล
+V02R05 — resolve_font_policy ก่อน build (auto-correct) + เลิกส่ง {FONT} เข้า self-audit
+V02R04 — V1/V2/V4/V5 เรียก check_fonts จาก SSOT เลิกมีสำเนากฎ | ผูกกับ skill ice-doc-builder §3.0 FONT POLICY + §3.2 E1-E6 + §6 V1-V4
 
 V02R03 — นโยบายย้ายไป `font_policy.py` (SSOT) ไฟล์นี้ import อย่างเดียว ไม่ประกาศซ้ำ
   เหตุผล: RAILS อยู่ในไฟล์นี้ตัวเดียว → build script อีก 5 ตัวใช้ร่วมไม่ได้ → hard-code กันเอง

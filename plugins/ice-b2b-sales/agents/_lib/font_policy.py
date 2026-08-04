@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 font_policy.py — SSOT ของนโยบายฟอนต์ไทย+ละติน (skill ice-doc-builder §3.0)
-V01R02 | 2026.08.04
+V01R05 | 2026.08.04
+  V01R03 fallbacks เป็น list + rail_fallbacks() · V01R04 resolve_font_policy (auto-correct)
+  V01R05 infer_rail (เดารางจากชนิดเอกสาร)
 
 V01R02 (คำสั่ง user):
   +APPROVED_ALT — ตัวเลือกที่อนุมัติเพิ่ม เลือกใช้ได้โดยไม่ต้อง --allow-font:
