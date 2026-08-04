@@ -32,7 +32,7 @@ from docx.oxml import OxmlElement
 
 # ⭐ นโยบายฟอนต์มาจาก SSOT เดียว — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้ (V02R01)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from font_policy import RAILS, resolve_font_policy   # noqa: E402
+from font_policy import RAILS, resolve_font_policy, infer_rail   # noqa: E402
 
 
 # ── ⭐ W1-W2 FONT BINDING ที่ระดับราก (V02R01 — 2026.08.04) ──────────────────
@@ -151,7 +151,8 @@ def build(spec_path, out_path):
             add_bilingual(doc, block.get("en", ""), block.get("th", ""))
 
     # ⭐ ฟอนต์มาจากราง (§3.0) · spec override ได้เมื่อลูกค้า/TOR บังคับ
-    rail = spec.get("rail", "private")
+    rail, _why = infer_rail(spec, out_path)
+    print(f"📄 ราง: {rail}  ({_why})")
     if rail not in RAILS:
         sys.exit(f"rail ต้องเป็น {'|'.join(RAILS)} (ได้: {rail})")
     font = spec.get("font") or RAILS[rail]["font"]

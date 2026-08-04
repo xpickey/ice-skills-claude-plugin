@@ -52,7 +52,7 @@ def OxmlElement(tag):
 
 # ⭐ นโยบายฟอนต์มาจาก SSOT เดียว — ห้าม hard-code ชื่อฟอนต์ในไฟล์นี้ (V02R01)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from font_policy import RAILS, resolve_font_policy   # noqa: E402
+from font_policy import RAILS, resolve_font_policy, infer_rail   # noqa: E402
 
 
 def hex_to_rgb(h):
@@ -248,7 +248,8 @@ def build(spec_path, out_path):
         LAYOUTS.get(layout, add_bullets_slide)(prs, slide, theme)
 
     # ⭐ D1 — ฟอนต์มาจากราง (§3.0) · spec override ได้เมื่อลูกค้า/แบรนด์บังคับ
-    rail = spec.get("rail", "private")
+    rail, _why = infer_rail(spec, out_path)
+    print(f"📄 ราง: {rail}  ({_why})")
     if rail not in RAILS:
         sys.exit(f"rail ต้องเป็น {'|'.join(RAILS)} (ได้: {rail})")
     font = spec.get("font_family") or RAILS[rail]["font"]

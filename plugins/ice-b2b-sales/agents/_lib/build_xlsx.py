@@ -55,7 +55,7 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 # ─────────────────────────────────────────────────────────────────────────────
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from font_policy import (RAILS, BLACKLIST_PATTERNS, LATIN_ONLY, THAI_RE,   # noqa: E402
-                         APPROVED_ALT, RETIRED, rail_fallbacks, resolve_font_policy,
+                         APPROVED_ALT, RETIRED, rail_fallbacks, resolve_font_policy, infer_rail,
                          has_thai, installed_families, blacklist_hit, check_fonts)
 
 ROW_H_FACTOR = 1.45   # §3.2 E2 — ทดสอบแล้ว
@@ -184,7 +184,9 @@ def build(spec_path: str, out_path: str):
     with open(spec_path) as f:
         spec = json.load(f)
 
-    rail = spec.get("rail", "private")
+    # ⭐ V02R06: ไม่มี rail ใน spec → เดาจากชนิดเอกสาร (path/ชื่อไฟล์/หัวเรื่อง) + ประกาศเสมอ
+    rail, _why = infer_rail(spec, out_path)
+    print(f"📄 ราง: {rail}  ({_why})")
     if rail not in RAILS:
         sys.exit(f"rail ต้องเป็น private|govt (ได้: {rail})")
     FONT = spec.get("font", RAILS[rail]["font"])

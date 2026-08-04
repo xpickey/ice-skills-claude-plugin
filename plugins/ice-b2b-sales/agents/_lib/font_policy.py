@@ -56,6 +56,59 @@ DISTRIBUTABLE = {"IBM Plex Sans Thai Looped", "IBM Plex Sans Thai", "Noto Sans T
 #      ซึ่งผู้แก้จะจัดรูปแบบเองอยู่แล้ว → fallback แทบไม่มีผลต่อความสวยที่ลูกค้าเห็น
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# ⭐ V01R05 (2026.08.04 · คำสั่ง user) — เดาราง "จากชนิดเอกสาร" ไม่ใช่ default ตัวเดียวทุกงาน
+#   เดิม: rail = spec.get("rail", "private") → งาน TOR ราชการก็ได้ฟอนต์เอกชนไปเงียบ ๆ
+#   ตอนนี้: อ่านสัญญาณจาก path/ชื่อไฟล์/เนื้อ spec → เลือกรางให้ + **ประกาศเสมอว่าเดาจากอะไร**
+#   (ประกาศสำคัญพอ ๆ กับการเดาถูก — เดาผิดแล้วเงียบ คือสิ่งที่ทำให้เคส PWA/VFIN หลุดมาตลอด)
+# ─────────────────────────────────────────────────────────────────────────────
+RAIL_SIGNALS = {
+    "govt": ["tor", "ทีโออาร์", "e-gp", "egp", "ประกวดราคา", "สอบราคา", "จัดซื้อจัดจ้าง",
+             "ราชการ", "รัฐวิสาหกิจ", "พัสดุ", "ข้อกำหนดและขอบเขต", "ประกาศเชิญชวน",
+             "กรม", "กระทรวง", "สำนักงาน", "การประปา", "การไฟฟ้า"],
+    "academic": ["วิทยานิพนธ์", "ดุษฎีนิพนธ์", "สารนิพนธ์", "บทความวิชาการ", "บทความวิจัย",
+                 "มจร", "วารสาร", "thesis", "dissertation", "journal", "abstract",
+                 "บรรณานุกรม", "งานวิจัย"],
+}
+
+
+def infer_rail(spec=None, out_path="", default="private"):
+    """เดารางจากชนิดเอกสาร · คืน (rail, reason)
+
+    ลำดับสัญญาณ (บนชนะล่าง):
+      ① spec["rail"] ระบุตรง ๆ            ② spec["doc_type"]
+      ③ คำในชื่อไฟล์/path ปลายทาง          ④ คำในหัวเรื่อง/ชื่อชีทของ spec
+      ⑤ ไม่มีสัญญาณ → default (private) — แต่ยัง**ประกาศ**ว่าใช้ค่าเริ่มต้นเพราะไม่พบสัญญาณ
+    """
+    spec = spec or {}
+    if spec.get("rail") in RAILS:
+        return spec["rail"], f"spec ระบุ rail='{spec['rail']}' ตรง ๆ"
+
+    dt = (spec.get("doc_type") or "").lower()
+    hay_parts = [os.path.basename(out_path), out_path, dt,
+                 str(spec.get("title", "")), str(spec.get("name", ""))]
+    for sh in spec.get("sheets", []) or []:
+        hay_parts.append(str(sh.get("name", "")))
+        hay_parts += [str(h) for h in (sh.get("headers") or [])[:8]]
+    hay = " ".join(hay_parts).lower()
+
+    for rail, words in RAIL_SIGNALS.items():
+        if rail not in RAILS:
+            continue
+        hit = [w for w in words if w in hay]
+        if hit:
+            return rail, f"พบคำบ่งชี้ {hit[:3]} → ราง '{rail}'"
+
+    # academic ไม่ใช่ราง แต่มีข้อบังคับของตัวเอง — เตือนให้ประกาศ override แทนการเดาเอง
+    acad = [w for w in RAIL_SIGNALS["academic"] if w in hay]
+    if acad:
+        return default, (f"⚠ พบคำบ่งชี้งานวิชาการ {acad[:3]} — ข้อบังคับ มจร./วารสาร มักบังคับ "
+                         f"'TH SarabunPSK' 16pt ซึ่งอยู่นอกนโยบายราง "
+                         f"→ ถ้าใช่ ให้ใส่ \"font\":\"TH SarabunPSK\" + "
+                         f"\"font_override_reason\":\"ข้อบังคับวารสาร/มหาวิทยาลัย\" ใน spec")
+    return default, f"ไม่พบสัญญาณชนิดเอกสาร → ใช้ค่าเริ่มต้น '{default}'"
+
+
 def resolve_font_policy(font, rail, spec=None, fams=None):
     """⭐ ด่านนโยบาย **ก่อน build** — เรียกทันทีหลัง resolve ชื่อฟอนต์ ก่อนเขียนไฟล์ใด ๆ
 
