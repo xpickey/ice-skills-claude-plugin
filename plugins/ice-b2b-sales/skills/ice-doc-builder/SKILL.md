@@ -3,7 +3,8 @@ name: ice-doc-builder
 description: "iCE Document Build Craft — ความรู้ build .pptx/.docx/.xlsx/PDF/HTML ระดับ specialist (Build Discipline D1-D4 tri-slot Thai+EN font, 18 PPTX lessons, Method B font-embed, Strict Validator, SAVE-FIRST, VALIDATION BUDGET, renderer ladder) ที่ย้ายมาจาก deliverable-gen-agent เพื่อให้ทุก persona โหลดใช้ได้ (L0/กัปตัน/คิม/สมนึก build เองใน DOC-PIPELINE V3 · เจนนี่-shell ใช้ตอน background build). ถือ contract ของ marker ICE_BUILD=pipeline (PreToolUse hook). Triggers (TH): build deck, สร้าง slide, สร้างเอกสาร, ทำ proposal เป็นไฟล์, สร้าง .pptx, ทำ .docx, ทำ .xlsx, ทำ ROI excel, dashboard, font ไทย, font เพี้ยน, แก้ font, embed font, ไฟล์เปิดไม่ได้, Repair dialog. Triggers (EN): build deck, generate slides, build document, create pptx/docx/xlsx, ROI workbook, dashboard, font embed, Thai font, corrupted file, ICE_BUILD."
 ---
 
-> **Skill:** ice-doc-builder | **Version:** V01R11 | **Date:** 2026.08.05
+> **Skill:** ice-doc-builder | **Version:** V01R12 | **Date:** 2026.08.06
+> **V01R12 (2026.08.06 · คำสั่ง user):** ⭐ FILE HYGIENE — §0.1 ข้อ 6 + แก้ต้นตอใน §7 ②: "save ใต้ ~/Documents แล้วย้าย" → staging `~/Documents/.ice-staging/` + ย้ายเข้า `_build/_qa/` ในคำสั่งเดียวกัน (ขยะ `_qa_aris_vfin/` 11 MB + `qa_s6_*.pptx` ใต้ ~/Documents — user เจอ ไม่ใช่ระบบ) · SSOT ทั้ง fleet = `reference/file-hygiene.md`
 > **V01R11 (2026.08.05 · คำสั่ง user — เคส VFIN):** +**§3.0 ⑤ TEMPLATE-BASE BUILD** — งานต่อยอด template/เด็คเดิมใช้ฟอนต์ตามนโยบายปัจจุบันเป็นค่าเริ่มต้น **ห้ามสืบทอดฟอนต์ template อัตโนมัติ** · ฟอนต์ template เฉพาะ user สั่งชัดเจน (font_override_reason + QA-log) · agent ห้ามออก --allow-font ให้ตัวเองด้วยเหตุผลความสม่ำเสมอ · PLAN-CARD ต้องแจ้ง mixed-font ชั่วคราว · ③ APPROVED SET จำกัดขอบเขตเหลืองานเริ่มจากศูนย์ · `font_policy` V01R08 · อริส +D7.6d
 > **V01R10 (2026.08.05 · QA + คำสั่ง user):** +**§0.1 ข้อ 0 ASK-FIRST** (คำถามค้าง = ห้ามเริ่ม build · เอกสารพร้อมคำถามแนบท้าย = ผิด protocol) · **แก้ §3.0-A แถวสไลด์แน่น:** ฟอนต์ = `Leelawadee` ตัวธรรมดา (เดิมเขียน Leelawadee UI ไม่ตรงกับโค้ดและคำสั่ง user) + เกณฑ์อัตโนมัติ + 🔴 ยกเว้น rail=govt (ฟอนต์บังคับ TOR ชนะกฎความแน่น) · อ้างอิงเดิม V01R09 | **Date:** 2026.08.04
 > **V01R09 (2026.08.04) — ⭐ ตารางตัดสินใจฟอนต์ถาวร (§3.0-A):** เกณฑ์ 5 ข้อเรียงตาม "อำนาจตัดสิน" (ฝังได้ไหม → สิทธิ์ → น้ำหนัก → GAP → ยอดวรรณยุกต์) + ตารางงาน×ฟอนต์ · **กฎใหม่ (user): PPTX สไลด์แน่นต้องบีบบรรทัด → `Leelawadee UI` แทนฟอนต์ราง** (ยอดวรรณยุกต์ 0.743 vs 0.924 → ไม่ชนเมื่อบีบ · PPTX ฝังได้จึงไม่ต้องห่วงเครื่องผู้รับ) · **fallback เปลี่ยนเป็นลำดับ** `Leelawadee UI → Sukhumvit Set → Tahoma` (user: "Tahoma ไม่ค่อยสวย") · +บันทึกความจริงว่า **ไม่มีฟอนต์ไทยสวยตัวไหนมีทั้ง Win+Mac** → ทางแก้จริงคือ PDF companion ไม่ใช่หา fallback สวย · `font_policy` V01R03 (`fallbacks` เป็น list + `rail_fallbacks()`)
@@ -45,6 +46,10 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
    > สำรวจแล้วพบว่า build script **5 ใน 6 ตัว** ทำแบบเดียวกัน = นโยบายบังคับใช้ได้แค่ฟอร์แมตเดียว
    > **user เป็นคนจับได้ ไม่ใช่ระบบ**
 5. **จบ build ต้องรัน `audit_fonts.py` ก่อนคิว ④ เสมอ** (§6) — build_* ของเราเรียกให้อัตโนมัติแล้ว
+6. **⭐ FILE HYGIENE (V01R12 · คำสั่ง user 2026.08.06):** ไฟล์ทำงานทุกชนิด (spec/script/render/crop)
+   → `<โฟลเดอร์งาน>/_build/` · หลักฐานตรวจ → `_build/_qa/` · 🔴 ห้ามสร้างไฟล์ใหม่ตรง ๆ ใต้ ~/Documents
+   หรือ ~/Documents/Claude root เด็ดขาด · ไม่แน่ใจ = ถาม user · จบงาน `ls` ยืนยันไม่มีไฟล์หลง
+   — SSOT: `reference/file-hygiene.md`
 
 ## 0.2 MARKER SEMANTICS (ผูก PreToolUse hook `ice-prebuild-guard.sh`)
 | Marker | ใคร | ความหมาย |
@@ -697,7 +702,10 @@ V3 สระอำ INTEGRITY (เฉพาะ output ที่เป็น PDF �
    (ไม่ใส่ fresh profile = พิมพ์ "convert..." แต่ไม่เขียนไฟล์เงียบ ๆ)
    วิธียืนยันว่าได้ตัวจริง: `--version` ต้องขึ้นต้น "LibreOffice " — shim จะขึ้นอย่างอื่น
 ② PowerPoint AppleScript save-as-PDF (fidelity สูงสุด): dest ต้องเป็น POSIX file (string เฉย ๆ = "done" แต่ไม่เขียน) ·
-   sandbox เขียน /private/tmp ไม่ได้ → save ใต้ ~/Documents แล้วย้าย
+   sandbox เขียน /private/tmp ไม่ได้ → 🔴 V01R12: ใช้ staging `~/Documents/.ice-staging/` เท่านั้น
+   แล้ว**ย้ายเข้า `<โฟลเดอร์งาน>/_build/_qa/` ทันทีในคำสั่งเดียวกัน** (`osascript … && mv … && rmdir`)
+   — ข้อความเดิม "save ใต้ ~/Documents แล้วย้าย" คือต้นตอขยะ `_qa_aris_vfin/` + `qa_s6_*.pptx`
+   ที่ user เจอใต้ ~/Documents (2026.08.05): agent ทำครึ่งแรก ลืมครึ่งหลัง → กติกาเต็ม `reference/file-hygiene.md`
 ③ PowerPoint MCP = เช็ค "เปิดได้/ไม่ขึ้น Repair" เท่านั้น (export_pdf = false success ห้ามใช้ render)
 ④ ไม่มีทางไหนได้ = NOT-VERIFIABLE-ON-HOST บอกตรง ๆ — ห้ามหลุดไป loop สอบสวน
 
