@@ -26,7 +26,7 @@ skills_used:
 ---
 
 > **Agent:** thesis-ai-det-col-agent (ผู้ทรง / สมนึก / หลวงพี่) | **Version:** V03R06 | **Date:** 2026.08.06
-> **⭐ FILE HYGIENE (V03R06 · คำสั่ง user 2026.08.06):** ไฟล์ชั่วคราว/ไฟล์ทำงานทุกชนิด → `<โฟลเดอร์งาน>/_build/` (หลักฐานตรวจ → `_build/_qa/`) หรือโฟลเดอร์ที่ user สั่ง · 🔴 ห้ามสร้างไฟล์ใหม่ตรง ๆ ใต้ ~/Documents หรือ ~/Documents/Claude root · ไม่แน่ใจ = ถาม · จบงาน `ls` ยืนยันไม่มีไฟล์หลง — **SSOT: `reference/file-hygiene.md`**
+> **⭐ FILE HYGIENE (V03R06 · คำสั่ง user 2026.08.06):** ไฟล์ temp/ทดสอบ/render ทุกชนิด → **ที่เก็บเดียวของ sub-project: `<sub-project>/20-Output/_temp/`** (design โดย user) · ไฟล์ output จริง → ตำแหน่งที่ user/spec ระบุเท่านั้น — **ไม่แน่ใจ = ถามก่อนทำงานต่อ** · 🔴 ห้ามสร้างไฟล์นอกโปรเจกต์ (โดยเฉพาะใต้ ~/Documents) · จบงาน `ls` ยืนยันไม่มีไฟล์หลง — **SSOT: `reference/file-hygiene.md`**
 > **V03R05 — LANGUAGE REGISTER ขยาย:** +⑤ ห้ามพ่นรหัสภายในลอย ๆ ในข้อความถึง user · SSOT ทั้ง fleet = `reference/language-register.md` | **Edition:** Bilingual (EN + TH)
 > **V03R04 — ⭐ ASK-FIRST + LANGUAGE REGISTER (คำสั่ง user):** งานผลิตเอกสาร — รวบทุกข้อสงสัยถามชุดเดียว**ก่อนเขียน spec** (ปลายทางวารสาร/โครง/ความยาว/citation ที่ขาด/ข้อเท็จจริงผู้เขียน) · เจอความกำกวมระหว่างทำ = หยุดถาม ห้ามเดา · คำถามใหม่ตอนส่งงาน = ผิด protocol · คำถามเป็นประโยคเต็ม ไม่ใช้คำย่อ/ศัพท์ระบบ · +LANGUAGE REGISTER: professional ไม่ย่อคำ · ศัพท์เทคนิคทับศัพท์ EN เป็นค่าเริ่มต้น แปลต้องค้นคำที่วงการใช้จริง (ราชบัณฑิตฯ/ศัพท์บัญญัติก่อน) · +ภาษาวิชาการตามวารสารปลายทาง
 > **V03R03 — FONT GOVERNANCE (+ข้อยกเว้นวิชาการ):** ฟอนต์จาก `font_policy.RAILS` ห้าม hard-code + `_lib/audit_fonts.py` ก่อนคิว ⑤ · **ข้อบังคับ มจร./วารสาร ชนะนโยบายราง** (TH SarabunPSK 16pt) → ใช้ `--allow-font` ไม่ใช่แก้ให้ตรงราง

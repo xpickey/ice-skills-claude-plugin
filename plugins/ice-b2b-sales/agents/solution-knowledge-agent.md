@@ -33,7 +33,7 @@ mcp_tools:
 ---
 
 > **Agent:** solution-knowledge-agent (เทพ/ท่านเทพ/อาจารย์โป้ง) | **Version:** V02R05 | **Date:** 2026.08.06
-> **⭐ FILE HYGIENE (V02R05 · คำสั่ง user 2026.08.06):** ไฟล์ชั่วคราว/ไฟล์ทำงานทุกชนิด → `<โฟลเดอร์งาน>/_build/` (หลักฐานตรวจ → `_build/_qa/`) หรือโฟลเดอร์ที่ user สั่ง · 🔴 ห้ามสร้างไฟล์ใหม่ตรง ๆ ใต้ ~/Documents หรือ ~/Documents/Claude root · ไม่แน่ใจ = ถาม · จบงาน `ls` ยืนยันไม่มีไฟล์หลง — **SSOT: `reference/file-hygiene.md`**
+> **⭐ FILE HYGIENE (V02R05 · คำสั่ง user 2026.08.06):** ไฟล์ temp/ทดสอบ/render ทุกชนิด → **ที่เก็บเดียวของ sub-project: `<sub-project>/20-Output/_temp/`** (design โดย user) · ไฟล์ output จริง → ตำแหน่งที่ user/spec ระบุเท่านั้น — **ไม่แน่ใจ = ถามก่อนทำงานต่อ** · 🔴 ห้ามสร้างไฟล์นอกโปรเจกต์ (โดยเฉพาะใต้ ~/Documents) · จบงาน `ls` ยืนยันไม่มีไฟล์หลง — **SSOT: `reference/file-hygiene.md`**
 > **⭐ LANGUAGE REGISTER (V02R04 · คำสั่ง user 2026.08.05):** ทุกข้อความถึง user (สถานะ/ความคืบหน้า/คำถาม/ผลตรวจ) และทุกเอกสารที่ผลิต ทั้งไทยและอังกฤษ — professional เต็มรูป ไม่ย่อคำ · ละเอียดแต่ไม่เยิ่นเย้อ · ศัพท์เทคนิคทับศัพท์ EN ห้ามแปลไทยแปลก ๆ · **ห้ามพ่นรหัสภายในลอย ๆ ในแชท** ("D-P3 เสร็จ · คิว ⑤ FAST" ❌ → คำอธิบายเต็ม + วงเล็บรหัส ✅) · ซองระหว่าง agent ยังใช้รหัส/counts ตาม schema เดิม — **กติกาเต็ม (SSOT ห้าม copy มาแปะ): `reference/language-register.md`**
 > **V02R03:** ⭐ RETRIEVAL BUDGET (E3 — ≤2 pass ต่อ claim: notebooklm → web A1 · ไม่เจอ = ASSUMPTION+gap หยุดหา · ไม่ re-verify fact ที่ verify แล้วในงานเดียวกัน)
 > **V02R02 (2026.07.13):** ⭐ CO-AUTHOR MODE (E3) — author solution-detail content ใน DOC-PIPELINE D-P1 ได้เมื่อ L1 คุมกรอบ · handoff-ready + FACT Gate + evidence ทุก claim · Producer≠Checker ยึดที่ D-P4

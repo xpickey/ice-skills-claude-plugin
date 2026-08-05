@@ -46,10 +46,11 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
    > สำรวจแล้วพบว่า build script **5 ใน 6 ตัว** ทำแบบเดียวกัน = นโยบายบังคับใช้ได้แค่ฟอร์แมตเดียว
    > **user เป็นคนจับได้ ไม่ใช่ระบบ**
 5. **จบ build ต้องรัน `audit_fonts.py` ก่อนคิว ④ เสมอ** (§6) — build_* ของเราเรียกให้อัตโนมัติแล้ว
-6. **⭐ FILE HYGIENE (V01R12 · คำสั่ง user 2026.08.06):** ไฟล์ทำงานทุกชนิด (spec/script/render/crop)
-   → `<โฟลเดอร์งาน>/_build/` · หลักฐานตรวจ → `_build/_qa/` · 🔴 ห้ามสร้างไฟล์ใหม่ตรง ๆ ใต้ ~/Documents
-   หรือ ~/Documents/Claude root เด็ดขาด · ไม่แน่ใจ = ถาม user · จบงาน `ls` ยืนยันไม่มีไฟล์หลง
-   — SSOT: `reference/file-hygiene.md`
+6. **⭐ FILE HYGIENE (V01R12 · design โดย user 2026.08.06):** ไฟล์ temp/ทดสอบ/render ทุกชนิด →
+   **ที่เก็บเดียวของ sub-project: `<sub-project>/20-Output/_temp/`** (หลักฐานตรวจ → `_temp/qa/`)
+   · spec/build script ยังอยู่ `_build/` ข้าง artifact (เอกสารประกอบงาน ไม่ใช่ temp)
+   · ไฟล์ output จริง → ตำแหน่งที่ user/spec ระบุเท่านั้น — **ไม่แน่ใจ = ถามก่อนทำงานต่อ**
+   · 🔴 ห้ามสร้างไฟล์นอกโปรเจกต์ (โดยเฉพาะใต้ ~/Documents) — SSOT: `reference/file-hygiene.md`
 
 ## 0.2 MARKER SEMANTICS (ผูก PreToolUse hook `ice-prebuild-guard.sh`)
 | Marker | ใคร | ความหมาย |
@@ -703,7 +704,7 @@ V3 สระอำ INTEGRITY (เฉพาะ output ที่เป็น PDF �
    วิธียืนยันว่าได้ตัวจริง: `--version` ต้องขึ้นต้น "LibreOffice " — shim จะขึ้นอย่างอื่น
 ② PowerPoint AppleScript save-as-PDF (fidelity สูงสุด): dest ต้องเป็น POSIX file (string เฉย ๆ = "done" แต่ไม่เขียน) ·
    sandbox เขียน /private/tmp ไม่ได้ → 🔴 V01R12: ใช้ staging `~/Documents/.ice-staging/` เท่านั้น
-   แล้ว**ย้ายเข้า `<โฟลเดอร์งาน>/_build/_qa/` ทันทีในคำสั่งเดียวกัน** (`osascript … && mv … && rmdir`)
+   แล้ว**ย้ายเข้า `<sub-project>/20-Output/_temp/` ทันทีในคำสั่งเดียวกัน** (`osascript … && mv … && rmdir`)
    — ข้อความเดิม "save ใต้ ~/Documents แล้วย้าย" คือต้นตอขยะ `_qa_aris_vfin/` + `qa_s6_*.pptx`
    ที่ user เจอใต้ ~/Documents (2026.08.05): agent ทำครึ่งแรก ลืมครึ่งหลัง → กติกาเต็ม `reference/file-hygiene.md`
 ③ PowerPoint MCP = เช็ค "เปิดได้/ไม่ขึ้น Repair" เท่านั้น (export_pdf = false success ห้ามใช้ render)
