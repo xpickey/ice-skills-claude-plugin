@@ -1,4 +1,4 @@
-# 12 — WRITE-CLEAN CARD (L1) — เขียนสะอาดตั้งแต่แรก ⭐ V01R01
+# 12 — WRITE-CLEAN CARD (L1) — เขียนสะอาดตั้งแต่แรก ⭐ V01R04
 
 > **ใช้เมื่อไหร่:** ตอน **เขียน prose** (ไม่ใช่ตอน detect). การ์ดนี้คือ "สารสกัด top AI-tells" ที่ทุก agent ฝัง/อ้างได้ — เพื่อ**เลี่ยง AI-cadence ตั้งแต่ pass แรก** ไม่ต้องวน detect→fix ทีหลัง (ประหยัด token).
 >
@@ -31,12 +31,20 @@ delve→examine · leverage→use · utilize→use · robust→strong/reliable �
 
 **A5 — Wording (W1-W5):** positive-default · technical อธิบายเชิงผู้ใช้ · ไม่ลิเก · คำย่อนิยามก่อน · ไม่ emoji/CTA/clickbait
 
+**A6 — LANGUAGE REGISTER (คำสั่ง user 2026.08.05 · ทุก register ทั้ง TH/EN):**
+- **ไม่ย่อคำ ไม่ใช้คำย่อ** — คำย่อมาตรฐานวงการ (ERP, TOR) ใช้ได้แต่สะกดเต็มครั้งแรกในเอกสาร
+- **ละเอียดครบประเด็นแต่ไม่เยิ่นเย้อ** — ทุกประโยคมีสาระ ไม่ padding ไม่ทวนความเดิม
+- **ศัพท์เทคนิคทับศัพท์ EN เป็นค่าเริ่มต้น — ห้ามแปลไทยแปลก ๆ/ประดิษฐ์คำแปลเอง** · จำเป็นต้องแปลจริง
+  → **ค้นหาคำที่วงการใช้จริงจาก internet ก่อน** (ขออนุญาต user ตาม H2) · ไม่แน่ใจ = ทับศัพท์ไว้ก่อน
+- *SSOT ระดับ fleet: `~/.claude/agents/reference/language-register.md` — card นี้คือ prevention extract*
+
 ---
 
 ## ส่วน B — register-specific (เลือกตามงานที่เขียน)
 
 ### 🟩 B-Academic (ดุษฎีนิพนธ์/บทความ/วิจัย)
 - **Class A zero-tolerance** (เจอครั้งเดียวแก้): ยิ่งไปกว่านั้น · ในท้ายที่สุด · ทั้งหมดนี้สังเคราะห์ได้ว่า · อย่างก้าวกระโดด · พลิกโฉม(ใน body) · เป็นที่ทราบกันดีว่า · ปฏิเสธไม่ได้ว่า
+- **ภาษางานวิชาการ/งานวิจัย (A6 ฉบับ academic — คำสั่ง user 2026.08.05):** ประโยคความเรียงสมบูรณ์ตามธรรมเนียมบทความวิชาการไทย · ศัพท์เฉพาะทางเทียบ**ศัพท์บัญญัติราชบัณฑิตฯ/ศัพท์บัญญัติสาขา**ก่อน แล้วยึด**คำที่วารสารปลายทางใช้จริง**เหนือความชอบส่วนตัว · ไม่มีคำแปลที่ยอมรับในสาขา → ทับศัพท์รูปแบบ "ไทย (English)" ครั้งแรก แล้วทับศัพท์ตลอดเล่ม — ห้ามประดิษฐ์คำแปลเอง
 - ห้ามเปิดย่อหน้าสรุปด้วยสูตรสังเคราะห์ · acronym นิยามครั้งเดียว · กริยารายงานตรงชนิดแหล่ง (งานทัศนะห้าม "พบว่า/พิสูจน์ว่า")
 - 🟢 ใช้ได้ (อย่าตัดผิด): นอกจากนี้ · อย่างมีประสิทธิภาพ · บูรณาการ · ขับเคลื่อน · ยกระดับ (คำที่นักวิจัยไทยใช้จริง density ≤3/500)
 
@@ -53,6 +61,14 @@ delve→examine · leverage→use · utilize→use · robust→strong/reliable �
   - **ห้ามแตะ** 4 fit-labels (Configure/Customization/Integration/Workaround = bilingual by design)
   - **product-feature-misname guard:** verify ชื่อ feature จาก source ก่อนเสมอ — ห้ามเดา · ห้าม overclaim category (RNA = measurement engine ไม่ใช่ "actuarial")
   - *prevention extract ของ §6.6 — detection เต็ม = skill §6.6 B-Check 7/11. TL-A = §6.6 well-known-Thai guard (กระทบยอด) · TL-B misname = มิติใหม่ MG1 (gated) · ทิศตรงข้าม §6.5 (calque) ยังคงอยู่*
+- **B8 Professional Business Wording (คำสั่ง user 2026.08.05 — คู่กับกัปตัน P10 ⑤):**
+  - เขียน**ภาษาธุรกิจตรง ๆ ระดับที่ปรึกษาคุยกับผู้บริหาร** (professional business user wording) —
+    ผู้บริหารอ่านเข้าใจทันทีโดยไม่ต้องมีพื้นเทคนิค · **ไม่ใช้ technical term ถ้าเลี่ยงได้** —
+    อธิบายด้วย**ผลลัพธ์ทางธุรกิจ** (ประหยัดเวลา ลดความเสี่ยง เห็นตัวเลขเร็วขึ้น) ไม่ใช่กลไกทางเทคนิค
+  - ❌ "ระบบทำ three-way matching ผ่าน API integration" → ✅ "ระบบตรวจใบสั่งซื้อ ใบรับของ
+    และใบแจ้งหนี้ให้ตรงกันอัตโนมัติ ลดงานกระทบยอดของทีมบัญชี"
+  - 🟢 ยังใช้ได้: ชื่อเฉพาะ product/module (NetSuite, General Ledger) · ศัพท์ธุรกิจมาตรฐาน (ROI, TCO, go-live)
+  - technical detail เมื่อผู้อ่านขอเท่านั้น → แยกส่วน Executive Summary + Technical Detail เสมอ
 - **B7 No-Theatrical Wording (ห้ามคำละคร/เกม — เคส Viriyah VFIN 2026.07):**
   - คำนาฏกรรมห้ามใช้ในเอกสารธุรกิจทุกชนิด: **องก์** → ช่วงที่/Session/Part · **ฉาก** → Step/ขั้นตอนที่ · **ตัวละคร** → บทบาทผู้ใช้งาน (User Persona)
   - สำนวนเปรียบเปรยเชิงเกม/ละคร → ถ้อยคำธุรกิจตรง: ย้ายเสาประตู→ปรับเกณฑ์ภายหลัง · คุมเกม→คุมกรอบการวัดผล · ตัดสินเกม→จุดชี้ขาดการประเมิน · ทาสีเขียว→ตอบรับโดยไม่แสดงเงื่อนไข · กับดัก→ความเสี่ยงต่อความน่าเชื่อถือ
@@ -76,13 +92,14 @@ delve→examine · leverage→use · utilize→use · robust→strong/reliable �
 
 ## วิธีใช้ (สำหรับ agent)
 
-1. **ตอนเขียน** — สแกนใจ A1-A5 (core) + B-[register] ของงานที่ทำ → เลี่ยงตั้งแต่ร่างแรก
+1. **ตอนเขียน** — สแกนใจ A1-A6 (core) + B-[register] ของงานที่ทำ → เลี่ยงตั้งแต่ร่างแรก
 2. **ไม่แน่ใจว่าหลุดไหม** — ถ้าเป็น customer-facing/ส่งจริง → ส่ง qa-master D5 (โหลด skill เต็ม detect)
 3. **การ์ดนี้ = prevention · skill เต็ม = detection/correction** — คนละชั้น เสริมกัน
 
 ---
 
 ## CHANGELOG
+- **V01R04 (2026.08.05)** — +**A6 LANGUAGE REGISTER** (core ทุก register: ไม่ย่อคำ · ละเอียดไม่เยิ่นเย้อ · ทับศัพท์ EN ห้ามแปลไทยแปลก ๆ — แปลต้องค้นคำจริงจาก internet ก่อน · SSOT fleet = reference/language-register.md) · +**B8 Professional Business Wording** ใต้ B-Business (ภาษาธุรกิจตรง ๆ ระดับที่ปรึกษา-ผู้บริหาร ไม่ใช้ technical term — คู่กัปตัน P10 ⑤) · +บรรทัดภาษาวิชาการใต้ B-Academic (ศัพท์บัญญัติราชบัณฑิตฯ → คำที่วารสารใช้จริง → ทับศัพท์ ไทย (English) ครั้งแรก)
 - **V01R03 (2026.07.17)** — +B7 No-Theatrical Wording ใต้ B-Business (องก์/ฉาก/ตัวละคร + สำนวนเกม/ละคร → business wording ตรง + 🟢 day-in-the-life ยังใช้ได้) — ยกระดับจาก memory `b2b-business-wording-no-theatrical` (project Viriyah) ขึ้นเป็นกติกากลางทุก project · คู่กับ W3 Anti-ลิเก `11` §6.
 - **V01R02 (2026.06.24)** — +B6 Term-Localization ใต้ B-Business (TL-A keep-Thai / TL-B keep-EN-on-misname / TL-C Thai(EN)-first + product-feature-misname guard + verify-from-source) — prevention extract ของ §6.6/§6.6.1; เคส VFIN. example-light (push enumerated product list ไป Compass brief). cross-ref ชี้ skill เป็น source of truth (anti-drift).
 - **V01R01 (2026.06.13)** — สกัดครั้งแรกจาก CORE + 3 branch (V05R01). A=core (EN vocab/cadence + TH cadence + human-voice + wording) · B=register-specific (academic Class A / business anchor+ห้าม zero-risk / general) · C=guard. ออกแบบเป็น L1 ให้ทุก agent ฝัง/อ้าง — "เขียนสะอาดตั้งแต่แรก" แทน detect-fix loop.
