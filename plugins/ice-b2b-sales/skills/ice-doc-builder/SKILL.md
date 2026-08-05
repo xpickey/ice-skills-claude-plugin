@@ -3,7 +3,8 @@ name: ice-doc-builder
 description: "iCE Document Build Craft — ความรู้ build .pptx/.docx/.xlsx/PDF/HTML ระดับ specialist (Build Discipline D1-D4 tri-slot Thai+EN font, 18 PPTX lessons, Method B font-embed, Strict Validator, SAVE-FIRST, VALIDATION BUDGET, renderer ladder) ที่ย้ายมาจาก deliverable-gen-agent เพื่อให้ทุก persona โหลดใช้ได้ (L0/กัปตัน/คิม/สมนึก build เองใน DOC-PIPELINE V3 · เจนนี่-shell ใช้ตอน background build). ถือ contract ของ marker ICE_BUILD=pipeline (PreToolUse hook). Triggers (TH): build deck, สร้าง slide, สร้างเอกสาร, ทำ proposal เป็นไฟล์, สร้าง .pptx, ทำ .docx, ทำ .xlsx, ทำ ROI excel, dashboard, font ไทย, font เพี้ยน, แก้ font, embed font, ไฟล์เปิดไม่ได้, Repair dialog. Triggers (EN): build deck, generate slides, build document, create pptx/docx/xlsx, ROI workbook, dashboard, font embed, Thai font, corrupted file, ICE_BUILD."
 ---
 
-> **Skill:** ice-doc-builder | **Version:** V01R09 | **Date:** 2026.08.04
+> **Skill:** ice-doc-builder | **Version:** V01R10 | **Date:** 2026.08.05
+> **V01R10 (2026.08.05 · QA + คำสั่ง user):** +**§0.1 ข้อ 0 ASK-FIRST** (คำถามค้าง = ห้ามเริ่ม build · เอกสารพร้อมคำถามแนบท้าย = ผิด protocol) · **แก้ §3.0-A แถวสไลด์แน่น:** ฟอนต์ = `Leelawadee` ตัวธรรมดา (เดิมเขียน Leelawadee UI ไม่ตรงกับโค้ดและคำสั่ง user) + เกณฑ์อัตโนมัติ + 🔴 ยกเว้น rail=govt (ฟอนต์บังคับ TOR ชนะกฎความแน่น) · อ้างอิงเดิม V01R09 | **Date:** 2026.08.04
 > **V01R09 (2026.08.04) — ⭐ ตารางตัดสินใจฟอนต์ถาวร (§3.0-A):** เกณฑ์ 5 ข้อเรียงตาม "อำนาจตัดสิน" (ฝังได้ไหม → สิทธิ์ → น้ำหนัก → GAP → ยอดวรรณยุกต์) + ตารางงาน×ฟอนต์ · **กฎใหม่ (user): PPTX สไลด์แน่นต้องบีบบรรทัด → `Leelawadee UI` แทนฟอนต์ราง** (ยอดวรรณยุกต์ 0.743 vs 0.924 → ไม่ชนเมื่อบีบ · PPTX ฝังได้จึงไม่ต้องห่วงเครื่องผู้รับ) · **fallback เปลี่ยนเป็นลำดับ** `Leelawadee UI → Sukhumvit Set → Tahoma` (user: "Tahoma ไม่ค่อยสวย") · +บันทึกความจริงว่า **ไม่มีฟอนต์ไทยสวยตัวไหนมีทั้ง Win+Mac** → ทางแก้จริงคือ PDF companion ไม่ใช่หา fallback สวย · `font_policy` V01R03 (`fallbacks` เป็น list + `rail_fallbacks()`)
 > **V01R08 (2026.08.04) — ตัวเลือกฟอนต์ (คำสั่ง user):** +**Leelawadee / Leelawadee UI / UI Semilight** เป็นตัวเลือกที่อนุมัติ (ผ่าน V4 ไม่ต้อง `--allow-font` · auditor แจ้ง ℹ เตือน GAP ทุกครั้ง) · ⛔ **ถอด Sarabun ออกจากตัวเลือก (V5 ใหม่)** — คนละตัวกับ TH Sarabun New/TH SarabunPSK ที่ยังใช้ได้ · **default ยังเป็น IBM Plex Sans Thai Looped** เพราะวัดแล้ว GAP ไทย-ละติน 18.9% ชนะ Leelawadee 27.3% (เกณฑ์ตัดสินตามคำสั่ง user "GAP ดีกว่าเอาตัวนั้น") · `font_policy` V01R02 (+APPROVED_ALT +RETIRED) · `build_xlsx` V02R04 (เลิกมีสำเนากฎ → เรียก `check_fonts` จาก SSOT)
 > **V01R07 (2026.08.04) — ⭐ ONE POLICY, ONE AUDITOR, ALL FORMATS:** นโยบายฟอนต์ย้ายเป็น SSOT `_lib/font_policy.py` (RAILS+BLACKLIST+check_fonts) · **§0.1 ข้อ 4 ยกเป็นกติกาบังคับ: build script ทุกตัว `from font_policy import RAILS` — ห้าม hard-code ชื่อฟอนต์** · **จุดตรวจเดียว `_lib/audit_fonts.py`** ครอบ xlsx/pptx/docx/html/pdf · build_pptx/docx/dashboard/deck/html แก้ให้อ่านจากรางแล้ว (build_pptx เดิม **ไม่เคย set ฟอนต์เลยสักบรรทัด** · build_docx ไม่มี `w:cs` · dashboard เป็น CSS ละตินล้วน) · เอกสารกำกับที่เคยขัดกันเอง (`05-typography` V02R01 · `sales-pipeline-report` V01R04 · `gantt-timeline` V01R02) ลดเหลือ pointer
@@ -23,6 +24,10 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
 # §0 CONTRACT — ใครใช้ ใช้เมื่อไหร่ marker อะไร
 
 ## 0.1 เงื่อนไขก่อน build (ครบทุกข้อจึงเริ่ม)
+0. **⭐ ASK-FIRST ผ่านแล้ว (V01R10 · คำสั่ง user 2026.08.05)** — ทุกข้อสงสัยที่ source ไม่ตอบ
+   (ผู้อ่าน/โครง/ความยาว/ตัวเลขที่ขาด/สิ่งห้ามใส่/ภาษา+ราง) ถูกถาม user เป็นชุดเดียวและ**ได้คำตอบแล้ว**
+   — มีคำถามค้าง = ห้ามเริ่ม build · เจอกำกวมใหม่ระหว่าง build = หยุดถามทันที ห้ามเดา ·
+   🔴 เอกสารส่งมอบพร้อม "คำถามปรับปรุง" แนบท้าย = ทำผิดข้อนี้ (นิยามเต็ม: กัปตัน S1 / สมนึก T1)
 1. **Spec อยู่บนดิสก์แล้ว** — content spec + design spec save เป็นไฟล์ก่อนเสมอ (D-P1/D-P2 ของ DOC-PIPELINE) · build อ่านจาก spec ไม่อ่านจากความจำใน context (spec-on-disk = build ใหญ่แค่ไหน context ก็ไม่บวม)
 2. **ประกาศโหมดใน PLAN-CARD แล้ว** (work_mode: lite|full) + คิว ④ อริส QA ไว้แล้ว
 3. **เขียน build script ลงดิสก์** (ไม่ heredoc ยาวใน context) → รันด้วย marker
@@ -250,7 +255,7 @@ STRICT VALIDATOR (mandatory ก่อนส่งเข้า ④):
 | งาน | ฝังได้? | ⭐ ฟอนต์ | เหตุผล |
 |---|---|---|---|
 | **PPTX ทั่วไป** | ✅ Method B | `IBM Plex Sans Thai Looped` | GAP ดีสุด 18.9% + น้ำหนักครบ 7 ตัว |
-| **⭐ PPTX สไลด์แน่น/ต้องบีบบรรทัด** | ✅ | **`Leelawadee UI`** | ยอดวรรณยุกต์ **0.743** vs IBM Plex 0.924 → บีบ line-height แล้ว**ไม่ชน** · ฝังได้จึงไม่ต้องห่วงเครื่องผู้รับ (กฎนี้ user กำหนด 2026.08.04) |
+| **⭐ PPTX สไลด์แน่น/ต้องบีบบรรทัด** | ✅ | **`Leelawadee`** (ตัวธรรมดา — user เลือก 2026.08.05 · ไม่ใช่ตัว UI) | ยอดวรรณยุกต์ **0.737** vs IBM Plex 0.924 → บีบ line-height แล้ว**ไม่ชน** · ฝังได้จึงไม่ต้องห่วงเครื่องผู้รับ · **`build_pptx.py` สลับให้อัตโนมัติทั้งเด็ค**เมื่อสไลด์ใดเข้าเกณฑ์ (>400 ตัวอักษร / >8 บรรทัด / ตาราง >40 ช่อง) · ปิด/บังคับด้วย `spec["dense"]: false/true` · 🔴 **ยกเว้นงานราชการ (rail=govt): ฟอนต์บังคับของ TOR ชนะกฎความแน่นเสมอ** — ไม่สลับอัตโนมัติ ต้องประกาศ `dense: true` เอง |
 | **DOCX** | ⚠️ มือไม่ได้ | `IBM Plex Sans Thai Looped` + **PDF companion** | ฝังด้วยมือ = Word ปฏิเสธ (§2B.1) |
 | **XLSX ทั่วไป** | ❌ **ฝังไม่ได้** | `IBM Plex Sans Thai Looped` + **PDF companion บังคับ** | PDF คือฉบับที่ลูกค้า "เห็น" · xlsx คือฉบับให้แก้ต่อ |
 | **XLSX ที่รู้ว่าผู้รับ Windows** | ❌ | `Leelawadee UI` | มากับ Windows ทุกเครื่อง → ไม่ substitute |

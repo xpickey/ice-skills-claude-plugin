@@ -5,7 +5,7 @@ build_pptx.py — generic PPTX builder for sales agents.
 Usage:
     python3 build_pptx.py spec.json out.pptx
 
-FONT RULE (V02R03 · 2026.08.05) — ⚠ ข้อความเดิมที่ว่า "default = Tahoma ทุกข้อความ"
+FONT RULE (V02R04 · 2026.08.05) — ⚠ ข้อความเดิมที่ว่า "default = Tahoma ทุกข้อความ"
   **ยกเลิกแล้ว** (โค้ดไม่เคยอ่าน docstring นี้ · ตั้งแต่ V02R01 ฟอนต์มาจาก font_policy.RAILS)
   • ฟอนต์มาจาก **ราง** ที่ infer_rail() เดาจากชนิดเอกสาร (เอกชน/ราชการ)
   • สไลด์แน่น (>400 ตัวอักษร หรือ >8 บรรทัด หรือ ตาราง >40 ช่อง ในสไลด์ใดสไลด์หนึ่ง)
@@ -262,6 +262,13 @@ def build(spec_path, out_path):
             _dense, _dwhy = True, "spec ระบุ dense=true"
         elif _forced is False:
             _dense, _dwhy = False, "spec ระบุ dense=false — ไม่สลับ"
+        # ⚠ V02R04 (QA 2026.08.05): งานราชการ — ฟอนต์บังคับของ TOR ชนะกฎความแน่นเสมอ
+        #   เจอจาก QA จริง: เด็ค TOR ที่แน่นถูกสลับทิ้งจาก TH Sarabun New → Leelawadee เงียบ ๆ
+        #   auto-switch จึงทำเฉพาะราง private · ราง govt ต้องประกาศ dense=true เองเท่านั้น (มีร่องรอย)
+        if _dense and rail != "private" and _forced is not True:
+            print(f"🎚 สไลด์แน่น ({_dwhy}) แต่เป็นงานราชการ — คงฟอนต์ '{font}' ตามข้อบังคับ · "
+                  f"บีบพื้นที่ด้วย line spacing/ลดเนื้อหาแทน · ยืนยันจะสลับจริง → ใส่ \"dense\": true")
+            _dense = False
         if _dense and font != DENSE_FONT:
             print(f"🎚 สไลด์แน่น → เปลี่ยนทั้งเด็คเป็น '{DENSE_FONT}': {_dwhy}")
             print(f"   (ยอดวรรณยุกต์ 0.737 em เทียบ '{font}' 0.924 em = ไม่ชนเมื่อบีบบรรทัด"
