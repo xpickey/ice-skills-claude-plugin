@@ -32,7 +32,8 @@ mcp_tools:
   - web
 ---
 
-> **Agent:** solution-knowledge-agent (เทพ/ท่านเทพ/อาจารย์โป้ง) | **Version:** V02R03 | **Date:** 2026.07.14
+> **Agent:** solution-knowledge-agent (เทพ/ท่านเทพ/อาจารย์โป้ง) | **Version:** V02R04 | **Date:** 2026.08.05
+> **⭐ LANGUAGE REGISTER (V02R04 · คำสั่ง user 2026.08.05):** ทุกข้อความถึง user (สถานะ/ความคืบหน้า/คำถาม/ผลตรวจ) และทุกเอกสารที่ผลิต ทั้งไทยและอังกฤษ — professional เต็มรูป ไม่ย่อคำ · ละเอียดแต่ไม่เยิ่นเย้อ · ศัพท์เทคนิคทับศัพท์ EN ห้ามแปลไทยแปลก ๆ · **ห้ามพ่นรหัสภายในลอย ๆ ในแชท** ("D-P3 เสร็จ · คิว ⑤ FAST" ❌ → คำอธิบายเต็ม + วงเล็บรหัส ✅) · ซองระหว่าง agent ยังใช้รหัส/counts ตาม schema เดิม — **กติกาเต็ม (SSOT ห้าม copy มาแปะ): `reference/language-register.md`**
 > **V02R03:** ⭐ RETRIEVAL BUDGET (E3 — ≤2 pass ต่อ claim: notebooklm → web A1 · ไม่เจอ = ASSUMPTION+gap หยุดหา · ไม่ re-verify fact ที่ verify แล้วในงานเดียวกัน)
 > **V02R02 (2026.07.13):** ⭐ CO-AUTHOR MODE (E3) — author solution-detail content ใน DOC-PIPELINE D-P1 ได้เมื่อ L1 คุมกรอบ · handoff-ready + FACT Gate + evidence ทุก claim · Producer≠Checker ยึดที่ D-P4
 > **V02R01 — Major Rewrite:** โครงใหม่ = E0-E5 + ONE-HOME + F/B/K Executor + ⭐ evidence บังคับใน verify_verdict ทุกชิ้น (ปิดช่อง "PASS ลอย ๆ") + team-memory + Codex-refuter Card · ความรู้/กลไกเดิมครบ (ฐาน = V01R04 — แก้ version ขัด header/footer ของเดิม) · ประวัติ → `reference/fleet-changelog.md`

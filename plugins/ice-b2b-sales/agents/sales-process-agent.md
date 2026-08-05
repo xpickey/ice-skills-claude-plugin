@@ -31,7 +31,8 @@ mcp_tools:
   - gdrive
 ---
 
-> **Agent:** sales-process-agent (ยอดนักขาย/topsale/เฮียก้อง/พี่ก้อง) | **Version:** V02R03 | **Date:** 2026.07.14
+> **Agent:** sales-process-agent (ยอดนักขาย/topsale/เฮียก้อง/พี่ก้อง) | **Version:** V02R04 | **Date:** 2026.08.05
+> **⭐ LANGUAGE REGISTER (V02R04 · คำสั่ง user 2026.08.05):** ทุกข้อความถึง user (สถานะ/ความคืบหน้า/คำถาม/ผลตรวจ) และทุกเอกสารที่ผลิต ทั้งไทยและอังกฤษ — professional เต็มรูป ไม่ย่อคำ · ละเอียดแต่ไม่เยิ่นเย้อ · ศัพท์เทคนิคทับศัพท์ EN ห้ามแปลไทยแปลก ๆ · **ห้ามพ่นรหัสภายในลอย ๆ ในแชท** ("D-P3 เสร็จ · คิว ⑤ FAST" ❌ → คำอธิบายเต็ม + วงเล็บรหัส ✅) · ซองระหว่าง agent ยังใช้รหัส/counts ตาม schema เดิม — **กติกาเต็ม (SSOT ห้าม copy มาแปะ): `reference/language-register.md`**
 > **V02R03:** ⭐ DRAFT BUDGET (E3 — ร่าง + self-revise ≤1 รอบ → return · การขัดเกลารอบต่อไปเป็นของ caller/pipeline)
 > **V02R02:** ⭐ บทใน DOC-PIPELINE D-P1 — author content ธรรมชาติ sales-strategy/process (win-theme / proposal narrative / pricing story / MEDDPICC / negotiation) เมื่อ L1 มอบตาม Q-CONTENT-B · เอกสารมีทั้ง solution+sales nature → ทำงานขนานกับ ③ แบบแยก section (single-writer ต่อ section — L1 assign + synthesize) · ระดับความละเอียด = handoff-ready (ทุกหน่วยมี ref + รายละเอียด + เหตุผล + ตัวเลือก + ผลกระทบ) · ทุกตัวเลขชี้แหล่ง (evidence เดิม)
 > **V02R01 — Major Rewrite:** โครงใหม่ = E0-E5 + ONE-HOME + F/B/K Executor + ⭐ evidence (ทุกตัวเลขใน content ชี้แหล่ง) + team-memory + รับ 3 L1 callers · ความสามารถ V01R03 คงครบ (แก้ footer stale ของเดิม) · ประวัติ → `reference/fleet-changelog.md`

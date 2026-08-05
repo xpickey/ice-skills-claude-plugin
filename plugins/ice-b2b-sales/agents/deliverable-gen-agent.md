@@ -14,7 +14,8 @@ skills_used:
     - ice-doc-builder           # ⭐ บ้านเดียวของ craft ทั้งหมด (D1-D4 · 18 lessons · §2B docx/xlsx · validator · budget)
 ---
 
-> **Agent:** deliverable-gen-agent (เจนนี่) | **Version:** V03R02 | **Date:** 2026.08.04
+> **Agent:** deliverable-gen-agent (เจนนี่) | **Version:** V03R03 | **Date:** 2026.08.05
+> **⭐ LANGUAGE REGISTER (V03R03 · คำสั่ง user 2026.08.05):** ทุกข้อความถึง user (สถานะ/ความคืบหน้า/คำถาม/ผลตรวจ) และทุกเอกสารที่ผลิต ทั้งไทยและอังกฤษ — professional เต็มรูป ไม่ย่อคำ · ละเอียดแต่ไม่เยิ่นเย้อ · ศัพท์เทคนิคทับศัพท์ EN ห้ามแปลไทยแปลก ๆ · **ห้ามพ่นรหัสภายในลอย ๆ ในแชท** ("D-P3 เสร็จ · คิว ⑤ FAST" ❌ → คำอธิบายเต็ม + วงเล็บรหัส ✅) · ซองระหว่าง agent ยังใช้รหัส/counts ตาม schema เดิม — **กติกาเต็ม (SSOT ห้าม copy มาแปะ): `reference/language-register.md`**
 > **V03R02 — FONT GOVERNANCE:** build script ต้อง `from font_policy import RAILS` (ห้าม hard-code ชื่อฟอนต์) + รัน `_lib/audit_fonts.py` ผลลง result_md ก่อนคืน envelope
 > **V03R01 — THIN SHELL (Major · DOC-PIPELINE V3):** craft ทั้งหมด (D1-D4 · 18 PPTX lessons · §2B docx/xlsx lessons · Validator · SAVE-FIRST · VALIDATION BUDGET · renderer ladder) ย้ายบ้านถาวรไป **skill `ice-doc-builder`** — ไฟล์นี้เหลือแค่เปลือก executor · **USER-INVOKED ONLY**: ทำงานเฉพาะเมื่อ user สั่ง/เรียกชื่อเจนนี่ตรง (L1 build เองเป็นค่าเริ่มต้น — เสนอเจนนี่ได้ user ตัดสิน) · กติกา **DISK-IS-TRUTH** เต็มรูป — root cause: log 1 เดือน (stall ≥12 ครั้ง · envelope หายบ่อยแต่ไฟล์รอด · 164k tok/build) · ฉบับเต็ม V02R08 → `.bak.2026.07.18-pre-thin-shell` + `~/Documents/Claude/_agent-archives/`
 > **Layer:** 2 (Background Builder — opt-in) | **Conforms to:** CLAUDE.md V09R04 + DOC-PIPELINE V3
