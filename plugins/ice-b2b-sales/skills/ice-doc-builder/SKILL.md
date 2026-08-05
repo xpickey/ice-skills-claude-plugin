@@ -3,7 +3,8 @@ name: ice-doc-builder
 description: "iCE Document Build Craft — ความรู้ build .pptx/.docx/.xlsx/PDF/HTML ระดับ specialist (Build Discipline D1-D4 tri-slot Thai+EN font, 18 PPTX lessons, Method B font-embed, Strict Validator, SAVE-FIRST, VALIDATION BUDGET, renderer ladder) ที่ย้ายมาจาก deliverable-gen-agent เพื่อให้ทุก persona โหลดใช้ได้ (L0/กัปตัน/คิม/สมนึก build เองใน DOC-PIPELINE V3 · เจนนี่-shell ใช้ตอน background build). ถือ contract ของ marker ICE_BUILD=pipeline (PreToolUse hook). Triggers (TH): build deck, สร้าง slide, สร้างเอกสาร, ทำ proposal เป็นไฟล์, สร้าง .pptx, ทำ .docx, ทำ .xlsx, ทำ ROI excel, dashboard, font ไทย, font เพี้ยน, แก้ font, embed font, ไฟล์เปิดไม่ได้, Repair dialog. Triggers (EN): build deck, generate slides, build document, create pptx/docx/xlsx, ROI workbook, dashboard, font embed, Thai font, corrupted file, ICE_BUILD."
 ---
 
-> **Skill:** ice-doc-builder | **Version:** V01R10 | **Date:** 2026.08.05
+> **Skill:** ice-doc-builder | **Version:** V01R11 | **Date:** 2026.08.05
+> **V01R11 (2026.08.05 · คำสั่ง user — เคส VFIN):** +**§3.0 ⑤ TEMPLATE-BASE BUILD** — งานต่อยอด template/เด็คเดิมใช้ฟอนต์ตามนโยบายปัจจุบันเป็นค่าเริ่มต้น **ห้ามสืบทอดฟอนต์ template อัตโนมัติ** · ฟอนต์ template เฉพาะ user สั่งชัดเจน (font_override_reason + QA-log) · agent ห้ามออก --allow-font ให้ตัวเองด้วยเหตุผลความสม่ำเสมอ · PLAN-CARD ต้องแจ้ง mixed-font ชั่วคราว · ③ APPROVED SET จำกัดขอบเขตเหลืองานเริ่มจากศูนย์ · `font_policy` V01R08 · อริส +D7.6d
 > **V01R10 (2026.08.05 · QA + คำสั่ง user):** +**§0.1 ข้อ 0 ASK-FIRST** (คำถามค้าง = ห้ามเริ่ม build · เอกสารพร้อมคำถามแนบท้าย = ผิด protocol) · **แก้ §3.0-A แถวสไลด์แน่น:** ฟอนต์ = `Leelawadee` ตัวธรรมดา (เดิมเขียน Leelawadee UI ไม่ตรงกับโค้ดและคำสั่ง user) + เกณฑ์อัตโนมัติ + 🔴 ยกเว้น rail=govt (ฟอนต์บังคับ TOR ชนะกฎความแน่น) · อ้างอิงเดิม V01R09 | **Date:** 2026.08.04
 > **V01R09 (2026.08.04) — ⭐ ตารางตัดสินใจฟอนต์ถาวร (§3.0-A):** เกณฑ์ 5 ข้อเรียงตาม "อำนาจตัดสิน" (ฝังได้ไหม → สิทธิ์ → น้ำหนัก → GAP → ยอดวรรณยุกต์) + ตารางงาน×ฟอนต์ · **กฎใหม่ (user): PPTX สไลด์แน่นต้องบีบบรรทัด → `Leelawadee UI` แทนฟอนต์ราง** (ยอดวรรณยุกต์ 0.743 vs 0.924 → ไม่ชนเมื่อบีบ · PPTX ฝังได้จึงไม่ต้องห่วงเครื่องผู้รับ) · **fallback เปลี่ยนเป็นลำดับ** `Leelawadee UI → Sukhumvit Set → Tahoma` (user: "Tahoma ไม่ค่อยสวย") · +บันทึกความจริงว่า **ไม่มีฟอนต์ไทยสวยตัวไหนมีทั้ง Win+Mac** → ทางแก้จริงคือ PDF companion ไม่ใช่หา fallback สวย · `font_policy` V01R03 (`fallbacks` เป็น list + `rail_fallbacks()`)
 > **V01R08 (2026.08.04) — ตัวเลือกฟอนต์ (คำสั่ง user):** +**Leelawadee / Leelawadee UI / UI Semilight** เป็นตัวเลือกที่อนุมัติ (ผ่าน V4 ไม่ต้อง `--allow-font` · auditor แจ้ง ℹ เตือน GAP ทุกครั้ง) · ⛔ **ถอด Sarabun ออกจากตัวเลือก (V5 ใหม่)** — คนละตัวกับ TH Sarabun New/TH SarabunPSK ที่ยังใช้ได้ · **default ยังเป็น IBM Plex Sans Thai Looped** เพราะวัดแล้ว GAP ไทย-ละติน 18.9% ชนะ Leelawadee 27.3% (เกณฑ์ตัดสินตามคำสั่ง user "GAP ดีกว่าเอาตัวนั้น") · `font_policy` V01R02 (+APPROVED_ALT +RETIRED) · `build_xlsx` V02R04 (เลิกมีสำเนากฎ → เรียก `check_fonts` จาก SSOT)
@@ -397,6 +398,17 @@ Sarabun (Google)         — ไม่ใช่ blacklist แต่ user ปฏ�
 ② จับคู่ 2 ตระกูลเมื่อลูกค้าบังคับ Latin brand font เท่านั้น → ชดเชยขนาดตาม D3 สูตร cap-ratio
    (Big Four ทำแบบนี้ทุกราย ตั้งไทยใหญ่กว่า 1.18-1.77× — เพราะไม่มีฟอนต์ไทยของแบรนด์ตัวเอง)
 ③ APPROVED SET เดียวทั้งชุดเอกสาร (deck+docx+xlsx ของงานเดียวต้องตรงกัน — ลูกค้าเห็นเป็นชุด)
+   ⚠ V01R11: กติกานี้คุม**งานที่เริ่มจากศูนย์** — งานต่อยอด template เดิม ดูข้อ ⑤ (นโยบายชนะความสม่ำเสมอ)
+⑤ 🔴 TEMPLATE-BASE BUILD (คำสั่ง user 2026.08.05 · เคส VFIN MA-AMS-CR): งานที่สร้าง**ต่อยอด
+   template/เด็คเดิม** (รวมแทรกสไลด์ใหม่ · edit บน valid base) → **ใช้ฟอนต์ตามนโยบายปัจจุบัน
+   (ราง/ตัวเลือกอนุมัติ) เป็นค่าเริ่มต้น — ห้ามสืบทอดฟอนต์ของ template โดยอัตโนมัติ**
+   · ฟอนต์ template ใช้ได้**เฉพาะ user สั่งชัดเจน** ("ใช้ font ตาม template") → บันทึก
+     `font_override_reason: "user สั่งใช้ font ตาม template"` ใน spec + จดใน QA-log
+   · agent **ห้ามออก --allow-font ให้ตัวเอง**ด้วยเหตุผลความสม่ำเสมอของเด็คเดิม
+   · หน้าที่ตอน PLAN-CARD: แจ้ง user ว่าสไลด์ใหม่จะฟอนต์ต่างจากของเดิมในเด็คเดียวกัน (mixed-font
+     ชั่วคราว) จนกว่าเด็คจะ migrate ทั้งใบ — user เลือกรับ หรือสั่ง "ใช้ font ตาม template" ตรงนั้น
+   · ที่มา: เคส VFIN 2026.08.05 — สไลด์ใหม่บนเด็ค Compile คง Sarabun (ฟอนต์ที่ถอดออกแล้ว)
+     โดยอ้างความสม่ำเสมอของ template ทั้งที่ user ไม่ได้สั่งเรื่องฟอนต์ → user พลิกค่าเริ่มต้น
 ④ ชื่อ family ต้องเป็นชื่อจริงจาก name table — ห้ามเติม subfamily ต่อท้าย
    ❌ "IBM Plex Sans Thai Regular"  ✅ "IBM Plex Sans Thai Looped"
    (เคสจริง 2026.07.31: ไฟล์ PWA TOR Matrix ใส่ชื่อผิด → Excel substitute เงียบ → ฟอนต์ปน 3 ตัว)
