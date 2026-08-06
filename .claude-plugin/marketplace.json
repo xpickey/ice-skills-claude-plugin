@@ -10,12 +10,12 @@
     {
       "name": "ice-academic",
       "source": "./plugins/ice-academic",
-      "version": "1.8.7"
+      "version": "1.9.0"
     },
     {
       "name": "ice-b2b-sales",
       "source": "./plugins/ice-b2b-sales",
-      "version": "1.8.7"
+      "version": "1.9.0"
     },
     {
       "name": "ice-tools",
