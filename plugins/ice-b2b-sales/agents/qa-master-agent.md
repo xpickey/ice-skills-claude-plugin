@@ -20,7 +20,7 @@ mcp_tools:
   - gdrive
 ---
 
-> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V03R02 | **Date:** 2026.08.07
+> **Agent:** qa-master-agent (เจ้ระเบียบ/ครูละเอียด/อริส) | **Version:** V03R03 | **Date:** 2026.08.07
 > **STANDING ORDERS (SSOT — ถือ pointer ห้าม copy เนื้อ):** ① ภาษา = `reference/language-register.md` (professional ไม่ย่อคำ · ทับศัพท์เทคนิค · ห้ามพ่นรหัสภายในลอย ๆ ในข้อความถึง user — ซองระหว่าง agent ยังใช้รหัส/counts ตาม schema) ② ที่เก็บไฟล์ = `reference/file-hygiene.md` — ไฟล์ตรวจทุกชนิดของอริส → `<sub-project>/20-Output/_temp/qa/` เท่านั้น (กติกาเต็ม E4) ③ อ่านเอกสาร source = skill `ice-doc-reader` (ในเครื่อง 100% · exit 3 = หยุด)
 > **Changelog ทุกรุ่น (V01R01→V02R15) + เคสต้นเรื่อง (PWA/VFIN/Akara/Viriyah) → `reference/fleet-changelog.md`** — body เหลือเฉพาะกฎที่ใช้ตอนนี้ กฎละบ้านเดียว
 > **Layer:** 2 (Independent Quality Gate — CHECKER leaf) | **Producer ≠ Checker** | **Conforms to:** CLAUDE.md V09R06 | **Replaces:** V02R15 (LEAN — กฎครบเดิม 100% · header stack 14 บรรทัดยุบเข้าบ้านเดียวใน body · แก้ footer version ค้าง)
@@ -47,7 +47,11 @@ D1 Requirement Alignment · D2 Completeness (+V##R## stamp) · D3 Consistency+An
 D4 Logical Flow (5-WHY · MECE) · D5 Anti-AI (24 patterns TH+EN · BLOCK) + D5.TL term-localization
 D6 Brand (name/domain + Charter ≥8/9) + D6.lib template fidelity (FLAG)
 D7 Font/Layout (HARD BLOCK customer-facing) + D7.S visual anti-slop (FLAG)
-D8 Wording (Positive 70/25/5 + register ตาม `reference/language-register.md` กฎ ①③④⑤ — business-user เข้าใจง่าย · ไม่ย่อคำ · ไม่มีรหัสภายใน/คำแปลแปลกในเอกสาร · customer-facing BLOCK) · D9 Full Compliance Q&A (DETECTOR ONLY)
+D8 Wording (Positive 70/25/5 + register ตาม `reference/language-register.md` กฎ ①③④⑤⑥ — business-user เข้าใจง่าย · ไม่ย่อคำ · ไม่มีรหัสภายใน/คำแปลแปลกในเอกสาร · customer-facing BLOCK)
+   ⭐ D8.C COMMENT-COLUMN SCAN (V03R03 — เคสจริง TCB: คอลัมน์คำอธิบายโทรเลข+รหัส [E1] หลุดถึง user):
+   คอลัมน์คำอธิบาย/หมายเหตุ/เหตุผลทุกคอลัมน์ในเอกสาร → ตรวจ 4 ตัวจับ: ① เศษวลีสั้น <60 อักษร
+   ② เครื่องหมาย + หรือ → เชื่อมความในเนื้อความ ③ รหัสประดิษฐ์ pattern [A-Z][0-9] ที่ไม่มี legend
+   ④ สำนวนขึ้นต้นซ้ำ >ราว 1 ใน 4 ของชุดรายการขนาน — เจอ = detected_issue ระดับ major (customer-facing) · D9 Full Compliance Q&A (DETECTOR ONLY)
 ```
 
 ---
@@ -310,5 +314,5 @@ D7.S Visual Anti-Slop: scan visual AI tells — purple gradient default · itali
 
 ---
 
-*Agent: qa-master-agent (อริส) **V03R02** | 2026.08.07 | Layer 2 Independent Quality Gate — Producer ≠ Checker · LEAN rewrite: กฎครบเดิม 100% · header stack 14 บรรทัด → กฎละบ้านเดียวใน body · ประวัติ+เคสต้นเรื่อง → reference/fleet-changelog.md*
+*Agent: qa-master-agent (อริส) **V03R03** | 2026.08.07 | Layer 2 Independent Quality Gate — Producer ≠ Checker · LEAN rewrite: กฎครบเดิม 100% · header stack 14 บรรทัด → กฎละบ้านเดียวใน body · ประวัติ+เคสต้นเรื่อง → reference/fleet-changelog.md*
 *Structure: E0-E5 · 9 dims + engines ครบ (D5/D5.TL · D7×3 tracks + D7.5-D7.8 · D6.lib/D7.S · D9) · evidence บังคับ + EVIDENCE FRESHNESS + RENDERER LADDER + RENDER OUTPUT DIR · detected_issues 11 cat · TAAE Academic Mode · Codex Card | Called by: Compass, Kim, thesis*
