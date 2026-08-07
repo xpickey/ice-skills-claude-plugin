@@ -1,10 +1,56 @@
 # iCE-Compass-Next — Changelog & Lessons Archive
 
-> **Version:** V01R01 | **Date:** 2026.07.10 | ไฟล์นี้เก็บ **ประวัติ version + บทเรียนเต็ม** ที่ย้ายออกจาก body ของ agent (ตั้งแต่ V03R01) — เพื่อให้ main prompt เหลือเฉพาะกฎที่ใช้ตอนนี้ · อ่านไฟล์นี้เมื่อต้องการเหตุผลเบื้องหลังกฎ หรือทำ version ถัดไป
+> **Version:** V01R02 | **Date:** 2026.08.07 | ไฟล์นี้เก็บ **ประวัติ version + บทเรียนเต็ม** ที่ย้ายออกจาก body ของ agent (ตั้งแต่ V03R01) — เพื่อให้ main prompt เหลือเฉพาะกฎที่ใช้ตอนนี้ · อ่านไฟล์นี้เมื่อต้องการเหตุผลเบื้องหลังกฎ หรือทำ version ถัดไป
+> **V01R02:** รับประวัติ V03R04→V05R01 ที่ย้ายออกจากหัวไฟล์กัปตันตอน LEAN rewrite (คำสั่ง user 2026.08.07 — "ทำให้ code สะอาดขึ้น ไม่เยอะเกินเหตุ")
 
 ---
 
 ## Version History
+
+### V05R01 (2026.08.07) — LEAN REWRITE "ตัดซ้ำ-คงโครง" + DEMO-PIPELINE + ⑦ โมโม่
+**คำสั่ง user:** "ทำให้ Code สะอาดขึ้น ไม่เยอะเกินเหตุ ทำงานได้ดีกว่าเดิม" + เพิ่ม agent นักทำ demo (โมโม่) ที่กัปตันสั่งเป็นชิ้น ๆ ได้
+**วัดก่อนแก้:** 787 บรรทัด ≈ 49.4k token/การ adopt · ความซ้ำหลัก: กฎเจนนี่ USER-INVOKED ONLY ×8 จุด · บทเรียน Viriyah/Akara/MEA/TQR แทรก ~14 จุด · "164k tok/build" ×3 · header changelog 17 บรรทัด · P10 ฉบับเต็มทั้งที่ SSOT คือ language-register.md · footer version stale (V04R02 ทั้งที่จริง V04R08)
+**หลัก rewrite:** ONE-HOME จริงจัง (กฎเจนนี่บ้านเดียวที่ §4 · บทเรียนบ้านเดียวที่ changelog นี้) · ประวัติออกจาก header เหลือ 1 บรรทัด · กฎปฏิบัติการทุกข้อ**คงอยู่ในไฟล์** (ไม่ย้าย Matrix/PIPELINE/LIMITS/schema ไป reference — ตัดสินใจเรื่อง "รับประกันไม่หลุดการโหลด": สิ่งเดียวที่รับประกันทุกครั้งได้คือสิ่งที่อยู่ในไฟล์ที่อ่านทุกครั้ง)
+**ของใหม่:** ⑦ demo-builder (โมโม่ — dispatch ตรงได้ ต่างจาก ④ โดยเจตนา เพราะงานแอปเป็นชิ้นยาว/ขนานได้) · DEMO-PIPELINE pointer → skill ice-demo-builder (DM-0..DM-5) · ROUTING GATE เอกสาร vs แอป: กำกวม ("ทำ demo") = ถาม user ก่อน ห้ามเดา · Demo Data Policy (POC = ข้อมูลจริงที่ลูกค้ายินยอม · ทั่วไป = แปลงสมจริงประเภทรายการ/ธุรกิจเดียวกัน · ห้ามประดิษฐ์)
+
+### V04R08 (2026.08.06) — DOC READER
+อ่าน/แปลงเอกสาร → skill `ice-doc-reader` เป็นมาตรฐาน (`_lib/doc_to_md.sh`) — anydoc 16 นามสกุล + pdf-inspector + ตรวจสระอำ/วรรณยุกต์ · รันในเครื่อง 100% · exit 3 = หยุด ห้ามเข้าคลัง · อ่านไม่ได้ = แจ้ง user + 3 ทาง (ไฟล์ต้นฉบับ / OCR ในเครื่อง / ภายนอก-ขออนุญาตรายครั้ง)
+
+### V04R07 (2026.08.06) — FILE HYGIENE
+temp ทุกชนิด → `<sub-project>/20-Output/_temp/` · output จริงตามที่ระบุ ไม่แน่ใจถามก่อน · ห้ามสร้างไฟล์นอกโปรเจกต์ · SSOT = `reference/file-hygiene.md` — root cause: อริส save QA files กระจายใต้ ~/Documents (6 รายการ 11MB) — user เจอเอง
+
+### V04R06 (2026.08.05) — PROFESSIONAL BUSINESS WORDING (P10 ⑤)
+ทุกข้อความ/เอกสาร = ภาษาที่ปรึกษาคุยกับผู้บริหาร ไม่ใช้ technical term (ยกเว้นชื่อ product/ศัพท์ธุรกิจมาตรฐาน) · อธิบายด้วยผลลัพธ์ธุรกิจ · technical detail เมื่อ user ขอ (H1) แยก Exec Summary + Technical Detail
+
+### V04R05 (2026.08.05) — LANGUAGE REGISTER ขยาย (P10 ④)
+ห้ามพ่นรหัสภายในลอย ๆ ในข้อความถึง user ("D-P3 เสร็จ · คิว ⑤ FAST" ❌) — คำอธิบายเต็ม + วงเล็บรหัส · ซอง agent-to-agent ยังใช้รหัสตาม schema · SSOT ทั้ง fleet = `reference/language-register.md`
+
+### V04R04 (2026.08.05) — ASK-FIRST PROTOCOL
+รวบทุกข้อสงสัยถามชุดเดียวก่อนเขียน spec (checklist 6 ข้อ) · กำกวมกลางทาง = หยุดถาม · คำถามใหม่ตอนส่งงาน = ผิด protocol — root cause: Compile PPTX + VFIN ส่งงานพร้อมรายการคำถามแนบท้าย → แก้หลายรอบ ("คำถามหลังงานเสร็จแพงกว่าคำถามเดียวกันก่อนเริ่ม เสมอ")
+
+### V04R03 (2026.08.04) — FONT GOVERNANCE
+PRE-BUILD CHECK: ฟอนต์ต้องมาจาก `font_policy.RAILS` ห้าม hard-code + จบ build รัน `_lib/audit_fonts.py` ก่อนคิว ⑤ — root cause: PWA TCO V01R22 script ตั้ง `FONT="Sarabun"` เอง → นโยบาย LOCK บังคับใช้ไม่ได้ validator ขึ้น PASS **user จับได้ ไม่ใช่ระบบ** → บทเรียน "กฎที่ไม่มีใครเรียกใช้ = ไม่มีอยู่จริง"
+
+### V04R02 (2026.07.18) — SKILL LOADOUT ×2
+SALES LOADOUT (S0.0): เข้างานขาย → โหลด ice-b2b-enterprise-sale + ice-b2b-combo เต็มทันที (บทเรียน Viriyah "องก์/ฉาก": คนทำงานต้องถือ methodology เอง) · DOC LOADOUT (PRE-BUILD ①): ice-doc-builder + design-system + b2b-slide-designer + b2b-presentation-creator + thesis-ai-det-col
+
+### V04R01 (2026.07.18) — DOC-PIPELINE V3 "L0 BUILDS, ARIS CHECKS" (Major)
+กัปตัน build เองเป็นค่าเริ่มต้น (skill ice-doc-builder + marker `ICE_BUILD=pipeline` · hook V02R01) · Hard Delegation → **Hard QA Gate** (สิ่งบังคับคือ ⑤ ตรวจ ไม่ใช่ตัวผู้ build) · ④ เจนนี่ = thin shell USER-INVOKED ONLY + DISK-IS-TRUTH · D-P0 GATHER + ⑥ เสี่ยวป้อ · D7 HARD BLOCK ห้าม WON'T-FIX ฝ่ายเดียว — root cause: log 1 เดือน (④ stall ≥12 ครั้ง · 164k tok/build · inline+QA เสถียรกว่า เช่น Akara 8/8 PASS — ความผิดครั้งเดียวของ inline (Ascend) คือข้าม ⑤ ไม่ใช่การ build เอง) + Anthropic guidance "งาน deterministic อย่าใช้ agent" · ปรัชญาเปลี่ยน COMMANDER-NOT-BUILDER → BUILDER-WITH-GATES (บทเรียน 2 ชั้น: TQR 155 รอบเพราะไม่มี craft → ย้าย craft เป็น skill)
+
+### V03R08 (2026.07.17) — MANDATORY LENS
+content sales → ② ต้องเป็น 1 lens · content solution → ③ ต้องเป็น 1 lens · ห้าม L1 เขียน content เฉพาะทางเดี่ยว — root cause: Viriyah TOC ภาษาละคร "องก์/ฉาก" เพราะไม่มีผู้ถือ skill ร่วมวง
+
+### V03R07 (2026.07.14) — MODE GATE + PANEL DISCIPLINE + PIPELINE-LITE + RUN LINE บังคับ
+SOLO/PANEL/PIPELINE + burden-of-proof + ประกาศโหมดก่อนทำ · ONE-WAVE + L0-writes-first · LITE = ตัดรอบ ไม่ตัดบทบาท · Run Line บังคับ 100% — root cause: audit 1 สัปดาห์ (over-dispatch งานเล็ก + `_activity.log` ไม่เคยถูกเขียนแม้แต่บรรทัดเดียว → ถกเรื่อง "ช้า/เปลือง" ด้วยความรู้สึกแทนตัวเลข)
+
+### V03R06 (2026.07.14) — L2 STALL WATCHDOG
+artifact SAVE แล้วแต่ envelope ไม่กลับ ~3 นาที → verify เอง read-only + หยุด agent + จด observation — root cause: Viriyah เจนนี่ build เสร็จ 08:01 แต่วน validation ต่อจน transcript 1.48MB
+
+### V03R05 (2026.07.14) — READ-SELF FIRST
+รู้ path = อ่านเอง ห้ามส่ง Explore อ่านแทน (ช้ากว่าหลายเท่า) · Explore เฉพาะกวาดกว้าง — root cause: Viriyah L0 ส่ง Explore อ่านไฟล์เดียวที่รู้ path
+
+### V03R04 (2026.07.13) — DOC-PIPELINE V2 + FAILURE PROTOCOL + EVIDENCE FRESHNESS
+D-P1 READ-FIRST (กัปตันอ่าน source เอง ≤3 readers) · dispatch ล้มเหลว ห้าม silent fallback (retry 1 → STOP ถาม user · ทำแทนโดยไม่ขอ = การละเมิด) · verdict จาก render สดเท่านั้น — root cause: MEA/Akara (กัปตันไม่อ่าน source เอง · subagent ล่ม → build/QA inline เงียบ · QA จาก PNG 55dpi ของ session เก่า → แก้ผิดทาง → revert)
 
 ### V03R03 (2026.07.13) — DOC-PIPELINE + 2-Tier Invocation (8 จุด)
 **Root cause:** Viriyah RFP session `0d9285cb` (12-13 ก.ค.) — L0 สวมบทกัปตันโดยไม่ได้อ่านไฟล์ + ultracode ดันไปใช้ Workflow generic (5 workflows ไม่มี agentType) + build Excel inline 400+ จุด → **เจนนี่ถูกเรียก 0 ครั้ง** · pattern ซ้ำที่ EuroFood/Akara · content เชิง solution ไม่มีเจ้าของ (③ ถูกห้าม author) · "Failed to extract RFP ref" ไม่หยุดสายพาน

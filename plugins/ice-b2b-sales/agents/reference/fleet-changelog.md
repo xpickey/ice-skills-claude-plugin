@@ -4,6 +4,18 @@
 
 ---
 
+## ⭐ DEMO Wave + COMPASS LEAN (2026.08.07 — plugins 1.10.0 · กัปตัน V05R01 · +โมโม่ ⑦ V01R01 · skill ice-demo-builder V01R01)
+
+**โจทย์ user:** เพิ่มความสามารถทำ Prototype/Demo app — กัปตันออกแบบตาม practice และ**สั่ง agent นักทำ demo (โมโม่/โม่) เป็นชิ้น ๆ ได้** + "ทำให้ code กัปตันสะอาดขึ้น ไม่เยอะเกินเหตุ ทำงานดีกว่าเดิม"
+
+**ของใหม่:**
+- **skill `ice-demo-builder` V01R01** — บ้าน craft งาน demo ทั้งหมด: DEMO-PIPELINE 6 ด่าน (DM-0 QUALIFY → DM-1 SPEC → DM-2 DESIGN → DM-3 BUILD → DM-4 VERIFY → DM-5 REHEARSE) · ตาราง Tier (T1 mockup/T2 prototype/T3 real-stack) · **Demo Data Policy 3 ระดับ** (POC = ข้อมูลจริงที่ลูกค้ายินยอม-บันทึกใน spec · demo ทั่วไป = แปลงจากข้อมูลลูกค้าให้สมจริง ประเภทรายการ/ธุรกิจเดียวกัน · ห้ามประดิษฐ์แล้วอ้างจริง) · stack recipes (NetSuite/APEX/เว็บ) · guardrails (แก้ ≤3 รอบ/ชิ้น · ผู้ตรวจต้องรันแอปจริง — ห้าม Verifier Theater) — best practice สกัดจาก 3 repo (shanraisshan RPI · addyosmani agent-skills · loop-engineering) เขียนเอง ไม่ clone
+- **agent `demo-builder-agent` (โมโม่ ⑦) V01R01** — เปลือกบาง ~55 บรรทัดตามแม่แบบเสี่ยวป้อ · DISK-IS-TRUTH (+data_set/consent_status ใน brief) · **กัปตัน dispatch ตรงได้** (ต่างจากเจนนี่โดยเจตนา — งานแอปเป็นชิ้นยาว/ขนานได้) · acceptance ผ่านจริง: dashboard สมมติ 1 หน้า — เลขกระทบยอดครบ, theme ตรง, รายงานข้อจำกัด verify ตรง ๆ (FAIL-LOUD)
+- **กัปตัน V05R01 LEAN REWRITE** — 787→566 บรรทัด (−28%) · 74,375→44,631 ตัวอักษร (**−40%**) · กฎครบเดิม 100% (grep gate 80 กลไกครบ) · ตัดความซ้ำ (กฎเจนนี่ 8→4 จุด — บ้านเดียวที่ §4 · บทเรียน 14→3 จุด → compass-changelog V01R02) · +MODE GATE โหมด ④ DEMO + ROUTING GATE (กำกวมเอกสาร vs แอป = ถาม user ก่อน) · **ตัดสินใจโครงสร้าง:** ไม่ย้าย Matrix/PIPELINE/LIMITS/schema ไป reference — "สิ่งเดียวที่รับประกันทุกครั้งได้คือสิ่งที่อยู่ในไฟล์ที่อ่านทุกครั้ง" ย้ายเฉพาะประวัติ/บทเรียนที่ไม่ทำให้งานพัง
+- **APEX reference** — `LLM-Memory/30-Product/Oracle-APEX/Facts/apex-overview-26-1.md` (draft · provenance ครบ · partial: apex.oracle.com timeout — ตามงบ ≤2 pass)
+
+---
+
 ## ⭐ DOC READER Wave (2026.08.06-07 — plugins 1.9.0 · กัปตัน V04R08 · เสี่ยวป้อ V01R04 · สมนึก V03R07)
 
 **ปัญหาที่แก้:** การ "อ่านเอกสาร" ของ fleet เคยเป็นเรื่องเดา — แต่ละ agent ใช้เครื่องมือคนละตัว (python-docx ได้เฉพาะย่อหน้า · pdftotext ทำสระอำแตก · ฟอร์แมตแปลกอ่านไม่ได้เลย) และ **ไม่มีใครตรวจว่าข้อความไทยรอดครบไหม** → เนื้อหาหายเงียบตั้งแต่ก่อนถึงคลังความรู้
