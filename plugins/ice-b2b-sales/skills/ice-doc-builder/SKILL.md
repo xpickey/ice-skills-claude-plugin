@@ -3,7 +3,8 @@ name: ice-doc-builder
 description: "iCE Document Build Craft — ความรู้ build .pptx/.docx/.xlsx/PDF/HTML ระดับ specialist (Build Discipline D1-D4 tri-slot Thai+EN font, 18 PPTX lessons, Method B font-embed, Strict Validator, SAVE-FIRST, VALIDATION BUDGET, renderer ladder) ที่ย้ายมาจาก deliverable-gen-agent เพื่อให้ทุก persona โหลดใช้ได้ (L0/กัปตัน/คิม/สมนึก build เองใน DOC-PIPELINE V3 · เจนนี่-shell ใช้ตอน background build). ถือ contract ของ marker ICE_BUILD=pipeline (PreToolUse hook). Triggers (TH): build deck, สร้าง slide, สร้างเอกสาร, ทำ proposal เป็นไฟล์, สร้าง .pptx, ทำ .docx, ทำ .xlsx, ทำ ROI excel, dashboard, font ไทย, font เพี้ยน, แก้ font, embed font, ไฟล์เปิดไม่ได้, Repair dialog. Triggers (EN): build deck, generate slides, build document, create pptx/docx/xlsx, ROI workbook, dashboard, font embed, Thai font, corrupted file, ICE_BUILD."
 ---
 
-> **Skill:** ice-doc-builder | **Version:** V01R12 | **Date:** 2026.08.06
+> **Skill:** ice-doc-builder | **Version:** V01R13 | **Date:** 2026.08.07
+> **V01R13 (2026.08.07 · คำสั่ง user):** ⭐ iCE SUPER TEMPLATE — §0.1 ข้อ 7 + `references/ice-super-template.md` (แม่แบบ deck เรียกโดยชื่อ: ลายเส้นทอง 10 อุตสาหกรรม + Higgsfield สูตรยิงครั้งเดียว + archetype 6 หน้า) — จบการพิมพ์ชุดคำสั่งเดิมซ้ำทุก deck
 > **V01R12 (2026.08.06 · คำสั่ง user):** ⭐ FILE HYGIENE — §0.1 ข้อ 6 + แก้ต้นตอใน §7 ②: "save ใต้ ~/Documents แล้วย้าย" → staging `~/Documents/.ice-staging/` + ย้ายเข้า `_build/_qa/` ในคำสั่งเดียวกัน (ขยะ `_qa_aris_vfin/` 11 MB + `qa_s6_*.pptx` ใต้ ~/Documents — user เจอ ไม่ใช่ระบบ) · SSOT ทั้ง fleet = `reference/file-hygiene.md`
 > **V01R11 (2026.08.05 · คำสั่ง user — เคส VFIN):** +**§3.0 ⑤ TEMPLATE-BASE BUILD** — งานต่อยอด template/เด็คเดิมใช้ฟอนต์ตามนโยบายปัจจุบันเป็นค่าเริ่มต้น **ห้ามสืบทอดฟอนต์ template อัตโนมัติ** · ฟอนต์ template เฉพาะ user สั่งชัดเจน (font_override_reason + QA-log) · agent ห้ามออก --allow-font ให้ตัวเองด้วยเหตุผลความสม่ำเสมอ · PLAN-CARD ต้องแจ้ง mixed-font ชั่วคราว · ③ APPROVED SET จำกัดขอบเขตเหลืองานเริ่มจากศูนย์ · `font_policy` V01R08 · อริส +D7.6d
 > **V01R10 (2026.08.05 · QA + คำสั่ง user):** +**§0.1 ข้อ 0 ASK-FIRST** (คำถามค้าง = ห้ามเริ่ม build · เอกสารพร้อมคำถามแนบท้าย = ผิด protocol) · **แก้ §3.0-A แถวสไลด์แน่น:** ฟอนต์ = `Leelawadee` ตัวธรรมดา (เดิมเขียน Leelawadee UI ไม่ตรงกับโค้ดและคำสั่ง user) + เกณฑ์อัตโนมัติ + 🔴 ยกเว้น rail=govt (ฟอนต์บังคับ TOR ชนะกฎความแน่น) · อ้างอิงเดิม V01R09 | **Date:** 2026.08.04
@@ -51,6 +52,14 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
    · spec/build script ยังอยู่ `_build/` ข้าง artifact (เอกสารประกอบงาน ไม่ใช่ temp)
    · ไฟล์ output จริง → ตำแหน่งที่ user/spec ระบุเท่านั้น — **ไม่แน่ใจ = ถามก่อนทำงานต่อ**
    · 🔴 ห้ามสร้างไฟล์นอกโปรเจกต์ (โดยเฉพาะใต้ ~/Documents) — SSOT: `reference/file-hygiene.md`
+7. **⭐ iCE SUPER TEMPLATE (V01R13 · คำสั่ง user 2026.08.07 — จบการพิมพ์สั่งซ้ำ ≥5 session):**
+   **user เอ่ยชื่อ "iCE Super Template" → ดึง `references/ice-super-template.md` มาใช้ทั้งชุดทันที**
+   · สั่ง deck ทั่วไปโดยไม่เอ่ยชื่อ = ห้ามเหมาใช้เอง — ถาม CI/รายละเอียด/template ตาม ASK-FIRST ปกติ
+   — archetype 6 หน้า (ปกเข้มไล่เฉด+ลายเส้นทองคล้ำตามอุตสาหกรรม · TOC ·
+   divider · detail พื้นขาวลายจาง · process=infographic+Color telling/Block/Shading · closing) +
+   สูตร background Higgsfield ยิงครั้งเดียว/deck + motif 10 อุตสาหกรรม + ฟอนต์ตามโหมดภาษา (RAILS) +
+   ASK-FIRST ชุดสั้น 4 ข้อ (อุตสาหกรรม/ภาษา/ผู้ชม/โครง) · user ระบุ template อื่น/แบรนด์ลูกค้า = ตามนั้นแทน
+   · สี/type scale/grid = authority เดิมที่ `b2b-slide-designer/references/template_ice_propose.md` (ห้าม fork)
 
 ## 0.2 MARKER SEMANTICS (ผูก PreToolUse hook `ice-prebuild-guard.sh`)
 | Marker | ใคร | ความหมาย |

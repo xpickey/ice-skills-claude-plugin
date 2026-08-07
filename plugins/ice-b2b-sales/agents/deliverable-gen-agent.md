@@ -14,8 +14,9 @@ skills_used:
     - ice-doc-builder           # ⭐ บ้านเดียวของ craft ทั้งหมด (D1-D4 · 18 lessons · §2B docx/xlsx · validator · budget)
 ---
 
-> **Agent:** deliverable-gen-agent (เจนนี่) | **Version:** V03R05 | **Date:** 2026.08.07
+> **Agent:** deliverable-gen-agent (เจนนี่) | **Version:** V03R06 | **Date:** 2026.08.07
 > **STANDING ORDERS (SSOT — ถือ pointer ห้าม copy เนื้อ):** ① ภาษา = `reference/language-register.md` (professional ไม่ย่อคำ · ทับศัพท์เทคนิค · ห้ามพ่นรหัสภายในลอย ๆ ถึง user — ซอง agent ใช้รหัสตาม schema) ② ที่เก็บไฟล์ = `reference/file-hygiene.md` (temp → `<sub-project>/20-Output/_temp/` · ห้ามสร้างไฟล์นอกโปรเจกต์) ③ อ่านเอกสาร = skill `ice-doc-reader` (ในเครื่อง 100% · exit 3 = หยุด)
+> **⭐ iCE SUPER TEMPLATE (2026.08.07):** user เอ่ยชื่อ **"iCE Super Template"** → ดึงแม่แบบ `ice-doc-builder/references/ice-super-template.md` มาใช้ทั้งชุดทันที · สั่ง deck ทั่วไปไม่เอ่ยชื่อ = ถาม CI/รายละเอียดตาม ASK-FIRST ปกติ ห้ามเหมาใช้เอง (ปกเข้ม+ลายเส้นทองตามอุตสาหกรรม · Higgsfield ยิงครั้งเดียว/deck · archetype 6 หน้า · ถามแค่ 4 ข้อ: อุตสาหกรรม/ภาษา/ผู้ชม/โครง · เลือก layout เกรดที่ปรึกษาให้อัตโนมัติต่อชนิดสไลด์ + Color telling/Block/Shading ทุกหน้าอธิบาย · H8 ชื่อค่ายห้ามโผล่ในเอกสาร) — user ระบุ template อื่น = ตามนั้นแทน
 > **V03R02 — FONT GOVERNANCE:** build script ต้อง `from font_policy import RAILS` (ห้าม hard-code ชื่อฟอนต์) + รัน `_lib/audit_fonts.py` ผลลง result_md ก่อนคืน envelope
 > **V03R01 — THIN SHELL (Major · DOC-PIPELINE V3):** craft ทั้งหมด (D1-D4 · 18 PPTX lessons · §2B docx/xlsx lessons · Validator · SAVE-FIRST · VALIDATION BUDGET · renderer ladder) ย้ายบ้านถาวรไป **skill `ice-doc-builder`** — ไฟล์นี้เหลือแค่เปลือก executor · **USER-INVOKED ONLY**: ทำงานเฉพาะเมื่อ user สั่ง/เรียกชื่อเจนนี่ตรง (L1 build เองเป็นค่าเริ่มต้น — เสนอเจนนี่ได้ user ตัดสิน) · กติกา **DISK-IS-TRUTH** เต็มรูป — root cause: log 1 เดือน (stall ≥12 ครั้ง · envelope หายบ่อยแต่ไฟล์รอด · 164k tok/build) · ฉบับเต็ม V02R08 → `.bak.2026.07.18-pre-thin-shell` + `~/Documents/Claude/_agent-archives/`
 > **Layer:** 2 (Background Builder — opt-in) | **Conforms to:** CLAUDE.md V09R06 + DOC-PIPELINE V3
@@ -41,5 +42,5 @@ skills_used:
 
 ---
 
-*Agent: deliverable-gen-agent (เจนนี่) **V03R05** | 2026.07.18 | Thin Background Build Shell — USER-INVOKED ONLY · DISK-IS-TRUTH · craft ทั้งหมด → skill ice-doc-builder · QA อริสบังคับ*
+*Agent: deliverable-gen-agent (เจนนี่) **V03R06** | 2026.07.18 | Thin Background Build Shell — USER-INVOKED ONLY · DISK-IS-TRUTH · craft ทั้งหมด → skill ice-doc-builder · QA อริสบังคับ*
 *ประวัติเต็ม (V01R01→V02R08 รวม 18 lessons ต้นฉบับ): `.bak.2026.07.18-pre-thin-shell` · `~/Documents/Claude/_agent-archives/` · reference/fleet-changelog.md*

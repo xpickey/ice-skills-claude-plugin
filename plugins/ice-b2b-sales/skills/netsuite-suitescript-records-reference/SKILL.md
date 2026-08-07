@@ -1,6 +1,7 @@
 ---
 name: netsuite-suitescript-records-reference
-description: SuiteScript records and fields reference. Look up field IDs, types, required status, and search capabilities for all 272 NetSuite record types. Use this when building SuiteScript to ensure correct field usage.
+description: SuiteScript records and fields reference — look up field IDs, types, required status, and search capabilities for all 272 NetSuite record types — plus a REST Web Services (SuiteTalk REST) record API pointer and REST↔SuiteScript field mapping. Use when building SuiteScript for correct field usage, or when integrating via the REST Record API and you need endpoint patterns, the metadata-catalog, or how REST JSON fields map to SuiteScript internal IDs.
+license: The Universal Permissive License (UPL), Version 1.0
 metadata:
   author: Oracle NetSuite
   version: 1.0
@@ -138,6 +139,38 @@ The following script types are managed via SDF and don't appear as searchable re
 
 ## Record Index
 See `references/record-index.md` for an alphabetical listing of all 272 records.
+
+## REST Web Services (SuiteTalk REST) — Record API
+
+> **Different API surface from SuiteScript.** The data in `records.json` describes
+> SuiteScript internals; the REST Record API uses its own JSON schema. Do not assume
+> a SuiteScript internal ID is the valid REST field name.
+
+See **`references/rest-record-api.md`** for the REST Record API pointer + mapping:
+
+- **Authoritative source** — the version-aware REST API Browser
+  (`.../REST_API_Browser/record/v1/<RELEASE>/index.html`; captured target `2024.2`).
+- **Endpoint pattern** — `https://<account>.suitetalk.api.netsuite.com/services/rest/record/v1/{recordType}`
+  with `GET / POST / PATCH / PUT (eid) / DELETE`, transform, and sublist sub-resources.
+- **Query params** — `q`, `limit`/`offset`, `fields`, `expandSubResources`, `simpleEnumFormat`.
+- **Metadata Catalog** — `/services/rest/record/v1/metadata-catalog[/{recordType}]` returns the
+  live OpenAPI 3.0 / JSON Schema per account (the correct source for exact REST field names).
+- **REST ↔ SuiteScript mapping table** — CRUD verbs, camelCase JSON vs internal IDs,
+  reference fields as `{id, refName}`, sublists as `items[]`, dates as ISO, etc.
+
+### REST reference data files
+
+- **`references/rest-records.json`** — full field-level schema for all **151 REST record
+  types** (1342 definitions, ~20,000 properties). Each property = `{name, type, ref?, title?,
+  required?, enum?}`; `type:"ref"` points into `definitions` (resolve sub-resources/shared
+  refs). Extracted from the 2024.2 browser on 2026-08-07. Look up a record by key, e.g.
+  `definitions.salesOrder`.
+- **`references/rest-record-index.md`** — the 151 record-type index (alphabetical).
+- **`references/rest-record-api.md`** — endpoints, verbs, auth, query params, metadata-catalog,
+  and the REST↔SuiteScript mapping.
+
+For exact/current per-account fields (or a newer release), use the metadata-catalog:
+`/services/rest/record/v1/metadata-catalog/{recordType}`.
 
 ## SafeWords
 
