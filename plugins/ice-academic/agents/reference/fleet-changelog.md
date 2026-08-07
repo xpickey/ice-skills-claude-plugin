@@ -4,6 +4,32 @@
 
 ---
 
+## ⭐⭐ FLEET LEAN V2 + QA SPEED FIX + DISPATCH PRACTICE V2 (2026.08.07 — ทั้ง 10 ตัวพร้อมกัน)
+
+**โจทย์ user:** "รีวิวแบบเดียวกับกัปตันให้ทุก agent — อ่านไว ไม่วนซ้ำ ลด context/token · กฎ/validation ครบ" + "ปรับ practice การเรียก subagent ตาม Claude รุ่นใหม่" + "อริสตรวจนานมาก เช็คว่าวนไหม"
+
+**วินิจฉัย QA ช้า (หลักฐานจริง — โปรเจกต์ Minor Fixed Asset Count + Viriyah Resource Load):** Run Line บันทึกเอง "aris stopped with zero findings after ~80min" · สำเนาไฟล์งานเหมือนกัน 100% จำนวน 7 ชุด (run1-7) · เครื่องมือทดสอบถูกสร้างใหม่ 4 ตัวในงานเดียว · รอบ delta (ปุ่มเดียว) รัน matrix เต็ม 3 จอ × 3 บทบาทซ้ำ · รอบตรวจตายจาก connection error แล้ว spawn ใหม่จ่าย setup ซ้ำ — **ราก: Browser ในแอปเปิด file://+localhost ไม่ได้ → อริสวนวิศวกรรม workaround ไม่มีจุดหยุด**
+
+**ยาแก้ (อริส §4.6 ใหม่):** บันไดตรวจแอป 4 ขั้น (node --check → Chrome headless CLI → DOM metric counts → NOT-VERIFIABLE) + กติกาความเร็ว 5 ข้อ (HARNESS REUSE · TEST-IN-PLACE · DELTA=DELTA จริง · INFRA 2-STRIKE · SETUP อยู่ใน BUDGET) + **Progress Contract** (`_qa-progress.md` 1 บรรทัด/มิติ) — ฝั่งกัปตัน V05R02 เพิ่ม **QA-WATCHDOG** (ไม่มี progress ใหม่ ~15 นาที = หยุดถาม ไม่ปล่อยถึง 80)
+
+**DISPATCH PRACTICE V2 (กัปตัน S3 + คิม K3 + สมนึก T3):** ① CONTINUATION-FIRST RETRY (SendMessage ต่อ agent เดิมด้วย delta ของ brief — ไม่ spawn ใหม่จ่ายค่าอ่านซ้ำ) ② BACKGROUND DEFAULT งานยาว + รอ notification ห้าม poll ③ ONE-MESSAGE FAN-OUT ④ NO-AGENT-FOR-DETERMINISTIC ⑤ needs_input ครั้งเดียวครบ
+
+**LEAN ทุกตัว (สูตรกัปตัน V05R01: กฎครบ 100% · กฎละบ้านเดียว · ประวัติมาที่ไฟล์นี้):**
+| ตัว | ก่อน → หลัง | สาระ |
+|---|---|---|
+| อริส V02R15→**V03R01** | 398→~310 บรรทัด · −37% ตัวอักษร | header 14 บรรทัดยุบ (กฎมีบ้านใน engines ครบแล้ว) · +§4.6 speed rules · grep gate 57/57 · แก้ footer ค้าง V02R08 |
+| สมนึก V03R07→**V04R01** | 365→299 · −35% | header 10→4 · ASK-FIRST บ้านเดียว T1 · grep gate 58/58 · แก้ footer ค้าง V03R02 |
+| คิม V03R04→**V04R01** | 327→~300 | header 9→5 · F/B/K ตาราง→ฉบับย่อ · +DISPATCH PRACTICE V2 · แก้ footer ค้าง V03R01 |
+| เทพ V02R05→**V03R01** | −5 บรรทัด header | STANDING ORDERS 1 บรรทัด · กฎ RETRIEVAL BUDGET/CO-AUTHOR ยืนยันมีบ้าน E3 · แก้ footer ค้าง V02R03 |
+| ก้อง V02R05→**V03R01** | −4 | เดียวกัน + **ย้ายกฎ D-P1 AUTHOR จาก header เข้า E3** (เดิมไม่มีบ้านใน body) · แก้ footer ค้าง V02R03 |
+| เจนนี่ V03R04→**V03R05** · เสี่ยวป้อ V01R04→**V01R05** · โมโม่ V01R01→**V01R02** | ตัวละ 1-2 บรรทัด | STANDING ORDERS มาตรฐาน · Conforms V09R06 · โมโม่คง path เฉพาะ 50 - Demo |
+| bridges ×2 V02R02 | ไม่แตะ | สะอาดอยู่แล้ว (มี changelog pointer ไม่มี stack) |
+| กัปตัน V05R01→**V05R02** | +12 บรรทัด | +DISPATCH PRACTICE V2 + QA-WATCHDOG |
+
+**Header มาตรฐานใหม่ทั้ง fleet (4-5 บรรทัด):** Agent/Version · STANDING ORDERS (pointer 3 SSOT: language-register · file-hygiene · ice-doc-reader) · Changelog pointer · Layer/Conforms V09R06 — บล็อกคำสั่งประจำที่เคย copy เต็มข้อความใน 8-9 ไฟล์ เหลือ pointer บรรทัดเดียว แก้กติกากลางแตะไฟล์เดียว
+
+---
+
 ## ⭐ DEMO Wave + COMPASS LEAN (2026.08.07 — plugins 1.10.0 · กัปตัน V05R01 · +โมโม่ ⑦ V01R01 · skill ice-demo-builder V01R01)
 
 **โจทย์ user:** เพิ่มความสามารถทำ Prototype/Demo app — กัปตันออกแบบตาม practice และ**สั่ง agent นักทำ demo (โมโม่/โม่) เป็นชิ้น ๆ ได้** + "ทำให้ code กัปตันสะอาดขึ้น ไม่เยอะเกินเหตุ ทำงานดีกว่าเดิม"

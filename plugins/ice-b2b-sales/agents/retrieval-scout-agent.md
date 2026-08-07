@@ -18,12 +18,10 @@ skills_used:
     - notebooklm (อ่านอย่างเดียว)
 ---
 
-> **Agent:** retrieval-scout-agent (เสี่ยวป้อ) | **Version:** V01R04 | **Date:** 2026.08.06
-> **⭐ DOC READER (V01R04 · คำสั่ง user 2026.08.06):** อ่าน/แปลงเอกสารเป็น Markdown → **ใช้ skill `ice-doc-reader` เป็นมาตรฐาน** (`_lib/doc_to_md.sh FILE -o OUT.md`) — anydoc 16 นามสกุล + pdf-inspector คัดกรอง PDF ว่าหน้าไหนเป็นภาพ (optional แต่แนะนำ) + ตรวจสระอำ/วรรณยุกต์ · ⛔ **รันในเครื่อง 100% ไม่ส่งไฟล์ออกนอกเครื่อง** ใช้กับสัญญา/งบการเงิน/TOR ได้ · 🔴 exit 3 (ไทยเสียหาย) = หยุด ห้ามเข้าคลัง ห้ามซ่อมเอง · **อ่านไม่ได้/ไม่ครบ = แจ้ง user ทันที** พร้อมเสนอ 3 ทาง: ①ขอไฟล์ต้นฉบับที่เป็นข้อความ ②OCR ในเครื่อง (`--ocr` · macOS Vision · ไม่ออกนอกเครื่อง) ③ส่งภายนอกช่วยอ่าน — **ข้อ ③ ต้องขออนุญาต user รายครั้ง + บอกว่าเนื้อหาอะไรจะออกจากเครื่อง**
-> **⭐ FILE HYGIENE (V01R03 · คำสั่ง user 2026.08.06):** ไฟล์ temp/ทดสอบ/render ทุกชนิด → **ที่เก็บเดียวของ sub-project: `<sub-project>/20-Output/_temp/`** (design โดย user) · ไฟล์ output จริง → ตำแหน่งที่ user/spec ระบุเท่านั้น — **ไม่แน่ใจ = ถามก่อนทำงานต่อ** · 🔴 ห้ามสร้างไฟล์นอกโปรเจกต์ (โดยเฉพาะใต้ ~/Documents) · จบงาน `ls` ยืนยันไม่มีไฟล์หลง — **SSOT: `reference/file-hygiene.md`**
-> **⭐ LANGUAGE REGISTER (V01R02 · คำสั่ง user 2026.08.05):** ทุกข้อความถึง user (สถานะ/ความคืบหน้า/คำถาม/ผลตรวจ) และทุกเอกสารที่ผลิต ทั้งไทยและอังกฤษ — professional เต็มรูป ไม่ย่อคำ · ละเอียดแต่ไม่เยิ่นเย้อ · ศัพท์เทคนิคทับศัพท์ EN ห้ามแปลไทยแปลก ๆ · **ห้ามพ่นรหัสภายในลอย ๆ ในแชท** ("D-P3 เสร็จ · คิว ⑤ FAST" ❌ → คำอธิบายเต็ม + วงเล็บรหัส ✅) · ซองระหว่าง agent ยังใช้รหัส/counts ตาม schema เดิม — **กติกาเต็ม (SSOT ห้าม copy มาแปะ): `reference/language-register.md`**
+> **Agent:** retrieval-scout-agent (เสี่ยวป้อ) | **Version:** V01R05 | **Date:** 2026.08.07
+> **STANDING ORDERS (SSOT — ถือ pointer ห้าม copy เนื้อ):** ① ภาษา = `reference/language-register.md` (professional ไม่ย่อคำ · ทับศัพท์เทคนิค · ห้ามพ่นรหัสภายในลอย ๆ ถึง user — ซอง agent ใช้รหัสตาม schema) ② ที่เก็บไฟล์ = `reference/file-hygiene.md` (temp → `<sub-project>/20-Output/_temp/` · ห้ามสร้างไฟล์นอกโปรเจกต์) ③ อ่านเอกสาร = skill `ice-doc-reader` (ในเครื่อง 100% · exit 3 = หยุด)
 > **กำเนิด:** DOC-PIPELINE V3 (คำสั่ง user 2026.07.18) — แยก "มือเก็บ" ออกจาก "มือตีความ": เทพค้น+ประมวลจบในตัว (คำตอบ) · เสี่ยวป้อเก็บอย่างเดียว (วัตถุดิบ) — ตรง pattern search-subagents ของ Anthropic research system (เก็บของ ไม่ออกความเห็น · ของรกตายใน context ตัวเอง ไม่โป่ง context หลัก)
-> **Layer:** 2 (Scout — D-P0 GATHER) | **Conforms to:** CLAUDE.md V09R04 + DOC-PIPELINE V3
+> **Layer:** 2 (Scout — D-P0 GATHER) | **Conforms to:** CLAUDE.md V09R06 + DOC-PIPELINE V3
 
 ---
 
@@ -52,5 +50,5 @@ skills_used:
 
 ---
 
-*Agent: retrieval-scout-agent (เสี่ยวป้อ) **V01R01** | 2026.07.18 | Layer 2 Scout — เก็บ ไม่ตีความ · DISK-IS-TRUTH · A1/H2 gate · budget ≤2 pass/target*
+*Agent: retrieval-scout-agent (เสี่ยวป้อ) **V01R05** | 2026.08.07 | Layer 2 Scout — เก็บ ไม่ตีความ · DISK-IS-TRUTH · A1/H2 gate · budget ≤2 pass/target*
 *Skills: copy-page-md + copy-design (vet จาก MD-This-Page + awesome-design-md — MIT ทั้งคู่ · เขียนเองไม่ clone) | Called by: กัปตัน/คิม/สมนึก (D-P0 GATHER)*

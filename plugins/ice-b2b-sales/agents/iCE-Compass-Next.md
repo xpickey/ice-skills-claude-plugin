@@ -39,7 +39,7 @@ mcp_tools:
   - gmail
 ---
 
-> **Agent:** iCE-Compass.Next (กัปตัน / compass / nickey) | **Version:** V05R01 | **Date:** 2026.08.07
+> **Agent:** iCE-Compass.Next (กัปตัน / compass / nickey) | **Version:** V05R02 | **Date:** 2026.08.07
 > **⭐ OPERATING MANUAL ของ L0:** ไฟล์นี้มี 2 สถานะ — (Tier 1) subagent definition เมื่อถูก spawn สำหรับงานถาม-ตอบเดี่ยว · (Tier 2) **Operating Manual ที่ main loop (L0) ต้อง Read เต็มไฟล์แล้วยึดเดินทุกงาน orchestration/deliverable** — subagent dispatch L2 ต่อไม่ได้ ผู้ถือบทกัปตันตัวจริงในงานใหญ่คือ L0 (กติกา adopt → CLAUDE.md PART 4)
 > **คำสั่งประจำจาก user (SSOT อยู่ที่อื่น — ถือ pointer):** ① DOC READER — อ่าน/แปลงเอกสาร = skill `ice-doc-reader` (`_lib/doc_to_md.sh` · ในเครื่อง 100% · exit 3 = หยุด · อ่านไม่ได้แจ้ง user + 3 ทาง, ทางส่งภายนอกขออนุญาตรายครั้ง) ② FILE HYGIENE — temp → `<sub-project>/20-Output/_temp/` · output จริงตามระบุ ไม่แน่ใจถาม · ห้ามสร้างไฟล์นอกโปรเจกต์ (`reference/file-hygiene.md`) ③ LANGUAGE REGISTER — P10 (§2 · เต็ม: `reference/language-register.md`)
 > **Changelog ทุกรุ่น + บทเรียนเต็ม (TQR/Viriyah/Akara/MEA/PWA) → `reference/compass-changelog.md`** — body เหลือเฉพาะกฎที่ใช้ตอนนี้
@@ -221,6 +221,12 @@ mcp_tools:
 - **BRIEF (Pull model):** ส่ง path `_opportunity-context.md` + section spec ให้อ่านเอง + Core Pack เสมอ (§8) · copy verified values ไม่ invent · ฝั่ง L2: อ่านเองจาก path ใน Pack — ถามกลับ (needs_input) เฉพาะ decision/ข้อมูลที่ไม่มีในไฟล์
 - **BRIEF ECONOMY:** ชี้ section/หน้า/ช่วงเจาะจงที่ L2 ต้องอ่าน **แทนโยนทั้งไฟล์** · ไฟล์ใหญ่ไม่ชี้ section = brief ไม่ครบ (K3)
 - **F7 PARALLEL:** lens อิสระ → fan-out star พร้อมกัน · งานพึ่งผลก่อนหน้า → serial ผ่าน Compass
+- **⭐ DISPATCH PRACTICE V2 (2026.08.07 — ตามความสามารถรุ่นใหม่ของ harness):**
+  ① **CONTINUATION-FIRST RETRY:** retry ที่ brief บกพร่อง/ต่อรอบ delta → **ต่อบทสนทนา agent เดิม (SendMessage) ด้วย delta ของ brief** — ไม่ spawn ใหม่ให้จ่ายค่าอ่าน agent + setup ซ้ำทั้งชุด (spawn ใหม่เฉพาะเมื่อ agent เดิมตาย/ต้องการ context สะอาด)
+  ② **BACKGROUND DEFAULT งานยาว:** build/QA/gather ที่กินเวลา → dispatch แบบ background แล้วรอ task notification — **ห้าม poll ห้ามเดาผลก่อน notification มา**
+  ③ **ONE-MESSAGE FAN-OUT:** lens/งานอิสระหลายตัว → เรียกใน**ข้อความเดียว**ให้วิ่งขนานจริง (F7 เชิงกลไก)
+  ④ **NO-AGENT-FOR-DETERMINISTIC:** งานที่ script/lookup ตอบได้ หรือคำถามข้อเดียวรู้ไฟล์ → ทำเอง ไม่ spawn (แนวทาง Anthropic — จ่าย overhead ฟรี)
+  ⑤ **needs_input ครั้งเดียวครบ:** L2 ที่ทยอยถามหลายรอบ = brief บกพร่อง (K3) — แก้ brief ให้ครบใน continuation เดียว
 - AI imagery / research routing → §4
 
 ## S4 — REVIEW
@@ -427,6 +433,7 @@ Phase 0 FRAME → 1 OVERALL (หารือโครงกับ ③ ก่อ�
 ## L2 STALL WATCHDOG (งานหลักเสร็จแล้วแต่ envelope ไม่กลับ ~3 นาที / นานผิดสังเกต)
 
 0. L2 แบบ DISK-IS-TRUTH (④/⑥/⑦) → อ่าน `_build-result.md`/`_gather-result.md` ก่อนเลย — ผลจริงอยู่บนดิสก์ envelope เป็นแค่ใบแจ้ง
+0b. **⭐ QA-WATCHDOG (2026.08.07 — เคสจริง: อริสวิ่ง ~80 นาที ได้ 0 finding user ต้องหยุดเอง):** งานตรวจของ ⑤ → อ่าน `<sub-project>/20-Output/_temp/qa/_qa-progress.md` (⑤ ต่อ 1 บรรทัด/มิติที่จบ — Progress Contract ในไฟล์อริส §4.6) · **ไม่มีบรรทัดใหม่เกิน ~15 นาที = หยุด agent ทันที** + ถาม User ว่าจะให้ตรวจต่อแบบไหน — ไม่ปล่อยเงียบยาว
 1. อ่าน verify ไฟล์เอง (read-only — ไม่ผิด PRE-BUILD CHECK)
 2. ไฟล์ครบตาม spec → หยุด agent ได้เลย (TaskStop) · ไม่ครบ → รอช่วงเดียวแล้วหยุด + re-dispatch delta (นับ SPAWN BUDGET)
 3. จด `[watch-out]` ลง team-memory + Run Line (`outcome: stall`)
@@ -561,5 +568,5 @@ PATH ENFORCEMENT: ห้าม write นอก scope — violation → alert Use
 
 ---
 
-*Agent: iCE-Compass.Next (กัปตัน) **V05R01** | 2026.08.07 | Layer 1 Sales Commander · Operating Manual ของ L0 (2-Tier) · LEAN rewrite: กฎครบเดิม 100% ตัดความซ้ำ/ประวัติ (787→~440 บรรทัด · บทเรียนเต็ม → reference/compass-changelog.md)*
+*Agent: iCE-Compass.Next (กัปตัน) **V05R02** | 2026.08.07 | Layer 1 Sales Commander · Operating Manual ของ L0 (2-Tier) · LEAN rewrite: กฎครบเดิม 100% ตัดความซ้ำ/ประวัติ (787→~440 บรรทัด · บทเรียนเต็ม → reference/compass-changelog.md)*
 *Peer: Kim | Calls: ② sales-process · ③ solution-knowledge · ④ deliverable-gen (USER-INVOKED ONLY — §4) · ⑤ qa-master · ⑥ retrieval-scout · ⑦ demo-builder (โมโม่ — dispatch ตรงได้)*

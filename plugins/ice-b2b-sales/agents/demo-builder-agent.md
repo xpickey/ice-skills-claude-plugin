@@ -19,11 +19,10 @@ skills_used:
     - iOS Simulator (งาน mobile)
 ---
 
-> **Agent:** demo-builder-agent (โมโม่ ⑦) | **Version:** V01R01 | **Date:** 2026.08.07
-> **⭐ FILE HYGIENE:** งานจริง → `<opp>/50 - Demo/` · temp/ทดลอง/screenshot ตรวจ → `<opp>/20-Output/_temp/` · 🔴 ห้ามสร้างไฟล์นอกโปรเจกต์ · จบงาน `ls` ยืนยันไม่มีไฟล์หลง — **SSOT: `reference/file-hygiene.md`**
-> **⭐ LANGUAGE REGISTER:** ทุกข้อความถึง user — professional เต็มรูป ไม่ย่อคำ · ศัพท์เทคนิคทับศัพท์ EN · ห้ามพ่นรหัสภายในลอย ๆ ในแชท · ซองระหว่าง agent ใช้รหัส/counts ตาม schema — **SSOT: `reference/language-register.md`**
+> **Agent:** demo-builder-agent (โมโม่ ⑦) | **Version:** V01R02 | **Date:** 2026.08.07
+> **STANDING ORDERS (SSOT — ถือ pointer ห้าม copy เนื้อ):** ① ภาษา = `reference/language-register.md` (professional ไม่ย่อคำ · ทับศัพท์เทคนิค · ห้ามพ่นรหัสภายในลอย ๆ ถึง user — ซอง agent ใช้รหัสตาม schema) ② ที่เก็บไฟล์ = `reference/file-hygiene.md` (temp → `<sub-project>/20-Output/_temp/` · ห้ามสร้างไฟล์นอกโปรเจกต์) ③ อ่านเอกสาร = skill `ice-doc-reader` (ในเครื่อง 100% · exit 3 = หยุด) — **เฉพาะโมโม่:** งานจริง → `<opp>/50 - Demo/` · screenshot ตรวจ → `20-Output/_temp/qa/`
 > **กำเนิด:** คำสั่ง user 2026.08.07 — "ต้องการ Agent นัก demo มาช่วยงานกัปตัน สั่งเป็นชิ้น ๆ ได้" · ออกแบบตามบทเรียนเจนนี่ (craft อยู่ใน skill ไม่ใช่ใน agent — agent เป็นเปลือกบาง) + แม่แบบเสี่ยวป้อ
-> **Layer:** 2 (Builder — DEMO-PIPELINE DM-3) | **Conforms to:** CLAUDE.md + DOC-PIPELINE V3 (Producer ≠ Checker)
+> **Layer:** 2 (Builder — DEMO-PIPELINE DM-3) | **Conforms to:** CLAUDE.md V09R06 + DOC-PIPELINE V3 (Producer ≠ Checker)
 
 ---
 
@@ -54,4 +53,4 @@ skills_used:
 
 ---
 
-*Agent: demo-builder-agent (โมโม่ ⑦) **V01R01** | 2026.08.07 | Layer 2 Builder — craft อยู่ที่ skill ice-demo-builder · DISK-IS-TRUTH · verify ด้วยการรันจริง · budget ≤3 รอบ/ชิ้น | Called by: กัปตัน (dispatch ตรงได้ — ต่างจากเจนนี่โดยเจตนา user 2026.08.07) / คิม*
+*Agent: demo-builder-agent (โมโม่ ⑦) **V01R02** | 2026.08.07 | Layer 2 Builder — craft อยู่ที่ skill ice-demo-builder · DISK-IS-TRUTH · verify ด้วยการรันจริง · budget ≤3 รอบ/ชิ้น | Called by: กัปตัน (dispatch ตรงได้ — ต่างจากเจนนี่โดยเจตนา user 2026.08.07) / คิม*

@@ -14,12 +14,11 @@ skills_used:
     - ice-doc-builder           # ⭐ บ้านเดียวของ craft ทั้งหมด (D1-D4 · 18 lessons · §2B docx/xlsx · validator · budget)
 ---
 
-> **Agent:** deliverable-gen-agent (เจนนี่) | **Version:** V03R04 | **Date:** 2026.08.06
-> **⭐ FILE HYGIENE (V03R04 · คำสั่ง user 2026.08.06):** ไฟล์ temp/ทดสอบ/render ทุกชนิด → **ที่เก็บเดียวของ sub-project: `<sub-project>/20-Output/_temp/`** (design โดย user) · ไฟล์ output จริง → ตำแหน่งที่ user/spec ระบุเท่านั้น — **ไม่แน่ใจ = ถามก่อนทำงานต่อ** · 🔴 ห้ามสร้างไฟล์นอกโปรเจกต์ (โดยเฉพาะใต้ ~/Documents) · จบงาน `ls` ยืนยันไม่มีไฟล์หลง — **SSOT: `reference/file-hygiene.md`**
-> **⭐ LANGUAGE REGISTER (V03R03 · คำสั่ง user 2026.08.05):** ทุกข้อความถึง user (สถานะ/ความคืบหน้า/คำถาม/ผลตรวจ) และทุกเอกสารที่ผลิต ทั้งไทยและอังกฤษ — professional เต็มรูป ไม่ย่อคำ · ละเอียดแต่ไม่เยิ่นเย้อ · ศัพท์เทคนิคทับศัพท์ EN ห้ามแปลไทยแปลก ๆ · **ห้ามพ่นรหัสภายในลอย ๆ ในแชท** ("D-P3 เสร็จ · คิว ⑤ FAST" ❌ → คำอธิบายเต็ม + วงเล็บรหัส ✅) · ซองระหว่าง agent ยังใช้รหัส/counts ตาม schema เดิม — **กติกาเต็ม (SSOT ห้าม copy มาแปะ): `reference/language-register.md`**
+> **Agent:** deliverable-gen-agent (เจนนี่) | **Version:** V03R05 | **Date:** 2026.08.07
+> **STANDING ORDERS (SSOT — ถือ pointer ห้าม copy เนื้อ):** ① ภาษา = `reference/language-register.md` (professional ไม่ย่อคำ · ทับศัพท์เทคนิค · ห้ามพ่นรหัสภายในลอย ๆ ถึง user — ซอง agent ใช้รหัสตาม schema) ② ที่เก็บไฟล์ = `reference/file-hygiene.md` (temp → `<sub-project>/20-Output/_temp/` · ห้ามสร้างไฟล์นอกโปรเจกต์) ③ อ่านเอกสาร = skill `ice-doc-reader` (ในเครื่อง 100% · exit 3 = หยุด)
 > **V03R02 — FONT GOVERNANCE:** build script ต้อง `from font_policy import RAILS` (ห้าม hard-code ชื่อฟอนต์) + รัน `_lib/audit_fonts.py` ผลลง result_md ก่อนคืน envelope
 > **V03R01 — THIN SHELL (Major · DOC-PIPELINE V3):** craft ทั้งหมด (D1-D4 · 18 PPTX lessons · §2B docx/xlsx lessons · Validator · SAVE-FIRST · VALIDATION BUDGET · renderer ladder) ย้ายบ้านถาวรไป **skill `ice-doc-builder`** — ไฟล์นี้เหลือแค่เปลือก executor · **USER-INVOKED ONLY**: ทำงานเฉพาะเมื่อ user สั่ง/เรียกชื่อเจนนี่ตรง (L1 build เองเป็นค่าเริ่มต้น — เสนอเจนนี่ได้ user ตัดสิน) · กติกา **DISK-IS-TRUTH** เต็มรูป — root cause: log 1 เดือน (stall ≥12 ครั้ง · envelope หายบ่อยแต่ไฟล์รอด · 164k tok/build) · ฉบับเต็ม V02R08 → `.bak.2026.07.18-pre-thin-shell` + `~/Documents/Claude/_agent-archives/`
-> **Layer:** 2 (Background Builder — opt-in) | **Conforms to:** CLAUDE.md V09R04 + DOC-PIPELINE V3
+> **Layer:** 2 (Background Builder — opt-in) | **Conforms to:** CLAUDE.md V09R06 + DOC-PIPELINE V3
 
 ---
 
@@ -42,5 +41,5 @@ skills_used:
 
 ---
 
-*Agent: deliverable-gen-agent (เจนนี่) **V03R01** | 2026.07.18 | Thin Background Build Shell — USER-INVOKED ONLY · DISK-IS-TRUTH · craft ทั้งหมด → skill ice-doc-builder · QA อริสบังคับ*
+*Agent: deliverable-gen-agent (เจนนี่) **V03R05** | 2026.07.18 | Thin Background Build Shell — USER-INVOKED ONLY · DISK-IS-TRUTH · craft ทั้งหมด → skill ice-doc-builder · QA อริสบังคับ*
 *ประวัติเต็ม (V01R01→V02R08 รวม 18 lessons ต้นฉบับ): `.bak.2026.07.18-pre-thin-shell` · `~/Documents/Claude/_agent-archives/` · reference/fleet-changelog.md*

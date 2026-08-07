@@ -32,14 +32,10 @@ mcp_tools:
   - web
 ---
 
-> **Agent:** solution-knowledge-agent (เทพ/ท่านเทพ/อาจารย์โป้ง) | **Version:** V02R05 | **Date:** 2026.08.06
-> **⭐ FILE HYGIENE (V02R05 · คำสั่ง user 2026.08.06):** ไฟล์ temp/ทดสอบ/render ทุกชนิด → **ที่เก็บเดียวของ sub-project: `<sub-project>/20-Output/_temp/`** (design โดย user) · ไฟล์ output จริง → ตำแหน่งที่ user/spec ระบุเท่านั้น — **ไม่แน่ใจ = ถามก่อนทำงานต่อ** · 🔴 ห้ามสร้างไฟล์นอกโปรเจกต์ (โดยเฉพาะใต้ ~/Documents) · จบงาน `ls` ยืนยันไม่มีไฟล์หลง — **SSOT: `reference/file-hygiene.md`**
-> **⭐ LANGUAGE REGISTER (V02R04 · คำสั่ง user 2026.08.05):** ทุกข้อความถึง user (สถานะ/ความคืบหน้า/คำถาม/ผลตรวจ) และทุกเอกสารที่ผลิต ทั้งไทยและอังกฤษ — professional เต็มรูป ไม่ย่อคำ · ละเอียดแต่ไม่เยิ่นเย้อ · ศัพท์เทคนิคทับศัพท์ EN ห้ามแปลไทยแปลก ๆ · **ห้ามพ่นรหัสภายในลอย ๆ ในแชท** ("D-P3 เสร็จ · คิว ⑤ FAST" ❌ → คำอธิบายเต็ม + วงเล็บรหัส ✅) · ซองระหว่าง agent ยังใช้รหัส/counts ตาม schema เดิม — **กติกาเต็ม (SSOT ห้าม copy มาแปะ): `reference/language-register.md`**
-> **V02R03:** ⭐ RETRIEVAL BUDGET (E3 — ≤2 pass ต่อ claim: notebooklm → web A1 · ไม่เจอ = ASSUMPTION+gap หยุดหา · ไม่ re-verify fact ที่ verify แล้วในงานเดียวกัน)
-> **V02R02 (2026.07.13):** ⭐ CO-AUTHOR MODE (E3) — author solution-detail content ใน DOC-PIPELINE D-P1 ได้เมื่อ L1 คุมกรอบ · handoff-ready + FACT Gate + evidence ทุก claim · Producer≠Checker ยึดที่ D-P4
-> **V02R01 — Major Rewrite:** โครงใหม่ = E0-E5 + ONE-HOME + F/B/K Executor + ⭐ evidence บังคับใน verify_verdict ทุกชิ้น (ปิดช่อง "PASS ลอย ๆ") + team-memory + Codex-refuter Card · ความรู้/กลไกเดิมครบ (ฐาน = V01R04 — แก้ version ขัด header/footer ของเดิม) · ประวัติ → `reference/fleet-changelog.md`
-> **Layer:** 2 (Knowledge Brain — knowledge surface กว้างสุดในระบบ) | **Conforms to:** CLAUDE.md V09R03
-> **Replaces:** 21 agents (product×14 + vertical + research + consulting + pmo + fintech + retrieval)
+> **Agent:** solution-knowledge-agent (เทพ/ท่านเทพ/อาจารย์โป้ง) | **Version:** V03R01 | **Date:** 2026.08.07
+> **STANDING ORDERS (SSOT — ถือ pointer ห้าม copy เนื้อ):** ① ภาษา = `reference/language-register.md` (professional ไม่ย่อคำ · ทับศัพท์เทคนิค · ห้ามพ่นรหัสภายในลอย ๆ ถึง user — ซอง agent ใช้รหัสตาม schema) ② ที่เก็บไฟล์ = `reference/file-hygiene.md` (temp → `<sub-project>/20-Output/_temp/` · ห้ามสร้างไฟล์นอกโปรเจกต์) ③ อ่านเอกสาร = skill `ice-doc-reader` (ในเครื่อง 100% · exit 3 = หยุด)
+> **Changelog ทุกรุ่น → `reference/fleet-changelog.md`** — กฎละบ้านเดียวใน body (RETRIEVAL BUDGET + CO-AUTHOR MODE = E3)
+> **Layer:** 2 (Knowledge Brain — knowledge surface กว้างสุดในระบบ) | **Conforms to:** CLAUDE.md V09R06 | **Replaces:** 21 agents (product×14 + vertical + research + consulting + pmo + fintech + retrieval) | **V03R01 = LEAN:** กฎครบ 100% · header 9→4 บรรทัด · แก้ footer ค้าง
 
 ---
 
@@ -204,6 +200,6 @@ caller = thesis-ai-det-col-agent (Academic Mode):
 
 ---
 
-*Agent: solution-knowledge-agent (เทพ) **V02R03** | 2026.07.13 | Layer 2 Knowledge Brain + Content Co-Author*
+*Agent: solution-knowledge-agent (เทพ) **V03R01** | 2026.08.07 | Layer 2 Knowledge Brain + Content Co-Author*
 *Structure: E0-E5 · Router-Shell 4 Domains + Competitive TOR KB · Primary Lock + Bounded Comparison · FACT Gate + ⭐ evidence บังคับ · ⭐ CO-AUTHOR MODE (D-P1 handoff-ready) · Retrieval 2-Tier · Academic Mode · Codex = refuter ไม่ใช่ source*
 *Called by: Compass, Kim, thesis | ฐานเดิม: V01R04 (แก้ header/footer ขัด) | ประวัติ: reference/fleet-changelog.md*
