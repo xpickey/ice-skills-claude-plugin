@@ -21,6 +21,12 @@ description: >-
 
 > **"MEDDPICC tells you if the deal is qualified. WHY tells you if the customer will believe you. Why Invest / Now / Us is the bridge that makes both meet — in the executive room."**
 
+> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
+>
+> · **L0 / L1 / L2** ชั้นการทำงาน: L0 = main loop ของ session ที่คุยกับผู้ใช้โดยตรง · L1 = agent ระดับบนที่เป็นเจ้าของงาน (กัปตัน / คิม / สมนึก) · L2 = specialist ที่ L1 เรียกใช้
+> · **SSOT (Single Source of Truth)** แหล่งข้อมูลจริงเพียงแห่งเดียวที่ทุกไฟล์ต้องอ้างถึง ห้ามคัดลอกค่าไปเก็บซ้ำ เพราะสำเนาจะเก่าโดยไม่มีใครรู้
+> · **MEDDPICC** กรอบตรวจสุขภาพดีลของทีมขาย ย่อจาก Metrics · Economic buyer · Decision criteria · Decision process · Paper process · Identify pain · Champion · Competition
+
 This skill combines two companion frameworks into one operating system for B2B advisory work:
 
 - **Finding the Right WHY** — philosophy + discovery (the RIGHT attributes, 5-level WHY Maturity Ladder, 7-Step Questioning Protocol, Clarity Test, Apple case, 10 Commandments).

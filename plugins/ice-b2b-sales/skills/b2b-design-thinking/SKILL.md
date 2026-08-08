@@ -5,6 +5,10 @@ description: Integrated Design Thinking, Ideation, and Strategic Thinking for En
 
 # B2B Design Thinking & Strategic Thinking Skill
 
+> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
+>
+> · **MEDDPICC** กรอบตรวจสุขภาพดีลของทีมขาย ย่อจาก Metrics · Economic buyer · Decision criteria · Decision process · Paper process · Identify pain · Champion · Competition
+
 ## Purpose
 
 This skill is the single entry point for **two paired disciplines** that every enterprise software sale and solution engagement needs:

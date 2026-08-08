@@ -2,9 +2,34 @@
 name: ice-b2b-enterprise-sale
 description: Control/orchestrator skill for B2B Enterprise Software Sale work at iCE Consulting on Oracle Cloud (Fusion ERP/EPM/OCI), Oracle EBS, and Oracle NetSuite — plus adjacent practices in FinTech/Lending/IFRS9, Thai GFMIS/e-GP, and รัฐวิสาหกิจ TOR-Comply work. Routes work to the right sub-skill by Deliverable first, then Product, then Domain overlay, then Industry context. Optimised for Rapid Workflow (30–60 min per deliverable) and Pre-sales-heavy workload mix (~70 percent). Use this skill whenever the user is doing Sales, Pre-sales, Proposal, RFP, TOR, Demo, Account Planning, Customer Engagement, or Existing Customer Change Request work — including Thai-language phrasings such as ทำข้อเสนอ, เขียน proposal, ตอบ TOR, เตรียม demo, วาง account plan, ทำ business case, ตอบ RFI, ทำ CR ลูกค้าเก่า, ทำ board paper, and เตรียม pitch. Enforces a mandatory Typography and Bilingual Font QA gate before saving any .docx, .pptx, or .pdf deliverable.
 metadata:
-  version: V02R05
-  date: 2026-06-14
+  version: V02R06
+  date: 2026-08-08
 ---
+
+# Section 0A — ตารางนิยาม: ศัพท์และรหัสทุกตัวที่ไฟล์นี้ใช้
+
+> วิธีเขียนไฟล์ระบบที่ skill นี้ยึด: `~/.claude/agents/reference/fleet-writing-standard.md`
+> ไฟล์นี้เป็น **router (ตัวจัดเส้นทาง)** — หน้าที่คือเลือกว่างานนี้ต้องเรียก sub-skill ตัวไหนตามลำดับใด ไม่ใช่ที่เก็บวิธีทำงานเชิงลึก
+
+| ศัพท์ / รหัส | ความหมาย |
+|---|---|
+| **router / orchestrator** | skill ที่ทำหน้าที่เลือกเส้นทางและลำดับการเรียก skill อื่น — ตัวมันเองไม่ผลิตเนื้อหาเชิงลึก |
+| **sub-skill** | skill ปลายทางที่ router เรียกใช้ เช่น `b2b-strategic-thinking`, `oracle-netsuite-consulting` |
+| **chain (ห่วงโซ่)** | ลำดับการเรียก sub-skill ต่อกันสำหรับงานหนึ่งชิ้น เช่น กรอบคิด → วิธีขาย → ความรู้ product → สร้างสไลด์ |
+| **Fast Path / Default Chain** | Fast Path = เรียก sub-skill ตัวเดียวจบ ใช้กับงานเบาที่แก้ทีหลังได้ (เงื่อนไข 3 ข้อใน Section 2) · Default Chain = ห่วงโซ่เต็มใน Section 4 |
+| **Tier A / B / C / D** | ระดับความถี่ที่ sub-skill ถูกใช้: Tier A = แกนหลักใช้แทบทุกงาน · Tier B = เสริมตามบริบท · Tier C = ใช้เป็นครั้งคราว · Tier D = ยังไม่มี skill ในระดับนี้โดยเจตนา (เว้นที่ไว้) — รายชื่อต่อ tier อยู่ `references/sub-skill-index.md` |
+| **deliverable (ชิ้นงานส่งมอบ)** | ผลงานที่ส่งถึงลูกค้าหรือผู้บริหาร เช่น proposal, deck, business case — ตัวกำหนดเส้นทางลำดับแรกใน Section 3 |
+| **TOR (Terms of Reference)** | เอกสารข้อกำหนดของผู้ว่าจ้างในการจัดซื้อจัดจ้าง โดยเฉพาะงานราชการและรัฐวิสาหกิจ · **e-GP** = ระบบจัดซื้อจัดจ้างภาครัฐ · **GFMIS** = ระบบบริหารการเงินการคลังภาครัฐ |
+| **Compliance Matrix** | ตารางตอบข้อกำหนดของ TOR ทีละข้อว่าปฏิบัติตามได้หรือไม่ พร้อมหลักฐานอ้างอิง |
+| **Rapid Workflow** | เกณฑ์เวลาที่ skill นี้ตั้งไว้: หนึ่งชิ้นงานควรจบใน 30-60 นาที — ใช้ตัดสินว่าจะลงลึกแค่ไหน |
+| **Pre-Save Quality Gate** | ด่านตรวจก่อน save ไฟล์ทุกครั้ง 8 ข้อใน Section 7 |
+| **Positive Wording** | วินัยการใช้ภาษาเชิงบวกใน Section 6A — มี 3 ระดับ: ระดับคำ · ระดับประโยค · ระดับโครงเอกสาร |
+| **Loss-Frame** | การเขียนที่ชี้ให้เห็นสิ่งที่ลูกค้าจะเสียหากไม่ทำอะไร — อนุญาตเฉพาะในหัวข้อต้นทุนของการไม่ตัดสินใจ (Cost of Inaction) |
+| **Spontaneous Trait Transference** | ปรากฏการณ์ที่ผู้ฟังโอนคุณลักษณะของสิ่งที่ผู้พูดพูดถึงมาให้ตัวผู้พูดเอง — เหตุผลที่ห้ามใช้คำเชิงบวกกลบ pain ของลูกค้าในขั้น Discovery |
+| **`[ASSUMED: ...]`** | ป้ายกำกับที่ต้องติดทุกครั้งที่ตัวเลขหรือข้อเท็จจริงมาจากการอนุมาน ไม่ใช่จากแหล่งจริง |
+| **V##R##** | รหัสรุ่นเอกสาร เช่น `V02R05` — V = version หลัก · R = revision ย่อย · ต้องมีทั้งในชื่อไฟล์และในตัวเอกสาร |
+| **ผู้ใช้ระบบ (เจ้าของงาน)** | เจ้าของ workspace นี้ผู้เป็นผู้สั่งงานและผู้ส่งมอบงานให้ลูกค้า — ในเนื้อไฟล์เดิมเรียกด้วยชื่อจริงบางจุด ให้อ่านว่าหมายถึงบุคคลเดียวกัน |
+| **H2 · H3 · H6 · H8 · H9** | กฎเหล็กของ CLAUDE.md เครื่อง PART 3 ฉบับปัจจุบัน: H2 ห้ามค้น internet โดยไม่ขอ · H3 ห้ามกุข้อมูล · H6 ห้ามตัดสินภาษาไฟล์ส่งมอบเอง · H8 ห้ามเอ่ยชื่อบริษัทที่ปรึกษาหรือ methodology ในผลงาน · H9 ห้าม save ไฟล์โดยไม่ยืนยันก่อนและไม่มี V##R## |
 
 # Section 0 — Role & Mission
 
@@ -37,7 +62,9 @@ Thai phrasings count too: ทำข้อเสนอ, ตอบ TOR, เตร�
 If ALL three conditions are true, take the Fast Path (single sub-skill, no chain):
 
 1. Output is one artifact — not a multi-artifact bundle
-2. Audience is internal or a single-recipient email — not customer-facing deliverable
+2. Audience is internal, or it is a single-recipient email (a routine follow-up to one contact
+   counts even when that contact is the customer) — it is not a customer-facing *deliverable*
+   such as a proposal, deck, or bid document
 3. Reversibility is high — editable next round, not commit-grade
 
 Fast-Path examples:
@@ -50,7 +77,11 @@ Anything else takes the Default Chain in Section 4.
 
 # Section 3 — Decision Logic
 
-Run these four questions in order. The first hit wins; do not skip ahead.
+Run these four questions in order — they are **cumulative layers, not a first-match exit**.
+"First hit wins" applies *inside* one question: once Q2 identifies the product, take that
+product skill and move on; do not keep shopping for a better-sounding one. But you still
+answer Q3 and Q4 afterwards, because a domain overlay (Q3) is mandatory when it applies and
+industry context (Q4) always shapes language even when it adds no skill. Never stop after Q1.
 
 ## 3.1 Q1 — Deliverable Type (PRIMARY)
 
@@ -104,7 +135,11 @@ Chain order:
 2. b2b-solution-selling — pain-to-value, business case build
 3. Product skill (fusion / ebs / netsuite / fintech) — feasibility, scoping, license
 4. Domain skill (if applicable) — GFMIS, e-GP, PDPA
-5. b2b-presentation-creator — when output is a .pptx
+5. b2b-presentation-creator — when output is a .pptx (design of the slides)
+   5a. **Build the artifact** — every file-based deliverable, whatever the format, is produced
+       through skill `ice-doc-builder` (.pptx / .docx / .xlsx / PDF). A Word or PDF TOR response
+       skips step 5 above and comes straight here; it never goes from the domain skill to the
+       QA gate with no file produced.
    5b. **AI imagery (optional)** — เมื่อต้อง hero/section-divider/product-shot/brand-visual ที่ ref 07 Method 3 ระบุ:
        · ภาพภายในเร็ว/ไม่ 4K → `nanobanana-connection` (Gemini image — MCP เสมอ, quota ไม่เปลืองเครดิต)
        · 4K/text-fidelity/video/DTC-ad/brand/character คงหน้า → `higgsfield-connection` (credit-based — preflight cost ก่อน)
@@ -129,8 +164,12 @@ Chain: b2b-questioning OR b2b-relationship-management — single skill, single a
 
 # Section 5 — Mix & Match Rules
 
-- Never invoke more than 5 skills in one chain. If you need more, the request is too broad —
-  split it.
+- Never invoke more than 5 **content-producing** sub-skills in one chain. If you need more, the
+  request is too broad — split it. Three things do **not** count toward that cap because they
+  are gates and tooling, not content authors: the optional AI-imagery step (5b), the build skill
+  `ice-doc-builder`, and the Pre-Save Quality Gate in Section 7. A full Hot Path chain therefore
+  sits at the cap legitimately (steps 1-4 plus the deck skill) and still has room to build and
+  check the artifact.
 - Tier-A skills are the spine. Tier-B skills layer on. Tier-C is occasional. Tier-D is empty
   by design.
 - When two skills overlap, the Disambiguation Table in `references/sub-skill-index.md`
@@ -264,15 +303,21 @@ Approach Motivation และลดโอกาสปิดดีล
 - ห้ามใช้ Positive Wording กลบ Pain ของลูกค้าใน Discovery
 - ห้ามเกินสัดส่วน Negative 5% ในเอกสารที่ลูกค้าอ่านเอง
 - ห้ามวาง Cost of Inaction Section ไว้ท้ายเอกสาร ต้องวางก่อน Future State
-- Loss-Frame อนุญาตเฉพาะ Cost of Inaction Section ใน Pain Validation Stage
-  เท่านั้น
+- Loss-Frame อนุญาตเฉพาะใน Cost of Inaction Section เท่านั้น — ใช้ได้ทั้งใน Pain Validation
+  Stage และในเอกสารระดับ 3 (Proposal, Business Case, Board Paper, QBR/EBR) ที่ 6A.4 บังคับให้มี
+  section นี้อยู่แล้ว · ข้อห้ามที่แท้จริงคือ **ห้ามให้ Loss-Frame หลุดออกนอก section นั้น**
+  และห้ามเกินสัดส่วน 5% ของทั้งเอกสาร
 
 # Section 7 — Pre-Save Quality Gate
 
-Before saving any .docx, .pptx, or .pdf, run these checks in order:
+Before saving any .docx, .pptx, .xlsx, or .pdf, run these checks in order (the Thai
+word-breaking check in item 7 is written for .xlsx precisely because spreadsheets wrap text
+inside fixed column widths):
 
-1. **Anti-AI sweep** — Pichai's Protocol V6.0 Step 9 word list (no "leverage / robust /
-   comprehensive / seamless"; no "เป็นที่ทราบกันดีว่า / ปฏิเสธไม่ได้ว่า")
+1. **Anti-AI sweep** — remove AI-tell vocabulary and cadence. Authoritative word list and
+   rewrite guidance: skill `thesis-ai-det-col` → `references/12_write_clean_card.md`
+   (branch B-Business for sales work). Common offenders: English "leverage / robust /
+   comprehensive / seamless"; Thai "เป็นที่ทราบกันดีว่า / ปฏิเสธไม่ได้ว่า".
 2. **Burstiness check** — sentence-length variety, opening variety, paragraph-size mix
 3. **Name-drop scan** — body must contain zero firm names, zero methodology brand names
 4. **Anti-hallucination scan** — every number, every date, every name must trace to a real
@@ -281,8 +326,8 @@ Before saving any .docx, .pptx, or .pdf, run these checks in order:
    Frame Change applied to value sentences, Document Architecture follows 70/25/5 ratio,
    Cost of Inaction Section placed before Future State Vision, no Positive Wording masking
    negative facts in Escalation/Recovery deliverables
-6. **Typography & Bilingual QA** — ⚠️ **V03R01: ตารางจับคู่ฟอนต์ใน `references/typography-bilingual-qa.md`
-   ถูกยกเลิกแล้ว** (พิสูจน์ว่าผิดด้วย PDF จริง 45 ฉบับ) → **แหล่งกติกาฟอนต์ที่เป็นทางการ = skill
+6. **Typography & Bilingual QA** — ⚠️ **ตารางจับคู่ฟอนต์ใน `references/typography-bilingual-qa.md`
+   ถูกยกเลิกตั้งแต่ไฟล์นั้นรุ่น V03R01** (พิสูจน์ว่าผิดด้วย PDF จริง 45 ฉบับ) → **แหล่งกติกาฟอนต์ที่เป็นทางการ = skill
    `ice-doc-builder` §3.0 FONT POLICY 2 ราง**: เอกชน `IBM Plex Sans Thai Looped` (ไทย=อังกฤษ ไม่บวก pt) ·
    ราชการ/TOR `TH Sarabun New` 16pt · blacklist: IT๙/Angsana/Cordia/Browallia/Latin-only-บนไทย
    ไฟล์ reference เดิมเหลือไว้เป็น checklist กระบวนการเท่านั้น
@@ -301,7 +346,9 @@ Before saving any .docx, .pptx, or .pdf, run these checks in order:
 
 Mirror the language Pichai uses in the request. When the request is Thai, the deliverable
 is Thai (with English technical terms in brackets where standard). When bilingual is
-asked, lay Thai and English side-by-side, equal weight, paired typography per the QA file.
+asked, lay Thai and English side-by-side with equal weight, and take every font decision from
+skill `ice-doc-builder` §3.0 — the paired-font table in `references/typography-bilingual-qa.md`
+was retired (Section 7 item 6) and must not be used for font names any more.
 
 # Section 9 — Reading Order for References
 
@@ -311,7 +358,10 @@ References are lazy-lookup. Do not pre-read them. Open only what you need:
 - `sub-skill-index.md` — when you need disambiguation, industry routing, or a tier check
 - `orchestration-playbook.md` — when the request matches a Worked Example (WE-00 through
   WE-08) or a Quick Reference Card (QRC-01 through QRC-10)
-- `typography-bilingual-qa.md` — at pre-save time, every time a font-bearing artifact ships
+- `typography-bilingual-qa.md` — **process checklist only.** Its font-pairing table was
+  retired (see Section 7 item 6); the authoritative font rules live in skill
+  `ice-doc-builder` §3.0. Open this file for the pre-save checklist steps, never for a
+  font name.
 
 A normal session does not need to read any reference end-to-end. Lookup the row, apply,
 move on.
@@ -327,22 +377,44 @@ Before handing the deliverable back, answer these silently:
 
 If any answer is "no," fix it before handing back.
 
-# Section 11 — Protocol V6.0 Alignment
+# Section 11 — CLAUDE.md Alignment (ปรับให้ตรงฉบับปัจจุบัน 2026.08.08)
 
-This skill operates inside Pichai's CLAUDE WORKING PROTOCOL V6.0. The protocol overrides
-anything in this skill where they conflict. Specifically:
+This skill operates inside the machine-level CLAUDE WORKING PROTOCOL (`~/.claude/CLAUDE.md`,
+current edition V09R08). That file overrides anything here where the two conflict. The rules
+this skill leans on most, using the **current** rule codes — the earlier V6.0 numbering
+(H7/H8/H9/H10/H14/H15/H16) is obsolete and must not be cited any more:
 
-- H7 Pre-Save Confirmation — never skip
-- H8 V##R## stamping — never skip
-- H9 No name-dropping in body — never skip
-- H10 Default to Business Language — never default to Technical without permission
-- H14 Executive-grade prose — bullets are for scanning, prose is the spine
-- H15 / H16 — every recommendation carries ROI / Risk / Trade-off and offers alternatives
-  where they exist
+- **H9 — Pre-Save Confirmation + `V##R##` stamping.** Never save a deliverable without
+  confirming with the user first, and never save one without the version identifier in both
+  the filename and the document itself.
+- **H8 — No name-dropping in the body.** Consulting-firm names and methodology brand names
+  never appear in print; the concepts may be used silently.
+- **H6 — Never decide the deliverable's language alone.** Ask Thai / English / bilingual
+  before producing the file, unless the user already specified it.
+- **H1 + P4 — Business language is the default.** Technical depth requires the user's
+  permission first, and is then split into an executive summary plus a technical section.
+- **P2 — Executive-grade prose.** Bullets are for scanning; complete sentences carry the
+  argument.
+- **P3 — Every recommendation carries its business reasoning** (return, risk, trade-off) and
+  offers alternatives where real ones exist.
+- **H3 — Anti-hallucination.** Customer names, figures, dates, and technical specifications
+  must trace to a real source or be flagged `[ASSUMED: ...]`.
 
 End of router. The deliverable starts in the chain.
 
 # Section 12 — Change Log
+
+**V02R06 — 2026.08.08 — FLEET READABILITY V3 Phase 2.**
+Added Section 0A (definition table: router/sub-skill/chain, Fast Path vs Default Chain,
+Tier A-D, deliverable, TOR/e-GP/GFMIS, Compliance Matrix, Rapid Workflow, Positive Wording,
+Loss-Frame, `[ASSUMED]`, `V##R##`, and the current CLAUDE.md hard-rule codes) so a reader who
+opens only this file can follow it. Rewrote Section 11 against the **current** machine
+CLAUDE.md V09R08 rule numbering — the old Protocol V6.0 codes (H7/H8/H9/H10/H14/H15/H16) no
+longer matched any existing rule and pointed readers at the wrong obligations. Resolved the
+contradiction where Section 9 told the reader to open `typography-bilingual-qa.md` for fonts
+while Section 7 had already retired that table: the reference is now labelled process-checklist
+only, with `ice-doc-builder` §3.0 named as the sole font authority. No routing changes — Hot,
+Standard, and Fast Path are identical.
 
 **V02R05 — 2026.06.14 — Sub-release. Negotiation playbook authored.**
 The dedicated `b2b-solution-selling/references/10-negotiation-playbook.md` (V01R01) was

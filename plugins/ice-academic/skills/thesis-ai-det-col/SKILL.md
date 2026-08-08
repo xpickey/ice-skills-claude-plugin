@@ -5,6 +5,14 @@ description: Thai AI detection, humanization, Voice/Writing Profile extraction, 
 
 # THESIS-AI-DET-COL — Thai AI Detection & Correction Skill
 
+> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
+>
+> · 🔴 **คำว่า "L1" ในไฟล์นี้ไม่ได้หมายถึงชั้นของ agent** — หมายถึง L1 Write-Clean Card (ชั้นป้องกันการเขียนให้ไม่เป็นสำนวน AI ตั้งแต่ร่างแรก) และ L1-L8 ในแคตตาล็อกสำนวนไทย
+> · 🔴 **คำว่า "Tier" ในไฟล์นี้หมายถึง Tier-1 Register Gate และ Tier-2 sub-profile ของสกิลนี้เอง** ไม่ใช่ระดับความลึกการตรวจของผู้ตรวจคุณภาพ
+> · **TAAE (Thai Academic Audit Engine)** ระเบียบวิธีตรวจงานวิชาการไทย 7 ขั้น — engine เต็มอยู่ในสกิลนี้เองที่ `references/10_academic_audit_engine.md`
+> · **SSOT (Single Source of Truth)** แหล่งข้อมูลจริงเพียงแห่งเดียวที่ทุกไฟล์ต้องอ้างถึง ห้ามคัดลอกค่าไปเก็บซ้ำ เพราะสำเนาจะเก่าโดยไม่มีใครรู้
+> · **รหัส H (H1 ถึง H10)** กฎเหล็กของ `~/.claude/CLAUDE.md` PART 3 เช่น H2 ห้ามค้น internet โดยไม่ขอ · H3 ห้ามกุข้อมูล · H4 ถามทีละหนึ่งคำถาม · H6 ห้ามตัดสินภาษาไฟล์ส่งมอบเอง · H9 ห้าม save ไฟล์โดยไม่ยืนยันก่อนและไม่มี `V##R##` · H10 ห้ามแก้ไฟล์ระบบโดยไม่อ่านมาตรฐานการเขียนก่อน
+
 ทักษะตรวจจับและแก้ไขเนื้อหา AI สำหรับงานเขียนภาษาไทย+อังกฤษ — register-agnostic ครอบคลุม 3 ประเภทเนื้อหาเท่าเทียมกัน (🟩 Academic / 🟧 Business / 🟪 General) — Detection, Correction (Two-Pass), Voice Profile Extraction, Full-Document Audit.
 
 **Version: V06R03 | 2026.08.05** — (R02: +W6 term-localization TL-A/B/C + MG1-3 misname guard, เคส VFIN — ดู CHANGELOG). **Shared Core (register-agnostic) + 3 Branches เท่าเทียม**. 🟦 CORE = กลไกที่ไม่มี academic default ฝังอยู่ · 🟩/🟧/🟪 = 3 branch สมมาตร (column เท่ากัน) ไม่มีตัวใดเกาะตัวอื่น. เพิ่ม **Register Gate เป็น Tier-1 entry** (ขึ้นก่อนทุกอย่าง — ห้ามเดา Academic) · ตาราง 3-branch สมมาตร · 2-tier tree (register-gate → sub-profile) · de-dup (corpus / anti-halluc / two-pass / density → SSOT 1 ที่ + pointer) · TQ rebalance (TQ1-2 → CORE universal · TQ3-9 → 🟩 academic) · Mode 6 worked example ครบ 3 register. (V05: Shared Core + 3 Branches เริ่มต้น — ดู changelog)

@@ -5,9 +5,31 @@ description: iCE Demo/Prototype Build Craft — ความรู้สร้�
 
 # iCE DEMO BUILDER — Demo/Prototype Application Craft
 
-> **Skill:** ice-demo-builder | **Version:** V01R01 | **Date:** 2026.08.07
+> **Skill:** ice-demo-builder | **Version:** V01R02 | **Date:** 2026.08.08
+> **V01R02 (2026.08.08 · FLEET READABILITY V3 Phase 2):** +§0.0 ตารางนิยาม (รหัสทีม · DM-0..DM-5 · Tier · vertical slice · Verifier Theater · DISK-IS-TRUTH · A1/H2/H3/H4 · MEDDPICC) — เนื้อกติกาและ pipeline เดิมคงครบทุกข้อ
 > **กำเนิด:** คำสั่ง user 2026.08.07 — เพิ่มความสามารถทำ Prototype/Demo app ให้ fleet โดยกัปตันออกแบบและสั่งโมโม่ ⑦ เป็นชิ้น ๆ ได้ · best practice สกัดจาก 3 repo (shanraisshan RPI · addyosmani agent-skills · cobusgreyling loop-engineering — หลักการมาเขียนเอง ไม่ clone, MIT ทั้งหมด) ผสานเข้ากติกา fleet เดิม (DOC-PIPELINE V3 · H3/H4 · file hygiene · font governance)
 > **หลักออกแบบ:** craft อยู่ที่ skill นี้ — ผู้ใช้ skill คือกัปตัน (build เอง) หรือโมโม่ (build เป็นชิ้นตาม brief) · ผู้ตรวจแยก context เสมอ (Producer ≠ Checker)
+
+---
+
+## §0.0 ⭐ ตารางนิยาม — รหัสและศัพท์ทุกตัวที่ไฟล์นี้ใช้ (อ่านก่อนใช้งานครั้งแรก)
+
+> วิธีเขียนไฟล์ระบบที่ skill นี้ยึด: `~/.claude/agents/reference/fleet-writing-standard.md`
+
+| รหัส / ศัพท์ | ความหมาย |
+|---|---|
+| **② ก้อง · ③ เทพ · ⑤ อริส · ⑥ เสี่ยวป้อ · ⑦ โมโม่** | รหัสทีม: ② `sales-process-agent` เจ้าของเรื่องเล่าการขาย · ③ `solution-knowledge-agent` ยืนยันว่า product ทำได้จริง · ⑤ `qa-master-agent` ผู้ตรวจคุณภาพอิสระใน context แยก · ⑥ `retrieval-scout-agent` เก็บวัตถุดิบ (เช่น design ของลูกค้า) · ⑦ `demo-builder-agent` ผู้สร้าง demo เป็นชิ้น ๆ ตาม brief |
+| **เลขวงกลมในบันได/รายการ (① ② ③)** | เป็นลำดับข้อเท่านั้น ไม่ใช่รหัสทีม — รหัสทีมมีชื่อคนตามหลังเสมอ (⑤ อริส) |
+| **L0** | main loop ของ session ที่คุยกับ user โดยตรงและรับบทกัปตัน — ผู้ออกแบบ demo และผู้ build งานเล็กด้วยตัวเอง |
+| **DM-0 ถึง DM-5** | 6 ด่านของ DEMO-PIPELINE ในไฟล์นี้: DM-0 QUALIFY คุ้มไหม · DM-1 SPEC เขียนความต้องการลงดิสก์ · DM-2 DESIGN ระบบดีไซน์ · DM-3 BUILD สร้าง · DM-4 VERIFY ตรวจด้วยการรันจริง · DM-5 REHEARSE ซ้อม |
+| **DEMO-SPEC** | ไฟล์ `DEMO-SPEC.md` ที่เก็บเรื่องเล่าการขาย + รายการหน้าจอ + เทคนิค — ต้องเขียนลงดิสก์ก่อน build เสมอ (build อ่านจากไฟล์ ไม่อ่านจากความจำ) |
+| **Tier T1 / T2 / T3** | ความลึกของ demo: T1 = mockup หน้านิ่ง 1-3 หน้า · T2 = prototype เว็บกดได้จริงหลายหน้าจอ · T3 = ระบบจริงบน stack จริง (NetSuite sandbox / APEX) — ตารางเต็มอยู่ §2 |
+| **vertical slice (ชิ้นแนวตั้ง)** | หน่วยงาน 1 ชิ้น = 1 หน้าจอหรือ 1 ฟีเจอร์ที่จบในตัว เปิดดูได้ทันที — ตรงข้ามกับการสร้างทีละ layer ทั้งระบบซึ่งยังดูอะไรไม่ได้จนกว่าจะครบ |
+| **Verifier Theater (ตรวจแบบละคร)** | การรายงานว่าตรวจแล้วทั้งที่ไม่ได้รันของจริง — ❌ "อ่านโค้ดแล้วน่าจะทำงานได้ ✔ ผ่าน" · ✅ "เปิดแอปจริง กดครบ 5 ฉาก แนบ screenshot 5 รูป ไม่มี error ใน console" |
+| **DISK-IS-TRUTH** | ผลงานจริงคือไฟล์บนดิสก์ ไม่ใช่ข้อความที่ agent เล่า — brief ส่งเป็น path, ผลลัพธ์ยืนยันด้วย `ls` และไฟล์ `_build-result.md` |
+| **opportunity (ดีล)** | โอกาสการขายหนึ่งรายการของลูกค้าหนึ่งราย = โฟลเดอร์งานหนึ่งชุด · path ในไฟล์นี้ที่ขึ้นต้นด้วย `<opportunity>/` หรือ `50 - Demo/` ล้วนอยู่ใต้โฟลเดอร์ของดีลนั้น |
+| **A1 gate / H2 · H3 · H4** | A1 gate = ด่านขออนุญาต user ก่อนออก internet · H2 = ห้ามค้น internet โดยไม่ขอ · H3 = ห้ามกุข้อมูล · H4 = ถามทีละหนึ่งคำถาม (กฎเหล็ก CLAUDE.md เครื่อง PART 3) |
+| **MEDDPICC** | กรอบตรวจสุขภาพดีลที่ทีมขายใช้ (Metrics, Economic buyer, Decision criteria, Decision process, Paper process, Identify pain, Champion, Competition) — ใช้ตอบว่า demo นี้ช่วยผ่านด่านไหนของดีล |
 
 ---
 
@@ -50,16 +72,17 @@ description: iCE Demo/Prototype Build Craft — ความรู้สร้�
 
 ### DM-3 BUILD — สร้างทีละชิ้นแนวตั้ง (ที่มา: incremental-implementation)
 - **หั่นงานเป็น vertical slice** — 1 ชิ้น = 1 หน้าจอ/ฟีเจอร์ที่จบในตัว รันได้ ดูได้ (ไม่ใช่ "layer ทั้งระบบ") · เรียงชิ้นตามเรื่องเล่าการขาย: หน้าที่เปิดฉาก demo สร้างก่อน
-- **ใครสร้าง:** งานเล็ก (≤2 หน้าจอ) → กัปตัน/L0 build เอง inline · งานหลายหน้าจอ/ขนานได้/context หนัก → **สั่งโมโม่ ⑦ เป็นชิ้น** — 1 brief = 1 ชิ้น พร้อม path DEMO-SPEC + ชิ้นที่รับผิดชอบ + output dir + budget
-- **เพดานรอบแก้ ≤3 ต่อชิ้น** (ที่มา: loop-engineering Infinite Fix Loop) — แก้เกิน 3 รอบแล้วยังไม่ผ่าน = หยุด รายงานอาการ+สิ่งที่ลองแล้ว ให้ระดับบนตัดสิน (ห้าม debug วนเงียบ ๆ — บทเรียน TQR 155 รอบ)
+- **ใครสร้าง (เกณฑ์ตัดสิน — เข้าข้อใดข้อหนึ่งก็พอ ไม่ต้องครบทุกข้อ):** งานเล็กไม่เกิน 2 หน้าจอ **และ** context ยังว่าง → กัปตัน/L0 build เอง inline · เข้าข้อใดข้อหนึ่งต่อไปนี้ → **สั่งโมโม่ ⑦ เป็นชิ้น**: (ก) เกิน 2 หน้าจอ (ข) หลายชิ้นทำขนานกันได้ (ค) context ใกล้เต็ม · กรณีก้ำกึ่ง เช่น 3 หน้าจอเล็กตอน context ว่าง ให้เลือกทางที่ทำให้ผู้ใช้เห็นผลเร็วกว่า แล้วบอกเหตุผลไว้ใน PLAN-CARD — 1 brief = 1 ชิ้น พร้อม path DEMO-SPEC + ชิ้นที่รับผิดชอบ + output dir + budget
+- **เพดานรอบแก้ ≤3 ต่อชิ้น** (ที่มา: loop-engineering Infinite Fix Loop) — แก้เกิน 3 รอบแล้วยังไม่ผ่าน = หยุด รายงานอาการ+สิ่งที่ลองแล้ว ให้ระดับบนตัดสิน (ห้าม debug วนเงียบ ๆ — บทเรียน TQR 155 รอบ) · **เพดานนี้นับเฉพาะรอบแก้เพื่อให้ชิ้นงานทำงานได้ในขั้น DM-3** · การแก้ตามข้อค้นพบของ ⑤ ในขั้น DM-4 **เริ่มนับใหม่ที่ 1** เพราะเป็นคนละปัญหา แต่ยังจำกัด ≤3 รอบเช่นกัน
 - โค้ด/สคริปต์ build อยู่ `50 - Demo/_build/` ข้าง artifact (เอกสารประกอบงาน ไม่ใช่ temp)
 
 ### DM-4 VERIFY — ตรวจด้วยการรันจริงเท่านั้น (ที่มา: browser-testing + loop-engineering Verifier Theater)
+- 🔴 **ใครรัน:** ผู้สร้างชิ้นนั้น (L0 หรือโมโม่ ⑦) รันเองรอบแรกและเก็บ screenshot เป็นหลักฐาน · **จากนั้น ⑤ อริสต้องเปิดแอปรันเองอีกรอบใน context แยก ห้ามตัดสินจาก screenshot ที่ผู้สร้างส่งมาอย่างเดียว** เพราะการเชื่อหลักฐานของผู้สร้างคือ Verifier Theater อีกรูปหนึ่ง — screenshot ของผู้สร้างมีไว้เป็นบันทึกงานและแผนสำรอง ไม่ใช่ตัวแทนการตรวจ
 - 🔴 **กติกาเหล็ก: ผู้ตรวจต้องรันแอปจริง ห้ามตรวจด้วยการอ่านโค้ดอย่างเดียว** — "Verifier Theater" (ตรวจแบบละคร) คือความล้มเหลวชนิดเดียวกับ validator ที่ขึ้น PASS ทั้งที่ฟอนต์ผิดทั้งไฟล์
-- เว็บ → เปิดใน **Browser ในแอป** กดตามเรื่องเล่าการขายทีละฉาก + เก็บ **screenshot เป็นหลักฐาน** ลง `20-Output/_temp/qa/` · อ่าน console ต้องไม่มี error ค้าง
+- เว็บ → เปิดใน **Browser ในแอป** กดตามเรื่องเล่าการขายทีละฉาก + เก็บ **screenshot เป็นหลักฐาน** ลง `<opportunity>/20-Output/_temp/qa/` · **ชุด screenshot ที่จะใช้เป็นแผนสำรองวันเดโม (DM-5) ต้องคัดลอกไปเก็บถาวรที่ `<opportunity>/50 - Demo/_backup-screens/` ก่อนปิดงาน** เพราะของใน `_temp/` ถือเป็นของชั่วคราวที่ถูกกวาดทิ้งได้ · อ่าน console ต้องไม่มี error ค้าง
 - Mobile → **iOS Simulator** แตะ/ปัด/พิมพ์ตามบท + screenshot
 - ตรวจข้ามสถานะ: ลอง empty state (ข้อมูลว่าง) และ error state อย่างน้อย 1 จุด — ลูกค้าชอบกดของที่เราไม่ได้เตรียม
-- **customer-facing → อริส ⑤ ตรวจใน context แยก** (visual anti-slop D7.S + ความถูกต้องข้อมูลเทียบ DEMO-SPEC) · ไฟล์โค้ดที่จะส่งมอบให้ลูกค้า → ผ่าน code-review/security-review ก่อน
+- **นิยาม customer-facing ในงาน demo:** demo ทุกชิ้นที่จะ**ฉายให้ลูกค้าเห็น** ถือเป็น customer-facing ทั้งหมด ไม่ว่าจะส่งไฟล์ให้หรือไม่ — เพราะสิ่งที่ขึ้นจอต่อหน้าลูกค้าคือภาพลักษณ์ของข้อเสนอ · **customer-facing → อริส ⑤ ตรวจใน context แยก** (visual anti-slop D7.S + ความถูกต้องข้อมูลเทียบ DEMO-SPEC) · ไฟล์โค้ดที่จะส่งมอบให้ลูกค้า → ผ่าน code-review/security-review ก่อน
 
 ### DM-5 REHEARSE — ซ้อมและเตรียมวันจริง
 เขียน `50 - Demo/README.md` ให้คนที่ไม่ได้ build เปิด demo ได้เองใน 5 นาที:
@@ -119,7 +142,7 @@ description: iCE Demo/Prototype Build Craft — ความรู้สร้�
 | ขั้น | เครื่องมือ |
 |---|---|
 | DESIGN (DM-2) | skill `frontend-design` · `ui-ux-pro-max` · `design:design-system` · Figma MCP (`figma-design-to-code`, `figma-generate-design`) · เสี่ยวป้อ `copy-design` (brand ลูกค้า) |
-| BUILD (DM-3) | โค้ดตรง + skill stack ตาม §3 · Artifact เฉพาะข้อมูลแปลง/สมมติล้วน + แจ้ง user ก่อน (ออกนอกเครื่อง) |
+| BUILD (DM-3) | โค้ดตรง + skill stack ตาม §3 · Artifact ใช้ได้เฉพาะข้อมูลแปลง/สมมติล้วน และ **ต้องขออนุญาต user รายครั้งก่อนเสมอ** (เป็นการส่งข้อมูลออกนอกเครื่อง — มาตรฐานเดียวกับ §4 และ §6 ข้อ 4) |
 | VERIFY (DM-4) | **Browser ในแอป** (`preview_start` → navigate → screenshot → read_console) · **iOS Simulator** (attach → tap/swipe → screenshot) · `code-review` / `security-review` ก่อนส่งมอบโค้ด |
 | REHEARSE (DM-5) | screenshot ชุดจาก DM-4 → PDF แผนสำรอง (ผ่าน DOC-PIPELINE ถ้าจะทำเป็นเอกสารสวย) |
 
@@ -137,4 +160,4 @@ description: iCE Demo/Prototype Build Craft — ความรู้สร้�
 
 ---
 
-*Skill: ice-demo-builder **V01R01** | 2026.08.07 | ผู้ใช้: กัปตัน (inline) + demo-builder-agent โมโม่ ⑦ (เป็นชิ้น) | ตรวจ: อริส ⑤ (customer-facing) | ที่มา best practice: RPI gate + agent-skills craft + loop-engineering guardrails — เขียนเอง ไม่ clone*
+*Skill: ice-demo-builder **V01R02** | 2026.08.08 | ผู้ใช้: กัปตัน (inline) + demo-builder-agent โมโม่ ⑦ (เป็นชิ้น) | ตรวจ: อริส ⑤ (customer-facing) | ที่มา best practice: RPI gate + agent-skills craft + loop-engineering guardrails — เขียนเอง ไม่ clone*

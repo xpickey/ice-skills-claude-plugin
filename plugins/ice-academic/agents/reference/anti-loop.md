@@ -3,6 +3,10 @@
 > **Loaded by:** iCE-Compass.Next + ทุก in-path agent (เป็น contract ร่วม)
 > **Design ref:** iCE-B2B-Compass.Next_V01R02 §11
 
+> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
+>
+> · **L0 / L1 / L2** ชั้นการทำงาน: L0 = main loop ของ session ที่คุยกับผู้ใช้โดยตรง · L1 = agent ระดับบนที่เป็นเจ้าของงาน (กัปตัน / คิม / สมนึก) · L2 = specialist ที่ L1 เรียกใช้
+
 ---
 
 ## Why fleet ใหม่ loop ยากเกิด

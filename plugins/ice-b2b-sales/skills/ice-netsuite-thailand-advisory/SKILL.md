@@ -1,6 +1,7 @@
 ---
 name: ice-netsuite-thailand-advisory
 description: Use when scoping, designing, proposing, or delivering an Oracle NetSuite engagement for a Thai or APAC organisation. Wraps Oracle's SuiteCloud Agent Skills with Thailand-specific localization (THB, TFRS, VAT/WHT, e-Tax Invoice, BOI, Pillar Two), Thai OneWorld topology decisions, and iCE Consulting's advisory voice for pre-sales, business case, and RFP/TOR response work. Triggers on NetSuite + Thailand, NetSuite Thai subsidiary, NetSuite OneWorld Thailand, e-Tax Thailand NetSuite, BOI NetSuite, TFRS NetSuite, ปรึกษา NetSuite, ติดตั้ง NetSuite, ระบบบัญชี NetSuite ไทย, ภาษีไทย NetSuite, TOR NetSuite ภาครัฐ, RFP NetSuite, business case NetSuite, ROI NetSuite Thailand. Designed to compose with netsuite-ai-connector-instructions, netsuite-owasp-secure-coding, netsuite-sdf-project-documentation, netsuite-sdf-roles-and-permissions, netsuite-suitescript-records-reference, netsuite-suitescript-upgrade, and netsuite-uif-spa-reference.
+license: Proprietary — iCE Consulting
 metadata:
   author: Pichai / iCE Consulting
   version: V01R01
@@ -10,6 +11,11 @@ metadata:
 ---
 
 # iCE NetSuite Thailand Advisory Skill
+
+> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
+>
+> · **MEDDPICC** กรอบตรวจสุขภาพดีลของทีมขาย ย่อจาก Metrics · Economic buyer · Decision criteria · Decision process · Paper process · Identify pain · Champion · Competition
+> · **TOR (Terms of Reference)** เอกสารข้อกำหนดของผู้ว่าจ้างในงานจัดซื้อจัดจ้าง โดยเฉพาะภาครัฐและรัฐวิสาหกิจ — ข้อกำหนดใน TOR ชนะนโยบายภายในของเราเสมอ
 
 Version: V01R01 | Date: 2026.05.23
 

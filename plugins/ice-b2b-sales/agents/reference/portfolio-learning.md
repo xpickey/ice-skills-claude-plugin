@@ -3,6 +3,10 @@
 > **Loaded by:** iCE-Compass.Next (progressive disclosure — โหลดตอน Portfolio Mode)
 > **Skill:** portfolio-intelligence | **Absorbs:** portfolio-intelligence-agent learning loop
 
+> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
+>
+> · **รหัสทีม (เลขวงกลม)** ② `sales-process-agent` (ก้อง — เนื้อหาฝั่งงานขาย) · ③ `solution-knowledge-agent` (เทพ — ความรู้ product/industry) · ④ `deliverable-gen-agent` (เจนนี่ — ผู้สร้างไฟล์เบื้องหลัง ทำงานเฉพาะเมื่อผู้ใช้เรียกชื่อตรง) · ⑤ `qa-master-agent` (อริส — ผู้ตรวจคุณภาพอิสระ) · ⑥ `retrieval-scout-agent` (เสี่ยวป้อ — เก็บวัตถุดิบ) · ⑦ `demo-builder-agent` (โมโม่ — สร้าง demo app)
+
 ---
 
 ## Portfolio Mode — Cross-Deal Learning

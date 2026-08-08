@@ -11,6 +11,15 @@ license: Proprietary
 >
 > **Mission:** Turn any B2B sales context (industry, vendor product, sales stage, audience) into a beautiful, on-brand deck that closes faster and reads cleaner than the competition's.
 
+> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
+>
+> · **`V##R##`** รหัสรุ่นเอกสาร เช่น `V02R05` — V คือรุ่นหลัก R คือการแก้ย่อย ต้องมีทั้งในชื่อไฟล์และในตัวเอกสาร
+> · **เจนนี่** = `deliverable-gen-agent` ผู้สร้างไฟล์เบื้องหลัง ทำงานเฉพาะเมื่อผู้ใช้เรียกชื่อตรงเท่านั้น
+> · **อริส (เจ้าระเบียบ)** = `qa-master-agent` ผู้ตรวจคุณภาพอิสระ ตรวจในบริบทแยกจากผู้สร้างเสมอ — เป็นปลายทางบังคับของทุกไฟล์ที่ส่งออก
+> · **กัปตัน (Compass)** = `iCE-Compass-Next` เจ้าของงานขาย ผู้สั่งงานและตัดสินใจขั้นสุดท้ายในดีลนั้น
+> · **D1 ถึง D4 (tri-slot ฟอนต์)** = วินัยการ build ฟอนต์ของ skill `ice-doc-builder` — D1 กำหนดชื่อฟอนต์ครบ 3 ช่องในทุก text run (อังกฤษ · เอเชียตะวันออก · ภาษาไทย) · D3 คุมขนาดตัวอักษรไทยเทียบละติน · รายละเอียดเต็มอยู่สกิลนั้น
+> · **D7 (และ D7.7 / D7.H8)** = มิติตรวจฟอนต์และการจัดหน้าของอริส ซึ่งเป็นด่านหยุดงานสำหรับไฟล์ที่ส่งลูกค้า
+
 ---
 
 ## 0. Quick Reference

@@ -5,6 +5,10 @@ description: Senior-partner strategic thinking for enterprise software sales, pr
 
 # B2B Strategic Thinking
 
+> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
+>
+> · **MEDDPICC** กรอบตรวจสุขภาพดีลของทีมขาย ย่อจาก Metrics · Economic buyer · Decision criteria · Decision process · Paper process · Identify pain · Champion · Competition
+
 This skill provides the strategic-thinking discipline that turns ambiguous prompts into defensible executive-grade recommendations for enterprise software businesses operating in Thailand and APAC.
 
 It is the **conductor** of the skill stack. It frames the strategic problem, decides which downstream skills (`b2b-questioning`, `b2b-enterprise-sale-strategy`, `oracle-*`, `fin-tech-consulting`, `advisor-govt-gfmis`, `legal-it-thailand-cloud`) to consult, synthesizes their outputs through MECE and Pyramid Principle, and produces a Why-Stack narrative (Why Change, Why Now, Why Invest, Why Us, Why Stay) backed by proof units.

@@ -4,6 +4,13 @@
 > **เป้าหมาย (คำสั่ง user):** ทุก agent ในงานเดียวกัน **เห็น goal เดียวกัน** · แชร์ปัญหา/bug/บทเรียนถึงกัน · ทำงานต่อเนื่องข้าม session
 > **ที่มา:** business-adapted จาก `thedotmack/claude-mem` (typed observations + session digest + inject-at-start + dedup + never-block) — เอา **data model** ไม่เอา infra (daemon/SQLite/Chroma) · ออกแบบตาม memory best practice ของ Claude: 1 รายการ = 1 ข้อเท็จจริง · pointers ไม่ใช่ payloads · อัปเดตแทนสร้างซ้ำ · ลบของผิด/จบแล้ว
 
+> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
+>
+> · **⑤ อริส** = `qa-master-agent` ผู้ตรวจคุณภาพอิสระ — รหัสทีมตัวเดียวที่ไฟล์นี้ใช้ (รหัสอื่นของทีมอยู่ในไฟล์ agent ที่เกี่ยวข้อง)
+>
+> · **L0 / L1 / L2** ชั้นการทำงาน: L0 = main loop ของ session ที่คุยกับผู้ใช้โดยตรง · L1 = agent ระดับบนที่เป็นเจ้าของงาน (กัปตัน / คิม / สมนึก) · L2 = specialist ที่ L1 เรียกใช้
+> · **envelope (ซองผลงาน)** โครงสร้างคำตอบมาตรฐานที่ specialist คืนกลับให้ผู้มอบงาน — สั้น คงรูปทุกครั้ง และชี้ไปที่ไฟล์ผลงานจริงบนดิสก์
+
 ## LOCATION + TEMPLATE
 
 ```

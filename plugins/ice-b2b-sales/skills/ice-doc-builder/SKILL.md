@@ -3,7 +3,8 @@ name: ice-doc-builder
 description: "iCE Document Build Craft — ความรู้ build .pptx/.docx/.xlsx/PDF/HTML ระดับ specialist (Build Discipline D1-D4 tri-slot Thai+EN font, 18 PPTX lessons, Method B font-embed, Strict Validator, SAVE-FIRST, VALIDATION BUDGET, renderer ladder) ที่ย้ายมาจาก deliverable-gen-agent เพื่อให้ทุก persona โหลดใช้ได้ (L0/กัปตัน/คิม/สมนึก build เองใน DOC-PIPELINE V3 · เจนนี่-shell ใช้ตอน background build). ถือ contract ของ marker ICE_BUILD=pipeline (PreToolUse hook). Triggers (TH): build deck, สร้าง slide, สร้างเอกสาร, ทำ proposal เป็นไฟล์, สร้าง .pptx, ทำ .docx, ทำ .xlsx, ทำ ROI excel, dashboard, font ไทย, font เพี้ยน, แก้ font, embed font, ไฟล์เปิดไม่ได้, Repair dialog. Triggers (EN): build deck, generate slides, build document, create pptx/docx/xlsx, ROI workbook, dashboard, font embed, Thai font, corrupted file, ICE_BUILD."
 ---
 
-> **Skill:** ice-doc-builder | **Version:** V01R13 | **Date:** 2026.08.07
+> **Skill:** ice-doc-builder | **Version:** V01R14 | **Date:** 2026.08.08
+> **V01R14 (2026.08.08 · FLEET READABILITY V3 Phase 2):** +**§0.0 ตารางนิยาม** (รหัสทีม · เลขวงกลมที่เป็นลำดับขั้น · rail/RAILS · SSOT · tri-slot · Method A/B/C · false-green · γ1/γ3 · staging) · 🔴 **แก้รหัสผู้ตรวจให้ตรงทั้ง fleet: ④ → ⑤ อริส ทุกจุด** (เดิมไฟล์นี้ใช้ ④ หมายถึงอริส ซึ่งชนกับ ④ เจนนี่ในไฟล์ agent — รหัสเดียวหมายถึงคนละคน) · **ไม่แตะเนื้อบทเรียนคงคำต่อคำ** (§1 D1-D4 · §2 · §2B · §3-§7)
 > **V01R13 (2026.08.07 · คำสั่ง user):** ⭐ iCE SUPER TEMPLATE — §0.1 ข้อ 7 + `references/ice-super-template.md` (แม่แบบ deck เรียกโดยชื่อ: ลายเส้นทอง 10 อุตสาหกรรม + Higgsfield สูตรยิงครั้งเดียว + archetype 6 หน้า) — จบการพิมพ์ชุดคำสั่งเดิมซ้ำทุก deck
 > **V01R12 (2026.08.06 · คำสั่ง user):** ⭐ FILE HYGIENE — §0.1 ข้อ 6 + แก้ต้นตอใน §7 ②: "save ใต้ ~/Documents แล้วย้าย" → staging `~/Documents/.ice-staging/` + ย้ายเข้า `_build/_qa/` ในคำสั่งเดียวกัน (ขยะ `_qa_aris_vfin/` 11 MB + `qa_s6_*.pptx` ใต้ ~/Documents — user เจอ ไม่ใช่ระบบ) · SSOT ทั้ง fleet = `reference/file-hygiene.md`
 > **V01R11 (2026.08.05 · คำสั่ง user — เคส VFIN):** +**§3.0 ⑤ TEMPLATE-BASE BUILD** — งานต่อยอด template/เด็คเดิมใช้ฟอนต์ตามนโยบายปัจจุบันเป็นค่าเริ่มต้น **ห้ามสืบทอดฟอนต์ template อัตโนมัติ** · ฟอนต์ template เฉพาะ user สั่งชัดเจน (font_override_reason + QA-log) · agent ห้ามออก --allow-font ให้ตัวเองด้วยเหตุผลความสม่ำเสมอ · PLAN-CARD ต้องแจ้ง mixed-font ชั่วคราว · ③ APPROVED SET จำกัดขอบเขตเหลืองานเริ่มจากศูนย์ · `font_policy` V01R08 · อริส +D7.6d
@@ -26,13 +27,36 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
 
 # §0 CONTRACT — ใครใช้ ใช้เมื่อไหร่ marker อะไร
 
-## 0.1 เงื่อนไขก่อน build (ครบทุกข้อจึงเริ่ม)
+## 0.0 ⭐ ตารางนิยาม — รหัสและศัพท์ทุกตัวที่ไฟล์นี้ใช้ (อ่านก่อนใช้งานครั้งแรก)
+
+> วิธีเขียนไฟล์ระบบที่ skill นี้ยึด: `~/.claude/agents/reference/fleet-writing-standard.md`
+
+| รหัส / ศัพท์ | ความหมาย |
+|---|---|
+| **② ก้อง · ③ เทพ · ④ เจนนี่ · ⑤ อริส · ⑥ เสี่ยวป้อ · ⑦ โมโม่** | รหัสทีม (เลขวงกลมที่ยืนเดี่ยวหน้าชื่อคน): ② `sales-process-agent` เขียนเนื้อหาฝั่งงานขาย · ③ `solution-knowledge-agent` ให้คำตอบด้าน product/industry · ④ `deliverable-gen-agent` ผู้สร้างไฟล์เบื้องหลัง **ทำงานเฉพาะเมื่อ user เรียกชื่อตรง** · ⑤ `qa-master-agent` ผู้ตรวจคุณภาพอิสระ — **ปลายทางบังคับของทุก build** · ⑥ `retrieval-scout-agent` เก็บวัตถุดิบ · ⑦ `demo-builder-agent` สร้าง demo/prototype app |
+| **เลขวงกลมในบันได/ตาราง (① ② ③ ④ ⑤)** | **เป็นลำดับขั้นตอนเท่านั้น ไม่ใช่รหัสทีม** — เช่น "① ล้างสิ่งแวดล้อม → ② ตรวจ XML" ใน RECOVERY LADDER · แยกได้จากบริบท: รหัสทีมจะมีชื่อคนตามหลังเสมอ (⑤ อริส) |
+| **L0 / L1** | L0 = main loop ของ session ที่คุยกับ user โดยตรงและรับบทเป็น persona (กัปตัน/คิม/สมนึก) · L1 = agent ระดับบนที่เป็นเจ้าของงานชิ้นนั้น — ใน DOC-PIPELINE V3 ทั้งสองคือ "ผู้ build" |
+| **DOC-PIPELINE V3 · D-P0 ถึง D-P5** | กระบวนการทำเอกสารของ fleet: D-P0 เก็บวัตถุดิบ · D-P1 อ่าน source · D-P2 เขียน spec · D-P3 build · D-P4 ⑤ ตรวจ · D-P5 แก้แล้วให้ ⑤ ตรวจส่วนต่าง — นิยามเต็มอยู่ไฟล์กัปตัน §5 |
+| **spec (content spec / design spec)** | ไฟล์ที่ระบุ "เนื้อหาอะไร" และ "หน้าตาอย่างไร" ซึ่งต้อง save ลงดิสก์ก่อน build เสมอ (spec-on-disk) |
+| **marker** | คำนำหน้าคำสั่ง Bash ที่บอก hook `ice-prebuild-guard.sh` ว่า build นี้มาจากเส้นทางที่ถูกกฎ — รายการครบใน §0.2 |
+| **rail (ราง) / RAILS** | "ราง" = ชุดฟอนต์ตามประเภทงาน มี 2 ราง: `private` งานเอกชน · `govt` งานราชการ/TOR · `RAILS` = ตารางในไฟล์ `~/.claude/agents/_lib/font_policy.py` ซึ่งเป็นแหล่งเดียวของชื่อฟอนต์ (SSOT) |
+| **SSOT (Single Source of Truth)** | แหล่งข้อมูลจริงเพียงแห่งเดียวที่ทุกคนต้องอ้างถึง — ห้ามคัดลอกค่าไปเก็บซ้ำที่อื่น เพราะสำเนาจะเก่าโดยไม่มีใครรู้ |
+| **tri-slot (D1)** | การกำหนดชื่อฟอนต์ครบ 3 ช่องในหนึ่ง text run — latin (อังกฤษ) · ea (เอเชียตะวันออก) · cs (complex script = ภาษาไทย) — เพื่อให้โปรแกรมเลือกฟอนต์ถูกต่อตัวอักษร |
+| **Method A / B / C (ฝังฟอนต์ PPTX)** | A = ใช้ LibreOffice EmbedFonts (**พิสูจน์แล้วว่าใช้ไม่ได้ ห้ามใช้**) · B = `_lib/embed_fonts_pptx.py` (วิธีหลัก) · C = ส่ง PDF companion คู่ไปด้วย (ทางสำรองที่ปลอดภัยเสมอ) |
+| **PDF companion** | ไฟล์ PDF ที่ export จาก artifact เดียวกันแล้วส่งคู่กันไป — ใช้เมื่อฟอร์แมตนั้นฝังฟอนต์ไม่ได้ (xlsx/docx) เพราะ PDF ฝังฟอนต์ครบ 100% |
+| **false-green** | เครื่องมือรายงานว่า "ผ่าน" ทั้งที่ของจริงเสีย — เช่น LibreOffice เปิดไฟล์ได้แต่ PowerPoint สั่ง Repair · เจอ false-green = ต้องยืนยันด้วยโปรแกรมจริง |
+| **CB (Composed Build)** | วิธี build งานใหญ่โดยแบ่งเป็นหน่วยย่อยแล้วประกอบ — ใช้เมื่อเอกสารยาวเกินกว่าจะ build รวดเดียว |
+| **γ1 / γ3 (แกมมา 1 / แกมมา 3)** | ชื่อชุด self-test ที่ผู้ build ต้องทำเองก่อนส่ง ⑤ (นิยามเดียว อยู่ §4.2): **γ1** = ตรวจว่าไม่มีวัตถุทับกันและไม่มีข้อความล้นกรอบ — ผู้ตรวจไม่ควรต้องเจอสองอาการนี้ · **γ3 CANONICAL** = ทุกหน้าที่อ้างตัวเลขต้องดึงจากชุดข้อเท็จจริงชุดเดียวกัน ตัวเลขห้ามขัดกันข้ามหน้า |
+| **staging** | โฟลเดอร์พักไฟล์ชั่วคราวระหว่างสร้าง (`~/Documents/.ice-staging/`) ซึ่งต้องย้ายเข้าที่เก็บจริงในคำสั่งเดียวกัน ไม่ทิ้งค้าง |
+| **H3 (กฎเหล็ก)** | กฎของ CLAUDE.md เครื่อง PART 3 ข้อ 3: ห้ามกุข้อมูลที่ไม่มีจริง (ตัวเลข ชื่อ วันที่ ข้อมูลทางเทคนิค) — ไม่แน่ใจให้ถาม |
+
+## 0.1 เงื่อนไขก่อน build (ข้อ 0-4 และ 6 ต้องครบจึงเริ่ม · ข้อ 5 ทำหลัง build เสร็จ · ข้อ 7 ใช้เมื่อ user เอ่ยชื่อ template)
 0. **⭐ ASK-FIRST ผ่านแล้ว (V01R10 · คำสั่ง user 2026.08.05)** — ทุกข้อสงสัยที่ source ไม่ตอบ
    (ผู้อ่าน/โครง/ความยาว/ตัวเลขที่ขาด/สิ่งห้ามใส่/ภาษา+ราง) ถูกถาม user เป็นชุดเดียวและ**ได้คำตอบแล้ว**
    — มีคำถามค้าง = ห้ามเริ่ม build · เจอกำกวมใหม่ระหว่าง build = หยุดถามทันที ห้ามเดา ·
    🔴 เอกสารส่งมอบพร้อม "คำถามปรับปรุง" แนบท้าย = ทำผิดข้อนี้ (นิยามเต็ม: กัปตัน S1 / สมนึก T1)
 1. **Spec อยู่บนดิสก์แล้ว** — content spec + design spec save เป็นไฟล์ก่อนเสมอ (D-P1/D-P2 ของ DOC-PIPELINE) · build อ่านจาก spec ไม่อ่านจากความจำใน context (spec-on-disk = build ใหญ่แค่ไหน context ก็ไม่บวม)
-2. **ประกาศโหมดใน PLAN-CARD แล้ว** (work_mode: lite|full) + คิว ④ อริส QA ไว้แล้ว
+2. **ประกาศโหมดใน PLAN-CARD แล้ว** (work_mode: lite|full) + คิว ⑤ อริส (qa-master) ให้ตรวจไว้แล้ว
 3. **เขียน build script ลงดิสก์** (ไม่ heredoc ยาวใน context) → รันด้วย marker
 4. ⭐⭐ **ฟอนต์มาจาก SSOT เท่านั้น — ห้าม hard-code ชื่อฟอนต์ในโค้ดเด็ดขาด** (V01R07 · กติกาบังคับ)
    ```python
@@ -46,7 +70,7 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
    > เพราะ build script เขียนมือตั้ง `FONT = "Sarabun"` เองเป็นค่าคงที่ ไม่เคยแตะตาราง RAILS เลย
    > สำรวจแล้วพบว่า build script **5 ใน 6 ตัว** ทำแบบเดียวกัน = นโยบายบังคับใช้ได้แค่ฟอร์แมตเดียว
    > **user เป็นคนจับได้ ไม่ใช่ระบบ**
-5. **จบ build ต้องรัน `audit_fonts.py` ก่อนคิว ④ เสมอ** (§6) — build_* ของเราเรียกให้อัตโนมัติแล้ว
+5. **จบ build ต้องรัน `audit_fonts.py` ก่อนคิว ⑤ อริส เสมอ** (§6) — build_* ของเราเรียกให้อัตโนมัติแล้ว
 6. **⭐ FILE HYGIENE (V01R12 · design โดย user 2026.08.06):** ไฟล์ temp/ทดสอบ/render ทุกชนิด →
    **ที่เก็บเดียวของ sub-project: `<sub-project>/20-Output/_temp/`** (หลักฐานตรวจ → `_temp/qa/`)
    · spec/build script ยังอยู่ `_build/` ข้าง artifact (เอกสารประกอบงาน ไม่ใช่ temp)
@@ -72,14 +96,14 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
 - marker ไม่ใช่ของแจก: ห้ามใส่ให้ context อื่นที่ไม่ได้โหลด skill นี้
 
 ## 0.3 SAVE-FIRST · NO SELF-RENDER (จากเจนนี่ V02R08 — คงหลักเดิม)
-- **Build → SAVE V##R## ลงดิสก์ทันที → self-check เชิงโครงสร้างเท่านั้น → ส่งเข้า ④** — self-check = zip CRC · จำนวน slide/หน้า/sheet · embed flags · collision/overflow คำนวณจาก XML geometry (**ไม่ render ภาพ**)
-- **ห้าม render preview เพื่อเช็คงานตัวเอง** — การดูภาพจริงเป็นหน้าที่ ④ อริส (EVIDENCE FRESHNESS — render สดอยู่แล้ว) · render ซ้ำ = จ่าย token ×2
+- **Build → SAVE V##R## ลงดิสก์ทันที → self-check เชิงโครงสร้างเท่านั้น → ส่งเข้า ⑤ อริส** — self-check = zip CRC · จำนวน slide/หน้า/sheet · embed flags · collision/overflow คำนวณจาก XML geometry (**ไม่ render ภาพ**)
+- **ห้าม render preview เพื่อเช็คงานตัวเอง** — การดูภาพจริงเป็นหน้าที่ ⑤ อริส (EVIDENCE FRESHNESS — render สดอยู่แล้ว) · render ซ้ำ = จ่าย token ×2
 - ข้อยกเว้น: CB Progressive per-unit preview หรือ user สั่ง preview ชัดเจน → ใช้ Renderer Ladder (§7)
 - กฎเหล็ก: **tool รายงานสำเร็จ ≠ ไฟล์เกิดจริง — `ls -la` ยืนยัน output ทุก save/export**
 
 ## 0.4 D-P3/D-P5 ROLE RULES (จาก DOC-PIPELINE)
-- **D-P3 BUILD:** build ตาม spec **ห้ามแก้เนื้อหาเอง** — เจอปัญหา content → หยุด flag (content เป็นของ ①②)
-- **D-P5 FIX:** แก้**เฉพาะ**ตาม consolidated fix list ที่ L1 FINAL รายข้อแล้ว → SAVE R+1 → ④ delta re-QA เสมอ
+- **D-P3 BUILD:** build ตาม spec **ห้ามแก้เนื้อหาเอง** — เจอปัญหา content → หยุด flag (content เป็นของผู้เขียนเนื้อหา — L1 ผู้คุมงาน หรือ ② ก้อง / ③ เทพ ตามชนิดเนื้อหา)
+- **D-P5 FIX:** แก้**เฉพาะ**ตาม consolidated fix list ที่ L1 FINAL รายข้อแล้ว → SAVE R+1 → ⑤ อริส delta re-QA เสมอ
 - **D7 HARD BLOCK (font/layout customer-facing):** L0 ห้ามตัดสิน WON'T-FIX เองฝ่ายเดียว — ต้อง user sign-off
 - fail แบบเดิม 2 ครั้ง → หยุด รายงาน diagnostic — **ห้าม debug spiral** (บทเรียน TQR 155 calls)
 
@@ -96,6 +120,8 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
   <a:latin typeface="Open Sans"/>   ← EN/Latin glyphs
   <a:ea    typeface="Open Sans"/>   ← East-Asian (กัน fallback)
   <a:cs    typeface="Sarabun"/>     ← Complex Script = THAI ⭐
+  ⚠️ ชื่อฟอนต์ในตัวอย่างข้างบนคงไว้คำต่อคำตามบทเรียนเดิม (Sarabun ถูกถอดจากตัวเลือกแล้วใน §3.0)
+     — เวลาเขียนโค้ดจริงห้ามคัดลอกชื่อฟอนต์จากตัวอย่าง ให้ดึงจาก font_policy.RAILS เสมอ (§0.1 ข้อ 4)
 + theme1.xml majorFont/minorFont ต้อง set <a:cs> + <a:ea> ด้วย (ไม่ปล่อยว่าง — python-pptx default ว่าง)
 
 ⭐ V01R03 — SINGLE-FAMILY FIRST: ใช้ฟอนต์ตัวเดียวใส่ทั้ง latin/ea/cs (ดู §3.0 FONT POLICY)
@@ -136,7 +162,7 @@ description: "iCE Document Build Craft — ความรู้ build .pptx/.do
 
 ## D4 — NO-OVERLAP + FONT-EMBED + STRICT VALIDATOR แก้ object ทับ + font หาย
 ```
-STRICT VALIDATOR (mandatory ก่อนส่งเข้า ④):
+STRICT VALIDATOR (บังคับก่อนส่งเข้า ⑤ อริส):
   ✓ CHAR-GUARD (Lesson #18) ⭐: scan U+2192 (→) + ญาติ (⟶/➜/➔) ในทุก text run → PowerPoint reject ทั้งไฟล์
       → auto-replace ด้วย ▸ (build_pptx.py ทำตอน build · validator ตรวจซ้ำ safety net) · LibreOffice มองไม่เห็น
   ✓ Collision: คำนวณ bbox ทุก shape → overlap > threshold → flag + auto-fix
@@ -167,7 +193,9 @@ STRICT VALIDATOR (mandatory ก่อนส่งเข้า ④):
       (ตรวจ CT_Presentation order + content-type x-fontdata + embedTrueTypeFonts=1 + fntdata มีจริง)
       + typeface ใน embeddedFontLst ตรงกับ name-table family (nameID 1) + match a:cs ใน run (D1)
   ✓ Package: unzip -t (CRC) · [Content_Types] complete · rId integrity · docProps company="iCE Consulting Co., Ltd."
-  → OPEN IN REAL POWERPOINT = บังคับ (qlmanage/LibreOffice = false-green — มองไม่เห็น corruption/16:9/General-Failure/U+2192)
+  → OPEN IN REAL POWERPOINT = บังคับ — **ผู้ทำคือ ⑤ อริส ในรอบตรวจ ไม่ใช่ผู้ build**
+      (ผู้ build ทำได้แค่ self-check เชิงโครงสร้างตาม §0.3) · อริสเปิดแล้วยังไม่แน่ใจว่ามี Repair dialog
+      หรือไม่ → ขอ user เปิดยืนยัน เหมือนกรณี DOCX ใน §2B.1 (qlmanage/LibreOffice = false-green — มองไม่เห็น corruption/16:9/General-Failure/U+2192)
       ⛔ LibreOffice render ผ่าน ≠ validation pass — ใช้ preview เร็ว ๆ ได้ แต่ "สวยใน LibreOffice" อาจเป็นไฟล์เสียในเครื่องลูกค้า (KT Food S4: → หลุดเพราะ LibreOffice ปล่อยผ่าน)
       ⚠️ font "General Failure" (อาการ B) = AppleScript/qlmanage มองไม่เห็น → คนเปิด PowerPoint ดู dialog
 
@@ -334,7 +362,8 @@ fallbacks = ["Leelawadee UI"]     ← เหลือตัวเดียว
 ฟอนต์หลัก : IBM Plex Sans Thai Looped      ← ชื่อ family ที่ถูกต้อง (มี Looped ต่อท้าย)
 ขนาด      : ไทย = อังกฤษ  ห้ามบวก pt      (cap 0.698 em · ละตินอยู่ในตัวเดียวกัน)
 น้ำหนัก    : Thin/ExtraLight/Light/Regular/Medium/SemiBold/Bold — เลี่ยง Bold ใช้ SemiBold แทน
-สำรอง     : Tahoma (ติดมากับ Win+Mac ทั้งคู่ — ใช้เมื่อคุมเครื่องปลายทางไม่ได้)
+สำรอง     : Leelawadee UI ตัวเดียวเท่านั้น — ⛔ Tahoma ถูกตัดออกแล้ว (คำสั่ง user 2026.08.04 · §3.0-A ขั้น 3)
+            fallback คือทางสุดท้ายจริง ๆ ให้ไต่ขั้น 0-2 จนไม่ต้องใช้
 หลักฐาน   : user ทดสอบผ่าน · ปตท. ใช้จริงใน 56-1 One Report · SIL OFL = embed ถูกกฎหมาย
             ยอดวรรณยุกต์ 0.864 em เทียบกล่อง 1.239 → เหลือที่ว่าง 0.375 em (สบายที่สุดในกลุ่ม)
 ```
@@ -369,7 +398,7 @@ Leelawadee · Leelawadee UI · Leelawadee UI Semilight   (ไทย+อังก
 | **IBM Plex Sans Thai Looped** | **0.811** | 0.924 | **18.9%** ← ราง private |
 | IBM Plex Sans Thai | 0.799 | 0.866 | 20.1% |
 | Noto Sans Thai | 0.782 | 0.840 | 21.8% |
-| Tahoma | 0.769 | 0.805 | 23.1% ← fallback |
+| ~~Tahoma~~ | 0.769 | 0.805 | 23.1% ← **ตัดออกแล้ว** (คงตัวเลขไว้เป็นข้อมูลเปรียบเทียบ) |
 | Leelawadee / Leelawadee UI | 0.727 | 0.737 / 0.743 | 27.3% ← ตัวเลือกอนุมัติ |
 | ~~Sarabun~~ | 0.837 | **0.957** | 16.3% ← **ถอดออก** |
 
@@ -413,6 +442,8 @@ Sarabun (Google)         — ไม่ใช่ blacklist แต่ user ปฏ�
 ② จับคู่ 2 ตระกูลเมื่อลูกค้าบังคับ Latin brand font เท่านั้น → ชดเชยขนาดตาม D3 สูตร cap-ratio
    (Big Four ทำแบบนี้ทุกราย ตั้งไทยใหญ่กว่า 1.18-1.77× — เพราะไม่มีฟอนต์ไทยของแบรนด์ตัวเอง)
 ③ APPROVED SET เดียวทั้งชุดเอกสาร (deck+docx+xlsx ของงานเดียวต้องตรงกัน — ลูกค้าเห็นเป็นชุด)
+   🔴 ข้อยกเว้นเดียว: การสลับฟอนต์อัตโนมัติของสไลด์แน่น (§3.0-A) ชนะกฎข้อนี้ เพราะ "อ่านออกไหม"
+   สำคัญกว่า "เหมือนกันทั้งชุด" — เมื่อเกิดขึ้นต้องแจ้ง mixed-font ใน PLAN-CARD และบันทึกเหตุผลใน QA-log
    ⚠ V01R11: กติกานี้คุม**งานที่เริ่มจากศูนย์** — งานต่อยอด template เดิม ดูข้อ ⑤ (นโยบายชนะความสม่ำเสมอ)
 ⑤ 🔴 TEMPLATE-BASE BUILD (คำสั่ง user 2026.08.05 · เคส VFIN MA-AMS-CR): งานที่สร้าง**ต่อยอด
    template/เด็คเดิม** (รวมแทรกสไลด์ใหม่ · edit บน valid base) → **ใช้ฟอนต์ตามนโยบายปัจจุบัน
@@ -553,7 +584,7 @@ T3 ZWSP INJECTION (ทางสุดท้าย — แลกด้วยร�
    ❌ ห้ามใช้กับ: เนื้อความยาวที่ลูกค้าจะ copy ไปใช้ต่อ · เอกสาร TOR/e-GP ที่ถูก index
 ```
 
-**กติกาบังคับ:** ทุก build ที่มีไทย+wrap → **รัน T2 audit ก่อนส่งเข้า ④** · เจอเสี่ยง → แก้ตามลำดับ ① ขยายคอลัมน์ ② ปรับข้อความ ③ ZWSP (ต้องบอก user ว่าแลกอะไร)
+**กติกาบังคับ (แยกตามฟอร์แมต):** `.xlsx` → **รัน T2 audit ก่อนส่งเข้า ⑤ อริส เสมอ** เพราะข้อความถูกบีบอยู่ในความกว้างคอลัมน์ที่ตายตัว · `.pptx` และ `.docx` → ใช้ **T1 lang-tag `th-TH`** บนทุก run ที่มีข้อความไทยก็เพียงพอ (โปรแกรมตัดคำให้เอง) แล้วให้ ⑤ ตรวจด้วยตาในรอบ render · เจอเสี่ยง → แก้ตามลำดับ ① ขยายคอลัมน์ ② ปรับข้อความ ③ ZWSP (ต้องบอก user ว่าแลกอะไร)
 
 ## 3.4 กติการ่วมทุกฟอร์แมต
 - **APPROVED SET เดียวทั้งเอกสารชุดเดียวกัน** (deck+docx+xlsx ของงานเดียวต้อง family ตรงกัน — ลูกค้าเห็นเป็นชุด)
@@ -577,8 +608,8 @@ docProps: overwrite creator=iCE (กัน "Steve Canny" python-pptx default lea
 RULE (numeric): NEW deck OR >5 slides change → BUILD from spec (full pipeline)
                 ≤5 slides edit บน VALID base → EDIT via python-pptx API (รักษา structure)
                 (rebuild-from-source = re-introduce corruption → ห้าม edit แบบ rebuild)
-BUILD PIPELINE: Pre-Flight → build per-section (18 lessons + D1-D4) → merge+page+font-embed → STRICT VALIDATOR → ส่ง ④
-EDIT PIPELINE:  open VALID base (PowerPoint-Repaired ถ้ามี) → python-pptx API edit → re-verify corruption → ส่ง ④
+BUILD PIPELINE: Pre-Flight → build per-section (18 lessons + D1-D4) → merge+page+font-embed → STRICT VALIDATOR → ส่ง ⑤ อริส
+EDIT PIPELINE:  open VALID base (PowerPoint-Repaired ถ้ามี) → python-pptx API edit → re-verify corruption → ส่ง ⑤ อริส
 
 ⭐ γ1 SELF-TEST (ด่านศูนย์): Strict Validator = Collision + Overflow (Y-budget 16:9 6.858m H)
   → เจอทับ/ล้น → แก้จบในตัว (QA/User ไม่ควรเจอ overflow/collision)
@@ -617,14 +648,14 @@ _lib/patterns/gantt-timeline.md — Project Timeline/Gantt (สกัดจา�
 
 # §6 ⭐ VALIDATION BUDGET (Hard Rule กัน validation loop กิน token — เคสจริง Viriyah 2026.07.14 transcript 1.48MB)
 
-1. **SINGLE-PASS:** validator ครบชุดตาม format/tier รัน **1 ครั้งเดียว** → PASS ทุกข้อ = **จบ ส่งเข้า ④ ทันที** — ห้าม re-run/re-render/re-parse "เพื่อความชัวร์"
+1. **SINGLE-PASS:** validator ครบชุดตาม format/tier รัน **1 ครั้งเดียว** → PASS ทุกข้อ = **จบ ส่งเข้า ⑤ อริส ทันที** — ห้าม re-run/re-render/re-parse "เพื่อความชัวร์"
 2. **FAIL → แก้ → re-check เฉพาะข้อที่ fail (delta)** · cap 2 รอบ → ยัง fail = หยุด รายงาน diagnostic ไม่ฝืนวน
 3. **SCALE-TO-SIZE:** artifact เล็ก (xlsx ≤~30 แถว · deck ≤5 slides · docx ≤3 หน้า) = ตรวจโครงสร้าง+ค่าพอ ไม่ render ภาพทุกหน้า
 4. **TOKEN DISCIPLINE:** parse/ตรวจด้วย script ที่คืนผลเป็น**ตัวเลข/counts** — ห้าม dump raw XML เข้า context (transcript บวม = ทำผิดข้อนี้)
 - **PPTX:** γ1 Strict Validator (§1 D4 ทุก ✓) · **XLSX:** formula-integrity + §3.2 E1-E6 · **DOCX:** §3.1 W1-W3 + academic → citation-verbatim · **HTML:** เปิด browser/screenshot จริง · **PDF:** pdffonts emb=yes
 - ทุก format: validator report เป็น**ตัวเลขจริง** ("collision 0 · overflow 0 · fonts 4/4 embedded") — ห้ามรายงาน "ผ่านแล้ว" ลอย ๆ
 
-## ⭐ V1-V3 FONT VALIDATORS (V01R03 ใหม่ — บังคับทุก build ที่มีไทย · รันก่อนส่งเข้า ④)
+## ⭐ FONT VALIDATORS V1-V4 (หมายเหตุลำดับ: V3 พิมพ์อยู่ต่อจาก V4 ในหัวข้อถัดไป — อ่านให้ครบทั้งสี่ตัว) (V01R03 ใหม่ — บังคับทุก build ที่มีไทย · รันก่อนส่งเข้า ⑤ อริส)
 
 > **ทำไมเพิ่ง"มี":** 2026.07.31 พบไฟล์ `PWA_ERP_TOR_System-Module-User-Matrix_V01R04` ระบุฟอนต์ `IBM Plex Sans Thai Regular` ซึ่ง**ไม่มี family ชื่อนี้อยู่จริง** → Excel ทิ้งแล้ว substitute เงียบ → ฟอนต์ปน 3 ตัวในไฟล์เดียว → user เห็นเป็น "วรรณยุกต์เพี้ยน ขนาดไม่เท่ากัน" · **ระบบเดิมไม่มีตัวตรวจใดจับได้เลย**
 
@@ -674,8 +705,8 @@ V4 ⭐⭐ RAIL CONFORMANCE (V01R06 · 2026.08.04 — ด่านที่ "ห�
    **ต้นเหตุที่แท้จริง (สำคัญกว่าตัวด่าน):** นโยบายอยู่ใน RAILS ซึ่งถูกเรียกเฉพาะ `build_xlsx.py build()`
    ที่อ่าน spec.json — แต่ deliverable ส่วนใหญ่สร้างด้วย **build script เขียนมือ** ที่ตั้ง `FONT = "..."`
    เองเป็นค่าคงที่แล้วสั่ง openpyxl ตรง ๆ → **bypass ตาราง RAILS ทั้งตาราง**
-   ⇒ กติกาใหม่: build script เขียนมือทุกตัวต้อง `from build_xlsx import RAILS` แล้วอ่านฟอนต์จากราง
-      ห้าม hard-code ชื่อฟอนต์ · และต้องรัน `--audit` ก่อนส่งเข้า ④ ทุกครั้ง
+   ⇒ กติกาใหม่: build script เขียนมือทุกตัวต้อง `from font_policy import RAILS` แล้วอ่านฟอนต์จากราง
+      ห้าม hard-code ชื่อฟอนต์ · และต้องรัน `--audit` ก่อนส่งเข้า ⑤ อริส ทุกครั้ง
    `--allow-font` ใช้เมื่อ: TOR บังคับฟอนต์ · ไฟล์ที่ลูกค้าส่งมา (ไม่ใช่ของเราสร้าง)
 
 V3 สระอำ INTEGRITY (เฉพาะ output ที่เป็น PDF หรือจะถูก copy-paste)
@@ -732,12 +763,12 @@ V3 สระอำ INTEGRITY (เฉพาะ output ที่เป็น PDF �
 
 # §8 ⭐ CODEX/OPENROUTER OPTION (คงตามคำสั่ง user — advisor/QA/idea ทางเลือก)
 
-- ผู้ build (L0/persona ใด ๆ) ใช้ Codex/OpenRouter เป็น**ที่ปรึกษาทางเลือก**ได้ตาม codex_scope ที่ user เปิด: review โค้ด build ก่อนรันงานใหญ่ · ภาษาใน artifact ก่อนส่ง ④ · ไอเดีย design
+- ผู้ build (L0/persona ใด ๆ) ใช้ Codex/OpenRouter เป็น**ที่ปรึกษาทางเลือก**ได้ตาม codex_scope ที่ user เปิด: review โค้ด build ก่อนรันงานใหญ่ · ภาษาใน artifact ก่อนส่ง ⑤ อริส · ไอเดีย design
 - **กติกาเหล็ก: ผู้ตรวจภายนอกว่าผ่าน ≠ ข้าม Strict Validator/γ1 — ของตัวเองรันเสมอ (เสริม ไม่แทน)** · QA จริงยังเป็นอริส
 - L0 เรียกเองใน loop หลัก = เสถียร (แก้ pattern เดิม "subagent หลุดตอนกำลังเรียก advisor") · **เจนนี่-shell ตั้ง `codex_scope: none` เสมอ** (บทเรียน Viriyah team-memory)
 - Contract = skill `claude-codex-bridge` / `openrouter-bridge` (ONE-HOME)
 
 ---
 
-*Skill: ice-doc-builder **V01R01** | 2026.07.17 | สกัดจาก deliverable-gen-agent V02R08 (§4→§1-2·4 · §5→§5 · E4→§0.3+§6) คำต่อคำ + ใหม่: §3 FONT ข้ามฟอร์แมต docx/xlsx/pdf + §0 CONTRACT ICE_BUILD=pipeline + §7 Renderer Ladder + §8 Codex Option*
+*Skill: ice-doc-builder **V01R14** | 2026.08.08 | สกัดจาก deliverable-gen-agent V02R08 (§4→§1-2·4 · §5→§5 · E4→§0.3+§6) คำต่อคำ + ใหม่: §3 FONT ข้ามฟอร์แมต docx/xlsx/pdf + §0 CONTRACT ICE_BUILD=pipeline + §7 Renderer Ladder + §8 Codex Option*
 *ใช้โดย: L0 (กัปตัน/คิม/สมนึก personas) · deliverable-gen-agent shell · QA โดยอริสบังคับทุกกรณี (Producer≠Checker)*

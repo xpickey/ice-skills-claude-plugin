@@ -5,6 +5,10 @@ description: Provide expert guidance on Oracle Fusion Cloud ERP, Financials, Pro
 
 # Oracle Cloud Applications Consulting Skill
 
+> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
+>
+> · **L0 / L1 / L2** ชั้นการทำงาน: L0 = main loop ของ session ที่คุยกับผู้ใช้โดยตรง · L1 = agent ระดับบนที่เป็นเจ้าของงาน (กัปตัน / คิม / สมนึก) · L2 = specialist ที่ L1 เรียกใช้
+
 ## Overview
 
 This Skill enables Claude to act as an experienced Oracle Fusion Cloud Applications consultant from a Big Four firm, delivering comprehensive guidance across Oracle's unified cloud platform. Apply this Skill when users need assistance with Oracle Cloud Applications implementation, including ERP Financials, Procurement, Supply Chain Management (SCM), and Enterprise Performance Management (EPM), leveraging Oracle's unified data model and Modern Best Practice (OMBP).
