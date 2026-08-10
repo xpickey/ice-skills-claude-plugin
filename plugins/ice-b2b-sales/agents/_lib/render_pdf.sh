@@ -45,7 +45,14 @@ if [ "${1:-}" = "--which" ]; then
 fi
 
 SRC="${1:?usage: render_pdf.sh <file> [outdir] [--expect FONT]}"
+# กัน silent failure (เคสจริง 2026.08.09: เรียกด้วย --output_dir <path> → สคริปต์สร้างโฟลเดอร์ชื่อ "--output_dir" จริง ๆ
+# แล้วทิ้ง path ที่ตั้งใจไว้เงียบ ๆ) — outdir เป็น positional ตัวที่ 2 เท่านั้น flag เดียวที่รับคือ --expect
+case "$SRC" in -*) echo "❌ argument แรกต้องเป็น path ไฟล์ ไม่ใช่ flag: $SRC" >&2
+  echo "   usage: render_pdf.sh <file> [outdir] [--expect FONT]" >&2; exit 2;; esac
 OUT="${2:-$(dirname "$SRC")}"
+case "$OUT" in --expect) OUT="$(dirname "$SRC")";;   # เรียกแบบ render_pdf.sh file --expect FONT = ไม่ได้ระบุ outdir
+  -*) echo "❌ outdir เป็น positional ตัวที่ 2 — ไม่รับ flag ชื่อ '$OUT' (สคริปต์นี้ไม่มี --output_dir/--outdir)" >&2
+  echo "   ✅ ถูก: render_pdf.sh ไฟล์.docx \"<โฟลเดอร์ปลายทาง>\" --expect FONT" >&2; exit 2;; esac
 EXPECT=""
 for ((i=1; i<=$#; i++)); do
   [ "${!i}" = "--expect" ] && { j=$((i+1)); EXPECT="${!j:-}"; }
