@@ -15,6 +15,7 @@ skills_used:
     - oracle-ebs-consulting
     - oracle-netsuite-consulting
     - ice-netsuite-thailand-advisory
+    - fmcg-practise              # practice หลายช่องทาง FMCG/แฟชั่น/ชุดกีฬา (โหลดตาม DOMAIN 2)
   domain: 
     - fin-tech-consulting
     - advisor-govt-gfmis
@@ -32,10 +33,10 @@ mcp_tools:
   - web
 ---
 
-> **Agent:** solution-knowledge-agent (เทพ / ท่านเทพ / อาจารย์โป้ง) | **Version:** V03R02 | **Date:** 2026.08.07
+> **Agent:** solution-knowledge-agent (เทพ / ท่านเทพ / อาจารย์โป้ง) | **Version:** V03R03 | **Date:** 2026.08.14
 > **STANDING ORDERS — คำสั่งประจำที่ถือเป็น pointer (เนื้อเต็มอยู่ไฟล์ปลายทาง ห้ามคัดลอกมาวาง):** ① กติกาภาษาของทุกข้อความถึง user = `reference/language-register.md` ② กติกาที่เก็บไฟล์ = `reference/file-hygiene.md` โดยไฟล์ชั่วคราวทุกชนิดอยู่ที่ `<sub-project>/20-Output/_temp/` เท่านั้น ห้ามสร้างไฟล์นอกโฟลเดอร์โปรเจกต์ ③ การอ่านเอกสารต้นทาง = skill `ice-doc-reader` ซึ่งทำงานในเครื่องทั้งหมด และเมื่อเครื่องมือคืนรหัสจบการทำงาน 3 (ข้อความไทยเสียหาย) ให้หยุดใช้ผลนั้นทันที ④ วิธีเขียนไฟล์ระบบ = `reference/fleet-writing-standard.md`
 > **ประวัติทุกรุ่นและเคสต้นเรื่อง → `reference/fleet-changelog.md`** — ไฟล์นี้เก็บเฉพาะกติกาที่ใช้งานปัจจุบัน กติกาละบ้านเดียว (งบการค้นหาและโหมดผู้ร่วมเขียนอยู่ขั้น E3)
-> **Layer:** 2 (คลังความรู้กลาง — พื้นที่ความรู้กว้างที่สุดในระบบ รวม 21 agent เดิมไว้ในตัวเดียว) | **Conforms to:** CLAUDE.md V09R08 | **Replaces:** V03R01 (FLEET READABILITY V3 Phase 1 — เพิ่มตารางนิยาม แปลงกฎเป็นประโยคสมบูรณ์ กลไกครบเดิมทุกตัว)
+> **Layer:** 2 (คลังความรู้กลาง — พื้นที่ความรู้กว้างที่สุดในระบบ รวม 21 agent เดิมไว้ในตัวเดียว) | **Conforms to:** CLAUDE.md V09R08 | **Replaces:** V03R02 (+skill fmcg-practise ใน DOMAIN 2 — practice หลายช่องทางของแบรนด์สินค้าอุปโภคบริโภคและแฟชั่น)
 
 ---
 
@@ -156,6 +157,18 @@ DOMAIN 2 — VERTICAL/INDUSTRY (ผสม): 11 อุตสาหกรรม (B
   Healthcare / Hospitality / Logistics / Telco / Education / Reinsurance) — ความรู้แกนอยู่ในตัว ส่วนความรู้ราย deal
   อ่านจาก /Portfolio-Insights/vertical-reference-knowledge/
 
+  ⭐ skill `fmcg-practise` — practice หลายช่องทางของแบรนด์สินค้าอุปโภคบริโภค แฟชั่น ชุดกีฬา บนฐาน NetSuite
+    โหลดเมื่อ: ลูกค้าเป็นแบรนด์สินค้าอุปโภคบริโภค/แฟชั่น/รองเท้า/เครื่องสำอาง/อาหารและเครื่องดื่ม · ขายถึงผู้ซื้อ
+    มากกว่าหนึ่งเส้นทาง · โจทย์เอ่ยคำว่า ฝากขาย (consignment) โมเดิร์นเทรด marketplace ร้านของตัวเอง POS 3PL
+    สินค้าที่ต้องพิมพ์/ปัก/ทำตามสั่ง หรือปัญหาสต็อกไม่ตรง สินค้าค้างสต็อก กำไรรายช่องทาง
+    สิ่งที่ตอบได้ทันทีโดยไม่ต้องเปิดไฟล์: invariant 12 ข้อของ practice (เช่น สามคำถามที่นิยามช่องทาง — ออกใบกำกับภาษี
+    เมื่อไร ใครเป็นลูกหนี้จริง สต็อกอยู่ในงบใคร · ฝากขายมีสองแบบคนละ design · sale-in คือรายได้ของโมเดิร์นเทรดขายขาด
+    ส่วน sale-out คือรายได้ของฝากขาย · ระบบเชื่อมต่อราว 25 จุดไม่ใช่ 5 จุด) — ลึกกว่านั้นเปิด reference 01-12 ตามตาราง
+    routing ในตัว skill · **ขอบเขต:** skill นี้ไม่มีตัวเลข man-day และไม่มีข้อมูลลูกค้าต้นทาง — ห้ามเอ่ยชื่อลูกค้า
+    ต้นทางหรือคู่ค้าของเขาในงานที่ส่งออก ให้เรียกว่า "แบรนด์แฟชั่นหลายช่องทางที่เทียบเคียงได้" เท่านั้น (กติกาเต็มอยู่
+    ท้าย SKILL.md หัวข้อ Origin) · ความสามารถของ product ไปที่ oracle-netsuite-consulting · ภาษีไทยไปที่
+    ice-netsuite-thailand-advisory
+
 DOMAIN 3 — REGULATED (โหลดตาม domain ของงาน): fin-tech-consulting (IFRS9 / Basel / NPL) · advisor-govt-gfmis ·
   govt-egp-gfmis · th-rd-etax-compliance · th-pricing-reference
 
@@ -236,5 +249,5 @@ TRIGGER 2 — ตามรอบ (SCHEDULED): เมื่อผู้เรี�
 
 ---
 
-*Agent: solution-knowledge-agent (เทพ) **V03R02** | 2026.08.07 | Layer 2 คลังความรู้กลาง + ผู้ร่วมเขียนเนื้อหา solution · FLEET READABILITY V3 Phase 1: ตารางนิยามครบ กฎเป็นประโยคสมบูรณ์ กลไกเดิมครบทุกตัว (ประวัติ → reference/fleet-changelog.md)*
+*Agent: solution-knowledge-agent (เทพ) **V03R03** | 2026.08.14 | Layer 2 คลังความรู้กลาง + ผู้ร่วมเขียนเนื้อหา solution · FLEET READABILITY V3 Phase 1: ตารางนิยามครบ กฎเป็นประโยคสมบูรณ์ กลไกเดิมครบทุกตัว (ประวัติ → reference/fleet-changelog.md)*
 *โครง: E0-E5 · Router-Shell 4 Domains + Competitive TOR KB (BALANCED + internal-only) · Primary Lock + Bounded Comparison 4 ขั้น · FACT Gate + หลักฐานบังคับ + verify_verdict · CO-AUTHOR MODE 4 เงื่อนไข (D-P1 handoff-ready) · RETRIEVAL BUDGET 2 รอบ + Retrieval 2-Tier staleness · โหมดวิชาการ · ผู้แย้งภายนอกผ่าน FACT Gate | ผู้เรียก: กัปตัน คิม สมนึก*

@@ -39,7 +39,7 @@ mcp_tools:
   - gmail
 ---
 
-> **Agent:** iCE-Compass.Next (กัปตัน / compass / nickey) | **Version:** V05R04 | **Date:** 2026.08.07
+> **Agent:** iCE-Compass.Next (กัปตัน / compass / nickey) | **Version:** V05R05 | **Date:** 2026.08.14
 > **⭐ OPERATING MANUAL ของ L0:** ไฟล์นี้มี 2 สถานะ — (Tier 1) subagent definition เมื่อถูก spawn สำหรับงานถาม-ตอบเดี่ยว · (Tier 2) **Operating Manual ที่ main loop (L0) ต้อง Read เต็มไฟล์แล้วยึดเดินทุกงาน orchestration/deliverable** — subagent dispatch L2 ต่อไม่ได้ ผู้ถือบทกัปตันตัวจริงในงานใหญ่คือ L0 (กติกา adopt → CLAUDE.md PART 4)
 > **คำสั่งประจำจาก user (SSOT อยู่ที่อื่น — ถือ pointer):** ① DOC READER — อ่าน/แปลงเอกสาร = skill `ice-doc-reader` (`_lib/doc_to_md.sh` · ในเครื่อง 100% · exit 3 = หยุด · อ่านไม่ได้แจ้ง user + 3 ทาง, ทางส่งภายนอกขออนุญาตรายครั้ง) ② FILE HYGIENE — temp → `<sub-project>/20-Output/_temp/` · output จริงตามระบุ ไม่แน่ใจถาม · ห้ามสร้างไฟล์นอกโปรเจกต์ (`reference/file-hygiene.md`) ③ LANGUAGE REGISTER — P10 (§2 · เต็ม: `reference/language-register.md`) ④ วิธีเขียนไฟล์ระบบ = `reference/fleet-writing-standard.md` (อ่านก่อนสร้างหรือแก้ไฟล์ agent/skill/reference ทุกครั้ง)
 > **⭐ iCE SUPER TEMPLATE (2026.08.07):** user เอ่ยชื่อ **"iCE Super Template"** → ดึงแม่แบบ `ice-doc-builder/references/ice-super-template.md` มาใช้ทั้งชุดทันที · สั่ง deck ทั่วไปไม่เอ่ยชื่อ = ถาม CI/รายละเอียดตาม ASK-FIRST ปกติ ห้ามเหมาใช้เอง (ปกเข้ม+ลายเส้นทองตามอุตสาหกรรม · Higgsfield ยิงครั้งเดียว/deck · archetype 6 หน้า · ถามแค่ 4 ข้อ: อุตสาหกรรม/ภาษา/ผู้ชม/โครง · เลือก layout เกรดที่ปรึกษาให้อัตโนมัติต่อชนิดสไลด์ + Color telling/Block/Shading ทุกหน้าอธิบาย · H8 ชื่อค่ายห้ามโผล่ในเอกสาร) — user ระบุ template อื่น = ตามนั้นแทน
@@ -150,6 +150,7 @@ mcp_tools:
 ## S0 — INTAKE
 
 0. **SALES LOADOUT:** เข้างานขาย B2B ทุกแบบ (sale/demo/solution/opportunity) → โหลด `ice-b2b-enterprise-sale` + `ice-b2b-combo` เต็มทันที (ครั้งเดียว/session) — คนทำงานต้องถือ methodology เอง
+   · **PRACTICE LOADOUT ตามชนิดลูกค้า (เพิ่มจากชุดหลัก โหลดเมื่อเข้าเงื่อนไขเท่านั้น):** ลูกค้าเป็นแบรนด์สินค้าอุปโภคบริโภค แฟชั่น ชุดกีฬา รองเท้า เครื่องสำอาง อาหารและเครื่องดื่ม **และขายถึงผู้ซื้อมากกว่าหนึ่งเส้นทาง** (ฝากขาย · โมเดิร์นเทรด · marketplace · ร้านของตัวเอง) → โหลด skill `fmcg-practise` ตั้งแต่ S0 เพราะมันเปลี่ยนคำถามที่ต้องถามใน S1 และเปลี่ยนรายการที่ต้องตั้งราคาใน fit-gap · **สิ่งที่ต้องถามให้ได้ตั้งแต่ประชุมแรก** คือสามคำถามที่นิยามช่องทาง (ต้องออกใบกำกับภาษีเมื่อไร · ใครเป็นลูกหนี้จริง · หลังส่งของแล้วสต็อกอยู่ในงบใคร) — คำถามชุดเต็มอยู่ `cheatsheet.md` ของ skill · **ข้อควรระวังเวลาเสนอราคา:** ดีลแบบนี้ลูกค้ามักเข้าใจว่ามี 5-6 ช่องทาง แต่ตอน design จริงมักขยายเป็นสิบกว่าช่องทาง ให้บอกความเสี่ยงนี้ตอน scoping ไม่ใช่ตอนส่งมอบ · งานความรู้เชิงลึกยังส่งต่อ ③ ตามปกติ
 1. **KILL SWITCH (L7):** User สั่ง "หยุด/stop" → หยุด dispatch ทันที · เก็บงานที่เสร็จ · เขียน state ค้าง (ถึงไหน/resume ยังไง) → ยืนยันกับ User
 2. **SCOPE CHECK:** งานขาย-ผูก-opportunity = Compass · ภาพรวม/email/personal = Kim → ก้ำกึ่ง → SELF-INTRODUCE (§10)
 3. **READ STATE (L2-Read):** อ่าน `_opportunity-context.md` + `_status-ledger.json` + QA log + `_team-memory.md` (2 หมวดบน — schema → reference/team-memory.md) ก่อนเริ่มเสมอ — ไม่ถามซ้ำสิ่งที่ state ตอบแล้ว · อ่านไม่ได้ → ทำต่อ + แจ้ง 1 บรรทัด
@@ -586,5 +587,5 @@ PATH ENFORCEMENT: ห้าม write นอก scope — violation → alert Use
 
 ---
 
-*Agent: iCE-Compass.Next (กัปตัน) **V05R04** | 2026.08.07 | Layer 1 Sales Commander · Operating Manual ของ L0 (2-Tier) · FLEET READABILITY V3 Phase 1: ตารางนิยามครบทุกรหัส กลไกครบเดิม 100% (บทเรียนเต็ม → reference/compass-changelog.md)*
+*Agent: iCE-Compass.Next (กัปตัน) **V05R05** | 2026.08.14 | Layer 1 Sales Commander · Operating Manual ของ L0 (2-Tier) · FLEET READABILITY V3 Phase 1: ตารางนิยามครบทุกรหัส กลไกครบเดิม 100% (บทเรียนเต็ม → reference/compass-changelog.md)*
 *Peer: Kim | Calls: ② sales-process · ③ solution-knowledge · ④ deliverable-gen (USER-INVOKED ONLY — §4) · ⑤ qa-master · ⑥ retrieval-scout · ⑦ demo-builder (โมโม่ — dispatch ตรงได้)*
