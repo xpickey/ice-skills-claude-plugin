@@ -238,7 +238,7 @@ event.
 
 Listing these in a proposal is itself a credibility signal; most competitors simply assume.
 
-1. Whether electronic tax invoicing is elective or mandatory for this client, and on what timetable
+1. **What tax relief is currently available for adopting electronic tax invoicing, in what form, and when it expires** — the legal position is elective, so the live question is the incentive and the counterparty pressure, not the obligation
 2. Which electronic scheme fits the volume, and the consequences of the entity-wide election
 3. **Whether entry, shelf-space and new-store fees are promotional payments or a retailer service** — the withholding treatment appears the same, the VAT consequence differs
 4. Withholding categories and rates by spend type — not one blanket rate

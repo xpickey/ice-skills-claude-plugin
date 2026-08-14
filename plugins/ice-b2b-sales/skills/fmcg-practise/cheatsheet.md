@@ -239,6 +239,24 @@ types** — purchase order · invoice · advance ship notice · credit note requ
 return to vendor. **Coverage is per retailer and per document, not one yes or no.** Never quote
 "Thai modern trade is purchase-order-only" as a fact — verify per account.
 
+## "Do we have to move to e-Tax Invoice?" — the answer has two halves
+
+| | Position | Why it matters in the room |
+|---|---|---|
+| **In law** | **elective** — entered by application, no general mandate found | never say it is compulsory; the client can check, and being caught out costs more than the point is worth |
+| **In practice (B2B)** | **close to unavoidable** — counterparties pull you in, and the state offers tax relief for adopting | never say "you can defer it" either; staying on paper has a measurable cost |
+
+**The line that works:** *"Legally elective — do not let anyone tell you otherwise. In practice your
+buyers will pull you in and there is relief for moving. So we do not build it as a later project; we
+design the document layer so adopting it is a switch, not a rebuild."*
+
+⚑ **Ask:** are any of your major customers already issuing or receiving electronically? *(their
+accounts-payable process decides this for you, not your own timetable)*
+
+**Never quote from this skill:** whether relief is available now, its form, its rate or its expiry —
+these are time-limited. Send it to the client's tax adviser. Two further design facts that do hold:
+the scheme choice is **entity-wide, not per channel**, and **credit notes are inside it**.
+
 ## Pricing and promotion — the rule
 
 > **The front end owns the decision. The ERP owns the record.**

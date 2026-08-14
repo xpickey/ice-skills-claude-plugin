@@ -22,7 +22,7 @@ description: >-
   วางโซลูชัน FMCG.
 license: Proprietary
 metadata:
-  version: V02R04
+  version: V02R05
   date: 2026.08.14
   origin: >-
     Distilled from two completed implementations — an apparel and sportswear brand, and a food and
@@ -60,6 +60,11 @@ metadata:
     V02R04 — final sweep: the cheatsheet still carried a superseded EDI block asserting "purchase
     order and little else" alongside the corrected three-architecture block, and gained the
     versioned-agreement decision rule where dispute defence and Thai competition compliance meet.
+    V02R05 — electronic tax invoicing restated on the user's correction. The previous wording was
+    right in law and misleading in practice: it is elective, but business-to-business counterparties
+    pull a supplier in and the state offers tax relief for adopting, so "you can defer it" is as wrong
+    as "the law compels you". New invariant 13a, a cheatsheet decision block, a corrected glossary
+    entry, and the adviser question reframed from the obligation to the incentive and its expiry.
   composes_with:
     - ice-netsuite-thailand-advisory
     - oracle-netsuite-consulting
@@ -145,7 +150,7 @@ gaps · 6 discovery questions.** Section 3 is written to be lifted straight into
 | General ledger, channel profitability, dimensions, period close, fixed assets | **15** |
 | "Draw me the architecture" · which system owns what · how many integrations · middleware | **16** |
 | **Sketch the footprint for a prospect who sells through X, Y and Z** · sizing a live opportunity | **16**, worked example |
-| Thai e-Tax Invoice, VAT on rebates, withholding on retailer fees, **what a retailer may lawfully charge**, platform reporting, Thai QR | **17** |
+| Thai e-Tax Invoice · "do we have to move to e-Tax?" · VAT on rebates, withholding on retailer fees, **what a retailer may lawfully charge**, platform reporting, Thai QR | **17** |
 | BOI, investment promotion, promoted vs non-promoted, imported raw-material control | **18** |
 | Discovery agenda, what delays these programmes, migration, cutover, phasing | **19** |
 | A term I do not recognise | `glossary.md` |
@@ -211,6 +216,11 @@ understated.
 **13. One promotion master, consumed twice.** The promotion that drives a trade-spend accrual is the
 same one that drives a forecast uplift. Two records means the sell-through settling the scanback
 differs from the one forecasting demand, and both become unreliable.
+
+**13a. Thai electronic tax invoicing is elective in law and close to unavoidable in practice.** Never
+tell a client it is compulsory — they can check. Never tell them it can wait either: counterparties
+pull them in and the state offers relief for adopting. **Design the document layer so that adoption
+is a switch, not a rebuild.** File **17**.
 
 **14. Where the gaps cluster, every time:** statutory document and tax formats · channel-specific
 data-entry ergonomics · mechanics where accounting and physical reality diverge. Price those as custom

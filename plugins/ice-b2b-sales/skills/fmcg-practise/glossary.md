@@ -64,7 +64,7 @@ merely mentioned. Terms with no number are conventions of this practice rather t
 
 **Electronic data interchange** — structured document exchange with a retailer. In the Thai market it is commercially available through service-bureau Web EDI covering the major chains and six document types; coverage is **per retailer and per document**, not one yes or no. Do not assume purchase-order-only. (02)
 
-**Electronic tax invoice and receipt** — Thailand's structured, digitally signed tax-document scheme. Two mutually exclusive routes; the election is entity-wide, not per channel. **Whether it is mandatory is disputed between sources — confirm, never assert.** (17)
+**Electronic tax invoice and receipt** — Thailand's structured, digitally signed tax-document scheme. Two mutually exclusive routes; the election is entity-wide, not per channel. **Elective in law but close to unavoidable in business-to-business practice** — counterparties pull you in and the state offers tax relief for adopting. Design so that adoption is a switch, not a rebuild. (17)
 
 **Estimation method (expected value / most likely amount)** — the required per-contract choice of how an uncertain rebate outcome is estimated, together with constraining the estimate and reassessing it at each reporting date. Accruing at the current rate and truing up periodically satisfies the arithmetic but not the requirement. Confirm any standard citation with the client's auditor. (10)
 
