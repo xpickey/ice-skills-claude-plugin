@@ -37,6 +37,33 @@ Goods sit at someone else's site and the sale happens later
 
 **If both models are in scope, that is two designs, not one design with a flag.**
 
+## Van sales — the first question is the document on the vehicle
+
+> A rep sells from a loaded vehicle, hands the goods over and takes the money in one visit. The tax
+> point is therefore **on the vehicle, at the stop** — which raises a question the source material
+> does not answer and you must not answer for the client.
+
+**Ask before anything else:** *"When your rep sells at the shop, what document does the customer
+walk away with — and where does its number come from?"*
+
+| What you need to establish | Why it decides the design |
+|---|---|
+| Is a tax invoice or a receipt issued **at the stop**, or raised later at the office? | one is a mobile printing and numbering problem, the other is a settlement-time posting problem |
+| **Where does the running number come from** — a book held on the van, a range allocated to the vehicle, or the ERP on sync? | number-range control per vehicle is a build; a shared range across an offline fleet is a duplicate waiting to happen |
+| What happens to the number when the device is offline all day? | this is where offline-first designs break |
+
+**Three rules that hold once the document question is settled:**
+
+- **Van stock is relieved at settlement, not at the sale.** The mobile device decrements van
+  inventory live; the ledger moves at the end-of-shift close. Say so before a client assumes
+  same-day posting, and present the posting delay as the fraud-detection window it is.
+- **Van receivable must not be merged with modern-trade receivable.** Modern trade is dominated by
+  deductions and disputes; van is many small balances against many small shops with a limit each.
+  Merging them destroys both collections and dispute handling.
+- **Establish the route model before estimating** — cash van (sell from stock, settle in one visit)
+  or pre-sales (order on one call, deliver on another). A client running **both** needs two route
+  calendars, two stock-ownership rules and two revenue-recognition points.
+
 ## Online — who is the debtor?
 
 | Sub-model | Debtor | Order opens | Invoice trigger | Reconciliation pain |
@@ -55,16 +82,6 @@ be one line in a scope document.
 > Retailer → modern trade outright. You → consignment.
 
 Everything else (both involve a mall, both need sale-out data, both have deductions) is noise.
-
-## EDI expectation setting
-
-| What the customer says | What to assume | What to budget |
-|---|---|---|
-| "The retailer has EDI" | EDI covers the **purchase order** and little else | file/template import path + sale-out reconciliation report |
-| "We want full EDI" | prove it retailer by retailer before committing | discovery task per retailer group, before the estimate is fixed |
-
-Promising EDI parity in a proposal and finding the retailer's limits during build is a schedule
-risk that lands on the implementer, not the customer.
 
 ## Costing — how to advise
 
@@ -95,6 +112,116 @@ returns · work-in-process/in-transit · loaned · damaged.
 
 Bins inside a location separate by **material status** (good / damaged / claim), because one
 location holds several conditions at once.
+
+## The trade agreement is evidence, not paperwork — two reasons, same requirement
+
+> **Keep the agreement versioned and amendment-tracked, and be able to reproduce the version that was
+> in force on any given date.**
+
+| Why it matters | Where it comes from |
+|---|---|
+| **Dispute defence** — the approved promotion or agreement *as it stood on the deduction date* is what you argue with. A system that cannot reproduce that version cannot defend the claim | file **10**, stage 5 |
+| **Thai compliance** — competition guidance on retailer charges requires a **written agreement made in advance**, and treats a charge beyond what the contract states as unfair. The system is how the supplier evidences that | file **17**, section 1 |
+
+Two independent reasons landing on one design decision. That is a stronger argument than "the auditor
+will like it", and it is the line to use when a client pushes back on the cost of versioning.
+
+## Trade spend — the three questions that win the meeting
+
+1. *"When a retailer short-pays you, how long before you know why — and what share do you never explain?"*
+2. *"Do you know your margin **after** back-margin, by retailer? Can you show me by item?"*
+3. *"When you cross a volume tier that re-rates retrospectively, how does that reach your accounts?"*
+
+**The line that lands:** a brand can win the listing, hit the volume target, and still lose money on
+that retailer — and gross-margin reporting will not reveal it until the year is over.
+
+### Rebate component — five attributes, not one type
+
+| Attribute | Options | Why it changes the build |
+|---|---|---|
+| Basis | sell-**in** / sell-**through** | sell-through needs a point-of-sale feed from the retailer |
+| Scope — **product** axis | whole turnover / basket / item | what qualifies |
+| Scope — **customer** axis | group / banner / store cluster | **the axis home-grown designs omit** — and the reason group and banner deals double-count |
+| Mechanic | **retroactive** / incremental / **prospective** | three values, not two — see below |
+| Settlement | on-invoice / off-invoice / net-bill / credit note / **unilateral deduction** | different tax treatment, and largely **the retailer's choice, not the brand's** |
+
+### Rebate mechanic — three values, and the third is a different accounting model
+
+| Mechanic | What happens commercially | What it means for the design |
+|---|---|---|
+| **Retroactive** | crossing a tier re-rates everything from the start of the period | a catch-up charge at the moment of crossing, not a rounding difference. Accounted as **variable consideration** — estimated and constrained |
+| **Incremental** | the new rate applies only above the threshold | the straightforward case, and the one most designs assume is the only one |
+| **Prospective** | the benefit earned now applies to **future** purchases | published guidance treats it as a **customer option**, potentially deferred rather than accrued. **Not a different rate — a different model** |
+
+**The discovery question that finds the third one:** *"Are any of your rebates earned now but applied
+to future purchases?"* Almost nobody volunteers this, and a design built on two mechanics cannot
+absorb it later without reworking the accrual history.
+
+**And estimation is a decision, not a default.** Where the outcome is not yet known, the choice
+between an **expected-value** and a **most-likely-amount** approach is made per contract, the
+estimate is constrained so revenue is not recognised where a significant reversal is likely, and it
+is reassessed at each reporting date. Accruing at the current rate and truing up periodically
+satisfies the arithmetic but not the requirement. **Confirm any standard or paragraph citation with
+the client's auditor before it goes in a document — this skill does not assert them.**
+
+### Net GP waterfall — and the two placement rules
+
+```
+Gross revenue − COGS = CM1 − trade deductions = CM2 − fulfilment cost = CM3 (Net GP)
+```
+- Show **Net GP margin % and trade-spend ratio together**. Either alone misleads.
+- **Delivery-performance penalties sit in fulfilment cost, not in trade deductions** — a
+  management-reporting judgement to settle with the accounting-policy owner before build; their tax
+  and accounting classification is a separate, unsettled question (file 17). They are your
+  operational failure, not commercial investment. Mixing them distorts the trade-spend ratio.
+- **Freeze and version the snapshot at close**, or late debit memos silently restate a closed period.
+
+### Deduction handling — the four non-negotiables
+
+single front door for all three arrival channels · confidence score + **per-retailer** tolerance ·
+**double-dip block** (same entitlement settled twice — by credit note *and* by deduction) · split
+allocation both ways. **Unmatched = leakage; the match rate is the metric.**
+
+### Dispute — the loss that is entirely avoidable
+
+Register each retailer's **submission window, accepted codes, required formats**. Count down, warn
+before expiry, **gate submission on evidence completeness**. Capture proof of delivery **within a
+day of despatch**, not when the dispute starts. Missing the window is a permanent loss.
+
+### Settling a Thai rebate — the assumption that is probably wrong
+
+> Most designs assume a volume rebate is settled by issuing a tax credit note (ใบลดหนี้). Thai
+> guidance points the other way, and the consequence is structural rather than cosmetic.
+
+The reasoning to carry in your head: a **conditional** discount is not a discount given at the time
+of sale, so it sits inside the VAT base at the time of sale — and the events that permit a tax
+credit note are a closed list. A rebate earned on cumulative volume is therefore likely **not a
+credit-note event at all**, leaving a **commercial credit note carrying no VAT**.
+
+| Design consequence | What to do about it |
+|---|---|
+| **Two document types are needed**, not one | tax credit note for qualifying events, commercial credit note without VAT for conditional rebates — **separate numbering series**, separate templates |
+| Discount **at the moment of sale** behaves differently from a rebate **settled later** | this is the on-invoice versus off-invoice distinction, and in Thailand the gap is a tax-character gap, not a timing one |
+| Routing all trade spend through tax credit notes | produces VAT that does not reconcile to the periodic return — and a year of postings to unpick |
+
+**How to say it, and where to stop.** Raise it as a design question with a known shape: *"Which of
+your rebate structures can be settled by tax credit note, and which need a commercial credit note?
+That is a question for your tax adviser, and we will build for both answers."* **Never rule on a
+specific structure.** The question list is in file **17**; handing it over is itself a credibility
+signal, because most competitors assume instead.
+
+### Which reporting framework the client uses changes the scope
+
+> Ask this **before** sizing the trade-spend accrual work. It can move the estimate materially in
+> either direction, and it is invisible if you do not ask.
+
+| If the client reports under... | Then the accrual scope... |
+|---|---|
+| the **full standard** (the Thai equivalent of the international revenue standard is a direct translation, with no local modification on consideration payable to a customer) | includes **estimation method, constraint and reassessment at each reporting date** — the machinery in the mechanic table above |
+| the framework for **entities without public accountability** (กิจการที่ไม่มีส่วนได้เสียสาธารณะ) | is materially lighter — that framework measures revenue net of trade and volume discounts only and carries **no variable-consideration concept**, which the professional body itself identifies as a point of difference |
+
+**The question:** *"Which financial reporting framework do you report under — and is that expected to
+change?"* A group planning to move up, or one with a subsidiary on each, is scoping for both.
 
 ## "We already have EDI" — decide which of three things they mean
 
@@ -179,13 +306,16 @@ estimating attention, not as a substitute for estimating.
 | Weight | Line item | Why it sits here |
 |---|---|---|
 | **Heaviest** | **Pseudo-consignment dual-book synchronisation** | custom program + reconciliation report + support runbook, and it is never configuration |
+| | **Rebate hierarchy cascade across both axes without double-counting** | the hardest single piece of a trade-spend build, and custom in most products |
 | | **The integration estate as a whole** (~25 touchpoints) | the happy path is quick; error contract, retry, duplicate protection and reconciliation are the work |
+| | **Van sales — van inventory, offline-first capture and the settlement close** | a van-inventory record most products lack natively, a specialised mobile product, and a settlement screen with segregation of duties |
 | | **Promotion and discount mechanics** | priced as configuration, delivered as development, almost every time |
 | | **Data migration of open balances** | open orders, consignment stock at retailers, in-transit stock, open deductions, returns in flight |
 | **Heavy** | **Statutory document formats** | each preprinted variant is a report customisation, and they are non-negotiable |
 | | **Marketplace gateway** (build or buy) | one-off, then cheap per platform — but the first one is real |
 | | **Item master and variant handling** | style × colour × size, plus barcode and external-reference cross-mapping |
 | | **Transformation / outside processing** | own master data, own location, own cost mechanism |
+| **Heavy** | **Investment-promotion segregation**, where the client is promoted | valuation-layer segregation of duty-exempt stock, document-level tagging before posting, and governed common-cost allocation |
 | **Moderate** | **Per-location inventory valuation or stock-value ceilings** | custom, and often discovered late |
 | | **Ageing, movement-class and dead-stock reporting** | custom in the reference implementation, not standard |
 | | **Treasury** — bank reconciliation, cheque handling, withholding-tax payment splitting | a workstream, not a payables add-on |
@@ -217,7 +347,7 @@ Treat each of these as an explicit line item, not a rounding allowance:
 | "the platform pays us net" | many-to-one cash application that nobody has designed |
 | "sales decide the discount" | pricing governance living outside the ERP |
 | "every store request becomes its own delivery" | fulfilment consolidation missing |
-| "we'll do EDI with them" | a purchase-order-only interface being described as EDI |
+| "we'll do EDI with them" | a portal someone re-keys from, being described as EDI |
 
 ## Questions that earn credibility in the first meeting
 
