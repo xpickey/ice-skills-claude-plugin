@@ -17,7 +17,7 @@ description: >-
   แปรสภาพสินค้า, fit-gap FMCG, วางโซลูชัน FMCG, เสื้อผ้ากีฬา ERP.
 license: Proprietary
 metadata:
-  version: V01R01
+  version: V01R02
   date: 2026.08.14
   changelog: >-
     V01R01 — pricing and promotion reframed on the user's direction: base price in the ERP with
@@ -25,6 +25,11 @@ metadata:
     onto the ERP sales line (amount, type, campaign code, funder) so channel and campaign margin
     analysis works. Marketplace settlement reconciliation upgraded from a caution to a designed
     three-way-match solution. New invariants 3b and 3c, two new patterns, two routing rows.
+    V01R02 — EDI corrected on a source the user supplied. Thai modern-trade EDI is commercially
+    available through service-bureau Web EDI covering the major chains and six document types, so
+    the previous "assume purchase-order-only" guidance was wrong and is replaced by a three-
+    architecture model (portal-only / bureau-integrated / direct-per-retailer) with the question
+    that separates them. Thailand-specific research round in progress separately.
   origin: >-
     Distilled from a completed multi-channel NetSuite implementation for a Thai sportswear and
     apparel brand, plus the firm's FMCG application-landscape approach. All content is
@@ -77,7 +82,8 @@ Any of these in a prospect conversation:
 |---|---|
 | "What channels does a brand like this sell through?" · "How do they differ?" · ขายผ่านช่องทางไหนบ้าง | **01** channel landscape |
 | Dealers, distributors, credit terms, project sales, sponsorship, export, deposits | **02** wholesale channels |
-| Department stores, key accounts, EDI, sale-in vs sale-out, rebates, chargebacks, deductions | **03** modern trade |
+| Department stores, key accounts, sale-in vs sale-out, rebates, chargebacks, deductions | **03** modern trade |
+| **EDI** · "the client says they already have EDI" · portal vs bureau vs direct · which documents each retailer supports | **03**, "EDI in Thai modern trade" |
 | Consignment, ฝากขาย, sale-out recognition, stock at the retailer, reconciliation, event stock | **04** consignment |
 | Website, Shopee/Lazada/TikTok, API gateway, cash on delivery, online returns, chat selling | **05** online |
 | **Platform settlement reconciliation** · "did the platform pay us for everything we shipped" · fees, commission, subsidy · กระทบยอดกับเงินรับจาก platform | **05**, "Platform settlement reconciliation" section |

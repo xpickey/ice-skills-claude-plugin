@@ -58,22 +58,78 @@ Two details that repeat across consumer-goods deals:
   invoice is issued for it, and the final invoice must net it off. Missing the netting step is a
   recurring defect.
 
-## EDI — the expectation gap worth naming early
+## EDI in Thai modern trade — what is actually available, and the trap inside it
 
-The reference implementation's tender asked for **sale-in capture through an EDI provider**. The
-outcome was recorded as a **GAP**: the counterparty could not use EDI for replenishment and
-sales — **only for purchase orders**.
+### The market position
 
-What shipped instead:
-- **CSV/template import** for modern-trade orders and online-platform orders
-- A **purpose-built order-entry screen** so modern-trade sales staff could pick items, check stock
-  and create the order quickly — delivered as a customisation
+EDI with the major Thai modern-trade chains **is available**, through a **service-bureau "Web EDI"
+model** rather than through each supplier building its own connection. At least one Thai provider
+runs this as a commercial service covering the large convenience-store, hypermarket, supermarket,
+cash-and-carry, and health-and-beauty chains — around fourteen retail groups — and supports **six
+document types**:
 
-**Carry this into every FMCG conversation.** Assume the retailer's EDI covers the purchase order
-and little else. Budget for a file-import path plus a sale-out reconciliation report, and treat
-full end-to-end EDI as an upside to be proven, not a baseline to be promised. Promising EDI
-parity in a proposal and discovering the retailer's limits in build is a schedule risk that lands
-squarely on the implementer.
+| Document | Direction |
+|---|---|
+| Purchase order | retailer → supplier |
+| Invoice | supplier → retailer |
+| Advance ship notice | supplier → retailer |
+| Credit note request | retailer → supplier |
+| Remittance advice | retailer → supplier |
+| Return to vendor | retailer → supplier |
+
+The service is positioned explicitly at **small and medium suppliers that have no EDI
+infrastructure of their own**.
+
+> Source: a Thai modern-trade EDI service provider's own service description, retrieved 2026-08-14.
+> Underlying message standards (EDIFACT, EANCOM, GS1 or XML) are **not stated publicly** — ask the
+> provider directly before designing a mapping.
+
+### This corrects a common assumption — including one made in the reference implementation
+
+The reference implementation recorded a **GAP**: the counterparty could not use EDI for
+replenishment and sales, **only for purchase orders**. What shipped instead was a CSV/template
+import for modern-trade and online-platform orders, plus a purpose-built order-entry screen for
+modern-trade sales staff.
+
+Given what the market actually offers, read that gap correctly: **it was a limitation of that
+counterparty and that project's adoption, not a limitation of EDI in Thailand.** Do not carry
+"Thai modern trade is purchase-order-only" into the next deal as a fact. It is a question.
+
+### The trap: "we have EDI" may mean a person typing into a portal
+
+The service-bureau model is accessed through a **web portal**. A supplier using it converts a
+received purchase order into an advance ship notice or invoice **on the provider's screen**.
+
+That is EDI between the **provider and the retailer**. It is **not** integration between the
+**ERP and anything**. A supplier who says "we already have EDI" may be describing a workflow where
+a person reads the portal and re-keys into the ERP — which is exactly the manual step an ERP
+project is meant to remove.
+
+**So there are three distinct architectures, and they cost very differently:**
+
+| Pattern | What it means | ERP work |
+|---|---|---|
+| **Portal-only** | staff key between the portal and the ERP | none — and the pain remains |
+| **Bureau-integrated** | the ERP exchanges files or messages with the EDI provider, the provider fans out to each retailer | one integration, reused per retailer — usually the right answer |
+| **Direct to retailer** | the ERP connects to each retailer individually | one integration **per retailer**, plus per-retailer maintenance forever |
+
+The middle row is the pattern to propose in most cases: **the provider absorbs each retailer's
+dialect, exactly as an API gateway absorbs each marketplace's** (file **11**). Same architectural
+idea, different domain.
+
+### What to ask, in this order
+
+1. Do you exchange documents with your retailers electronically today — and through whom?
+2. Which of the six document types do you actually use with each retailer? *(Coverage is per
+   retailer and per document, not a single yes or no.)*
+3. Does that exchange touch your ERP, or does someone key it in from a screen?
+4. Which retailers are in scope, and does your provider already cover all of them?
+5. What message standard and file format does the provider require?
+
+**Then size it.** Bureau-integrated is one interface with per-retailer configuration. Direct is one
+interface per retailer. Getting this wrong in either direction — promising parity you cannot reach,
+or budgeting for connections a bureau already provides — is a proposal error, and the second one
+loses deals to whoever asked the question.
 
 ## Trade terms and deductions — where margin actually goes
 

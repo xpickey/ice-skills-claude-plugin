@@ -76,8 +76,12 @@ and shipped file/template import instead.
 **Gaps and improvement areas.**
 - **EDI expectation management is the recurring commercial risk.** Per-retailer EDI capability in
   Thailand is not publicly documented in any authoritative source we could retrieve. **Ask the client,
-  retailer by retailer, before fixing the estimate.** Assume purchase-order-only until proven
-  otherwise.
+  retailer by retailer, before fixing the estimate.** **Do not assume purchase-order-only** — that
+  was true of one counterparty in the reference implementation, not of the Thai market. A
+  service-bureau Web EDI model covering the major chains and six document types is commercially
+  available (file **03**). The real question is not whether EDI exists but **which of the three
+  architectures the client is in** — portal-only with re-keying, bureau-integrated, or direct per
+  retailer — because those differ by an order of magnitude in integration scope.
 - **Trade terms lived partly outside the ERP** because the ERP held only a base price and discounting
   happened in front-end systems. **That architecture is not the gap — the missing write-back is.**
   Defend the design (the front end owns the deal context) and make the requirement explicit: every

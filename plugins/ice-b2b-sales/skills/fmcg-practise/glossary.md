@@ -39,7 +39,7 @@ Reference file numbers point to where the term is explained in context.
 
 **Distribution-centre allowance** — a retailer charge for its own logistics, usually settled as a deduction. (03)
 
-**Electronic data interchange** — structured document exchange with a retailer. In Thai organised retail, commonly supports the **purchase order only**. (03)
+**Electronic data interchange** — structured document exchange with a retailer. In the Thai market it is commercially available through service-bureau Web EDI covering the major chains and six document types; coverage is **per retailer and per document**, not one yes or no. Do not assume purchase-order-only. (03)
 
 **Fast/slow-moving report** — SKU movement classification driving markdown and buying decisions. (07)
 
@@ -126,3 +126,5 @@ Reference file numbers point to where the term is explained in context.
 **Weeks of supply** — stock on hand expressed as weeks of forward demand. (07)
 
 **Work in process** — goods under transformation or production, owned and not sellable. (07, 08)
+
+**Web EDI / EDI service bureau** — a shared service that exchanges trade documents with many retailers on a supplier's behalf, accessed through a web portal or integrated to the supplier's ERP. In the Thai market this covers the major chains and six document types. The pattern mirrors an API gateway for marketplaces: one connection for the ERP, many dialects absorbed by the provider. (03, 11)

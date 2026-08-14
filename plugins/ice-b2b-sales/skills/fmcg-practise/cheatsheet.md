@@ -96,6 +96,22 @@ returns · work-in-process/in-transit · loaned · damaged.
 Bins inside a location separate by **material status** (good / damaged / claim), because one
 location holds several conditions at once.
 
+## "We already have EDI" — decide which of three things they mean
+
+| They mean | Tell | ERP scope |
+|---|---|---|
+| **Portal-only** | someone opens a supplier portal and re-keys into the ERP | zero integration built — **and the pain they hired you for is still there** |
+| **Bureau-integrated** | the ERP exchanges with one EDI service provider who fans out to every retailer | **one** interface + per-retailer configuration ← usually the right proposal |
+| **Direct to retailer** | the ERP connects to each chain separately | **one interface per retailer**, forever, plus maintenance |
+
+**The question that separates them:** *"Does that exchange touch your ERP, or does someone key it in
+from a screen?"*
+
+Thai market reality: bureau Web EDI covering the major chains exists and supports **six document
+types** — purchase order · invoice · advance ship notice · credit note request · remittance advice ·
+return to vendor. **Coverage is per retailer and per document, not one yes or no.** Never quote
+"Thai modern trade is purchase-order-only" as a fact — verify per account.
+
 ## Pricing and promotion — the rule
 
 > **The front end owns the decision. The ERP owns the record.**
