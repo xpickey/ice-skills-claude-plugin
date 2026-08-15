@@ -127,6 +127,17 @@ Delivery confirmations flow back through the gateway and trigger the AR invoice 
 and every subsequent marketplace cheap. Below two platforms the arithmetic favours a direct
 integration or a bought platform.
 
+## Funder-split pass-through test for any middle layer
+
+**When to use** — any time an OMS, marketplace aggregator or fulfilment-provider platform sits
+between the sales channels and the ERP.
+**How** — before committing to the layer, trace one promoted order end to end and confirm the ERP
+still receives: discount amount and type, **who funded it**, the campaign code, and the platform's
+settlement identifiers. Then trace one settled order and confirm the deduction lines survive.
+**Trade-offs** — none if it passes. If it fails, the single clean feed silently destroys funder
+attribution (invariant 9) and the three-way match — and the failure is invisible until finance
+asks why online margin looks wrong.
+
 ## Synchronous only when a human waits
 
 **When to use** — deciding the mode of every integration in the estate.

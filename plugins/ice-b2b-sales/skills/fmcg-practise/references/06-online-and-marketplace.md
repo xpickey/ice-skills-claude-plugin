@@ -100,79 +100,6 @@ Three questions the design must answer:
 the original sale, so an order can appear as revenue in one period and as a deduction two periods
 later.
 
-### API and import mechanics — verified against the platforms' own interfaces (Thailand, 2026)
-
-**Shopee Open API v2.** Orders come from `get_order_list` → `get_order_detail`. Settlement is per-order
-via `get_escrow_detail`, whose published formula is the reconciliation spec in one line:
-`escrow_amount = total_amount + voucher + credit_card_promotion + seller_rebate + coin − commission_fee
-− credit_card_transaction_fee − cross_border_tax − service_fee − buyer_shopee_kredit −
-seller_coin_cash_back + final_shipping_fee − seller_return_refund_amount`. Two design consequences:
-the escrow value **moves until the order completes**, so pull it only after completion; and vouchers
-arrive **already split seller-funded versus platform-funded**, so a design that merges them is
-discarding a distinction the platform itself maintains (invariant 12).
-
-**Lazada Open Platform.** Orders via `/orders/get` + `/order/items/get`. Settlement via the finance
-group: `/finance/payout/status/get` for the payout cycles and `/finance/transaction/details/get` for
-the line-level deductions. Access is app key/secret plus a **per-store token that expires** — token
-refresh is part of the integration design, not an afterthought.
-
-**Spreadsheet-import interim** (brands typically run a file-based bridge before the API build; the
-platform order export carries 70+ columns of which a mapping usually selects 10-15). Five transforms
-recur in every implementation and belong in the fit-gap as their own line items:
-1. **Extract VAT from both item price and freight** before import when the ERP prices exclusive.
-2. **Explode pack SKUs** — listing variants encoded as `<baseSKU>-<n>ea` must become base SKU × n
-   with the unit price divided back, or stock relief is wrong by the pack factor.
-3. **One one-time customer account per platform** — buyers are not created as customers; the
-   platform is the debtor (consistent with the sub-model table above).
-4. **Line-level unique reference** for idempotent re-import — one order carries many SKU lines, so
-   order number alone cannot be the duplicate key.
-5. **Carry the buyer's tax-invoice request fields** (requested flag, tax ID, contact number) —
-   they are the trigger for per-order e-Tax issuance (file 17).
-Pull only orders in **delivered** status, and design the pull window around the platform's
-post-delivery return period: a return filed after import must produce a credit note, not a silent
-mismatch at settlement.
-
-### The other platforms are not more of the same — three integration classes (Thailand, 2026)
-
-Scoping error to prevent: a prospect says "we sell on Shopee, Lazada, TikTok, LINE and Facebook"
-and the estimate multiplies one connector by five. The five fall into **three classes with
-different reconciliation designs**, and the third has no settlement report at all.
-
-| Class | Platforms | Order capture | Money flow | Reconciliation |
-|---|---|---|---|---|
-| **Full marketplace** | Shopee · Lazada · **TikTok Shop** | Order API | platform collects, deducts, pays on cycle | **three-way match** (above) |
-| **Platform storefront, seller collects** | **LINE SHOPPING** (public Open API since 2023: orders, products, stock) | Order API | payment via the seller's own gateway or transfer — no escrow cycle | **two-way**: order ↔ payment received |
-| **Chat commerce** | **Facebook / Instagram** (no native checkout in Thailand) · LINE OA chat | conversation → order entered by admin or an order-capture tool; often routed through an OMS aggregator | seller collects: transfer slip, gateway link, or cash on delivery | **two-way**, and the harder half is order *capture*: chat orders that never enter a system are unreconcilable by definition |
-
-Design consequences worth pricing separately:
-- **TikTok Shop reconciles like Shopee** — its Finance API exposes statements and per-order
-  transactions, settles after delivery plus the return window, and adds a deduction type the other
-  two do not have at the same scale: **creator/affiliate commission**, which must land in trade
-  spend (file 10) attributed to the campaign, not lumped into platform fees.
-- **LINE looks like a marketplace but settles like a website** — use the order API, skip the
-  escrow design, and match receipts against the seller's own payment gateway.
-- **Chat commerce needs the manual-verify sub-model** (the fourth debtor pattern in this file):
-  the consumer is the debtor, an admin confirms payment before release, and the integration
-  question is which tool captures the chat order — because a brand with real chat volume runs an
-  OMS aggregator in front of the ERP, which then becomes one integration, not three.
-- A prospect on all five platforms therefore needs **two connector designs plus one capture
-  decision**, not five connectors — say so in the estimate and the architecture page (file 16).
-
-### The capture decision has three answers — and one may already be made (Thailand, 2026)
-
-Where do marketplace orders enter the estate before the ERP? Three options, priced differently:
-
-| Option | What it is | When it wins | The fit-gap test |
-|---|---|---|---|
-| **Direct connectors** | ERP (or middleware) integrates each platform's API | few platforms · brand wants full line-level data ownership | full control, most build |
-| **Independent OMS aggregator** | a commercial OMS (in the Thai market, ZORT is the reference case — public API v4, connects Shopee, Lazada, TikTok Shop, LINE SHOPPING and web stores) holds the platform connections; the ERP integrates **once** to the OMS | many platforms · chat commerce in the mix · the OMS's stock-sync prevents overselling across channels | **does the OMS pass through the funder-split promotion fields and the settlement identifiers?** If it flattens them, invariant 9 and the three-way match break behind a clean-looking single feed |
-| **Fulfilment platform** | a fulfilment provider's own OMS/WMS, bundled with the warehouse service (Sokochan-class: the OMS is free when goods sit in their warehouse) | the brand **already outsources fulfilment** — the platform connections and the stock truth may already live there | same pass-through test, plus an exit question: the order history lives in the provider's system, so switching 3PL means migrating the sales-channel hub too |
-
-If the prospect already uses an outsourced-fulfilment provider, ask **which system currently talks
-to the marketplaces** before designing anything — the capture decision may already be made, and the
-ERP's job reduces to one inbound feed plus the settlement match. The dependency cuts both ways:
-cheapest integration, deepest lock-in.
-
 ## 3. Functions the system must provide
 
 | # | Function | Why it is needed | Typically standard or custom |
@@ -197,6 +124,13 @@ cheapest integration, deepest lock-in.
 
 Functions 1, 8, 9, 11 and 13 are where online scope is normally underestimated.
 
+| 18 | **VAT extraction on import** — item price and freight | platform exports carry VAT-inclusive prices; an exclusive-pricing ERP mis-states revenue without it | configuration or import script |
+| 19 | **Pack-SKU explosion** — listing variants encoded as `<baseSKU>-<n>ea` become base SKU × n, unit price divided back | stock relief is wrong by the pack factor otherwise | custom import logic |
+| 20 | **One one-time customer account per platform** (buyers never created as customers) | the platform is the debtor; thousands of buyer records add cost and no control | configuration |
+| 21 | **Line-level unique reference** on every imported order line | one order carries many SKU lines — order number alone cannot be the idempotent re-import key | import design |
+| 22 | **Tax-invoice request capture** — requested flag, tax ID, contact number carried per order | these fields trigger per-order e-Tax issuance (file 17) | configuration |
+| 23 | **Funder-split pass-through** when an OMS or fulfilment platform sits in front of the ERP | if the middle layer flattens seller-funded versus platform-funded promotions or drops settlement identifiers, invariant 9 and the three-way match break behind a clean-looking feed | test in fit-gap, not assumed |
+
 ## 4. Integration touchpoints
 
 | Touchpoint | Direction | Mode | What it carries |
@@ -210,6 +144,50 @@ Functions 1, 8, 9, 11 and 13 are where online scope is normally underestimated.
 | Stock availability | ERP → storefront and gateway | scheduled or event-driven | what may be sold |
 | Product and price master | ERP → storefront and gateway | batch | item, description, base price |
 | Return and refund | platform / storefront → ERP | asynchronous | return authorisation, receipt, credit note |
+
+| Order pull — marketplace API | platform → gateway / OMS → ERP | scheduled pull | orders in **delivered** status only, with the pull window covering the platform's post-delivery return period |
+| Settlement pull — marketplace finance API | platform → ERP | scheduled pull, **after order completion only** | per-order gross, every deduction by type, funder-split vouchers, net payable |
+
+### Platform interface facts — verified against the platforms' own interfaces (Thailand, 2026)
+
+- **Shopee Open API v2:** orders via `get_order_list` → `get_order_detail`; settlement per order via
+  `get_escrow_detail`, whose published formula is the reconciliation spec in one line:
+  `escrow_amount = total_amount + voucher + credit_card_promotion + seller_rebate + coin − commission_fee
+  − credit_card_transaction_fee − cross_border_tax − service_fee − buyer_shopee_kredit −
+  seller_coin_cash_back + final_shipping_fee − seller_return_refund_amount`. The value **moves until
+  the order completes** — pull after completion only. Vouchers arrive already split seller-funded
+  versus platform-funded (invariant 12).
+- **Lazada Open Platform:** orders via `/orders/get` + `/order/items/get`; settlement via
+  `/finance/payout/status/get` (cycles) and `/finance/transaction/details/get` (line deductions).
+  Per-store tokens **expire** — token refresh is part of the design, not an afterthought.
+- **TikTok Shop:** reconciles like Shopee (order API + finance statements and per-order
+  transactions, settling after delivery plus the return window) and adds a deduction class the
+  others lack at scale: **creator/affiliate commission**, which belongs in trade spend (file 10)
+  attributed to the campaign, not in platform fees.
+- **LINE SHOPPING:** public Open API (since 2023 — orders, products, stock) but **no escrow cycle**;
+  payment arrives through the seller's own gateway or transfer, so reconciliation is two-way.
+- **Facebook / Instagram (Thailand):** no native checkout — chat commerce. Orders exist only if a
+  tool or an admin captures them; the consumer is the debtor under the manual-verify sub-model.
+
+### Three integration classes — and the capture decision
+
+Five platforms do not mean five connectors. **Full marketplace** (Shopee · Lazada · TikTok Shop):
+API + escrow, three-way match. **Platform storefront, seller collects** (LINE SHOPPING): order API,
+two-way match against the seller's gateway. **Chat commerce** (Facebook · Instagram · LINE OA):
+the hard half is capture, not reconciliation. Where orders enter the estate is a decision the
+**customer makes between two options — always present both, never pre-decide**:
+
+| | **Option A — ERP-direct** (via the brand-owned gateway) | **Option B — via an OMS** |
+|---|---|---|
+| Sub-types | direct connectors per platform, absorbed by one gateway | independent aggregator (ZORT-class: public API, holds the Shopee/Lazada/TikTok/LINE connections, cross-channel stock-sync) **or** the fulfilment provider's platform (Sokochan-class: the 3PL's own OMS, free with the warehouse service) |
+| Wins when | few platforms · full line-level data ownership · no third-party dependency wanted | many platforms · chat commerce in the mix · fulfilment already outsourced (the connections may already live there) |
+| Cost shape | more build, one-time | less build, a running dependency |
+| Must pass | — | the **funder-split pass-through test** (patterns) and the lock-in question: switching provider later means migrating the channel hub |
+
+Ask **which system currently talks to the marketplaces** before designing anything — the answer may
+have made the decision already. A prospect on all five platforms needs **two connector designs plus
+one capture decision** — say so in the estimate and the architecture page (file 16), and carry both
+options into the proposal so the customer chooses with the trade-offs visible.
 
 ## 5. Challenges, gaps and improvement areas
 
@@ -225,6 +203,11 @@ Functions 1, 8, 9, 11 and 13 are where online scope is normally underestimated.
 | **Platform changes its report format silently** | — | build the settlement import to **fail loudly** rather than mis-map a column quietly |
 | **Customer service left out of scope** | a separate training track was needed post-go-live for the impact of online sales on case handling | include the service desk's view of order status and returns in scope from the start |
 
+| **Escrow pulled before the order completes** | — | the platform's own figure moves until completion; schedule settlement pulls after completion only |
+| **Return filed after the delivered-status import** | — | the pull window must cover the return period, and a late return produces a credit note — not a silent mismatch at settlement |
+| **An OMS or 3PL platform flattens the feed** | — | test funder-split and settlement-identifier pass-through in fit-gap; a clean single feed that drops them breaks margin analysis invisibly |
+| **Sales-channel hub locked inside the fulfilment provider** | — | cheapest integration, deepest lock-in: switching 3PL then means migrating the marketplace connections and order history too — name this trade-off in the architecture decision |
+
 ## 6. Discovery questions
 
 1. Which online routes do you sell through today — own site, which marketplaces, chat, and roughly what mix? ⚑
@@ -237,6 +220,9 @@ Functions 1, 8, 9, 11 and 13 are where online scope is normally underestimated.
 8. Who decides the price and the promotion for each online route — and does the ERP see the breakdown or only the net? ⚑
 9. For cash on delivery: how do you clear a shipment the customer refused?
 10. Does your customer service team see order and return status, and where do they see it?
+11. **Which system talks to the marketplaces today — direct store connections, an OMS, or your fulfilment provider's platform?** ⚑ *(the capture decision may already be made, and the answer changes the connector count in the estimate)*
+12. How do orders reach your ERP or books today — API, file export, or manual keying — and what happens when an order you already imported gets returned? ⚑
+13. If an OMS or 3PL platform sits in the middle: does its feed keep seller-funded and platform-funded promotions separate, and carry the platform's settlement references? ⚑
 
 ## Related files
 

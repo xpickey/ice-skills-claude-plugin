@@ -76,6 +76,15 @@ walk away with — and where does its number come from?"*
 **Rule:** if the answer to "who pays you" changes, the AR design changes. Do not let "e-commerce"
 be one line in a scope document.
 
+## Online — how many connectors?
+
+Count classes, not logos: Shopee, Lazada and TikTok Shop share one marketplace design (API +
+escrow, three-way match) · LINE SHOPPING is order-API-without-escrow (two-way) · Facebook,
+Instagram and LINE OA are chat commerce (the problem is capture). **Five platforms = two connector
+designs + one capture decision.** First question: *which system talks to the marketplaces today —
+direct, an OMS, or the fulfilment provider's platform?* If the answer is a middle layer, run the
+funder-split pass-through test (patterns) before pricing anything.
+
 ## Modern trade versus consignment — the disambiguator
 
 > After you deliver, if the goods do not sell, **who carries them on their balance sheet?**

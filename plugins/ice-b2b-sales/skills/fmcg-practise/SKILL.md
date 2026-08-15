@@ -22,7 +22,7 @@ description: >-
   วางโซลูชัน FMCG.
 license: Proprietary
 metadata:
-  version: V02R08
+  version: V02R09
   date: 2026.08.14
   origin: >-
     Distilled from two completed implementations — an apparel and sportswear brand, and a food and
@@ -31,6 +31,12 @@ metadata:
     no customer name, figures, prices, rates or contract terms are carried. Referred to throughout as
     "the reference implementations".
   changelog: >-
+    V02R09 — restructure: the marketplace API facts, three integration classes and
+    capture decision moved out of file 06's process section into the canonical homes
+    (section 3 function rows, section 4 touchpoints and interface facts, section 5
+    challenges, section 6 discovery questions), plus the funder-split pass-through
+    test in patterns.md and the connector-count rule in cheatsheet.md. Content from
+    V02R06-R08 unchanged in substance.
     V02R08 — file 06: the capture decision has three answers (direct connectors /
     independent OMS aggregator, ZORT-class / fulfilment platform, Sokochan-class)
     with the funder-split pass-through test and the 3PL lock-in exit question.
