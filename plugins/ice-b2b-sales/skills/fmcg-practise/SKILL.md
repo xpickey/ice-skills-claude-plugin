@@ -22,7 +22,7 @@ description: >-
   วางโซลูชัน FMCG.
 license: Proprietary
 metadata:
-  version: V02R07
+  version: V02R08
   date: 2026.08.14
   origin: >-
     Distilled from two completed implementations — an apparel and sportswear brand, and a food and
@@ -31,6 +31,9 @@ metadata:
     no customer name, figures, prices, rates or contract terms are carried. Referred to throughout as
     "the reference implementations".
   changelog: >-
+    V02R08 — file 06: the capture decision has three answers (direct connectors /
+    independent OMS aggregator, ZORT-class / fulfilment platform, Sokochan-class)
+    with the funder-split pass-through test and the 3PL lock-in exit question.
     V02R07 — file 06 gains the three-integration-class table (full marketplace /
     platform-storefront-seller-collects / chat commerce): TikTok Shop reconciles like
     Shopee plus creator-affiliate commission into trade spend; LINE SHOPPING uses the

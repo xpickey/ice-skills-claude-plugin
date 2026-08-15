@@ -158,6 +158,21 @@ Design consequences worth pricing separately:
 - A prospect on all five platforms therefore needs **two connector designs plus one capture
   decision**, not five connectors — say so in the estimate and the architecture page (file 16).
 
+### The capture decision has three answers — and one may already be made (Thailand, 2026)
+
+Where do marketplace orders enter the estate before the ERP? Three options, priced differently:
+
+| Option | What it is | When it wins | The fit-gap test |
+|---|---|---|---|
+| **Direct connectors** | ERP (or middleware) integrates each platform's API | few platforms · brand wants full line-level data ownership | full control, most build |
+| **Independent OMS aggregator** | a commercial OMS (in the Thai market, ZORT is the reference case — public API v4, connects Shopee, Lazada, TikTok Shop, LINE SHOPPING and web stores) holds the platform connections; the ERP integrates **once** to the OMS | many platforms · chat commerce in the mix · the OMS's stock-sync prevents overselling across channels | **does the OMS pass through the funder-split promotion fields and the settlement identifiers?** If it flattens them, invariant 9 and the three-way match break behind a clean-looking single feed |
+| **Fulfilment platform** | a fulfilment provider's own OMS/WMS, bundled with the warehouse service (Sokochan-class: the OMS is free when goods sit in their warehouse) | the brand **already outsources fulfilment** — the platform connections and the stock truth may already live there | same pass-through test, plus an exit question: the order history lives in the provider's system, so switching 3PL means migrating the sales-channel hub too |
+
+If the prospect already uses an outsourced-fulfilment provider, ask **which system currently talks
+to the marketplaces** before designing anything — the capture decision may already be made, and the
+ERP's job reduces to one inbound feed plus the settlement match. The dependency cuts both ways:
+cheapest integration, deepest lock-in.
+
 ## 3. Functions the system must provide
 
 | # | Function | Why it is needed | Typically standard or custom |
