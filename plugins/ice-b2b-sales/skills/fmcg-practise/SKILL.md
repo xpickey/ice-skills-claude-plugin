@@ -22,7 +22,7 @@ description: >-
   วางโซลูชัน FMCG.
 license: Proprietary
 metadata:
-  version: V02R06
+  version: V02R07
   date: 2026.08.14
   origin: >-
     Distilled from two completed implementations — an apparel and sportswear brand, and a food and
@@ -31,6 +31,12 @@ metadata:
     no customer name, figures, prices, rates or contract terms are carried. Referred to throughout as
     "the reference implementations".
   changelog: >-
+    V02R07 — file 06 gains the three-integration-class table (full marketplace /
+    platform-storefront-seller-collects / chat commerce): TikTok Shop reconciles like
+    Shopee plus creator-affiliate commission into trade spend; LINE SHOPPING uses the
+    order API without escrow design; Facebook-Instagram Thailand is chat commerce
+    needing the manual-verify sub-model and an order-capture decision. Five platforms
+    equal two connector designs plus one capture decision.
     V02R06 — file 06 gains verified API mechanics: Shopee escrow formula and
     pull-after-completion rule, Lazada finance endpoints and token-refresh design,
     and the five recurring spreadsheet-import transforms (VAT extraction, pack-SKU

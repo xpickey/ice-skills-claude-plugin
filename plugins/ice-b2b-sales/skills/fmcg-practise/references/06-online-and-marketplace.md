@@ -132,6 +132,32 @@ Pull only orders in **delivered** status, and design the pull window around the 
 post-delivery return period: a return filed after import must produce a credit note, not a silent
 mismatch at settlement.
 
+### The other platforms are not more of the same — three integration classes (Thailand, 2026)
+
+Scoping error to prevent: a prospect says "we sell on Shopee, Lazada, TikTok, LINE and Facebook"
+and the estimate multiplies one connector by five. The five fall into **three classes with
+different reconciliation designs**, and the third has no settlement report at all.
+
+| Class | Platforms | Order capture | Money flow | Reconciliation |
+|---|---|---|---|---|
+| **Full marketplace** | Shopee · Lazada · **TikTok Shop** | Order API | platform collects, deducts, pays on cycle | **three-way match** (above) |
+| **Platform storefront, seller collects** | **LINE SHOPPING** (public Open API since 2023: orders, products, stock) | Order API | payment via the seller's own gateway or transfer — no escrow cycle | **two-way**: order ↔ payment received |
+| **Chat commerce** | **Facebook / Instagram** (no native checkout in Thailand) · LINE OA chat | conversation → order entered by admin or an order-capture tool; often routed through an OMS aggregator | seller collects: transfer slip, gateway link, or cash on delivery | **two-way**, and the harder half is order *capture*: chat orders that never enter a system are unreconcilable by definition |
+
+Design consequences worth pricing separately:
+- **TikTok Shop reconciles like Shopee** — its Finance API exposes statements and per-order
+  transactions, settles after delivery plus the return window, and adds a deduction type the other
+  two do not have at the same scale: **creator/affiliate commission**, which must land in trade
+  spend (file 10) attributed to the campaign, not lumped into platform fees.
+- **LINE looks like a marketplace but settles like a website** — use the order API, skip the
+  escrow design, and match receipts against the seller's own payment gateway.
+- **Chat commerce needs the manual-verify sub-model** (the fourth debtor pattern in this file):
+  the consumer is the debtor, an admin confirms payment before release, and the integration
+  question is which tool captures the chat order — because a brand with real chat volume runs an
+  OMS aggregator in front of the ERP, which then becomes one integration, not three.
+- A prospect on all five platforms therefore needs **two connector designs plus one capture
+  decision**, not five connectors — say so in the estimate and the architecture page (file 16).
+
 ## 3. Functions the system must provide
 
 | # | Function | Why it is needed | Typically standard or custom |
