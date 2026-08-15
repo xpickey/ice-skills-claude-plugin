@@ -22,7 +22,7 @@ description: >-
   วางโซลูชัน FMCG.
 license: Proprietary
 metadata:
-  version: V02R05
+  version: V02R06
   date: 2026.08.14
   origin: >-
     Distilled from two completed implementations — an apparel and sportswear brand, and a food and
@@ -31,6 +31,11 @@ metadata:
     no customer name, figures, prices, rates or contract terms are carried. Referred to throughout as
     "the reference implementations".
   changelog: >-
+    V02R06 — file 06 gains verified API mechanics: Shopee escrow formula and
+    pull-after-completion rule, Lazada finance endpoints and token-refresh design,
+    and the five recurring spreadsheet-import transforms (VAT extraction, pack-SKU
+    explosion, per-platform one-time customer, line-level dedupe key, tax-invoice
+    request fields). Distilled from a live pursuit; generalised.
     V02R00 — full restructure. Reorganised into nine channel files sharing one fixed six-part template
     (use cases, process, function checklist, integrations, gaps, discovery questions) plus capability,
     context and discovery layers. Second reference case added, bringing trade spend, demand planning,

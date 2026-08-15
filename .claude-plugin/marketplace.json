@@ -15,7 +15,7 @@
     {
       "name": "ice-b2b-sales",
       "source": "./plugins/ice-b2b-sales",
-      "version": "1.18.5"
+      "version": "1.18.6"
     },
     {
       "name": "ice-tools",
