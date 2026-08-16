@@ -3,7 +3,7 @@ name: b2b-slide-designer
 description: "Presentation design advisor + Design Library for B2B (iCE). Selects style, theme, template, color/gradient, infographic layout, and icon by Corporate Identity and task. 8 core templates (Linen, Arctic, Cobalt, Onyx, Amber, Whiteboard, iCE-CI, iCE-Propose) + Design Library Router over 1,186 refs: 195 industry examples, 493 consulting decks (McKinsey/BCG/Bain/Big-4), 71 framework .pptx (SWOT/PESTEL/Porter/Gantt/Value-Chain/Customer-Journey), 29 gradients, 68 infographic types, 401 recolorable icons. Confidence-based selection (auto-pick or propose 5). Output for PPTX/HTML/PDF. Owns §5.5.1 font single-source + Font Strategy (TH-only/EN-only/TH+EN, font by language not template). Trigger for deck style, theme, template, color palette, gradient, infographic/framework (SWOT/Porter/Gantt), icon, consulting style, industry example, iCE document. Thai: หา template สไลด์, เลือกธีม/สีสไลด์, gradient, อินโฟกราฟิก, เลย์เอาต์, icon, สไลด์แนวที่ปรึกษา, ออกแบบ deck."
 ---
 
-# B2B Slide Designer + Design Library (V02R10 — 2026.08.17)
+# B2B Slide Designer + Design Library (V02R11 — 2026.08.17)
 
 > **V02R09 (2026.07.31):** ⭐ §4.6 เขียนใหม่เป็น **FONT POLICY 2 ราง** (เอกชน = `IBM Plex Sans Thai Looped` ไทย=อังกฤษไม่บวก pt · ราชการ = `TH Sarabun New` 16pt) + **BLACKLIST 8 ตระกูล** + **SINGLE-FAMILY FIRST** + กฎชื่อ family ต้องตรง name table เป๊ะ — ฐานหลักฐาน: PDF สาธารณะ 45 ฉบับส่องด้วย `pdffonts` + วัด metric ฟอนต์จริง 9 ตระกูล + user ทดสอบสายตา · **กติกาเต็ม+เหตุผลรายตัว = `ice-doc-builder` §3.0** (ที่นี่คือ pointer)
 
@@ -282,7 +282,18 @@ STUDY <deck/ภาพที่ชอบ> — ดูด "design DNA" (ไม่ c
 แต่ภาพหนึ่งใบรับได้จริงราว 5-6 ข้อ (ตัดให้เหลือประมาณ 30% ของเนื้อหาเดิม) · ภาพมีหน้าที่พาคน
 เข้าไปหาเอกสาร ไม่ใช่แทนเอกสาร
 
-### ชุดคำถามตั้งโจทย์ (DESIGN BRIEF — ถาม user รวบครั้งเดียวก่อนออกแบบ)
+### ชุดคำถามตั้งโจทย์ (DESIGN BRIEF — ตอบร่างเองก่อน แล้วเสนอให้ user ยืนยันครั้งเดียว)
+
+🔴 **กติกาการถาม (คำสั่ง user 2026.08.17): ห้ามโยนคำถามทั้งห้าข้อแบบว่างเปล่าให้ user กรอกเอง** —
+คำตอบส่วนใหญ่อยู่ในบริบทงานแล้ว (เอกสารต้นทาง · opportunity context · ผู้ชมที่รู้จากงานก่อนหน้า ·
+รูปแบบผลลัพธ์ที่งานกำหนดมา) ให้ agent **ตอบร่างทุกข้อเองจากบริบทก่อน** แล้วเสนอเป็น "ร่างโจทย์"
+ชุดเดียวให้ user ยืนยันหรือแก้ — **ถามตรง ๆ เฉพาะข้อที่บริบทไม่มีคำตอบจริง ๆ** และระบุชัดว่าข้อไหน
+agent อนุมานเอง (ให้ user เห็นว่าอะไรคือข้อสมมติ)
+❌ "ก่อนออกแบบ ขอถาม 5 ข้อ: 1. คนอ่านควรจำอะไร... 2. คนอ่านมีคำถามอะไร..." (โยนงานคิดกลับให้ user ทั้งชุด)
+✅ "ร่างโจทย์จากบริบทงาน: คนอ่านคือ CFO ควรจำกลับไปว่า 'ทางเลือก ข ถูกกว่า 28% ในสามปี' · คำถามในหัวคือ
+'เลือกอันไหน' จึงใช้โครงเปรียบเทียบ · ใช้ฉายในห้องประชุม 16:9 · ตัวเลขใหญ่สุดคือส่วนต่างสามปี — สองข้อนี้
+ผมอนุมานจาก proposal ท่านยืนยันหรือแก้ได้เลย ส่วนที่ผมไม่รู้จริงคือ [ข้อเดียวที่ถาม]"
+
 
 1. **คนที่เห็นภาพนี้ ควรจำอะไรกลับไปหนึ่งอย่าง?** — ตอบไม่ได้ = ยังเริ่มไม่ได้ ภาพจะรกแน่นอน
 2. **คนอ่านมีคำถามอะไรอยู่ในหัว?** — คำตอบชี้โครงโดยตรง (ตารางล่าง) ไม่ใช่ดูจากหน้าตาเอกสาร
@@ -326,7 +337,7 @@ STUDY <deck/ภาพที่ชอบ> — ดูด "design DNA" (ไม่ c
 | **HTML** | ใช้ CSS จัดลำดับสายตาแทนขนาดภาพ (สเกลหัว-รองตามสัดส่วนข้างบน) · ตามกติกา §5.6 HTML Output Styling · responsive: โครงเปรียบเทียบ/ไทม์ไลน์ต้อง scroll ในกรอบตัวเองบนจอแคบ ไม่บีบจนอ่านไม่ออก |
 | **PDF** | ยึดขนาดพิมพ์จริง (A4 แนวตั้ง = โครง 2:3) · ฟอนต์ต้องฝังครบ (`pdffonts` ทุกแถว emb=yes) · ทำจากต้นทาง vector (build → export) ไม่ใช่ภาพ raster — ตัวหนังสือคมทุกขนาดและค้นหาได้ |
 
-**ลำดับใช้งานจริง:** ถามชุดคำถาม 5 ข้อรวบครั้งเดียว → ขั้นตัด (แจ้งสิ่งที่ตัดพร้อมเหตุผล) → เสนอโครง 2 ทาง
+**ลำดับใช้งานจริง:** ตอบร่างโจทย์ 5 ข้อเองจากบริบท → เสนอให้ user ยืนยัน/แก้ครั้งเดียว (ถามเฉพาะข้อที่ไม่รู้) → ขั้นตัด (แจ้งสิ่งที่ตัดพร้อมเหตุผล) → เสนอโครง 2 ทาง
 พร้อมข้อเสียให้ user เลือก → เขียนลง design spec (โครง · ลำดับขนาด · ตัวเทียบ · icon set · รูปแบบผลลัพธ์)
 → build → ตรวจตัวเลขย้อนกลับ → ส่งอริสตรวจ (Anti-Slop + D7)
 
