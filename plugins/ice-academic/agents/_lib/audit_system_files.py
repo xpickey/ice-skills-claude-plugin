@@ -203,27 +203,14 @@ def audit_file(path: str, fragment_max: float) -> dict:
     elif frag_ratio > fragment_max * 0.7 and verdict == "PASS":
         verdict = "WARN"
         reasons.append(f"บรรทัดคำสั่งเป็นเศษวลี {frag_ratio:.0%} — ใกล้เพดาน")
-    # ── LANGUAGE CARD gate (2026.08.16): ไฟล์ agent ประตูหน้าต้องมีบัตรกติกาภาษาตรงรุ่น SSOT
-    # เหตุผล: กติกาหลัง pointer ไม่มีอะไรยืนยันว่าถูกอ่าน — บัตรที่ฝังในไฟล์คือสิ่งเดียวที่อยู่ใน context ทุก spawn
+    # ── LANGUAGE POINTER gate (2026.08.16 แทนการ์ดฝัง — คำสั่ง user: กติกาอยู่ไฟล์กลางไฟล์เดียว
+    # ระบบยัดเข้า context ผ่าน SessionStart hook · ด่านนี้ยืนยันว่าทุก agent ยังถือ pointer ถึงไฟล์กลาง)
     import pathlib as _pl
     _p = _pl.Path(path)
     if _p.parent.name == "agents" and _p.suffix == ".md" and ".bak" not in _p.name:
-        _ssot = None
-        for _cand in (_p.parent / "reference/language-register.md",
-                      _pl.Path.home() / ".claude/agents/reference/language-register.md"):
-            if _cand.is_file():
-                _m = re.search(r"\*\*Version:\*\* (V\d\dR\d\d)", _cand.read_text())
-                if _m:
-                    _ssot = _m.group(1)
-                    break
-        if _ssot:
-            _card = re.search(r"LANGUAGE CARD (V\d\dR\d\d)", raw)
-            if not _card:
-                verdict = "FAIL"
-                reasons.append("ไม่มี LANGUAGE CARD ในไฟล์ agent (SSOT ปัจจุบัน %s)" % _ssot)
-            elif _card.group(1) != _ssot:
-                verdict = "FAIL"
-                reasons.append("LANGUAGE CARD ตกรุ่น: ในไฟล์ %s แต่ SSOT ปัจจุบัน %s" % (_card.group(1), _ssot))
+        if "language-register" not in raw:
+            verdict = "FAIL"
+            reasons.append("ไฟล์ agent ไม่อ้างถึงกติกาภาษากลาง reference/language-register.md")
 
     if short_headings and verdict == "PASS":
         verdict = "WARN"
