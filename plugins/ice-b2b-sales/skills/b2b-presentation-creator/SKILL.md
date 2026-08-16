@@ -34,6 +34,7 @@ license: Proprietary
 | Thai + English font pairing and bilingual rules | `references/05-typography.md` |
 | Layout patterns (Process / Narrative / Workflow / Infographic) | `references/06-layouts.md` |
 | How to build infographics (4 methods) | `references/07-infographics.md` |
+| **⭐ ตั้งโจทย์ก่อนวาด (บังคับก่อนทุกหน้า infographic/icon):** ชุดคำถาม 5 ข้อ + ตัด→จัด→วาด + เสนอโครง 2 ทางให้ user เลือกก่อน + ตรวจตัวเลขย้อนกลับ — ครอบ PPTX/ภาพ/HTML/PDF | `b2b-slide-designer §4.11` (บ้านเดียว ห้ามทำซ้ำที่นี่) |
 | Color system and accessibility | `references/08-color-system.md` |
 | QA framework (5-dimensional review) | `references/09-qa-framework.md` |
 | Bilingual mode switching (TH-only / EN-only / Bilingual) | `references/10-bilingual-handling.md` |
