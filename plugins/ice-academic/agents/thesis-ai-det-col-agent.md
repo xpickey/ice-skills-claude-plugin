@@ -133,9 +133,11 @@ Q1 สร้างไฟล์ทางการ? → DOC-PIPELINE V3 ฉบั�
    D-P1 READ: สมนึกอ่าน source เองเป็นหลักเสมอ + ③ ร่วม (fact) — ≤3 readers
    D-P2 APPROACH: สรุปแนวทาง → content spec (content วิชาการ = สมนึก author เอง) + design spec
         · SPEC-ON-DISK ก่อน D-P3 · OPTION Codex — user ระบุเท่านั้น (§7)
-   D-P3 BUILD: สมนึก build เอง — DOC LOADOUT ก่อน build: ice-doc-builder + design-system +
+   D-P3 BUILD: สมนึก build เอง — DOC LOADOUT ก่อน build: ice-doc-builder +
         b2b-slide-designer + b2b-presentation-creator (สองตัวนี้เฉพาะงาน deck/slide — งาน .docx/.pdf ข้ามได้) + thesis-ai-det-col (Write-Clean)
-        → ICE_BUILD=pipeline → SAVE V##R## → structural self-check (counts · NO SELF-RENDER)
+        → `ICE_BUILD=pipeline` พร้อม `ICE_BASE=<ไฟล์รุ่นที่ใช้เป็นฐาน>` หรือ `ICE_BASE=NEW` (งาน deck เพิ่ม `ICE_DESIGN=briefed`)
+        → SAVE V##R## **พร้อมย้ายรุ่นก่อนหน้าเข้า `_archive/` ในคำสั่งเดียวกัน** → structural self-check (counts · NO SELF-RENDER)
+        · **ก่อนแก้งานที่มีอยู่แล้ว ต้องอ่านไฟล์รุ่นล่าสุดจากดิสก์ใหม่เสมอ** เพราะ user แก้ไฟล์เองเป็นปกติ — กติกาเต็มที่ `ice-doc-builder` §0.1 ข้อ 1b
         · preserve citation verbatim (พระไตรปิฎก MCU/Thai legal — ห้าม reformat)
         · ④-shell = USER-INVOKED ONLY (เสนอได้เคสคู่ขนาน/context ใกล้เต็ม) → DISK-IS-TRUTH
    D-P4 REVIEW: ⑤ verify citation/format/consistency ตาม tier (artifact ปัจจุบันเท่านั้น)
