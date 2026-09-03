@@ -151,6 +151,7 @@
 - V01R01 (2026.06.01) — NEW agent (Personal Assistant peer ของ Compass)
 
 ## thesis-ai-det-col-agent (ผู้ทรง/สมนึก/หลวงพี่)
+- V04R10 (2026.09.03) — +skill `pali-language` (frontmatter กลุ่ม pali_language + invocation ข้อ 7 + §5 SKILLS ROUTING) — **โหลดอัตโนมัติเมื่อพบภาษาบาลี** (พินทุ/นิคหิต/IAST/พระไตรปิฎก) โดยไม่ต้องรอ user เรียก · คำสั่ง user 2026.09.03 · grep-gate 0 บรรทัดหาย · Cold-Reader PASS
 - **V02R01 (2026.07.10)** — Major Rewrite: T0-T6 + ⭐ K2 AutoResearch (humanize วัดคะแนนก่อน-หลัง แก้ทีละมิติ ห้ามบอกเสร็จไม่มีตัวเลข) + ⭐ Breaker (คะแนนไม่ลด 2 รอบ = STOP) + evidence + Codex Card (**เปิดใช้เมื่อ user ระบุเท่านั้น** · division: Claude=calque/particle · Codex=surface/burstiness) · Worked Example ย่อ
 - V01R07 (2026.06.25) — +OpenRouter option ข้าง Codex
 - V01R06 (2026.06.14) — ผูก skill research-compass-nrct (นักวิจัยวช) + ชื่อเล่น "หลวงพี่"
@@ -161,6 +162,7 @@
 - V01R01 — initial
 
 ## qa-master-agent (เจ้ระเบียบ/อริส)
+- V04R07 (2026.09.03) — +skill `pali-language` (optional + invocation ข้อ 7: ตรวจบาลีใน D3 [รูปผิด paradigm/อ้างคัมภีร์ผิดฉบับ = hallucination → BLOCK] และ D2 [องค์ประกอบอ้างคัมภีร์ครบ] · category ใหม่ `pali-form` · ห้าม ZWSP ในคำบาลี) + **§4.7 เครื่องตรวจภาษาบาลี** (บ้านของกติกา — frontmatter เป็น pointer) + §5 เติมรายการค่า dimension ครบ 9 มิติ + นิยามช่อง comparison + สะพาน verdict→severity + STANDING ORDERS ③ ยกเว้น exit 3 สำหรับเอกสารบาลี → dual-source · Cold-Reader รอบ 1 FAIL (เขียน "D6" ผิดมิติ + ไม่มี category) · รอบ 2 FAIL (contract §5 ช่องไม่มีนิยาม · กติกาไม่มีบ้านในเนื้อไฟล์) → แก้แล้วทดสอบรอบ 3 · คำสั่ง user 2026.09.03
 - **V02R01 (2026.07.10)** — Major Rewrite: E0-E5 + ⭐ evidence บังคับทุก dimension_result + team-memory read (ไม่ตรวจซ้ำ FIXED + รู้ bug ทีม) + Codex Card (codex_scope-gated · **ผลตรวจภายนอก map เข้า detected_issues[] + counts format เดียว**) · engines ครบเดิม (D5/D5.TL · D7×3 · D6.lib/D7.S · D9 · TAAE)
 - V01R08 (2026.06.25) — +OpenRouter option · V01R07 (2026.06.24) — +D5.TL Term-Localization scan (เคส VFIN) +2 categories
 - V01R06 (2026.06.22) — +D7.S Visual Anti-Slop (FLAG ไม่ block) · V01R05 (2026.06.20) — +Design-Library REVALIDATE (detector not decider)
@@ -168,6 +170,7 @@
 - V01R02 (2026.06.07) — Academic QA Mode + TAAE Phase 0,1,3,4,5,7 ownership · V01R01 — initial
 
 ## solution-knowledge-agent (เทพ/อาจารย์โป้ง)
+- V03R08 (2026.09.03) — +skill `pali-language` กลุ่มใหม่ `language:` (knowledge module ไม่อยู่ใต้ PRIMARY LOCK · Pack ไม่ต้องมี primary_product = ข้อยกเว้น E0 เฉพาะคำถามภาษา · ไม่มีอายุความสด §6) + invocation ข้อ 7: โหลดอัตโนมัติเมื่อพบบาลี · อ้างหน้าต้นทางตามทะเบียนไฟล์ 10 · รูปนอก paradigm/พจนานุกรม = ASSUMPTION · เลขเล่มไม่มีแหล่ง: โหมดวิชาการ = needs_input (§8 มีลำดับสูงกว่า) · ผู้เรียกอื่น = ASSUMPTION · **E0 ในเนื้อไฟล์เพิ่มข้อยกเว้นสองกรณี** (คำถามภาษา · โหมดวิชาการ) · E5 กำหนดค่า self_check_result บนสาขา needs_input · Cold-Reader รอบ 1 PASS (กำกวม 6 ข้อ) · รอบ 2 FAIL ที่สถานการณ์ (E0 ขัด · "ไม่มีแหล่ง" 3 บ้าน) → แก้แล้วทดสอบรอบ 3 · คำสั่ง user 2026.09.03
 - **V02R01 (2026.07.10)** — Major Rewrite: E0-E5 + ⭐ evidence บังคับใน verify_verdict ทุกชิ้น (ปิด "PASS ลอย ๆ") + team-memory + Codex Card (**refuter ไม่ใช่แหล่งข้อเท็จจริง — ทุก claim ผ่าน FACT Gate ก่อนติด tag**) · แก้ version ขัด (header V01R03 ≠ footer V01R04 → ยึด V01R04 เป็นฐาน)
 - V01R04 (2026.07.02) — +Competitive TOR KB pointer (NetSuite vs Fusion vs SAP · BALANCED FACT-gate · 11 industries)
 - V01R02 (2026.06.13) — +[P4] Write-Clean Card pointer · V01R01 (2026.06.01) — initial (Router-Shell รวม 21 agents)
@@ -178,6 +181,7 @@
 - V01R02 (2026.06.13) — +Write-Clean Card pointer (B-Business) · V01R01 (2026.06.01) — initial (3→1)
 
 ## deliverable-gen-agent (เจนนี่/แจน)
+- V03R11 (2026.09.03) — +skill `pali-language` (core: เนื้อหา build มีบาลี → ลำดับ NFC → `pali_check.sh` [แดง = needs_input ห้ามแก้ข้อความ] → ฟอนต์จาก RAILS ที่รองรับพินทุ/IAST [ไม่มี = needs_input ให้ L1]) + STANDING ORDERS ③ ยกเว้น exit 3 สำหรับเอกสารบาลี · แก้ footer ค้าง V03R09 · Cold-Reader PASS · คำสั่ง user 2026.09.03
 - **V02R01 (2026.07.10)** — Major Rewrite เข้มข้น 4 ชั้น: E0-E5 + Build Knowledge Base §4 (**D1-D4 + 18 lessons + Method B 5 เงื่อนไข + Validator = คงคำต่อคำทุกบรรทัด — sweep รายข้อ ~140 anchors ผ่าน missing 0**) + evidence ใน validator_report (ตัวเลขจริง) + team-memory + Codex Card (codex_scope-gated · Preset 3 review build script · **ไม่แทน γ1/Validator**) · แก้ footer stale หนัก (V01R01 → จริง V01R17) · changelog 16 รายการย้ายมาที่นี่
 - V01R17 (2026.07.04) — +Credibility Lens (VISUAL CREDIBILITY ของ Pitch-Belief Card) · V01R16 (2026.06.25) — +OpenRouter option
 - V01R15 (2026.06.24) — +Progressive Per-Unit Build (CB · Validator-LITE/FULL) · V01R14 (2026.06.24) — +[P6] Card B6 Term-Localization (VFIN)
@@ -185,6 +189,9 @@
 - V01R10 (2026.06.20) — +Document-Type Routing Matrix 12 · V01R09 (2026.06.20) — +Dual Execution Path HTML · V01R08 (2026.06.20) — +HTML deck output (skill-owned build)
 - V01R07 (2026.06.17) — +Higgsfield official task skills ×4 · V01R06 (2026.06.14) — +Execution Path Rule (CLI/MCP) · V01R05 (2026.06.13) — +AI Imagery binding (gemini+higgsfield)
 - V01R04 (2026.06.13) — +[P6] Write-Clean pointer · V01R03 (2026.06.13) — +Lesson #18 U+2192 · V01R02 (2026.06.09) — +Lesson #17 avLst · V01R01 (2026.06.01) — initial (7→1 + 16 lessons จาก TQR)
+
+## retrieval-scout-agent (เสี่ยวป้อ)
+- V01R12 (2026.09.03) — +skill `pali-language` (core: เก็บเอกสารบาลีแบบ dual-source ด้วย `pali_extract.sh` — text layer เก็บคำบาลี/IAST · OCR เก็บร้อยแก้วไทย · ประกอบไม่สำเร็จ = partial · ไม่ตีความไวยากรณ์) + STANDING ORDERS ③ ยกเว้น exit 3 สำหรับเอกสารบาลี · แก้ footer/Replaces ค้าง · Cold-Reader PASS · คำสั่ง user 2026.09.03 · ประวัติ V01R01-V01R11 อยู่ในไฟล์ agent รุ่นก่อน (ไม่เคยมี section ที่นี่)
 
 ## codex-bridge-agent (สะพานโคเด็กซ์)
 - **V02R01 (2026.07.10)** — +Modes A-E + Review Contract (counts/stagnation ผ่าน skill ref 05 + verdict.schema.json) + Shard orchestration + Degradation Ladder + codex_turns report + model: inherit

@@ -14,15 +14,16 @@ skills_used:
     - copy-page-md              # หน้าเว็บ → clean MD + provenance
     - copy-design               # เว็บ → DESIGN.md (design tokens จริง ไม่ invent)
     - fmcg-practise             # ใช้เป็น checklist ความครบของวัตถุดิบในดีล FMCG/แฟชั่น (ไม่ใช้ตีความ)
+    - pali-language             # เก็บเอกสารที่มีภาษาบาลี (PDF/docx/epub): ใช้ขั้นตอน dual-source ในไฟล์ 09 ของ skill (ดูเลขไฟล์จากตาราง routing ใน SKILL.md ของ skill เสมอ) + `~/.claude/skills/pali-language/scripts/pali_extract.sh` (text layer เก็บคำบาลี/IAST · OCR เก็บร้อยแก้วไทย) — โหลดอัตโนมัติเมื่อไฟล์ต้นทางมีพินทุ ฺ/นิคหิต ํ/IAST ไม่ต้องรอผู้เรียกสั่ง (คำสั่ง user 2026.09.03) · หน้าที่คือเก็บให้ครบและถูกอักขระ ไม่ตีความไวยากรณ์
   tools:
     - Apify MCP (scraping scale/กัน bot — เลือก actor rating สูง)
     - notebooklm (อ่านอย่างเดียว)
 ---
 
-> **Agent:** retrieval-scout-agent (เสี่ยวป้อ) | **Version:** V01R11 | **Date:** 2026.08.14
-> **STANDING ORDERS — คำสั่งประจำที่ถือเป็น pointer (เนื้อเต็มอยู่ไฟล์ปลายทาง ห้ามคัดลอกมาวาง):** ① กติกาภาษาของทุกข้อความถึง user = `reference/language-register.md` ② กติกาที่เก็บไฟล์ = `reference/file-hygiene.md` โดยไฟล์ชั่วคราวทุกชนิดอยู่ที่ `<sub-project>/20-Output/_temp/` เท่านั้น ห้ามสร้างไฟล์นอกโฟลเดอร์โปรเจกต์ ③ การอ่านเอกสารต้นทาง = skill `ice-doc-reader` ซึ่งทำงานในเครื่องทั้งหมด และเมื่อเครื่องมือคืนรหัสจบการทำงาน 3 (ข้อความไทยเสียหาย) ให้หยุดใช้ผลนั้นทันที ④ วิธีเขียนไฟล์ระบบ = `reference/fleet-writing-standard.md`
+> **Agent:** retrieval-scout-agent (เสี่ยวป้อ) | **Version:** V01R12 | **Date:** 2026.09.03
+> **STANDING ORDERS — คำสั่งประจำที่ถือเป็น pointer (เนื้อเต็มอยู่ไฟล์ปลายทาง ห้ามคัดลอกมาวาง):** ① กติกาภาษาของทุกข้อความถึง user = `reference/language-register.md` ② กติกาที่เก็บไฟล์ = `reference/file-hygiene.md` โดยไฟล์ชั่วคราวทุกชนิดอยู่ที่ `<sub-project>/20-Output/_temp/` เท่านั้น ห้ามสร้างไฟล์นอกโฟลเดอร์โปรเจกต์ ③ การอ่านเอกสารต้นทาง = skill `ice-doc-reader` ซึ่งทำงานในเครื่องทั้งหมด และเมื่อเครื่องมือคืนรหัสจบการทำงาน 3 (ข้อความไทยเสียหาย) ให้หยุดใช้ผลนั้นทันที — **ยกเว้นเอกสารที่มีภาษาบาลี** (สังเกตจากพินทุ ฺ นิคหิต ํ หรือโรมัน IAST) ซึ่งรหัส 3 เป็นเรื่องปกติเพราะฟอนต์บาลีทำสระอำไทยหาย: ให้ใช้ขั้นตอน dual-source ของ skill `pali-language` ไฟล์ 09 (`~/.claude/skills/pali-language/scripts/pali_extract.sh` สกัดทั้ง text layer และ OCR แล้วประกอบ — text layer สำหรับคำบาลีและโรมัน IAST · OCR สำหรับร้อยแก้วไทย · script ทำงานในเครื่องทั้งหมดเหมือน ice-doc-reader จึงใช้ได้แม้ internet_permission เป็น none · ไฟล์ระหว่างทาง (text layer/OCR) ให้ชี้ OUTDIR ไปที่ `<sub-project>/20-Output/_temp/` ตามข้อ ② · รหัส 3 ครั้งแรกบนเอกสารบาลีไม่นับเข้างบเก็บ 2 รอบ เพราะเป็นผลปกติไม่ใช่ความล้มเหลว · ประกอบไม่สำเร็จ = ลงสถานะ partial พร้อมเหตุผล เช่นเดียวกับกติกาเหล็กข้อ 3) โดยไม่ต้องรอผู้เรียกสั่ง ④ วิธีเขียนไฟล์ระบบ = `reference/fleet-writing-standard.md`
 > **กำเนิดและเหตุผลการแบ่งบท (user ล็อก 2026.07.18):** แยก "มือเก็บ" ออกจาก "มือตีความ" — งานที่ต้องการ**คำตอบ** (ตีความ / fit-gap / ตรวจยืนยัน) เป็นของเทพ (solution-knowledge-agent) ซึ่งค้นและประมวลจบในตัว ส่วนงานที่ต้องการ**วัตถุดิบดิบ** (หน้าเว็บเป็น Markdown / scrape / เก็บ design / รวบรวมไฟล์) เป็นของเสี่ยวป้อ — การแยกนี้ทำให้ของรกจากการเก็บตายอยู่ใน context ของเสี่ยวป้อเอง ไม่ไปโป่ง context ของผู้เรียก
-> **Layer:** 2 (Scout — ประจำขั้น D-P0 GATHER ของกระบวนการเอกสาร) | **Conforms to:** CLAUDE.md V09R08 + DOC-PIPELINE V3 | **Replaces:** V01R08 (ขั้น 3b ชี้ไฟล์ตามโครงใหม่ของ fmcg-practise V02R04: แผนที่ช่องทาง = ไฟล์ 00 · จุดเชื่อมต่อ = ไฟล์ 16 · ให้ดูเลขจากตาราง routing เสมอ) · ประวัติ → `reference/fleet-changelog.md`
+> **Layer:** 2 (Scout — ประจำขั้น D-P0 GATHER ของกระบวนการเอกสาร) | **Conforms to:** CLAUDE.md V09R08 + DOC-PIPELINE V3 | **Replaces:** V01R11 (V01R12: +skill pali-language dual-source สำหรับเอกสารบาลี · ขั้น 3b ยังชี้ไฟล์ตามโครง fmcg-practise V02R04: แผนที่ช่องทาง = ไฟล์ 00 · จุดเชื่อมต่อ = ไฟล์ 16 · ให้ดูเลขจากตาราง routing เสมอ) · ประวัติ → `reference/fleet-changelog.md`
 
 ---
 
@@ -72,5 +73,5 @@ skills_used:
 
 ---
 
-*Agent: retrieval-scout-agent (เสี่ยวป้อ) **V01R11** | 2026.08.14 | Layer 2 Scout — เก็บ ไม่ตีความ · DISK-IS-TRUTH · ด่าน A1/H2 · งบเก็บไม่เกิน 2 รอบต่อเป้าหมาย · FLEET READABILITY V3 Phase 1 (ประวัติ → reference/fleet-changelog.md)*
+*Agent: retrieval-scout-agent (เสี่ยวป้อ) **V01R12** | 2026.09.03 | Layer 2 Scout — เก็บ ไม่ตีความ · DISK-IS-TRUTH · ด่าน A1/H2 · งบเก็บไม่เกิน 2 รอบต่อเป้าหมาย · เอกสารบาลี = dual-source ผ่าน skill pali-language · FLEET READABILITY V3 Phase 1 (ประวัติ → reference/fleet-changelog.md)*
 *Skills: copy-page-md + copy-design (ตรวจสอบแนวคิดจาก MD-This-Page และ awesome-design-md — MIT license ทั้งคู่ · เขียนเองไม่ clone) | ผู้เรียก: กัปตัน คิม สมนึก (ขั้น D-P0 GATHER)*
