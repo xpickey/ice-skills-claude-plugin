@@ -14,3 +14,9 @@ node_modules/
 agt-skill-pack/
 .venv-doc/
 **/.venv-doc/
+
+# runtime/log/cache ที่มากับ active skills — ไม่ commit
+*.log
+**/assets/templates-cache/
+**/evals/
+**/thesis-ai-det-col/archive/
