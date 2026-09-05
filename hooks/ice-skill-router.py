@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""ด่านก่อนคิด — hook UserPromptSubmit (V01R01 · 2026.09.05)
+"""ขั้นตรวจสอบก่อนเริ่มงาน — hook UserPromptSubmit (V01R01 · 2026.09.05)
 
 ทำงานทุกครั้งที่ user พิมพ์ข้อความ: อ่านตาราง skill-routing.yaml จับคู่ข้อความและโฟลเดอร์ที่ทำงานอยู่
-แล้วฉีดข้อความเข้า context ว่า "งานนี้ต้องโหลด skill อะไรก่อนเริ่มคิด" พร้อมการ์ดกฎที่ user ย้ำบ่อย
+แล้วเพิ่มข้อความเข้าบริบทของ Claude ว่า "งานนี้ต้องโหลด skill อะไรก่อนเริ่มคิด" พร้อมการ์ดกฎที่ user ย้ำบ่อย
 บันทึกเส้นทางที่จับได้ลงสภาพ session เพื่อให้ด่าน Write spec และด่าน build ตรวจย้อนได้
 
 เหตุผลที่ต้องเป็น hook: log สิงหาคม–กันยายน 2026 พบว่า 56 session ที่สร้างเอกสาร โหลด skill ออกแบบ
@@ -39,7 +39,7 @@ def main():
             os.makedirs(lib.STATE_DIR, exist_ok=True)
             with open(NO_ROUTE_LOG, "a", encoding="utf-8") as fh:
                 fh.write(json.dumps({"session": session_id, "cwd": cwd, "prompt": prompt[:200]}, ensure_ascii=False) + "\n")
-            print("ด่านก่อนคิด: ข้อความนี้ไม่ตรงกับเส้นทาง skill ใดในตาราง — ก่อนลงมือ ให้ประกาศในคำตอบแรกว่าจะใช้ skill ตระกูลใดและเพราะอะไร (ระบบบันทึกกรณีนี้ไว้เพื่อเพิ่มแถวในตารางภายหลัง)")
+            print("ขั้นตรวจสอบก่อนเริ่มงาน: ข้อความนี้ไม่ตรงกับประเภทงานใดในตารางเส้นทาง skill — ก่อนลงมือ ให้ประกาศในคำตอบแรกว่าจะใช้ skill ตระกูลใดและเพราะอะไร (ระบบบันทึกกรณีนี้ไว้เพื่อเพิ่มแถวในตารางภายหลัง)")
         return 0
 
     st = lib.load_state(session_id)
@@ -47,19 +47,19 @@ def main():
     lib.save_state(session_id, st)
 
     ms, mr = lib.missing_required(st)
-    lines = ["ด่านก่อนคิด (ตารางเส้นทาง skill ของทีม) — งานนี้เข้าเส้นทาง: " + " · ".join(f"{r['id']} ({r.get('label','')})" for r in hits)]
+    lines = ["ขั้นตรวจสอบก่อนเริ่มงาน (จากตารางเส้นทาง skill ของทีม) — งานนี้จัดอยู่ในประเภท: " + " · ".join(f"{r['id']} ({r.get('label','')})" for r in hits)]
     if st["required"]:
         status = "ยังไม่ได้โหลด: " + ", ".join(ms) if ms else "โหลดครบแล้ว"
-        lines.append("ต้องโหลดก่อนเขียน spec หรือ build (ด่านจะปฏิเสธถ้ายังไม่โหลด): " + ", ".join(st["required"]) + " — " + status)
+        lines.append("skill ที่ต้องโหลดก่อนเขียนไฟล์กำหนดเนื้อหาหรือสร้างไฟล์ (ระบบจะปฏิเสธถ้ายังไม่โหลด): " + ", ".join(st["required"]) + " — " + status)
     if st["recommended"]:
-        lines.append("ควรโหลดเพิ่มถ้าเนื้อหาเกี่ยวข้อง: " + ", ".join(st["recommended"]))
+        lines.append("skill ที่ควรโหลดเพิ่มถ้าเนื้อหาเกี่ยวข้อง: " + ", ".join(st["recommended"]))
     if st["read_first"]:
         pending = [os.path.basename(p) for p in mr]
         lines.append("ไฟล์ที่ต้องเปิดอ่านก่อนออกแบบ: " + ", ".join(os.path.basename(p) for p in st["read_first"]) + (" — ยังไม่ได้เปิด: " + ", ".join(pending) if pending else " — เปิดครบแล้ว"))
     for r in hits:
         if r.get("note"):
             lines.append("หมายเหตุ [" + r["id"] + "]: " + r["note"])
-    lines.append("ลำดับที่ถูกต้อง: โหลด skill ที่ระบุ → เปิดไฟล์ที่ระบุ → จึงเขียน spec → จึง build (ห้ามคิดหรือสร้างก่อนโหลด)")
+    lines.append("ลำดับที่ถูกต้อง: หนึ่ง โหลด skill ที่ระบุ · สอง เปิดอ่านไฟล์ที่ระบุ · สาม จึงเขียนไฟล์กำหนดเนื้อหา · สี่ จึงสร้างไฟล์ (ห้ามเริ่มคิดหรือสร้างงานก่อนโหลด)")
     cards = []
     for r in hits:
         c = r.get("card")
@@ -69,7 +69,7 @@ def main():
         p = lib.expand(c)
         if os.path.exists(p):
             with open(p, encoding="utf-8") as fh:
-                lines.append("\n--- การ์ดกฎประจำ (" + os.path.basename(p) + ") ---\n" + fh.read().strip())
+                lines.append("\n--- กฎการออกแบบสไลด์ที่ใช้ทุกครั้ง (" + os.path.basename(p) + ") ---\n" + fh.read().strip())
     print("\n".join(lines))
     return 0
 

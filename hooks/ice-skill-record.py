@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""บันทึกว่า skill ถูกโหลดจริง — hook PostToolUse สำหรับเครื่องมือ Skill และ Read (V01R01 · 2026.09.05)
+"""บันทึกรายชื่อ skill ที่ถูกโหลดจริง — hook PostToolUse สำหรับเครื่องมือ Skill และ Read (V01R01 · 2026.09.05)
 
 ทุกครั้งที่ model เรียก Skill tool หรือ Read ไฟล์ จะจดชื่อ skill (หรือ path ไฟล์) ลงสภาพ session
 ด่าน Write spec และด่าน build ใช้บันทึกนี้ตัดสินว่า "โหลดแล้วจริง" ไม่ใช่เชื่อคำพูดของ model

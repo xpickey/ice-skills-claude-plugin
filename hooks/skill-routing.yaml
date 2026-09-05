@@ -1,8 +1,8 @@
-# ตารางเส้นทาง skill ของทีม iCE — จุดแก้จุดเดียว (V01R01 · 2026.09.05)
+# ตารางเส้นทาง skill ของทีม iCE — จุดแก้จุดเดียว (V01R02 · 2026.09.05 — เพิ่ม ice-writing-register เป็น required ของงานเขียนทุกแบบ)
 #
 # ไฟล์นี้คืออะไร: ตารางที่บอกว่า "งานแบบไหน ต้องโหลด skill อะไร ก่อนเริ่มคิด" เครื่องเป็นคนอ่านไฟล์นี้
-# ไม่ใช่ model — hook อ่านทุกครั้งที่ user พิมพ์ข้อความ แล้วฉีดคำสั่งโหลด skill เข้า context ให้เอง
-# ผู้ใช้ตารางนี้: hooks/ice-skill-router.py (ฉีด) · hooks/ice-spec-gate.py (ปฏิเสธการเขียน spec ถ้ายังไม่โหลด)
+# ไม่ใช่ตัว model — hook อ่านทุกครั้งที่ user พิมพ์ข้อความ แล้วเพิ่มคำสั่งโหลด skill เข้าบริบทของ Claude ให้เอง
+# ผู้ใช้ตารางนี้: hooks/ice-skill-router.py (เพิ่มคำสั่งเข้าบริบท) · hooks/ice-spec-gate.py (ปฏิเสธการเขียน spec ถ้ายังไม่โหลด)
 #                · hooks/ice-prebuild-guard.sh (ปฏิเสธ build ถ้ายังไม่โหลด) · สคริปต์ deploy (สร้าง skills: preload ให้ agent)
 #
 # วิธีเพิ่มแถว: คัดลอกแถวใดแถวหนึ่ง แก้ id/when/required แล้วรัน  python3 hooks/tests/test_router.py  ต้องผ่านทุกข้อ
@@ -13,7 +13,7 @@
 #   required    skill ที่ต้องโหลดก่อนเขียน spec หรือ build — hook ปฏิเสธถ้ายังไม่โหลด (โหลดผ่าน Skill tool หรือ Read ไฟล์ SKILL.md ของ skill นั้น)
 #   recommended skill ที่ควรโหลด hook แนะนำแต่ไม่ปฏิเสธ
 #   read_first  ไฟล์ที่ต้องเปิดอ่านก่อนออกแบบ (นับว่าอ่านแล้วเมื่อมี Read ไฟล์นั้นใน session)
-#   card        ไฟล์การ์ดสั้นที่ hook ฉีดเนื้อหาทั้งไฟล์เข้า context ทันที (ใช้กับกฎที่ user ย้ำบ่อย)
+#   card        ไฟล์กฎสั้น ๆ ที่ hook นำเนื้อหาทั้งไฟล์ใส่เข้าบริบทของ Claude ทันที (ใช้กับกฎที่ user ย้ำบ่อย)
 #   note        ข้อความสั้นเพิ่มเติมที่ hook แสดงต่อท้าย
 
 routes:
@@ -22,12 +22,11 @@ routes:
     label: งานสไลด์นำเสนอหรือข้อเสนอที่ลูกค้าจะเห็น
     when:
       any_of: [pptx, deck, slide, สไลด์, นำเสนอ, presentation, proposal, ข้อเสนอ, pitch, one page, one-page, infographic, อินโฟกราฟิก]
-    required: [ice-doc-builder, b2b-slide-designer]
+    required: [ice-doc-builder, b2b-slide-designer, ice-writing-register]
     recommended: [b2b-presentation-creator, ice-b2b-enterprise-sale, b2b-solution-selling]
     read_first:
       - ~/.claude/skills/b2b-slide-designer/references/pptx-design-doctrine.md
       - ~/.claude/skills/b2b-slide-designer/references/design-principles.md
-      - ~/.claude/skills/thesis-ai-det-col/references/12_write_clean_card.md
     card: ~/.claude/skills/b2b-slide-designer/references/pptx-design-doctrine.md
     note: ทุกหน้าใน content-spec ต้องมีช่อง objective (ใช้ตอนคิดเท่านั้น ห้ามโผล่บนสไลด์) · action_title · key_message ตามงบคำ · visual · topic_id · color_set
 
@@ -35,10 +34,9 @@ routes:
     label: เอกสาร Word หรือ Excel ที่ลูกค้าจะเห็น (TOR · requirement workbook · work order · สัญญา · รายงาน)
     when:
       any_of: [docx, xlsx, word, excel, TOR, requirement, workbook, work order, สัญญา, รายงานประชุม, minutes, MOM, gap analysis, comply, ตอบ TOR]
-    required: [ice-doc-builder]
+    required: [ice-doc-builder, ice-writing-register]
     recommended: [ice-doc-reader, ice-b2b-enterprise-sale]
     read_first:
-      - ~/.claude/skills/thesis-ai-det-col/references/12_write_clean_card.md
     note: อ่านเอกสารต้นทางของลูกค้าด้วย ice-doc-reader ก่อน แล้วสกัดศัพท์ที่ลูกค้าใช้จริงลง _build/glossary.md ก่อนเขียน spec
 
   - id: sales-thinking
@@ -52,10 +50,7 @@ routes:
     label: ต้องแปลอังกฤษเป็นไทย หรือเขียนไทยจากต้นทางอังกฤษ
     when:
       any_of: [แปล, ภาษาไทย, ทับศัพท์, translate, thai wording, ภาษา business, ไม่ลิเก]
-    required: []
-    read_first:
-      - ~/.claude/agents/reference/language-register.md
-      - ~/.claude/skills/thesis-ai-det-col/references/12_write_clean_card.md
+    required: [ice-writing-register]
     note: ไม่แน่ใจว่าคำไทยที่จะใช้เป็นคำที่วงการใช้จริง → ค้น internet ได้ทันทีโดยไม่ต้องขอ (ข้อยกเว้น H2 ที่ user อนุมัติ 2026.09.05) แล้วบันทึกคำและแหล่งลง _build/glossary.md
 
   - id: academic-article
@@ -63,10 +58,8 @@ routes:
     when:
       any_of: [บทความวิชาการ, บทความวิจัย, ดุษฎีนิพนธ์, วารสาร, TCI, มจร, APA, citation, อ้างอิง, ThaiJO, humanize, GPTZero, Turnitin]
       path: ["*/Academic/*", "*/Academic"]
-    required: [thesis-ai-det-col]
+    required: [thesis-ai-det-col, ice-writing-register]
     recommended: [soc-sci-academic-article, jpspa-academic-article, agj-academic-article, phd-mcu-pa-dissertation, research-compass-nrct]
-    read_first:
-      - ~/.claude/agents/reference/language-register.md
     note: เลือก skill วารสารให้ตรงเล่ม (มจร สังคมศาสตร์ปริทรรศน์ = soc-sci · รัฐศาสตร์ AJPP/JPSPA = jpspa · AGJ = agj) — ไม่แน่ใจเล่มไหน ให้ถาม user ก่อน
 
   - id: product-netsuite

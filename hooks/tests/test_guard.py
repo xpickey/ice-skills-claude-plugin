@@ -42,8 +42,8 @@ def main():
 
     bad += case("อ่านอย่างเดียวผ่าน", "python3 -c 'from docx import Document; print(Document(\"a.docx\").paragraphs)'", sid, False)
     bad += case("build ไม่มี marker → ปฏิเสธ (ตรรกะเดิม)", "python3 build_deck.py", "none", True)
-    bad += case("ด่าน D: session ยังไม่โหลด skill → ปฏิเสธ", build_ok_markers, sid, True, "โหลดก่อนคิด")
-    for name in ("ice-doc-builder",):
+    bad += case("ด่าน D: session ยังไม่โหลด skill → ปฏิเสธ", build_ok_markers, sid, True, "ยังโหลด skill")
+    for name in ("ice-doc-builder", "ice-writing-register"):
         lib.record_skill(st, name)
     for p in st["read_first"]:
         lib.record_read(st, lib.expand(p))

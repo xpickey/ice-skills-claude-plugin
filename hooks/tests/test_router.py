@@ -72,16 +72,16 @@ def run_hook(name, payload):
 def test_hooks_end_to_end():
     sid = "test-" + next(tempfile._get_candidate_names())
     bad = 0
-    # 1) router ฉีดข้อความและจดเส้นทาง
+    # 1) router เพิ่มข้อความเข้าบริบทและจดประเภทงาน
     rc, out, err = run_hook("ice-skill-router.py", {"session_id": sid, "cwd": PROJ, "prompt": "ทำ deck นำเสนอ OCC ให้มี infographic"})
-    ok = rc == 0 and "deck-customer" in out and "ice-doc-builder" in out and "การ์ดกฎประจำ" in out
-    print(("  ✓ " if ok else "  ✗ ") + "router ฉีดเส้นทาง + การ์ด" + ("" if ok else f" rc={rc} err={err[:200]} out={out[:200]}")); bad += 0 if ok else 1
+    ok = rc == 0 and "deck-customer" in out and "ice-doc-builder" in out and "กฎการออกแบบสไลด์ที่ใช้ทุกครั้ง" in out
+    print(("  ✓ " if ok else "  ✗ ") + "router เพิ่มประเภทงาน + กฎสไลด์เข้าบริบท" + ("" if ok else f" rc={rc} err={err[:200]} out={out[:200]}")); bad += 0 if ok else 1
     # 2) spec gate ปฏิเสธเมื่อยังไม่โหลด
     rc, out, err = run_hook("ice-spec-gate.py", {"session_id": sid, "tool_name": "Write", "tool_input": {"file_path": PROJ + "/20-Propose/_build/content-spec.md"}})
     ok = '"deny"' in out
     print(("  ✓ " if ok else "  ✗ ") + "spec gate ปฏิเสธก่อนโหลด" + ("" if ok else f" out={out[:200]}")); bad += 0 if ok else 1
     # 3) จดการโหลด skill และเปิดไฟล์
-    for name in ("ice-doc-builder", "ice-b2b-sales:b2b-slide-designer"):
+    for name in ("ice-doc-builder", "ice-b2b-sales:b2b-slide-designer", "ice-writing-register"):
         run_hook("ice-skill-record.py", {"session_id": sid, "tool_name": "Skill", "tool_input": {"skill": name}})
     st = lib.load_state(sid)
     for p in st["read_first"]:
@@ -101,7 +101,7 @@ def test_hooks_end_to_end():
     print(("  ✓ " if ok else "  ✗ ") + "ไฟล์อื่น/ session ไม่มีเส้นทาง ผ่านเสมอ"); bad += 0 if ok else 1
     # 7) ข้อความไม่ตรงเส้นทางแต่เป็นงาน → บันทึก no-route
     rc, out, err = run_hook("ice-skill-router.py", {"session_id": sid, "cwd": PROJ, "prompt": "ช่วยสร้างตารางเปรียบเทียบผู้ให้บริการคลาวด์สามรายให้หน่อยครับ พร้อมข้อดีข้อเสีย"})
-    ok = "ไม่ตรงกับเส้นทาง" in out
+    ok = "ไม่ตรงกับประเภทงาน" in out
     print(("  ✓ " if ok else "  ✗ ") + "no-route → ขอให้ประกาศ + บันทึก"); bad += 0 if ok else 1
     try:
         os.remove(lib.state_path(sid))
