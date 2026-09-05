@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# iCE POST-BUILD RECORD (V01R01 | 2026.08.26) — ทำงานหลังคำสั่งสร้างเอกสารสำเร็จ
+# iCE POST-BUILD RECORD (V01R02 | 2026.09.05) — ทำงานหลังคำสั่งสร้างเอกสารสำเร็จ
 # หน้าที่: 1) บันทึกลายนิ้วมือไฟล์ที่เพิ่งสร้าง เพื่อให้ด่านก่อนสร้าง (ice-prebuild-guard V03R01)
 #             รู้ได้ว่าไฟล์ถูก user แก้ไขเองในภายหลังหรือไม่
 #          2) เรียกตัวตรวจฟอนต์ให้อัตโนมัติ แล้วส่งผลกลับให้ผู้ทำงานเห็นทันที
@@ -38,12 +38,24 @@ PY
   MSG="$MSG · บันทึกลายนิ้วมือของ $b แล้ว (ใช้ตรวจว่ามีการแก้ไขด้วยมือในภายหลังหรือไม่)"
 done <<< "$FILES"
 
-# เรียกตัวตรวจฟอนต์ให้อัตโนมัติ ถ้ามีเครื่องมืออยู่
+# เรียกตัวตรวจอัตโนมัติ ถ้ามีเครื่องมืออยู่
+# V01R02 (2026.09.05): macOS ไม่มีคำสั่ง timeout — บรรทัดเดิม "timeout 60 python3 …" จึงล้มเงียบทุกครั้ง
+#   ทำให้การตรวจฟอนต์อัตโนมัติไม่เคยทำงานจริงตั้งแต่ 2026.08.26 · แก้เป็นตัวห่อที่ใช้ได้ทั้งสองระบบ
+#   + เพิ่มตัวตรวจเลย์เอาต์ (audit_layout.py) สำหรับไฟล์นำเสนอ ตามแนวทางการทำสไลด์ 6 ข้อ
+run_limited() {  # $1 = วินาที · ที่เหลือ = คำสั่ง
+  local secs="$1"; shift
+  if command -v gtimeout >/dev/null 2>&1; then gtimeout "$secs" "$@"; else "$@"; fi
+}
+first="$(head -1 <<<"$FILES")"
 AUDIT="$HOME/.claude/agents/_lib/audit_fonts.py"
 if [[ -f "$AUDIT" ]]; then
-  first="$(head -1 <<<"$FILES")"
-  out="$(timeout 60 python3 "$AUDIT" "$first" 2>&1 | tail -3)"
+  out="$(run_limited 60 python3 "$AUDIT" "$first" 2>&1 | tail -3 | tr '\n' ' ')"
   [[ -n "$out" ]] && MSG="$MSG · ผลตรวจฟอนต์อัตโนมัติ: $out"
+fi
+LAYOUT="$HOME/.claude/agents/_lib/audit_layout.py"
+if [[ -f "$LAYOUT" && "$first" == *.pptx ]]; then
+  lay="$(run_limited 60 python3 "$LAYOUT" "$first" 2>&1 | tail -12 | tr '\n' ' ')"
+  [[ -n "$lay" ]] && MSG="$MSG · ผลตรวจเลย์เอาต์อัตโนมัติ (ต้องเป็น PASS ก่อนส่งผู้ตรวจคุณภาพ): $lay"
 fi
 
 [[ -z "$MSG" ]] && exit 0
