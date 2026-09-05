@@ -1,6 +1,6 @@
 ---
 name: ice-doc-builder
-description: ใช้เมื่อต้องสร้างหรือแก้ไฟล์ .pptx .docx .xlsx PDF หรือ HTML ที่ส่งถึงลูกค้า รวมเรื่องฟอนต์ไทย การฝังฟอนต์ ไฟล์เปิดไม่ได้ และเครื่องหมาย ICE_BUILD หน้าคำสั่งสร้างไฟล์ · คำกระตุ้น: build deck, สร้าง slide, สร้างเอกสาร, ทำ .docx, ทำ .xlsx, font ไทย, font เพี้ยน, embed font, Repair dialog
+description: "ใช้เมื่อต้องสร้างหรือแก้ไฟล์ .pptx .docx .xlsx PDF หรือ HTML ที่ส่งถึงลูกค้า รวมเรื่องฟอนต์ไทย การฝังฟอนต์ ไฟล์เปิดไม่ได้ และเครื่องหมาย ICE_BUILD หน้าคำสั่งสร้างไฟล์ · คำกระตุ้น: build deck, สร้าง slide, สร้างเอกสาร, ทำ .docx, ทำ .xlsx, font ไทย, font เพี้ยน, embed font, Repair dialog"
 ---
 
 # ice-doc-builder — วินัยการสร้างไฟล์เอกสารและไฟล์นำเสนอของทีม iCE
