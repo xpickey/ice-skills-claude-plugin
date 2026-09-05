@@ -1,6 +1,6 @@
 ---
 name: cua-driver
-description: Drive a native macOS app via the cua-driver CLI (default) or MCP server — snapshot its AX tree, click/type/scroll by element_index, verify via re-snapshot. Use when the user asks you to operate, drive, automate, or perform a GUI task in a real macOS application on the host (e.g. "open a file in TextEdit", "navigate to /Applications in Finder", "click the Save button in Numbers").
+description: "ใช้เมื่อต้องการให้ Claude สั่งงานแอป macOS จริงบนเครื่องแทนผู้ใช้ เช่น เปิดไฟล์ใน TextEdit หรือกดปุ่ม Save ใน Numbers ผ่าน cua-driver โดยไม่แย่งหน้าต่างที่ผู้ใช้กำลังใช้อยู่ คำกระตุ้น: cua-driver, สั่งงานแอป macOS, drive macOS app, automate GUI, คลิกในแอป"
 ---
 
 # cua-driver

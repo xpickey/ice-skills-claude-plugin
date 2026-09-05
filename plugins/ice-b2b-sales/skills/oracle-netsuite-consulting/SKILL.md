@@ -1,6 +1,6 @@
 ---
 name: oracle-netsuite-consulting
-description: Provide expert guidance on NetSuite ERP, SuiteSuccess, and NetSuite EPM (planning, consolidation, reconciliation, performance management) with Thailand and APAC localization using Big Four consulting methodology and SuiteCloud best practices
+description: "ใช้เมื่อต้องการคำแนะนำระดับที่ปรึกษาเรื่อง NetSuite ERP, SuiteSuccess และ NetSuite EPM (วางแผน รวมงบ กระทบยอด) พร้อม localization ไทยและ APAC — วางแผนติดตั้ง ออกแบบ และปรับปรุงตาม SuiteCloud best practice · คำกระตุ้น: NetSuite, SuiteSuccess, NetSuite EPM, OneWorld, implement NetSuite"
 ---
 
 # Oracle NetSuite Cloud ERP & EPM Consulting Skill

@@ -1,6 +1,6 @@
 ---
 name: b2b-questioning
-description: Expert coaching for enterprise software sales, pre-sales, and customer success practitioners to design and deliver high-impact questions across the deal and account lifecycle. Applies SPIN, MEDDPICC, Sandler Pain Funnel, Challenger, 5 Whys, Socratic, JTBD, Design Thinking laddering with Thai calibration (kreng jai, face, hierarchy, bunkhun). Use whenever the user mentions discovery prep, qualification, MEDDPICC, SPIN questions, pain funnel, Challenger questions, QBR prep, renewal, solution workshop, RFP questions, demo scripting, call prep, account planning, fit-gap, consultative selling, Need-Payoff, Implication, stakeholder mapping, Champion or Economic Buyer discovery, or asks "what questions should I ask" in B2B enterprise software (Oracle, SAP, NetSuite, MS Dynamics, Salesforce, Workday, Infor, Odoo). Also triggers on transcript review, discovery agenda, QBR script, questions for CFOs/CIOs/Champions, Thai enterprise or government engagements.
+description: "ใช้เมื่อต้องเตรียมชุดคำถามสำหรับการประชุมลูกค้าซอฟต์แวร์องค์กรทุกขั้น ตั้งแต่ discovery ถึง QBR — ได้ชุดคำถาม 8 ถึง 20 ข้อพร้อมลำดับและการปรับให้เข้ากับวัฒนธรรมไทย · คำกระตุ้น: ตั้งคำถาม, ควรถามอะไร, discovery prep, SPIN, pain funnel, คำถามสำหรับ CFO, call prep, what questions should I ask"
 ---
 
 # B2B Questioning Skill for Enterprise Software

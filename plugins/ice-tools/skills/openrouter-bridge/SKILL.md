@@ -1,6 +1,6 @@
 ---
 name: openrouter-bridge
-description: "Use when the user wants a second opinion / debate / review / idea-extraction from a model OTHER than Claude or Codex — picking ANY model via OpenRouter (GPT, Gemini, Llama, DeepSeek-R1, Claude, etc. through one API). Claude drives a manual turn-by-turn conversation by calling a curl helper; OpenRouter is stateless so the helper keeps conversation history locally and resends it each turn. Pick a model with --model <alias|id> (gpt/sonnet/gemini/r1/flash) or omit to get a 5-model picker. Triggers on ถาม OpenRouter, ปรึกษาหลายโมเดล, เลือก model, second opinion, รีวิวด้วยโมเดลอื่น, ถก solution หลายโมเดล, persona review, สกัด idea, ask another model, multi-model consult. NOT for one-shot when Codex/Claude suffices, and NOT an MCP server. Requires OPENROUTER_API_KEY in ~/.hermes/.env."
+description: "ใช้เมื่อต้องการ second opinion ถกเถียง รีวิว หรือสกัด idea จากโมเดลอื่นที่ไม่ใช่ Claude หรือ Codex เช่น GPT, Gemini, DeepSeek-R1 ผ่าน OpenRouter เลือกโมเดลได้เอง ต้องมี OPENROUTER_API_KEY คำกระตุ้น: ถาม OpenRouter, ปรึกษาหลายโมเดล, เลือก model, persona review, ask another model, multi-model consult"
 trigger: /openrouter-bridge
 ---
 

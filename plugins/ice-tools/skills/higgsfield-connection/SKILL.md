@@ -1,6 +1,6 @@
 ---
 name: higgsfield-connection
-description: เชื่อมต่อและสั่งงาน Higgsfield AI MCP Server (image + video + Marketing Studio + Soul ID + Virality Predictor) จาก Claude Desktop, Cowork และ Code CLI. ใช้เมื่อผู้ใช้ต้องการ สร้าง/แก้ภาพ AI คุณภาพสูง (FLUX.2/Soul/Nano Banana Pro), สร้างวิดีโอ AI (Kling/Veo/Seedance), ทำ DTC/Product Ads, Product Photoshoot, Brand Video, UGC, สร้าง Avatar/Character หน้าตาคงเส้นคงวา (Soul ID), วิเคราะห์โอกาสไวรัล (Virality Predictor), upscale ภาพ/วิดีโอ, generate เสียง/voiceover, หรือ Setup/Troubleshoot Higgsfield. ต่างจาก nanobanana (Gemini image-only) — Higgsfield = full image+video+marketing+audio suite. Triggers ภาษาไทย — ทำวิดีโอ AI, สร้าง ad/โฆษณา, product shot, ภาพสินค้า, avatar, character คงหน้า, hero/banner คุณภาพสูง, วิเคราะห์วิดีโอไวรัล, upscale, voiceover, Higgsfield, FLUX, Kling, Veo, Soul ID, Marketing Studio. English — generate video, AI ad, product photoshoot, DTC ad, brand video, consistent character/avatar, soul id, virality predictor, upscale video, higgsfield, kling, veo, flux, marketing studio.
+description: "ใช้เมื่อต้องการสร้างหรือแก้ภาพ AI คุณภาพสูง วิดีโอ AI โฆษณาสินค้า avatar ที่หน้าคงเดิม (Soul ID) upscale เสียงพากย์ หรือตั้งค่าและแก้ปัญหา Higgsfield ต้องมีบัญชี Higgsfield ที่ login แล้ว คำกระตุ้น: Higgsfield, ทำวิดีโอ AI, สร้างโฆษณา, product shot, Soul ID, Kling, Veo, Marketing Studio"
 metadata:
   version: V01R04
   date: "2026-06-29"

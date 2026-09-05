@@ -1,6 +1,6 @@
 ---
 name: graphify
-description: "Use for any question about a codebase, its architecture, file relationships, or project content — especially when graphify-out/ exists, where the question should be treated as a graphify query first. Turns any input (code, docs, papers, images, videos) into a persistent knowledge graph with god nodes, community detection, and query/path/explain tools."
+description: "ใช้เมื่อต้องการเข้าใจโครงสร้าง codebase ความสัมพันธ์ของไฟล์ หรือเนื้อหาโปรเจกต์ โดยสร้าง knowledge graph ที่ถามซ้ำได้ข้าม session และถ้ามีโฟลเดอร์ graphify-out อยู่แล้ว ให้ถามผ่าน graphify ก่อน คำกระตุ้น: graphify, knowledge graph, โครงสร้าง codebase, architecture ของโค้ด, query graph"
 trigger: /graphify
 ---
 

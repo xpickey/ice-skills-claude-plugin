@@ -1,6 +1,6 @@
 ---
 name: jpspa-academic-article
-description: "ผู้เชี่ยวชาญการเขียนบทความวิชาการสำหรับวารสารวิชาการรัฐศาสตร์และรัฐประศาสนศาสตร์ (AJPP/JPSPA, TCI Tier 1) จัดพิมพ์โดย มจร ครอบคลุม Lifecycle 8 Stage + 3 Gate: Voice Profile, Topic Framing, Literature Review (NotebookLM), Theoretical Framework + Buddhist Mapping, Drafting 9 Components ≤8000 คำ, AI Detection, Quality Audit 6 Dim TCI Tier 1, 4-Pillar Citation Verification (Format/Reciprocity/Authority/Pattern), Submission. ใช้เมื่อกล่าวถึง: บทความวิชาการ AJPP/JPSPA, วารสารรัฐศาสตร์รัฐประศาสนศาสตร์ มจร, TCI Tier 1, ISSN 2822-065X/2822-0676, ThaiJO รัฐศาสตร์, APA นาม-ปี มจร, อ้างพระไตรปิฎก มจร, ทฤษฎี รปศ.+พุทธธรรม, Analysis Depth, Synthesis, Counterargument, double-blind 3 ท่าน, CopyCat 15%, AI 20%, องค์ความรู้ใหม่ มจร, NotebookLM literature, voice profile JPSPA, citation audit, ตรวจอ้างอิง APA, Reciprocity Ghost Citation. Trigger แม้ไม่ระบุชื่อวารสาร ถ้าบริบทเป็นบทความวิชาการ มจร รัฐศาสตร์/รัฐประศาสนศาสตร์. SCOPE: บทความวิชาการ ≤8000 คำ 4000 บาท (ไม่รวมบทความวิจัย/บทวิจารณ์)"
+description: "ใช้เมื่อเขียนหรือตรวจบทความวิชาการ (ไม่รวมบทความวิจัย) เพื่อส่งวารสารวิชาการรัฐศาสตร์และรัฐประศาสนศาสตร์ มจร ฐาน TCI กลุ่ม 1 ได้บทความไม่เกิน 8,000 คำที่ผ่านการตรวจอ้างอิงและสำนวน AI ก่อนส่ง · Triggers: JPSPA, AJPP, วารสารรัฐศาสตร์ มจร, TCI Tier 1, citation audit, พุทธบูรณาการ"
 ---
 
 # JPSPA Academic Article Expert

@@ -1,6 +1,6 @@
 ---
 name: oracle-cloud-applications-consulting
-description: Provide expert guidance on Oracle Fusion Cloud ERP, Financials, Procurement, SCM, and EPM implementation, configuration, and optimization following Big Four consulting methodology and Oracle Modern Best Practice for end-to-end business transformation
+description: "ใช้เมื่อต้องการคำแนะนำระดับที่ปรึกษาเรื่อง Oracle Fusion Cloud ERP, Financials, Procurement, SCM และ EPM ทั้งวางแผนติดตั้ง ออกแบบกระบวนการ ตั้งค่า และปรับปรุงตาม Oracle Modern Best Practice · คำกระตุ้น: Oracle Cloud, Fusion, ERP Cloud, EPM, OCI, FAH, implement Oracle Cloud, ออกแบบกระบวนการ Oracle"
 ---
 
 # Oracle Cloud Applications Consulting Skill

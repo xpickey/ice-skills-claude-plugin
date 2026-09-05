@@ -1,16 +1,6 @@
 ---
 name: ice-b2b-combo
-description: >-
-  All-in-one B2B enterprise-software sales and pre-sales skill for Oracle Cloud (Fusion ERP/EPM/OCI),
-  Oracle EBS, NetSuite, and FinTech/Lending — with Thai overlays (GFMIS, e-GP procurement, e-Tax). One
-  skill that routes the work, supplies sales method and product knowledge, specs deliverables, and
-  quality-checks before delivery — loading only the detail each task needs. It ALWAYS establishes
-  product and sale stage first, asking when either is unclear before doing anything else. Use whenever
-  the user is selling, proposing, qualifying, demoing, negotiating, or renewing enterprise software, or
-  writing a proposal, RFP/TOR response, business case, account plan, discovery guide, or QBR. Thai
-  triggers: ทำข้อเสนอ, เขียน proposal, ตอบ TOR, เตรียม demo, วาง account plan, ทำ business case, qualify
-  ดีล, MEDDPICC, discovery, fit-gap, เจรจาราคา, renewal, เสนอ Oracle/NetSuite/ERP. Even without a named
-  product or stage, treat any enterprise-sales request as a trigger and begin with the context gate.
+description: "ใช้เมื่อทำงานขายหรือก่อนการขายซอฟต์แวร์องค์กร Oracle Cloud, EBS, NetSuite หรือ FinTech ในไทย โดยต้องการ skill เดียวที่ครบทั้งวิธีขาย ความรู้ product spec เอกสาร และการตรวจก่อนส่ง — ยืนยัน product และขั้นการขายก่อนเสมอ · คำกระตุ้น: ทำข้อเสนอ, ตอบ TOR, เตรียม demo, qualify ดีล, เจรจาราคา"
 license: MIT
 ---
 

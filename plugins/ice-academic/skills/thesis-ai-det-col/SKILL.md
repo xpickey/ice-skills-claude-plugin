@@ -1,6 +1,6 @@
 ---
 name: thesis-ai-det-col
-description: Thai AI detection, humanization, Voice/Writing Profile extraction, and full-document pre-submission audit — register-agnostic across Academic, Business, and General writing (TH+EN). Use to detect whether text was AI-written, humanize it to authentic human voice, extract a writing profile from a folder of references, or audit a document before submission. Triggers on "ตรวจ AI", "ทำให้ดูเป็นมนุษย์เขียน", "humanize", "ลด AI score", "Turnitin", "GPTZero", "แก้ข้อความ AI", "สกัด writing style", "ดุษฎีนิพนธ์ มจร", "บทความวิชาการ TCI", "บทความวิจัย", "ตรวจ proposal", "ตรวจข้อเสนอ", "ตรวจ citation", "ตรวจ format ก่อนส่ง", "review เอกสาร", "audit บทความ" — and Thai dissertations, MCU theses, AGJ/TCI articles, iCE business proposals, general writing (email/blog/report), or a folder of documents to learn the style. Use even when the user doesn't say "AI". Self-contained and portable — runs on both Claude Code and Claude on web. ONLY reads, detects, rewrites, audits — does NOT produce formatted documents.
+description: "ใช้เมื่อต้องตรวจว่าข้อความเขียนโดย AI แก้ให้เป็นเสียงมนุษย์ สกัดรูปแบบการเขียนจากเอกสารอ้างอิง หรือตรวจเอกสารทั้งฉบับก่อนส่ง ใช้ได้ทั้งงานวิชาการ ธุรกิจ และงานทั่วไป · ไม่สร้างไฟล์เอกสาร · Triggers: ตรวจ AI, humanize, ลด AI score, Turnitin, GPTZero, สกัด writing style, audit บทความ, ตรวจ citation"
 ---
 
 # THESIS-AI-DET-COL — Thai AI Detection & Correction Skill

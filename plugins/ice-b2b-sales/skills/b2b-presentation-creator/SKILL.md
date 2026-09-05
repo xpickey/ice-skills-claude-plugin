@@ -1,6 +1,6 @@
 ---
 name: b2b-presentation-creator
-description: ใช้เมื่อต้องสร้างหรือแก้ไฟล์นำเสนอ .pptx หรือ HTML deck สำหรับงานขายซอฟต์แวร์องค์กร — proposal deck, demo deck, business case, QBR, ตอบ TOR หรือ RFP, deck ในนาม iCE Consulting · คำกระตุ้น: ทำ slide, สร้าง presentation, เตรียม deck, ทำ pitch, ทำ infographic, build a deck, pitch deck, slides
+description: "ใช้เมื่อต้องสร้างหรือแก้ไฟล์นำเสนอ .pptx หรือ HTML deck สำหรับงานขายซอฟต์แวร์องค์กร — proposal deck, demo deck, business case, QBR, ตอบ TOR หรือ RFP, deck ในนาม iCE Consulting · คำกระตุ้น: ทำ slide, สร้าง presentation, เตรียม deck, ทำ pitch, ทำ infographic, build a deck, pitch deck, slides"
 license: Proprietary
 ---
 

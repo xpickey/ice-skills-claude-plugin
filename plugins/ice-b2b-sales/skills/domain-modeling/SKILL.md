@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR.
+description: "ใช้เมื่อกำลังออกแบบระบบและต้องนิยามศัพท์เฉพาะของโปรเจกต์ให้ชัด เขียนหรือแก้ CONTEXT.md หรือบันทึกการตัดสินใจเป็น ADR — ได้อภิธานศัพท์และบันทึกการตัดสินใจที่จดทันทีเมื่อตกผลึก · คำกระตุ้น: domain model, CONTEXT.md, ADR, glossary, ศัพท์ในโค้ด, นิยามศัพท์โปรเจกต์"
 ---
 
 # Domain Modeling

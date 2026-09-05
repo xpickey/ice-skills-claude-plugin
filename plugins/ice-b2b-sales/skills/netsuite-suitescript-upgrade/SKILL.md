@@ -1,6 +1,6 @@
 ---
 name: netsuite-suitescript-upgrade
-description: SuiteScript 1.0, 2.0, and 2.x to 2.1 migration assistant. Analyzes, converts, explains, and validates script upgrades. Covers 125+ API mappings, 34 object conversions, 13 unmapped API workarounds, all script type entry point changes, SuiteScript 2.0/2.x to 2.1 upgrade guidance, and 16 categories of breaking behavioral changes. Essential for modernizing legacy SuiteScript codebases.
+description: "ใช้เมื่อต้องย้าย SuiteScript 1.0, 2.0 หรือ 2.x ไปเป็น 2.1 — วิเคราะห์ความยาก แปลงโค้ด อธิบายการจับคู่ API และตรวจผลแปลง ด้วยตารางจับคู่ API กว่า 125 รายการและรายการพฤติกรรมที่เปลี่ยน · คำกระตุ้น: upgrade SuiteScript, migrate to 2.1, nlapi to N/, convert SuiteScript 1.0, แปลงสคริปต์เก่า NetSuite"
 license: The Universal Permissive License (UPL), Version 1.0 
 metadata:
   author: Oracle NetSuite

@@ -1,7 +1,6 @@
 ---
 name: b2b-enterprise-sale-strategy
-description: >
-  B2B enterprise sales strategy for selling Oracle Cloud ERP/EPM/SCM, SAP RISE/BTP/B1, MS Dynamics 365, NetSuite, Infor, Odoo, Salesforce CRM in Thailand. Combines solution selling, design thinking, win-win negotiation with Big Four frameworks (BCG, McKinsey, PwC, Deloitte, KPMG). Use whenever the user asks about B2B IT sales strategy, account planning, deal pursuit, proposal strategy, competitive positioning, pricing, government e-bidding, RFP response, pipeline coaching, objection handling, or selling ERP/EPM/CRM in Thailand. Trigger for "how to sell Oracle/SAP to...", "deal strategy", "account plan", "sales playbook", "Thai enterprise sales". Three sub-strategies: Government/Public Sector, Large Enterprise, Normal Enterprise.
+description: "ใช้เมื่อต้องวางกลยุทธ์ขายซอฟต์แวร์องค์กรในไทยระดับดีลหรือบัญชีลูกค้า แยกตามกลุ่ม ภาครัฐ องค์กรใหญ่ องค์กรทั่วไป — ได้แผนพร้อมเหตุผลและทางเลือก · คำกระตุ้น: deal strategy, account plan, sales playbook, จะขาย Oracle/SAP ให้ใคร, e-bidding, ตอบ RFP, objection handling, Thai enterprise sales"
 ---
 
 # B2B Enterprise Sale Strategy

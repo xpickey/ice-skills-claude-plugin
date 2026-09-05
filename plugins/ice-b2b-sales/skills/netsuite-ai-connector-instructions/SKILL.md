@@ -1,6 +1,6 @@
 ---
 name: netsuite-ai-connector-instructions
-description: NetSuite Intelligence skill — teaches AI the correct tool selection order, output formatting, domain knowledge, multi-subsidiary and currency handling, and SuiteQL safety checklist for any AI + NetSuite AI Service Connector session.
+description: "ใช้เมื่อ session เชื่อมกับบัญชี NetSuite จริงผ่าน AI Service Connector และต้องเลือกเครื่องมือให้ถูกลำดับ รายงานก่อน saved search ก่อน record ก่อน SuiteQL — ได้กติกาการดึงข้อมูล การจัดผลลัพธ์ หลาย subsidiary หลายสกุลเงิน และรายการตรวจ SuiteQL · คำกระตุ้น: NetSuite connector, ดึงข้อมูล NetSuite"
 license: The Universal Permissive License (UPL), Version 1.0
 metadata:
   author: Oracle NetSuite

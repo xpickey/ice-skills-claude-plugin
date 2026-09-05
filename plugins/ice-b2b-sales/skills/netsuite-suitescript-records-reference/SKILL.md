@@ -1,6 +1,6 @@
 ---
 name: netsuite-suitescript-records-reference
-description: SuiteScript records and fields reference — look up field IDs, types, required status, and search capabilities for all 272 NetSuite record types — plus a REST Web Services (SuiteTalk REST) record API pointer and REST↔SuiteScript field mapping. Use when building SuiteScript for correct field usage, or when integrating via the REST Record API and you need endpoint patterns, the metadata-catalog, or how REST JSON fields map to SuiteScript internal IDs.
+description: "ใช้เมื่อเขียน SuiteScript หรือเชื่อมต่อผ่าน REST Record API แล้วต้องรู้รหัส field ชนิดข้อมูล และการค้นหาของ record NetSuite ทั้ง 272 ชนิด — ได้ค่าอ้างอิงถูกต้องและการจับคู่ field ระหว่าง REST กับ SuiteScript · คำกระตุ้น: field id NetSuite, record type, N/record, N/search, SuiteTalk REST, internal id"
 license: The Universal Permissive License (UPL), Version 1.0
 metadata:
   author: Oracle NetSuite

@@ -1,6 +1,6 @@
 ---
 name: claude-codex-bridge
-description: "Use when the user wants Claude to consult, debate, or pair with OpenAI Codex (gpt-5.5) on a problem — design discussion, code review, second opinion, or hand-off-to-write-then-review. Claude drives a manual turn-by-turn conversation by calling the local Codex CLI via a helper script; Codex keeps its own session memory across turns (codex exec resume), so it remembers the thread. Triggers on ถาม Codex, ปรึกษา Codex, ให้ Codex review, ถก solution กับ Codex, คุยกับ Codex, second opinion, Codex bridge, agent bridge, ส่งให้ Codex เขียน. NOT for one-shot questions to Codex with no follow-up (just call codex exec directly), and NOT a Codex MCP server."
+description: "ใช้เมื่อต้องการให้ Claude ปรึกษา ถกเถียง หรือให้ OpenAI Codex ตรวจงานแบบคุยต่อเนื่องหลายรอบผ่าน Codex CLI โดย Codex จำบริบทรอบก่อนได้ ไม่ใช้เมื่อถาม Codex ครั้งเดียวจบ ต้อง codex login ก่อน คำกระตุ้น: ถาม Codex, ปรึกษา Codex, ให้ Codex review, Codex bridge, second opinion, ส่งให้ Codex เขียน"
 trigger: /codex-bridge
 ---
 

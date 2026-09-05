@@ -1,25 +1,6 @@
 ---
 name: fmcg-practise
-description: >-
-  Multi-channel solution practice for FMCG, fashion, sportswear, food and consumable-product brands
-  selling B2B2C. Use for pre-sales discovery, fit-gap, solution design, demo design, proposal and
-  scoping — and reach for it whenever a prospect sells the same product through more than one route
-  to the shopper, even if they never say "multi-channel". Nine sales channels, each with its own use
-  cases, process, function checklist, integrations and gaps: traditional trade, modern trade,
-  consignment in both tax-point models, van sales, owned-store point of sale, e-commerce and
-  marketplace, project and corporate, export, and event/employee groups. Plus trade spend and Net GP
-  (trade agreements, rebate structures, listing fees, promotions and scanbacks, deduction intake,
-  matching, disputes, accruals, gross-to-net), inventory location topology and costing, transformation
-  and made-to-order, demand planning with promotion uplift and sell-through, procure-to-pay and budget
-  control, ledger dimensions for channel profitability, the application footprint and its integration
-  catalogue, Thai tax and trade-competition compliance, investment-promotion privileges, and a
-  discovery and scoping bank. Triggers on FMCG solution, fashion ERP, apparel ERP, food and beverage
-  ERP, consumer goods ERP, multi-channel sales, omni-channel, consignment, sale-in sale-out, modern
-  trade, trade spend, rebate, listing fee, deduction, chargeback, Net GP, gross-to-net, EDI,
-  marketplace integration, Shopee Lazada TikTok, POS integration, van sales, 3PL, FEFO, shelf life,
-  dead stock, channel profitability, BOI, ขายหลายช่องทาง, ฝากขาย, โมเดิร์นเทรด, ขายออนไลน์, ขายบนรถ,
-  ระบบ POS, คลังสินค้า, ต้นทุนสินค้า, แปรสภาพสินค้า, ส่วนลดการค้า, ค่าแรกเข้า, กระทบยอด, fit-gap FMCG,
-  วางโซลูชัน FMCG.
+description: "ใช้เมื่อลูกค้าขายสินค้าอุปโภคบริโภค แฟชั่น หรืออาหารผ่านหลายช่องทาง แม้ไม่ได้พูดคำว่า multi-channel — ได้ use case กระบวนการ รายการฟังก์ชัน จุดเชื่อมต่อ และคำถาม discovery รายช่องทาง รวม trade spend · คำกระตุ้น: FMCG, ฝากขาย, โมเดิร์นเทรด, ขายบนรถ, Shopee Lazada TikTok, rebate, ค่าแรกเข้า"
 license: Proprietary
 metadata:
   version: V02R09

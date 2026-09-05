@@ -1,14 +1,6 @@
 ---
 name: sales-pipeline-report
-description: >
-  Generate executive-grade Sales Pipeline reports from CRM Excel data — as a PowerPoint deck,
-  Excel workbook, or structured markdown — using a clean visual design system with stage-based
-  categorization (WON / AWARD / FOCUS / AT RISK / ACTIVE / EARLY), NetNew vs Recurring revenue split, and quarterly
-  breakdowns. Use this skill whenever the user uploads or references a sales pipeline Excel file
-  and wants any kind of report, deck, summary, or visualization — even if they just say "generate
-  the pipeline report", "make slides from this data", "pipeline deck", or "pipeline summary".
-  Also trigger when the user mentions CRM stage mapping, committed deals, or wants to analyze
-  deal pipeline by quarter or product. Pairs with the pptx skill when output is a presentation.
+description: "ใช้เมื่อ user อัปโหลดหรืออ้างถึงไฟล์ Excel ของ pipeline ขายจาก CRM แล้วต้องการรายงาน deck หรือสรุประดับผู้บริหาร — ได้รายงานแยกหมวดขั้นดีล (WON / AWARD / FOCUS / AT RISK / ACTIVE / EARLY) แยก NetNew กับ Recurring รายไตรมาส · คำกระตุ้น: รายงาน pipeline, pipeline deck, สรุป pipeline, committed deals"
 ---
 
 # Sales Pipeline Report Skill

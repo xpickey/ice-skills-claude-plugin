@@ -1,6 +1,6 @@
 ---
 name: oracle-ebs-consulting
-description: Provide expert guidance on Oracle E-Business Suite (EBS R12.2/11i) Financials, Procurement, SCM, Manufacturing, and HRMS implementation, upgrade, configuration, and optimization following Big Four consulting methodology and Oracle Application Implementation Method (AIM) for comprehensive business transformation. Use when users need assistance with EBS implementation, module configuration, technical architecture, data migration, upgrade planning, integration design, Thai localization, or end-to-end business process design.
+description: "ใช้เมื่อต้องการคำแนะนำระดับที่ปรึกษาเรื่อง Oracle E-Business Suite R12.2 หรือ 11i ทั้ง Financials, Procurement, SCM, Manufacturing, HRMS — วางแผนติดตั้ง อัปเกรด ตั้งค่า ย้ายข้อมูล และ localization ไทย ตามวิธี AIM · คำกระตุ้น: EBS, E-Business Suite, R12, 12.2, upgrade EBS, MD050, flexfield, multi-org"
 ---
 
 # Oracle E-Business Suite Applications Consulting

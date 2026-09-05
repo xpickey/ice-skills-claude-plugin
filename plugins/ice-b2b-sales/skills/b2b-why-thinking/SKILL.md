@@ -1,20 +1,6 @@
 ---
 name: b2b-why-thinking
-description: >-
-  WHY-integrated thinking for B2B enterprise work. Combines Start-With-Why
-  (Golden Circle, belief discovery) with MEDDPICC qualification and the Why
-  Change / Why Now / Why Invest / Why Us / Why Stay executive narrative. Use
-  when a B2B sales, pre-sales, customer success, advisory, or proposal user
-  needs to — discover or sharpen a company or customer WHY, qualify a deal
-  with MEDDPICC plus belief overlay, build Why Change/Now/Invest/Us/Stay
-  narratives, score Deal Health, or write a WHY-driven pitch, proposal, or
-  executive briefing. Triggers on Start With Why, Golden Circle, MEDDPICC,
-  Why Invest/Now/Us, Deal health, executive narrative, and Thai phrases
-  หา WHY, WHY ที่ใช่, วางกลยุทธ์ดีล, เขียน proposal, เตรียม pitch executive.
-  Strong for Oracle, SAP, NetSuite, Microsoft, Salesforce, Workday, Infor
-  deals in Thailand, APAC, government, and SOE. Outputs bilingual Thai +
-  English by default. Composes with b2b-solution-selling,
-  b2b-strategic-thinking, ice-b2b-enterprise-sale.
+description: "ใช้เมื่อต้องค้นหาหรือลับ WHY ของบริษัทหรือลูกค้า แล้วผูกกับ MEDDPICC และเรื่องเล่า Why Change/Now/Invest/Us/Stay — ได้คะแนนสุขภาพดีลและโครง pitch หรือ proposal ที่ผู้บริหารเชื่อ · คำกระตุ้น: หา WHY, WHY ที่ใช่, Start With Why, Golden Circle, วางกลยุทธ์ดีล, เตรียม pitch executive, deal health"
 ---
 
 # b2b-why-thinking — WHY-Integrated Thinking for B2B Enterprise

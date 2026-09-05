@@ -1,22 +1,7 @@
 ---
 version: 0.3.0
 name: higgsfield-generate
-description: |
-  Generate images/videos/3D assets/audio via Higgsfield AI. Defaults:
-  GPT Image 2 for image/design/text, Seedance 2.0 for video, Nano Banana 2/Pro
-  for character/reference images, Marketing Studio for ads, Sonilo/Mirelo for
-  audio, plus Soul models and Kling 3.0.
-  Use when: "generate an image", "make a video", "animate this photo",
-  "image-to-video", "edit/stylize/remix this image", "produce a clip",
-  "reframe this video", "create a 3D model / GLB / mesh", "create a sound
-  effect", "make music", "text-to-audio", "create an ad", "make a UGC video",
-  "product demo", "unboxing", "brand video", "presenter video", "create avatar
-  for ad", or "analyze video virality". Supports image-to-image,
-  image-to-video, image-to-3D, text-to-audio, text-to-music, workflow
-  generation, references, job/upload IDs, Marketing Studio, and Virality
-  Predictor. Chain with higgsfield-soul-id for face/identity consistency.
-  NOT for: Soul Character training (use higgsfield-soul-id), product
-  photoshoots, marketplace cards, text/chat/TTS.
+description: "ใช้เมื่อต้องการสั่ง Higgsfield สร้างภาพ วิดีโอ โมเดล 3D หรือเสียง แปลงภาพเป็นวิดีโอ สร้างโฆษณาผ่าน Marketing Studio หรือวิเคราะห์โอกาสไวรัล ไม่ใช้กับการฝึก Soul Character ภาพสินค้า หรือ marketplace card คำกระตุ้น: generate image, make a video, สร้างวิดีโอ, image-to-video, สร้างเสียง, UGC video"
 argument-hint: "[prompt-or-analysis-request] [--model <name>] [--image|--video <path-or-id>]"
 allowed-tools: Bash
 ---

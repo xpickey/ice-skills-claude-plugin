@@ -1,6 +1,6 @@
 ---
 name: grilling
-description: Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
+description: "ใช้เมื่อ user ต้องการให้ซักถามแผน การตัดสินใจ หรือไอเดียอย่างไม่ปล่อยผ่าน จนได้ความเข้าใจตรงกันทุกกิ่งของการออกแบบ — ถามเป็นรอบพร้อมคำตอบที่แนะนำ ไม่ลงมือจนกว่าจะยืนยัน · คำกระตุ้น: grill, grill me, ซักให้สุด, stress-test ความคิด, ถามจนชัด, ท้าทายแผนนี้"
 ---
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.

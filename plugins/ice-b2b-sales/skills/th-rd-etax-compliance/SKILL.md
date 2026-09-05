@@ -1,6 +1,6 @@
 ---
 name: th-rd-etax-compliance
-description: Thailand Revenue Department (กรมสรรพากร / RD) tax compliance reference for enterprise software deployments — VAT (Por Por 30 / 36), Withholding Tax (PND 1 / 1ก / 2 / 3 / 53 / 54 / 50 ทวิ), e-Tax invoice / e-Receipt (CA-signed XML), bank file formats (BAHTNET / PromptPay / ITMX), Thai chart of accounts (TFRS-aligned), Buddhist Era (พ.ศ.) calendar handling, statutory year-end reports (ภงด.50/51, บอจ.5). Use whenever a deal touches Thai tax compliance, e-invoicing, payroll tax, statutory reporting, or RD-required document formats. Bilingual EN + TH formal register.
+description: "ใช้เมื่อดีลแตะภาษีไทยของกรมสรรพากร ภาษีมูลค่าเพิ่ม (ภ.พ.30/36) ภาษีหัก ณ ที่จ่าย (PND) e-Tax Invoice ไฟล์ธนาคาร ผังบัญชีไทย ปี พ.ศ. และรายงานสิ้นปี — ได้คำตอบระดับข้อกฎหมายสำหรับ fit-gap ระบบ ERP · คำกระตุ้น: ภาษีไทย, VAT ไทย, withholding tax, e-Tax Invoice, ภ.พ.30, PND 53, localization ภาษี"
 ---
 
 # Thai Revenue Department (RD) — Tax & Compliance Reference

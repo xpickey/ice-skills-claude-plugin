@@ -1,6 +1,6 @@
 ---
 name: b2b-design-thinking
-description: Integrated Design Thinking, Ideation, and Strategic Thinking for Enterprise Software Sales and Solution providers (Oracle, SAP, MSFT, Salesforce, Infor, Odoo, Workday, Thai GFMIS/e-GP/SMART PAO, AI extensions). Use whenever the user needs a discovery workshop, envisioning session, design sprint, ideation, account strategy, market-entry, competitive positioning, portfolio choice, value-case, or proposal "Why Invest / Why Now / Why Us" narrative. Trigger on "design thinking", "ideation", "brainstorm", "HMW", "empathy map", "journey map", "design sprint", "envisioning workshop", "value proposition", "strategic thinking", "where to play", "how to win", "playing to win", "three horizons", "Wardley map", "scenario planning", "account strategy", "value case", "why invest why now why us", "exec readout", "C-suite pitch". Also for Thai-market workshops, bilingual Thai/English pre-sales artifacts, and Big-Four-grade proposals. Always produces ≥3 options with trade-offs; orchestrates Oracle/SAP/GFMIS/sales skills.
+description: "ใช้เมื่อต้องออกแบบ workshop ค้นหาความต้องการ ideation หรือ design sprint กับลูกค้าซอฟต์แวร์องค์กร หรือวางกลยุทธ์ where to play / how to win — ได้ทางเลือกอย่างน้อย 3 ทางพร้อมข้อดีข้อเสีย · คำกระตุ้น: design thinking, ideation, brainstorm, empathy map, journey map, why invest why now why us"
 ---
 
 # B2B Design Thinking & Strategic Thinking Skill

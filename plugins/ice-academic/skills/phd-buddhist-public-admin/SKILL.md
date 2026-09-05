@@ -1,6 +1,6 @@
 ---
 name: phd-buddhist-public-admin
-description: "Ph.D./M.A. dissertation guide for MCU Public Administration, Political Science, and Buddhist Management. STRICT REGULATIONS from official thesis writing guide. PA theory-to-Buddhist Dhamma mapping (43 theories x 61 dharma categories). Dhamma Constitution for social-role ethics. Trigger for: ดุษฎีนิพนธ์, วิทยานิพนธ์, สารนิพนธ์, MCU thesis, มจร, กรอบแนวคิด, ตัวแปร, บทที่ 1-5, เชิงอรรถ, บรรณานุกรม, หลักพุทธธรรม, mixed methods, POSDCoRB, Good Governance, mapping ทฤษฎี-หลักธรรม, ธรรมนูญชีวิต, คู่มือการเขียนดุษฎีนิพนธ์, กฎระเบียบ มจร, or any dissertation/academic writing at MCU."
+description: "ใช้เมื่อทำดุษฎีนิพนธ์ วิทยานิพนธ์ หรือสารนิพนธ์ที่ มจร สาขารัฐศาสตร์ รัฐประศาสนศาสตร์ และการจัดการเชิงพุทธ ได้งานที่ตรงคู่มือ มจร ทั้งบทที่ 1-5 เชิงอรรถ บรรณานุกรม และการจับคู่ทฤษฎีกับหลักพุทธธรรม · Triggers: ดุษฎีนิพนธ์ มจร, วิทยานิพนธ์, สารนิพนธ์, MCU thesis, หลักพุทธธรรม, ธรรมนูญชีวิต"
 ---
 
 # Ph.D. / M.A. Dissertation Guide — Buddhist Public Administration (MCU)

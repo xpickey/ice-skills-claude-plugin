@@ -1,6 +1,6 @@
 ---
 name: notebooklm
-description: Browser-automation fallback channel to query Google NotebookLM when the MCP server is unavailable. Uses Patchright to drive notebooklm.google.com directly. Prefer `notebooklm-connection` skill (MCP-based) when the `notebooklm-mcp` MCP server is connected — fall back to this skill only when MCP fails, rate-limits, or is offline. Source-grounded, citation-backed answers from Gemini with drastically reduced hallucinations.
+description: "ใช้เมื่อต้องการถาม NotebookLM แต่ MCP server notebooklm-mcp ใช้ไม่ได้ ติด rate limit หรือ offline จึงขับ browser แทน ได้คำตอบที่อ้างอิงเอกสารในสมุด ถ้า MCP ใช้ได้ให้ใช้ skill notebooklm-connection ก่อน คำกระตุ้น: notebooklm, ถาม NotebookLM, ask my NotebookLM, query my notebook"
 ---
 
 # NotebookLM Research Assistant Skill (Browser Automation Fallback)

@@ -1,6 +1,6 @@
 ---
 name: b2b-solution-selling
-description: Hybrid B2B enterprise solution-selling playbook for Oracle Cloud, SAP, NetSuite, MS Dynamics and financial/digital transformation deals in Thailand, APAC, government, and SOE markets. Stacks SPIN, Solution Selling (Bosworth/Eades), Challenger, MEDDPICC, and Big Four (McKinsey/BCG) into a sell-through-deliver process. Use whenever the user is doing discovery, qualification, pain sheet, MEDDPICC scoring, Challenger pitch, business case (ROI/NPV/SCQA), stakeholder map, proposal, win brief, sales-to-delivery handover, project closure, pipeline review, forecast, e-GP/TOR response, call prep, objection handling, or deal coaching for enterprise software. Trigger even without methodology keywords — "help with this Oracle deal", "move this stuck opportunity", "prep for CFO meeting", "build the business case", "qualify this", "Thai government bid", "we lost — why", "hand off to delivery" all qualify. For sellers, sales engineers, account directors, sales managers, and executive sponsors.
+description: "ใช้เมื่อต้องเดินดีลซอฟต์แวร์องค์กรตั้งแต่ discovery จนส่งมอบ — ได้ pain sheet, คะแนน MEDDPICC, Challenger pitch, business case, ข้อเสนอ และเอกสารส่งต่อทีม delivery · คำกระตุ้น: qualify ดีลนี้, ดีลติด, เตรียมพบ CFO, สร้าง business case, ตอบ TOR, ทำไมแพ้, hand off to delivery, deal coaching"
 ---
 
 # B2B Solution Selling Skill

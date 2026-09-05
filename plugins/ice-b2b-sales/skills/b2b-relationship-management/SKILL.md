@@ -1,20 +1,6 @@
 ---
 name: b2b-relationship-management
-description: >-
-  End-to-end B2B relationship management for Enterprise Software providers
-  (Oracle, SAP, Microsoft, NetSuite, Salesforce, Workday) in Thailand —
-  commercial and Thai government/state enterprise (รัฐวิสาหกิจ, อบจ.)
-  accounts. Full lifecycle: stakeholder & power mapping, strategic account
-  planning, QBR/EBR cadence, account health scoring, champion development,
-  multi-threading, value realization, renewal & expansion, escalation &
-  recovery. Built on BCG KAM/ABE, McKinsey CX & NRR, SAMA 7-step, Gartner
-  buying-committee and health-score frameworks. Hard-wires Thai cultural
-  overlay (kreng jai, bunkhun, face) and Thai government procurement (e-GP,
-  GFMIS). Use when the user mentions account plan, KAM, account health,
-  churn risk, executive sponsor, EBR, QBR, NRR, champion, stakeholder map,
-  white space, renewal, expansion, upsell, cross-sell, reference customer,
-  escalation, value realization, AMS, Thai enterprise or government account
-  — or about the health, durability, or growth of a customer relationship.
+description: "ใช้เมื่อคิดเรื่องความสัมพันธ์กับลูกค้าในระดับบัญชีข้ามหลายไตรมาส ไม่ใช่ดีลเดียว — ได้แผนบัญชีลูกค้า แผนที่ผู้มีอำนาจ คะแนนสุขภาพบัญชี และแผนต่อสัญญาหรือกู้สถานการณ์ · คำกระตุ้น: account plan, KAM, account health, churn risk, champion, stakeholder map, QBR, EBR, renewal, expansion, escalation"
 ---
 
 # B2B Relationship Management — Enterprise Software (Thailand + Government)

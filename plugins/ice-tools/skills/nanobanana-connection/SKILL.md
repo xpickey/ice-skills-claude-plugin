@@ -1,6 +1,6 @@
 ---
 name: nanobanana-connection
-description: เชื่อมต่อและสั่งงาน Gemini Image MCP Server (rlabs/gemini-mcp — Google Nano Banana Pro / gemini-3-pro-image-preview) จาก Claude Desktop, Cowork และ Code CLI. ใช้ทุกครั้งที่ผู้ใช้ต้องการ สร้างภาพ AI, แก้ภาพ, ทำ Logo, Hero Image, Product Shot, Thumbnail, Banner, Mockup, Sticker, Illustration, วิเคราะห์/อ่านภาพ (Vision), สร้างวิดีโอ (Veo), Setup/Troubleshoot Gemini MCP, หรือ เปลี่ยน/Rotate API Key. ครอบคลุม Pre-flight Connection Test (MCP+Auth+Billing), Prompt Cookbook ไทย-อังกฤษ 30+ Pattern, Aspect Ratio/Image Size, Session-based Multi-turn Editing, Image Analysis (Claude เห็นภาพ), Billing/Quota Recovery, และ API Key Rotation. Triggers ภาษาไทย — ทำภาพให้หน่อย, สร้างภาพ AI, วาด AI, ทำ hero/thumbnail/logo/product shot/banner/illustration, แก้ภาพนี้, สร้าง mockup, วิเคราะห์ภาพ, อ่านภาพนี้, ทำวิดีโอ, Nano Banana, Gemini image, เปลี่ยน API Key, rotate key, Key รั่ว. English — generate/edit/analyze image, create illustration/banner, AI image, nano banana, generate video, rotate API key, change Gemini key, leaked key. คู่กับ b2b-presentation-creator, canvas-design, brand-guidelines.
+description: "ใช้เมื่อต้องการสร้างหรือแก้ภาพ AI ผ่าน Gemini Nano Banana เช่น hero image, logo, banner, mockup อ่านและวิเคราะห์ภาพ หรือเปลี่ยน API Key ของ Gemini ต้องมี GEMINI_API_KEY ที่เปิด billing แล้ว คำกระตุ้น: Nano Banana, Gemini image, สร้างภาพ AI, ทำภาพให้หน่อย, แก้ภาพนี้, วิเคราะห์ภาพ, rotate key"
 metadata:
   version: V03R01
   date: 2026-06-21

@@ -1,6 +1,6 @@
 ---
 name: netsuite-sdf-project-documentation
-description: Generate enterprise-grade documentation for NetSuite SDF projects. Analyze scripts, object XML files, `manifest.xml`, and SuiteQL queries to produce README.md, architecture diagrams (Mermaid/ASCII), deployment guides, and troubleshooting tables. Can integrate with post-deployment documentation workflows when automation (for example, hooks) is available.
+description: "ใช้เมื่อต้องทำเอกสารประกอบโปรเจกต์ NetSuite SDF จากสคริปต์ object XML manifest และ SuiteQL ที่มีอยู่ — ได้ README, ผังสถาปัตยกรรม Mermaid, คู่มือ deploy และตาราง troubleshooting · คำกระตุ้น: document NetSuite project, ทำเอกสาร SDF, README SuiteCloud, deployment guide NetSuite"
 license: The Universal Permissive License (UPL), Version 1.0
 metadata:
   author: Oracle NetSuite

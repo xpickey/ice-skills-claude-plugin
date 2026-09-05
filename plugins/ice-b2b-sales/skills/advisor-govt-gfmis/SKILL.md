@@ -1,6 +1,6 @@
 ---
 name: advisor-govt-gfmis
-description: "ที่ปรึกษาระดับสูงแบบบูรณาการสำหรับระบบ New GFMIS Thai, e-GP, งบประมาณ FM และ ERP ภาครัฐไทย ผสานความเชี่ยวชาญด้าน IT Service Provider, Business Advisor, Oracle Cloud ERP/EPM, Finance, Procurement และ Supply Chain ใช้ skill นี้ทุกครั้งที่มีคำถามเกี่ยวกับ: New GFMIS Thai (แผนงาน 5 ปี, Soft Token, GF-eLAAS, UAM, e-Tax, GF-eGP, Enhancement), ระบบบริหารงบประมาณ FM (รหัสหน่วยงาน, รหัสแหล่งของเงิน, รหัสงบประมาณ, การโอนงบ, การกันเงิน, การเบิกแทน), พรบ.วิธีการงบประมาณ 2561 (ทุกมาตรา), ระเบียบการเบิกจ่ายเงินจากคลัง 2562, พรบ.จัดซื้อจัดจ้าง 2560, e-GP, e-bidding, e-market, e-Tax ภาครัฐ, Vendor Master (ทุกกลุ่ม 1000-8000), ระบบ PO/AP/RP/FA/GL/MIS GFMIS, Internal Audit GFMIS, Run Payment, BAHTNET/SMART, Accrual Accounting, Asset Capitalization, COA ภาครัฐ, IPSAS, Budget Hard Stop, Cloud ERP ภาครัฐ, Oracle Fusion, SAP Public Sector, สัญญา IT ภาครัฐ, PDPA ภาครัฐ, PromptBIZ ภาครัฐ, GFMIS vs ERP, IT Transformation ภาครัฐ, TOR ระบบสารสนเทศภาครัฐ, การก่อหนี้ผูกพันข้ามปี, Bank Reconciliation, Year-end Closing"
+description: "ใช้เมื่อต้องการคำตอบระดับที่ปรึกษาอาวุโสเรื่องระบบ New GFMIS Thai การเงินการคลังและงบประมาณภาครัฐไทย และการวาง ERP ภาครัฐเทียบ GFMIS — ได้คำตอบอ้างกฎหมายและขั้นตอนจริง · คำกระตุ้น: GFMIS, รหัสงบประมาณ, กันเงิน, เบิกจ่าย, งบประมาณภาครัฐ, GFMIS vs ERP, Cloud ERP ภาครัฐ"
 ---
 
 # Advisor Government New GFMIS Thai + e-GP + ERP + พรบ.งบประมาณ

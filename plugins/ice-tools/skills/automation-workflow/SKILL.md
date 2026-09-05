@@ -1,6 +1,6 @@
 ---
 name: automation-workflow
-description: "Designs automation workflows with trigger-action sequences, tool connections, and error handling procedures. Use when automating repetitive business processes."
+description: "ใช้เมื่อต้องการออกแบบ workflow อัตโนมัติสำหรับงานที่ทำซ้ำเป็นประจำ ได้ลำดับ trigger และ action การเชื่อมเครื่องมือ และวิธีรับมือข้อผิดพลาด ไม่ใช้เมื่อต้องเขียนโค้ดเชื่อมระบบเองหรือทำงานครั้งเดียว คำกระตุ้น: automation workflow, Zapier, Make, n8n, ทำงานอัตโนมัติ"
 allowed-tools: Read Write Glob
 metadata:
   author: matthewhitcham

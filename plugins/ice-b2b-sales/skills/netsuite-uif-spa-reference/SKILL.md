@@ -1,6 +1,6 @@
 ---
 name: netsuite-uif-spa-reference
-description: "Use when building, modifying, or debugging NetSuite UIF SPA components. Provides API/type lookup for `@uif-js/core` and `@uif-js/component` (constructors, methods, props, enums, hooks, and component options)."
+description: "ใช้เมื่อสร้าง แก้ หรือ debug component ของ NetSuite UIF SPA และต้องรู้ API ที่แน่นอนของ @uif-js/core และ @uif-js/component (constructor, method, props, enum, hook) — ได้ type definition อ้างอิงครบ · คำกระตุ้น: UIF, SPA NetSuite, uif-js, DataGrid, StackPanel, NetSuite single-page app, JSX NetSuite"
 license: The Universal Permissive License (UPL), Version 1.0
 metadata:
   author: Oracle NetSuite

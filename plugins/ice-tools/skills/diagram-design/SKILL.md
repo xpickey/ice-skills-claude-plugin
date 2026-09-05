@@ -1,6 +1,6 @@
 ---
 name: diagram-design
-description: Create branded architecture, IT current-state, flowchart, sequence, state machine, ER/data model, timeline, swimlane, quadrant, radar/spider, polar chart (polar/radial lollipop), loop/flywheel, nested, tree, org chart, layer stack, Venn, pyramid/funnel, treemap, bar, line, Gantt and scatter charts, high-level, process, medallion, data flow, DP integration, DP security matrix, Sankey, fishbone, Wardley map, kanban, user journey, deployment, dependency graph, UML class, story map, or database schema diagrams as standalone HTML/SVG/PNG. Redraw .drawio/.drawio.png/.drawio.svg or Mermaid .mmd sources at a chosen size/detail; onboard brand tokens from a website; add semantic patterns, callouts, accessible motion, or sketchy/hand-drawn styling.
+description: "ใช้เมื่อต้องการวาด diagram ตามแบรนด์เป็นไฟล์ HTML, SVG หรือ PNG เช่น architecture, flowchart, sequence, ER, timeline, swimlane, Gantt, org chart รวม 39 แบบ หรือวาดใหม่จากไฟล์ .drawio และ Mermaid คำกระตุ้น: diagram design, วาด diagram, architecture diagram, flowchart, วาดผัง, drawio, Mermaid"
 license: MIT
 metadata:
   version: "2.6"

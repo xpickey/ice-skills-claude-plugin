@@ -1,22 +1,6 @@
 ---
 name: pali-language
-description: >-
-  This skill should be used when the user asks to "อ่านบาลี", "แปลบาลี", "แปลบาลีเป็นไทย",
-  "แปลไทยเป็นบาลี", "แต่งประโยคบาลี", "ผันนามบาลี", "แจกวิภัตติ", "วิภัตติ", "การันต์",
-  "อาขยาต", "กิตก์", "สนธิ", "สมาส", "ตัทธิต", "ถอดอักษรบาลี", "IAST", "โรมันบาลี",
-  "บาลีโรมัน", "อ่านบาลีโรมัน", "ถอดเป็นโรมัน", "โรมันเป็นไทย", "Velthuis" (aa .m ~n "n), "ISO 15919", "PTS ŋ",
-  "diacritics บาลี", "ลำดับอักษรบาลี", "ฝึกอ่านบาลี", "แบบฝึกหัดบาลี", "Pali romanization",
-  "ปาลิ", "ภาษาบาลี", "ภาษามคธ", "Pali grammar", "Pali translation", "อ้างพระไตรปิฎก",
-  "เล่ม/ข้อ/หน้า", "พุทธพจน์", "คำบาลีในบทความ", "ชื่อหลักธรรมภาษาบาลี", or needs to
-  extract Pali text from PDF/documents into Markdown ("อ่าน PDF บาลี", "สกัดเอกสารบาลี",
-  "OCR บาลี", "pdftotext บาลี"). Provides a page-cited Pali grammar reference in Thai
-  (script, declension of all 13 kāranta × 3 genders, pronouns, numerals, 8 verb tenses,
-  5 voices, kitaka, sandhi, samāsa, taddhita), a 10-step translation order, Pali→Thai and
-  Thai→Pali workflows, Tipiṭaka citation format for MCU/TCI academic writing, a Roman-script
-  Pali module (IAST / ISO 15919 / Velthuis / PTS conventions, pronunciation from Roman text,
-  Thai↔Roman transliteration tool with self-test, dictionary sort order, 6 lessons with
-  answer keys), and a dual-source (text-layer + OCR) document-ingestion pipeline with
-  validation scripts.
+description: "ใช้เมื่ออ่าน แปล แต่ง หรือถอดอักษรภาษาบาลี รวมถึงอ้างพระไตรปิฎกและสกัดเอกสารบาลีจาก PDF ได้คำตอบที่อ้างตำราไวยากรณ์พร้อมเลขหน้า และรูปศัพท์ที่ถูกต้องทั้งอักษรไทยและโรมัน · Triggers: แปลบาลี, ภาษาบาลี, แจกวิภัตติ, อาขยาต, สนธิ สมาส, บาลีโรมัน, IAST, Pali grammar"
 version: V01R06
 ---
 

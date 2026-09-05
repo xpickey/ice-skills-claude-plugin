@@ -1,18 +1,6 @@
 ---
 name: agj-academic-article
-description: >
-  ผู้เชี่ยวชาญการเขียนบทความวิชาการ (Academic Article) สำหรับวารสารบัณฑิตศึกษาวิชาการ
-  (Academic Graduate Journal — AGJ, TCI Tier 2, ISSN 3027-8643) ครอบคลุมทุกขั้นตอน:
-  เลือกหัวข้อ → จำแนกประเภท (วิเคราะห์/วิจารณ์/สังเคราะห์) → เลือกกรอบทฤษฎี → เขียนเนื้อหา
-  → ตรวจ 7 Cs → จัดรูปแบบ Word → อ้างอิง APA นาม-ปี → เตรียมส่ง ThaiJO
-  ใช้ skill นี้ทุกครั้งที่มีคำถามเกี่ยวกับ: บทความวิชาการ, วารสารบัณฑิตศึกษาวิชาการ,
-  AGJ, Academic Graduate Journal, เขียนบทความวิชาการ AGJ, TCI journal AGJ,
-  academic article AGJ, ThaiJO submission AGJ, วิเคราะห์เชิงทฤษฎี, บทคัดย่อ AGJ,
-  APA นาม-ปี, อ้างอิงพระไตรปิฎก, ทฤษฎีรัฐประศาสนศาสตร์, พุทธบูรณาการ,
-  GFMIS academic, e-GP academic, digital transformation ภาครัฐ academic,
-  FinTech academic, IFRS9 academic, 7 Cs quality check,
-  หรือการเขียนงานวิชาการใน 5 สาขาของวารสาร AGJ
-  ⚠️ SCOPE: เฉพาะ "บทความวิชาการ" เท่านั้น ไม่ครอบคลุมบทความวิจัย (Research Article)
+description: "ใช้เมื่อเขียนหรือตรวจบทความวิชาการ (ไม่ใช่บทความวิจัย) เพื่อส่งวารสารบัณฑิตศึกษาวิชาการ ได้บทความครบตั้งแต่เลือกหัวข้อ กรอบทฤษฎี อ้างอิง APA นาม-ปี จนพร้อมส่ง ThaiJO · Triggers: AGJ, Academic Graduate Journal, วารสารบัณฑิตศึกษาวิชาการ, บทความวิชาการ AGJ, 7 Cs, ThaiJO"
 ---
 
 # Academic Article Expert — วารสารบัณฑิตศึกษาวิชาการ (AGJ)

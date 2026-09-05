@@ -1,6 +1,6 @@
 ---
 name: ice-demo-builder
-description: iCE Demo/Prototype Build Craft — ความรู้สร้าง application สำหรับ demo และ prototype ในงานขาย B2B (ERP/EPM/CRM) ระดับ specialist. ถือ DEMO-PIPELINE 6 ด่าน (QUALIFY → SPEC → DESIGN → BUILD → VERIFY → REHEARSE), ตาราง Tier เลือกความลึกของ demo, Demo Data Policy 3 ระดับ (POC ใช้ข้อมูลจริงที่ลูกค้ายินยอม · demo ทั่วไปใช้ข้อมูลแปลงสมจริง · ห้ามประดิษฐ์), stack recipes (NetSuite SuiteScript/UIF SPA, Oracle APEX, เว็บทั่วไป), tool map (frontend-design, ui-ux-pro-max, Figma MCP, Browser ในแอป, iOS Simulator) และ guardrails (เพดานรอบแก้ ≤3, ผู้ตรวจต้องรันแอปจริง). ใช้โดยกัปตัน (L0-adopted, build เอง) และ demo-builder-agent (โมโม่ ⑦, build เป็นชิ้น). Triggers (TH): ทำ demo แอป, สร้าง prototype, เตรียมแอปสาธิต, mockup หน้าจอ, แอปกดได้จริง, POC, โมโม่ build. Triggers (EN): build demo app, prototype application, clickable mockup, demo preparation, POC build, app for customer demo.
+description: "ใช้เมื่อต้องสร้างแอปสาธิตหรือ prototype ที่กดได้จริงสำหรับงานขาย B2B — เดิน DEMO-PIPELINE 6 ด่านตั้งแต่คัดกรองจนซ้อมนำเสนอ พร้อมนโยบายข้อมูล demo และผู้ตรวจต้องรันแอปจริง · คำกระตุ้น: ทำ demo แอป, สร้าง prototype, เตรียมแอปสาธิต, mockup หน้าจอ, POC, โมโม่ build · กำกวมว่าเอกสารหรือแอป ถามก่อน"
 ---
 
 # iCE DEMO BUILDER — Demo/Prototype Application Craft

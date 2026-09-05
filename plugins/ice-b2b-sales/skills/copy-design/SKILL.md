@@ -1,6 +1,6 @@
 ---
 name: copy-design
-description: "Copy Design — สกัด design language ของเว็บไซต์ (สีจริง typography spacing component patterns) ออกมาเป็นไฟล์ DESIGN.md มาตรฐาน (แนวคิด Google Stitch / VoltAgent awesome-design-md) เพื่อใช้ co-brand ลูกค้าใน deck/HTML demo/proposal — ต่อยอด customer-ci-finder จาก 'logo+hex' เป็น design system เต็มใบ. เก็บจากของจริงเท่านั้น ไม่ invent สี/ฟอนต์. Triggers (TH): เก็บ design เว็บ, สกัดสี CI ลูกค้า, ทำ DESIGN.md, copy design, ดึง design language, สี brand ลูกค้า. Triggers (EN): copy design, extract design system, DESIGN.md, brand extraction, design tokens from site."
+description: "ใช้เมื่อต้องเก็บ design language ของเว็บไซต์ลูกค้า (สี ฟอนต์ ระยะห่าง component) ออกมาเป็นไฟล์ DESIGN.md จากค่าจริงบนหน้าเว็บ เพื่อทำ deck หรือ demo ร่วมแบรนด์ลูกค้า — ไม่เดาสีหรือฟอนต์ · คำกระตุ้น: เก็บ design เว็บ, สกัดสี CI ลูกค้า, ทำ DESIGN.md, copy design, extract design system, design tokens"
 ---
 
 > **Skill:** copy-design | **Version:** V01R02 | **Date:** 2026.08.08

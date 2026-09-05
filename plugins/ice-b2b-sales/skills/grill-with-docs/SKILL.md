@@ -1,6 +1,6 @@
 ---
 name: grill-with-docs
-description: "ถามให้สุด (grill-with-docs) — สัมภาษณ์เจาะลึกแบบไม่ปล่อยผ่าน เพื่อลับแผนหรือการออกแบบให้คม พร้อมเขียนเอกสารกำกับ (ADR + อภิธานศัพท์) ไปด้วยระหว่างทาง. A relentless interview to sharpen a plan or design, which also creates docs (ADRs and glossary) as we go. Triggers (TH): ถามให้สุด, ซักให้สุด, ลับแผน, stress-test แผน, ถามจนกว่าจะชัด. Triggers (EN): grill with docs, grill this plan, stress-test my design. เรียกโดยผู้ใช้เท่านั้น (ไม่ auto-trigger)."
+description: "ใช้เมื่อ user สั่งให้ซักถามแผนหรือการออกแบบจนชัดทุกกิ่ง พร้อมจดบันทึกการตัดสินใจ (ADR) และอภิธานศัพท์ไปด้วยระหว่างทาง — เรียกโดย user เท่านั้น ไม่ทำงานอัตโนมัติ · คำกระตุ้น: ถามให้สุด, ซักให้สุด, ลับแผน, ถามจนกว่าจะชัด, grill with docs, grill this plan, stress-test my design"
 disable-model-invocation: true
 ---
 

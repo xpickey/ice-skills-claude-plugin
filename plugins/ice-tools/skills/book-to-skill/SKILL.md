@@ -1,6 +1,6 @@
 ---
 name: book-to-skill
-description: "Converts books and documents (PDF, EPUB, DOCX, HTML, Markdown, plain text, RTF, MOBI/AZW with Calibre) into structured agent skills, extracting frameworks, mental models, principles, techniques, and anti-patterns. Use when the user wants to study a document through GitHub Copilot CLI, Amp, or Claude Code, apply an author's frameworks while working, or build a reusable knowledge base from a file."
+description: "ใช้เมื่อต้องการแปลงหนังสือหรือเอกสาร (PDF, EPUB, DOCX, Markdown) ให้เป็น skill ของ agent โดยสกัด framework หลักคิด เทคนิค และข้อควรเลี่ยงของผู้เขียนมาใช้ซ้ำได้ คำกระตุ้น: book to skill, แปลงหนังสือเป็น skill, สกัด framework จากหนังสือ, สร้าง skill จากเอกสาร"
 ---
 
 <!--

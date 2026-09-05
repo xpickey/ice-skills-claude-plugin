@@ -1,6 +1,6 @@
 ---
 name: b2b-strategic-thinking
-description: Senior-partner strategic thinking for enterprise software sales, pre-sales, CS, and practice leaders in Thailand/APAC. Frames ambiguous questions, picks the right framework (Porter, BCG, McKinsey 7S, Wardley, Blue Ocean, JTBD, value engineering, Three Horizons), synthesizes with MECE/Pyramid, builds Five-Why narrative (Why Change/Now/Invest/Us/Stay) into executive-grade recommendations. Use for account strategy, account plan, deal/win/pursuit, business case, "why us/now/invest", competitive positioning, market/segment/GTM, portfolio or transformation roadmap, value proposition, executive narrative, board paper, "should we pursue/invest", "help me decide", scenario analysis, pre-mortem, RFP win strategy, government pursuit, or any strategic question selling Oracle, SAP, NetSuite, Dynamics, Salesforce, Workday, Infor, Odoo into Thailand, APAC, Thai government/SOE, or mid-market SME. Trigger even when "strategy" isn't said. Also covers strategic-questioning (internal challenge, distinct from b2b-questioning).
+description: "ใช้เมื่อคำถามเชิงกลยุทธ์ยังคลุมเครือและต้องการคำแนะนำระดับผู้บริหาร — จัดกรอบคำถาม เลือกกรอบวิเคราะห์ แล้วสรุปเป็นข้อเสนอแนะพร้อมเหตุผล Why Change/Now/Invest/Us/Stay · คำกระตุ้น: ควรไล่ดีลนี้ไหม, ช่วยตัดสินใจ, why us, competitive positioning, GTM, board paper, pre-mortem, win strategy"
 ---
 
 # B2B Strategic Thinking

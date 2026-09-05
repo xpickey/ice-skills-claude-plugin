@@ -1,6 +1,6 @@
 ---
 name: copy-page-md
-description: "Copy Page MD — เก็บหน้าเว็บ/เอกสาร online เป็น clean Markdown ลงดิสก์พร้อม provenance frontmatter (source URL + fetch date) ทุกชิ้น สำหรับงานเก็บวัตถุดิบของเสี่ยวป้อ (retrieval-scout) และทุก persona ที่ต้อง save หน้าเว็บเป็น MD. หลักการจาก MD-This-Page (MIT — readability-extract เนื้อหลัก ตัด nav/ads) แต่ implement ด้วยเครื่องมือในระบบ ไม่ clone โค้ดภายนอกมารัน. Triggers (TH): เก็บหน้าเว็บ, แปลงเว็บเป็น MD, save หน้านี้, ดูดเว็บ, เก็บบทความ, copy page. Triggers (EN): copy page md, save page as markdown, web to markdown, fetch page, archive page."
+description: "ใช้เมื่อต้องเก็บหน้าเว็บหรือเอกสาร online ลงดิสก์เป็น Markdown สะอาด พร้อมที่มาและวันที่เก็บทุกไฟล์ — เก็บอย่างเดียว ไม่ตีความ · คำกระตุ้น: เก็บหน้าเว็บ, save หน้านี้, แปลงเว็บเป็น MD, ดูดเว็บ, เก็บบทความ, copy page md, web to markdown, archive page"
 ---
 
 > **Skill:** copy-page-md | **Version:** V01R02 | **Date:** 2026.08.08

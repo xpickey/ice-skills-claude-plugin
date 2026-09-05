@@ -1,6 +1,6 @@
 ---
 name: th-pricing-reference
-description: Thailand-market pricing reference for enterprise software (Oracle Cloud / EBS / NetSuite, SAP RISE/GROW/B1, MS Dynamics 365 F&O/BC, Workday, Salesforce). Provides list-price anchors in USD, typical Thai-market discount bands, contracting nuances, BYOL / Customer 2 Cloud / Universal Credits levers, and budget benchmarks for sizing deals. Use when building proposals, ROI/TCO models, discount-justification memos, deal-desk approvals, or competitor comparisons in the Thai enterprise market. Bilingual EN + TH business wording.
+description: "ใช้เมื่อต้องตั้งราคา ทำข้อเสนอ ROI/TCO บันทึกขอส่วนลด หรือเทียบราคาคู่แข่งในตลาดไทย — ได้ราคาตั้งต้นของ Oracle, NetSuite, SAP, Microsoft Dynamics, Workday, Salesforce ช่วงส่วนลดที่พบจริงในไทย และกลไก BYOL · คำกระตุ้น: ราคา license, ส่วนลดเท่าไร, list price, pricing Thailand, TCO 3 ปี, deal desk"
 ---
 
 # TH Pricing Reference — Enterprise Software (Thailand Market)

@@ -1,17 +1,6 @@
 ---
 name: soc-sci-academic-article
-description: >
-  ผู้เชี่ยวชาญการเขียนบทความวิชาการ (Academic Article) สำหรับวารสาร มจร สังคมศาสตร์ปริทรรศน์
-  (MCU Journal of Social Sciences Review, TCI Tier 2) ครอบคลุมทุกขั้นตอน: เลือกหัวข้อ → จำแนกประเภท
-  (TYPE-A วิเคราะห์ / TYPE-B วิจารณ์ / TYPE-C สังเคราะห์) → เลือกกรอบทฤษฎี → เขียนเนื้อหา
-  → จัดรูปแบบ Word → อ้างอิง APA7 → ส่ง ThaiJO
-  ใช้ skill นี้ทุกครั้งที่มีคำถามเกี่ยวกับ: บทความวิชาการ, วารสาร มจร, สังคมศาสตร์ปริทรรศน์,
-  JSSR, เขียนบทความวิชาการ, TCI journal, academic article, ThaiJO submission,
-  วิเคราะห์เชิงทฤษฎี, critical review, conceptual synthesis, บทคัดย่อ, abstract,
-  APA 7th edition ภาษาไทย, อ้างอิงพระไตรปิฎก, ทฤษฎีรัฐประศาสนศาสตร์, พุทธบูรณาการ,
-  GFMIS academic, e-GP academic, digital transformation ภาครัฐ academic,
-  FinTech academic, IFRS9 academic, หรือการเขียนงานวิชาการใน 5 สาขาของวารสาร
-  ⚠️ SCOPE BOUNDARY: ครอบคลุม "บทความวิชาการ" เท่านั้น ไม่ครอบคลุมบทความวิจัย (Research Article)
+description: "ใช้เมื่อเขียนหรือตรวจบทความวิชาการ (ไม่ใช่บทความวิจัย) เพื่อส่งวารสาร มจร สังคมศาสตร์ปริทรรศน์ ได้บทความครบตั้งแต่เลือกหัวข้อ กรอบทฤษฎี อ้างอิง APA 7 จนพร้อมส่ง ThaiJO · Triggers: สังคมศาสตร์ปริทรรศน์, JSSR, วารสาร มจร, MCU Journal of Social Sciences Review, APA 7 ภาษาไทย, ThaiJO"
 ---
 
 # Academic Article Expert — วารสาร มจร สังคมศาสตร์ปริทรรศน์

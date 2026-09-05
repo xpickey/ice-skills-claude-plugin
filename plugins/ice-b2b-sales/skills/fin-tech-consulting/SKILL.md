@@ -1,6 +1,6 @@
 ---
 name: fin-tech-consulting
-description: Enterprise FinTech consulting for lending, loan origination, NPL/NPA asset management, IFRS9, and risk management using Big Four methodologies for B2B/B2C solutions. Use when users ask about financial products (loans, credit facilities, NPL/NPA), need system advice (LOS, collection systems, risk platforms, IFRS9 engines), require consulting deliverables (business cases, RFPs, solution architectures), discuss regulatory topics (IFRS9, Basel III/IV), seek FinTech solutions (digital lending platforms, credit-as-a-service), or request Big Four frameworks (structured approaches, maturity assessments, transformation roadmaps).
+description: "ใช้เมื่องานเกี่ยวกับสถาบันการเงิน สินเชื่อ ระบบ loan origination การบริหารหนี้เสีย NPL/NPA หรือ IFRS9 — ได้คำแนะนำระดับที่ปรึกษาอาวุโส ทั้งทางออกของระบบและเอกสารเช่น business case, RFP, สถาปัตยกรรม · คำกระตุ้น: สินเชื่อ, lending, LOS, NPL, IFRS9, ECL, Basel, digital lending, credit-as-a-service"
 ---
 
 # FinTech Consulting

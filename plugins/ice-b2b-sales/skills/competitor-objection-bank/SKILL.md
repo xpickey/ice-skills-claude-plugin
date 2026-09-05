@@ -1,6 +1,6 @@
 ---
 name: competitor-objection-bank
-description: Top-30 competitor objection bank with response anchors for B2B enterprise software sales — Oracle (Cloud / EBS / NetSuite / OCI / Tech Stack) competing against SAP (RISE / GROW / B1), Microsoft (D365 F&O / BC / Power Platform), Workday (Financials / HCM), Salesforce, Infor, Odoo, Thai-grown SMB packages. Provides objection text, root cause, recommended counter-narrative anchors, and trap-avoidance moves. Use whenever a deal goes competitive, in proposal write-up, exec briefing prep, deal review pressure-test, or objection-handling coaching. Bilingual EN + TH business wording.
+description: "ใช้เมื่อดีลมีคู่แข่งและต้องตอบข้อโต้แย้งเรื่อง SAP, Microsoft Dynamics, Workday, Salesforce, Infor, Odoo หรือแพ็กเกจไทย เทียบกับ Oracle และ NetSuite — ได้ต้นเหตุ แนวตอบ และกับดักที่ต้องเลี่ยง · คำกระตุ้น: ลูกค้าบอกว่า SAP ดีกว่า, objection, คู่แข่ง, ตอบข้อโต้แย้ง, competitive deal, deal review"
 ---
 
 # Competitor Objection Bank — Enterprise Software (Thai Market)

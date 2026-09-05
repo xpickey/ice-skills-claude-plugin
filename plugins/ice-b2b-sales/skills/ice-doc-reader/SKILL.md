@@ -1,6 +1,6 @@
 ---
 name: ice-doc-reader
-description: อ่านและแปลงเอกสารเป็น Markdown ในเครื่อง 100% ด้วย anydoc (16 นามสกุล — Word/PowerPoint/Excel/OpenDocument/RTF/EPUB/CSV/PDF) + pdf-inspector คัดกรอง PDF ว่าหน้าไหนเป็นภาพอ่านข้อความไม่ได้ก่อนแปลง + ตรวจความสมบูรณ์ภาษาไทย (สระอำ/วรรณยุกต์) ที่เครื่องมือทั้งสองไม่มี. ⛔ ไม่ส่งไฟล์ออกนอกเครื่อง ไม่มี API ไม่มี cloud — ใช้กับสัญญา งบการเงิน TOR เอกสารลูกค้าได้ปลอดภัย. ใช้เมื่อต้องอ่าน/สกัดเนื้อหาจากเอกสารเข้าคลังความรู้หรือเข้า context. Triggers (TH): อ่านเอกสาร, แปลงเป็น Markdown, สกัดเนื้อหาจากไฟล์, อ่าน PDF, อ่าน docx, ดูด TOR, เอกสารลูกค้าเข้าคลัง, PDF สแกน, ต้อง OCR ไหม, ตรวจว่าอ่านได้ครบไหม. Triggers (EN): read document, convert to markdown, extract text from file, parse PDF, docx to md, scanned PDF, needs OCR, document ingestion.
+description: "ใช้เมื่อต้องอ่านหรือแปลงเอกสารทุกชนิด (Word PowerPoint Excel PDF RTF EPUB CSV และอื่นรวม 16 นามสกุล) เป็น Markdown ก่อนนำเนื้อหาไปใช้ ทำงานในเครื่อง 100% มีตัวคัดกรอง PDF ว่าหน้าไหนเป็นภาพต้อง OCR · คำกระตุ้น: อ่านไฟล์นี้, แปลงเอกสาร, อ่าน PDF, อ่าน Word, doc to md, anydoc, ice-doc-reader"
 ---
 
 > **Skill:** ice-doc-reader | **Version:** V01R06 | **Date:** 2026.08.29
