@@ -1,4 +1,4 @@
-# ตารางเส้นทาง skill ของทีม iCE — จุดแก้จุดเดียว (V01R02 · 2026.09.05 — เพิ่ม ice-writing-register เป็น required ของงานเขียนทุกแบบ)
+# ตารางเส้นทาง skill ของทีม iCE — จุดแก้จุดเดียว (V01R03 · 2026.09.05 — V01R02 เพิ่ม ice-writing-register · V01R03 เพิ่มกติกาการจับคู่จากผลทดสอบผู้อ่านสด)
 #
 # ไฟล์นี้คืออะไร: ตารางที่บอกว่า "งานแบบไหน ต้องโหลด skill อะไร ก่อนเริ่มคิด" เครื่องเป็นคนอ่านไฟล์นี้
 # ไม่ใช่ตัว model — hook อ่านทุกครั้งที่ user พิมพ์ข้อความ แล้วเพิ่มคำสั่งโหลด skill เข้าบริบทของ Claude ให้เอง
@@ -15,6 +15,15 @@
 #   read_first  ไฟล์ที่ต้องเปิดอ่านก่อนออกแบบ (นับว่าอ่านแล้วเมื่อมี Read ไฟล์นั้นใน session)
 #   card        ไฟล์กฎสั้น ๆ ที่ hook นำเนื้อหาทั้งไฟล์ใส่เข้าบริบทของ Claude ทันที (ใช้กับกฎที่ user ย้ำบ่อย)
 #   note        ข้อความสั้นเพิ่มเติมที่ hook แสดงต่อท้าย
+#
+# กติกาการจับคู่และการนับ (แก้ตามผลทดสอบผู้อ่านสด 2026.09.05):
+#   - คำใน any_of ที่เป็นอังกฤษล้วนจับแบบทั้งคำ (word ไม่ตรงกับ keyword) · คำที่มีอักษรไทยจับแบบข้อความย่อย (เสนอ ตรงกับ นำเสนอ ได้)
+#   - ข้อความหนึ่งเข้าได้หลายประเภทพร้อมกัน → รวม required/recommended/read_first ของทุกประเภทที่ตรง (union) ไม่เลือกเพียงหนึ่ง
+#   - ไม่เข้าประเภทใดเลย → ไม่มี required · hook จะขอให้ model ประกาศในคำตอบแรกว่าจะใช้ skill ตระกูลใด และบันทึกลง ~/.claude/state/ice-session/no-route.log เพื่อเพิ่มแถวภายหลัง
+#   - "โหลดแล้ว" นับเฉพาะใน session หลักที่ user คุยด้วย (สภาพ session แยกตาม session_id) — subagent โหลดแทนไม่นับ
+#   - skill ใน required/recommended ต้องมีอยู่จริงที่ ~/.claude/skills/<ชื่อ>/SKILL.md — hooks/tests/test_router.py ตรวจข้อนี้ทุกครั้ง
+#   - card ใส่ได้หลายไฟล์ (hook นำแต่ละไฟล์เข้าบริบทครั้งเดียว) · path ที่ขึ้นต้น ~ hook ขยายให้เอง · path ของ hooks/… เทียบจากรากของ repo ไฟล์นี้
+#   - ช่องที่ไม่มีค่า ให้ละทั้งบรรทัด (ห้ามปล่อยช่องว่างเปล่า)
 
 routes:
 
@@ -36,7 +45,6 @@ routes:
       any_of: [docx, xlsx, word, excel, TOR, requirement, workbook, work order, สัญญา, รายงานประชุม, minutes, MOM, gap analysis, comply, ตอบ TOR]
     required: [ice-doc-builder, ice-writing-register]
     recommended: [ice-doc-reader, ice-b2b-enterprise-sale]
-    read_first:
     note: อ่านเอกสารต้นทางของลูกค้าด้วย ice-doc-reader ก่อน แล้วสกัดศัพท์ที่ลูกค้าใช้จริงลง _build/glossary.md ก่อนเขียน spec
 
   - id: sales-thinking
