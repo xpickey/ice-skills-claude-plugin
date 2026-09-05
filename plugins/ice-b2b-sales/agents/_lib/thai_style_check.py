@@ -72,6 +72,8 @@ def sentences(text):
 
 
 def check(text, register="business"):
+    # ข้อความในเครื่องหมายคำพูด ("…" “…” «…») คือการยกตัวอย่างหรือคำที่อ้างจากที่อื่น ไม่ใช่สำนวนของผู้เขียน — ตัดออกก่อนตรวจ
+    text = re.sub(r"\"[^\"\n]{1,120}\"|“[^”\n]{1,120}”|«[^»\n]{1,120}»", " ", text)
     finds = []
     for kw in T1:
         for m in re.finditer(re.escape(kw), text):
