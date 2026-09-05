@@ -75,7 +75,7 @@ def test_hooks_end_to_end():
     bad = 0
     # 1) router เพิ่มข้อความเข้าบริบทและจดประเภทงาน
     rc, out, err = run_hook("ice-skill-router.py", {"session_id": sid, "cwd": PROJ, "prompt": "ทำ deck นำเสนอ OCC ให้มี infographic"})
-    ok = rc == 0 and "deck-customer" in out and "ice-doc-builder" in out and "กฎการออกแบบสไลด์ที่ใช้ทุกครั้ง" in out
+    ok = rc == 0 and "deck-customer" in out and "ice-doc-builder" in out and "เอกสารที่ระบบใส่ให้" in out
     print(("  ✓ " if ok else "  ✗ ") + "router เพิ่มประเภทงาน + กฎสไลด์เข้าบริบท" + ("" if ok else f" rc={rc} err={err[:200]} out={out[:200]}")); bad += 0 if ok else 1
     # 2) spec gate ปฏิเสธเมื่อยังไม่โหลด
     rc, out, err = run_hook("ice-spec-gate.py", {"session_id": sid, "tool_name": "Write", "tool_input": {"file_path": PROJ + "/20-Propose/_build/content-spec.md"}})

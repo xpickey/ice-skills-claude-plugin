@@ -69,7 +69,7 @@ def main():
         p = lib.expand(c)
         if os.path.exists(p):
             with open(p, encoding="utf-8") as fh:
-                lines.append("\n--- กฎการออกแบบสไลด์ที่ใช้ทุกครั้ง (" + os.path.basename(p) + ") ---\n" + fh.read().strip())
+                lines.append("\n--- เอกสารที่ระบบใส่ให้เพราะประเภทงานนี้ต้องใช้ทุกครั้ง (" + os.path.basename(p) + ") ---\n" + fh.read().strip())
     print("\n".join(lines))
     return 0
 
