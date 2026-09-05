@@ -1,7 +1,7 @@
 {
   "name": "ice-tools",
   "description": "iCE productivity tools — 14 skills (diagram-design, book-to-skill, graphify, nanobanana-connection, higgsfield-connection, higgsfield-generate, higgsfield-product-photoshoot, higgsfield-marketplace-cards, higgsfield-soul-id, notebooklm, cua-driver, automation-workflow, claude-codex-bridge, openrouter-bridge) + 5 diagram commands + 2 agents (codex-bridge-agent, openrouter-agent). V2: Fleet Rewrite 2026.07.10.",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "author": {
     "name": "xpickey"
   }
