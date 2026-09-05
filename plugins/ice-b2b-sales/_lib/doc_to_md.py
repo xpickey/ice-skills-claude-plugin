@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 """
 doc_to_md.py — แปลงเอกสารเป็น Markdown ในเครื่อง 100% + ตรวจความสมบูรณ์ภาษาไทย
-V01R03 | 2026.08.07 | ผูกกับ skill ice-doc-reader
+V01R04 | 2026.08.29 | ผูกกับ skill ice-doc-reader
   V01R02 +OCR ในเครื่อง (macOS Vision · --ocr) + CMap suspect ลดเป็น flag (แก้ false positive)
   V01R03 (รีวิว) ฟอร์แมตไม่รองรับ/ไฟล์ว่าง/ไฟล์เสีย = exit 2 พร้อมข้อความชัด — เดิม .txt ได้
          ผลว่างเปล่าพร้อม exit 0 = ข้อมูลหายเงียบชนิดเดียวกับที่เครื่องมือนี้ตั้งใจกัน
+  V01R04 (defect จริง 2026.08.29 — สองข้อประกอบกันแล้วปล่อยไฟล์เสียเข้าคลังแบบ "ตรวจแล้วสะอาด")
+         ① ตรวจไทยเพิ่ม 3 กติกา: สระอำยุบเป็นช่องว่าง (กำหนด → ก าหนด) · สระลอยหลังช่องว่าง ·
+           ไทย ≥1000 อักขระแต่สระอำ = 0 (เป็นไปไม่ได้ทางสถิติ — เคสจริง e-GP RSS ผ่านเป็น
+           "สะอาด" ทั้งที่เสีย 31 จุด เพราะกติกาเดิม 2 ข้อจับ pattern นี้ไม่ได้)
+         ② --ocr เดิม no-op เงียบกับ PDF ชนิด text_based ที่ CMap/ฟอนต์พัง (pages_needing_ocr
+           ว่าง) → ตอนนี้ชั้นข้อความตรวจไทยไม่ผ่าน = OCR ทุกหน้าแล้ว "แทนที่" ทั้งไฟล์
+           (การเติมต่อท้ายแบบเดิมช่วยไม่ได้ — ข้อความเสียยังอยู่ ตรวจก็ยังตก) + flag --ocr-all
   exit: 0=สะอาด(หรือไฟล์ text อ่านตรงได้) · 1=ไม่พบไฟล์ · 2=อ่านไม่ได้/ว่าง/ไม่รองรับ ·
         3=ข้อความไทยเสียหาย · 4=ไม่พบ venv
 
@@ -20,8 +27,10 @@ V01R03 | 2026.08.07 | ผูกกับ skill ice-doc-reader
 ⛔ ทุกขั้นรันในเครื่อง ไม่มี API ไม่มี cloud — เอกสารลูกค้า สัญญา งบการเงิน ไม่ออกจากเครื่อง
 
 Usage:
-    python3 doc_to_md.py FILE [-o OUT.md] [--ocr] [--inspect-only] [--quiet]
-        --ocr = OCR หน้าที่เป็นภาพด้วย macOS Vision (ในเครื่อง · ต้องสั่งเอง)
+    python3 doc_to_md.py FILE [-o OUT.md] [--ocr] [--ocr-all] [--inspect-only] [--quiet]
+        --ocr     = OCR หน้าที่เป็นภาพด้วย macOS Vision (ในเครื่อง · ต้องสั่งเอง)
+                    และถ้าชั้นข้อความที่มีอยู่ตรวจไทยไม่ผ่าน จะ OCR ทุกหน้าแล้วแทนที่ให้เอง
+        --ocr-all = บังคับ OCR ทุกหน้าแล้วแทนที่ชั้นข้อความเดิมทั้งไฟล์ (ไม่ต้องรอผลตรวจ)
     python3 doc_to_md.py --scan DIR          # กวาด PDF ทั้งโฟลเดอร์ ดูว่าอ่านได้ครบไหม
 
 Interpreter: ต้องใช้ venv ของ fleet — เรียกผ่าน doc_to_md.sh หรือ
@@ -32,6 +41,17 @@ import sys, os, re, glob, time, json
 THAI_RE = re.compile(r"[฀-๿]")
 SARA_AM_BROKEN = "ํา"          # นิคหิต + สระอา = สระอำที่แตก — สัญญาณชัดเจน ไม่กำกวม
 FLOATING_TONE = re.compile(r"[ \t][่-๋]")   # วรรณยุกต์ตามหลังช่องว่าง = ผิดเสมอ
+
+# ⭐ V01R04 (defect B จริง 2026.08.29 — ไฟล์ e-GP RSS): สระอำยุบเป็น "ช่องว่าง + สระอา"
+#   (กำหนด → ก าหนด · การนำ → การน า) ซึ่งกติกา 2 ข้อบนจับไม่ได้เลย → เคยผ่านเป็น exit 0
+#   พยัญชนะไทยตามด้วยช่องว่างแล้วต่อด้วยสระอา = ความเสียหายเสมอ (คำไทยขึ้นต้นด้วย า ไม่ได้)
+SARA_AM_SPACED = re.compile(r"[ก-ฮ][ \t]า")
+# สระบน/ล่างตามหลังช่องว่าง = ผิดเสมอเหมือนวรรณยุกต์ลอย (สระพวกนี้ต้องเกาะพยัญชนะ)
+ORPHAN_VOWEL = re.compile(r"[ \t][ัิีึืุู]")
+# ไทยตั้งแต่ 1,000 อักขระแต่ไม่มีสระอำแม้แต่ตัวเดียว = เป็นไปไม่ได้ทางสถิติในร้อยแก้วไทย
+#   (เคสจริง: 5,838 อักขระ · สระอำ 0 — ตัวเลขนี้เองที่เปิดโปง defect B) — จับความเสียหาย
+#   แบบที่อักขระ "หายไปเฉย ๆ" ซึ่งไม่มี pattern เหลือให้ regex จับ
+AM_MISSING_MIN_THAI = 1000
 
 # ⚠ V01R02 (QA 2026.08.06): CMap garble ตรวจได้เฉพาะ PDF และเป็นแค่ "น่าสงสัย" ไม่ใช่ "พัง"
 #   สัญญาณจริงคือวรรณยุกต์ถูกแทนด้วยตัวเลข/สัญลักษณ์ (ท่า→ท1า · จ้าง→จ@าง)
@@ -47,12 +67,17 @@ _UNIT_AFTER = re.compile(r"^[0-9]+\s*(ปี|เดือน|วัน|ครั
 def check_thai(md: str, is_pdf: bool = False) -> dict:
     """ตรวจความสมบูรณ์ของข้อความไทย — ตัวนี้ขาดไม่ได้ ไม่มีใน anydoc/pdf-inspector
 
-    hard fail (ชัดเจน): สระอำแตก · วรรณยุกต์ลอย
+    hard fail (ชัดเจน): สระอำแตก · วรรณยุกต์ลอย · สระอำยุบเป็นช่องว่าง ·
+                        สระลอยหลังช่องว่าง · ไทย ≥1000 อักขระแต่สระอำ = 0 (V01R04)
     soft flag (ให้คนดู): CMap suspect เฉพาะ PDF — อาจเป็นคำพิมพ์ผิดในต้นฉบับ
     """
     thai = len(THAI_RE.findall(md))
+    am_ok = md.count("ำ")
     broken_am = md.count(SARA_AM_BROKEN)
     floating = len(FLOATING_TONE.findall(md))
+    spaced_am = len(SARA_AM_SPACED.findall(md))
+    orphan_vowel = len(ORPHAN_VOWEL.findall(md))
+    am_missing = thai >= AM_MISSING_MIN_THAI and am_ok == 0
 
     suspects = []
     if is_pdf:
@@ -64,12 +89,16 @@ def check_thai(md: str, is_pdf: bool = False) -> dict:
 
     return {
         "thai_chars": thai,
-        "sara_am_ok": md.count("ำ"),
+        "sara_am_ok": am_ok,
         "sara_am_broken": broken_am,
         "floating_tone": floating,
+        "sara_am_spaced": spaced_am,
+        "orphan_vowel": orphan_vowel,
+        "sara_am_missing": am_missing,
         "cmap_suspect": len(suspects),
         "suspect_samples": suspects[:5],
-        "clean": broken_am == 0 and floating == 0,   # suspect ไม่ทำให้ fail
+        "clean": (broken_am == 0 and floating == 0 and spaced_am == 0
+                  and orphan_vowel == 0 and not am_missing),   # suspect ไม่ทำให้ fail
     }
 
 
@@ -139,7 +168,7 @@ def shutil_which(cmd):
     return shutil.which(cmd)
 
 
-def convert(path: str, quiet=False, do_ocr=False) -> tuple:
+def convert(path: str, quiet=False, do_ocr=False, ocr_all=False) -> tuple:
     """② แปลง + ③ ตรวจไทย (+④ OCR ในเครื่องเมื่อสั่ง) · คืน (markdown, report)"""
     import anydoc
     rep = {"file": os.path.basename(path), "size_mb": round(os.path.getsize(path) / 1e6, 2)}
@@ -173,11 +202,14 @@ def convert(path: str, quiet=False, do_ocr=False) -> tuple:
             return "", rep
     rep["ms"] = round((time.time() - t) * 1000)
     rep["chars"] = len(md)
-    # ④ OCR ในเครื่อง — ทำเมื่อ user สั่ง --ocr เท่านั้น (ไม่ทำเอง · ใช้เวลา ~1.8 วิ/หน้า)
+    # ④ OCR ในเครื่อง — ทำเมื่อ user สั่ง --ocr/--ocr-all เท่านั้น (ไม่ทำเอง · ~1.8 วิ/หน้า)
     ins = rep.get("inspect") or {}
+    is_pdf = path.lower().endswith(".pdf")
+    page_count = ins.get("page_count", 0)
     ocr_targets = ins.get("pages_needing_ocr") or (
-        list(range(ins.get("page_count", 0))) if rep.get("no_text_layer") else [])
-    if do_ocr and ocr_targets:
+        list(range(page_count)) if rep.get("no_text_layer") else [])
+    # ④a เติมต่อท้าย — หน้าที่เป็นภาพไม่มีข้อความให้เสีย จึงเติมส่วนที่ขาดได้อย่างเดียว
+    if do_ocr and not ocr_all and ocr_targets:
         o = ocr_pdf_pages(path, ocr_targets)
         rep["ocr"] = {k: v for k, v in o.items() if k != "pages"}
         if o.get("available"):
@@ -185,7 +217,23 @@ def convert(path: str, quiet=False, do_ocr=False) -> tuple:
             for pg, txt in sorted(o["pages"].items()):
                 parts.append(f"\n### หน้า {pg+1}\n\n{txt}\n")
             md = "".join(parts)
+            rep["ocr"]["mode"] = "append"
             rep["ocr"]["note"] = f"เติมเนื้อหา {len(o['pages'])} หน้า ({o['chars']:,} ตัวอักษร)"
+    # ④b ⭐ V01R04 — ชั้นข้อความที่มีอยู่เสียหาย (CMap/ฟอนต์ฝังพัง) → OCR ทุกหน้าแล้ว "แทนที่"
+    #   เดิม: PDF ชนิด text_based มี pages_needing_ocr = [] ทำให้ --ocr เงียบไม่ทำอะไรเลย
+    #   ทั้งที่ตรวจไทยตก (defect A · เคสจริง พ.ร.บ.จัดซื้อฯ 2560 · GHB ERP-HR · KTB P2P)
+    #   ต้องแทนที่ ไม่ใช่เติม — เติมแล้วข้อความเสียยังอยู่ ตรวจไทยก็ตกเหมือนเดิม
+    if is_pdf and page_count and (
+            ocr_all or (do_ocr and not check_thai(md, is_pdf=True)["clean"])):
+        o = ocr_pdf_pages(path, list(range(page_count)))
+        rep["ocr"] = {k: v for k, v in o.items() if k != "pages"}
+        if o.get("available"):
+            md = "".join(f"\n## หน้า {pg+1}\n\n{txt}\n"
+                         for pg, txt in sorted(o["pages"].items()))
+            rep["ocr"]["mode"] = "replace-all"
+            rep["ocr"]["note"] = (f"OCR ทั้งไฟล์ {page_count} หน้าแล้วแทนที่ชั้นข้อความเดิม "
+                                  f"({'สั่ง --ocr-all' if ocr_all else 'ชั้นข้อความเดิมตรวจไทยไม่ผ่าน'}"
+                                  f" · {o['chars']:,} ตัวอักษร)")
 
     rep["chars"] = len(md)
     rep["thai"] = check_thai(md, is_pdf=path.lower().endswith(".pdf"))
@@ -216,6 +264,16 @@ def print_report(rep: dict):
                 print(f"      · สระอำแตก {th['sara_am_broken']} จุด (ค้นหา/copy จะพลาด)")
             if th["floating_tone"]:
                 print(f"      · วรรณยุกต์ลอย {th['floating_tone']} จุด")
+            if th.get("sara_am_spaced"):
+                print(f"      · สระอำยุบเป็นช่องว่าง {th['sara_am_spaced']} จุด (กำหนด → ก าหนด)")
+            if th.get("orphan_vowel"):
+                print(f"      · สระลอยหลังช่องว่าง {th['orphan_vowel']} จุด")
+            if th.get("sara_am_missing"):
+                print(f"      · ไม่พบสระอำแม้แต่ตัวเดียวทั้งที่มีข้อความไทย {th['thai_chars']:,} อักขระ "
+                      f"— เป็นไปไม่ได้ทางสถิติ = สระอำถูกกลืนหายตอนสกัดข้อความ")
+            if ins.get("available") and not rep.get("ocr"):
+                print(f"      → ทางซ่อม: รันใหม่พร้อม --ocr (จะ OCR ทุกหน้าแล้วแทนที่ชั้นข้อความที่เสีย "
+                      f"· ในเครื่อง · ~1.8 วิ/หน้า)")
 
         if th.get("cmap_suspect"):
             print(f"    ⚠ น่าสงสัย {th['cmap_suspect']} จุด เช่น {th['suspect_samples'][:3]} — "
@@ -286,7 +344,8 @@ if __name__ == "__main__":
         print(json.dumps(ins, ensure_ascii=False, indent=2)); sys.exit(0)
 
     try:
-        md, rep = convert(path, quiet, do_ocr="--ocr" in a)
+        md, rep = convert(path, quiet, do_ocr="--ocr" in a or "--ocr-all" in a,
+                          ocr_all="--ocr-all" in a)
     except Exception as e:
         print(f"❌ อ่านไฟล์ไม่ได้: {type(e).__name__}: {str(e)[:150]}", file=sys.stderr)
         print(f"   → แจ้ง user · ทางเลือก: ขอไฟล์ใหม่จากผู้ส่ง / ตรวจว่าไฟล์เสียหรือไม่ใช่ฟอร์แมตจริง",

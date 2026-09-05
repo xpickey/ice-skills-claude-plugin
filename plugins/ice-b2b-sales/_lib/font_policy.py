@@ -410,3 +410,29 @@ def check_fonts(fonts, rail: str = "private", allow_fonts=None, fams=None) -> di
                      f"{rep['off_rail']} → {EXTERNAL_MANDATE_NOTE}")
     rep["fails"] = fails
     return rep
+
+def font_file_for(family: str):
+    """หา path ของไฟล์ฟอนต์จาก family name จริง (nameID 1) — คืน None ถ้าไม่พบ
+
+    ใช้เมื่อต้องอ่าน metric ของฟอนต์ตอนรัน แทนการ hard-code ตัวเลขไว้ในข้อความ
+    (เหตุผล: ค่าที่ถูกของฟอนต์หนึ่งจะผิดสำหรับอีกฟอนต์ — เคสจริง ตัวคูณ 1.72 ที่วัดจาก
+     IBM Plex Sans Thai Looped เกินจริงเกือบ 40% เมื่อเอาไปใช้กับ TH Sarabun New)
+    """
+    try:
+        from fontTools.ttLib import TTFont
+    except ImportError:
+        return None
+    roots = ["/System/Library/Fonts", "/System/Library/Fonts/Supplemental",
+             "/Library/Fonts", os.path.expanduser("~/Library/Fonts")]
+    for root in roots:
+        for ext in ("ttf", "otf", "ttc"):
+            for p in glob.glob(f"{root}/**/*.{ext}", recursive=True):
+                try:
+                    f = TTFont(p, fontNumber=0, lazy=True)
+                    if f["name"].getDebugName(1) == family:
+                        sub = (f["name"].getDebugName(2) or "").lower()
+                        if sub in ("regular", "book", ""):
+                            return p
+                except Exception:
+                    pass
+    return None

@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 thai_wordbreak.py — ตัดคำไทยให้บรรทัดสวย ใน .docx / .xlsx / .pptx
-V01R01 | 2026.07.31 | ผูกกับ skill ice-doc-builder §3.5
+V01R02 | 2026.08.30 | ผูกกับ skill ice-doc-builder §3.5
+(V01R02: --audit แสดง 12 รายการแรกพร้อมบรรทัดแจ้งยอดที่เหลือชัดเจน + เพิ่ม --all ดูครบทุกรายการ
+ — แก้เคสรายงาน 12 ทั้งที่เสี่ยงจริง 77 · บทเรียน 70-Fleet/thai-wordbreak-audit-truncated-output.md)
 
 ปัญหา: ไทยไม่มีช่องว่างระหว่างคำ → Office ตัดบรรทัดกลางคำ ("ระบบบัญ / ชีแยกประเภท")
 เครื่องมือ: PyThaiNLP (newmm engine — รักษา case ของอังกฤษ ต่างจาก longest ที่ lowercase ทิ้ง)
@@ -20,7 +22,8 @@ Usage:
     python3 thai_wordbreak.py --check "ข้อความ" --width 30    # T2 ทำนายจุดตัด
     python3 thai_wordbreak.py --zwsp  "ข้อความ"               # T3 ใส่ ZWSP
     python3 thai_wordbreak.py --strip "ข้อความ"               # ถอด ZWSP ออก
-    python3 thai_wordbreak.py --audit file.xlsx --col C --width 45
+    python3 thai_wordbreak.py --audit file.xlsx --col C --width 45   # แสดง 12 รายการแรก
+    python3 thai_wordbreak.py --audit file.xlsx --all                # แสดงครบทุกรายการ
 """
 import sys, re, unicodedata
 
@@ -98,8 +101,12 @@ def find_bad_breaks(text: str, width: float, engine: str = _ENGINE) -> list:
     return bad
 
 
-def audit_xlsx(path: str, col: str = None, width: float = None):
-    """T2 กับไฟล์จริง — รายงานเซลล์ที่เสี่ยงตัดกลางคำ (read-only)"""
+AUDIT_SHOW_MAX = 12   # เพดานรายการที่พิมพ์เมื่อไม่ใส่ --all — จำนวนจริงอ่านจากบรรทัดสรุปเสมอ
+
+
+def audit_xlsx(path: str, col: str = None, width: float = None, show_all: bool = False):
+    """T2 กับไฟล์จริง — รายงานเซลล์ที่เสี่ยงตัดกลางคำ (read-only)
+    show_all=False พิมพ์ AUDIT_SHOW_MAX รายการแรก + บรรทัดแจ้งยอดที่เหลือ (ห้ามตัดเงียบ)"""
     from openpyxl import load_workbook
     wb = load_workbook(path)
     total, risky = 0, []
@@ -116,11 +123,16 @@ def audit_xlsx(path: str, col: str = None, width: float = None):
                 total += 1
                 bad = find_bad_breaks(c.value, w)
                 if bad:
+                    # เก็บตัวอย่างสูงสุด 2 จุดต่อเซลล์ — จำนวนเซลล์เสี่ยงนับจาก len(risky) ไม่ใช่จำนวนบรรทัดที่พิมพ์
                     risky.append((f"{ws.title}!{c.coordinate}", bad[:2]))
     print(f"THAI-WRAP AUDIT | เซลล์ไทยที่ wrap: {total} · เสี่ยงตัดกลางคำ: {len(risky)}")
-    for loc, bad in risky[:12]:
+    shown = risky if show_all else risky[:AUDIT_SHOW_MAX]
+    for loc, bad in shown:
         for _, word, l, r in bad:
             print(f"   {loc}: '{word}' → จะถูกผ่าเป็น '{l}' / '{r}'")
+    if len(risky) > len(shown):
+        print(f"   ⚠ แสดง {len(shown)} จาก {len(risky)} เซลล์เสี่ยง — เหลืออีก "
+              f"{len(risky) - len(shown)} เซลล์ ใช้ --all เพื่อดูครบทุกรายการ")
     if risky:
         print("   วิธีแก้ (เรียงจากดีไปรอง): ① ขยายความกว้างคอลัมน์  ② ปรับข้อความ"
               "  ③ ใส่ ZWSP (--zwsp · แลกกับ Ctrl+F หาไม่เจอ)")
@@ -149,6 +161,6 @@ if __name__ == "__main__":
     elif a[0] == "--audit":
         col = a[a.index("--col") + 1] if "--col" in a else None
         w = float(a[a.index("--width") + 1]) if "--width" in a else None
-        audit_xlsx(a[1], col, w)
+        audit_xlsx(a[1], col, w, show_all="--all" in a)
     else:
         print(__doc__)

@@ -16,6 +16,12 @@ V02R02 — ⭐ +V4 RAIL CONFORMANCE (ด่านที่หายไป): V1 �
 และ validator ขึ้น ✅ PASS · ต้นเหตุ: build script เขียนมือตั้ง FONT เองเป็นค่าคงที่ ไม่เคยเรียก RAILS
 → V4 เทียบกับ RAILS[rail] ตรง ๆ · CLI: --rail private|govt · --allow-font "ชื่อ" (TOR บังคับ/ไฟล์รับมา)
 
+V02R03 (2026.08.30) — §3.2 E2 เปลี่ยนจาก "ต้องตั้งความสูงเอง" เป็น "ความสูงต้องพอกับข้อความจริง":
+  ค่าเริ่มต้นของ builder = ปล่อย auto-height · ตั้งเองเฉพาะแถว merge หรือแถวที่ spec สั่ง row_height_lines
+  audit เลิก fail แถวที่ปล่อย auto · หันมา fail แถวที่ตั้งเองแล้วเตี้ยกว่าที่ข้อความต้องการ
+  (คำนวณจากความกว้างคอลัมน์จริงของเซลล์นั้น ไม่ใช่การเดาจำนวนบรรทัดแบบเหมารวม)
+  หลักฐาน: CP Axtra Requirement Baseline 2026.08.30 — ×1.45 เฉือน 83/112 แถว · ×1.72 เฉือน 52/140 · auto 0/140
+
 V02R02 — แก้ E4 false positive: เดิมฟ้อง "merge ในแถวไทย+wrap" ทุกแถวโดยไม่ดูว่าแถวนั้นตั้ง
 row height ไว้แล้วหรือไม่ → ไฟล์ที่ builder ของเราสร้างสด (merge_put ตั้ง height ให้เสมอ) ก็ FAIL
 พิสูจน์ด้วย differential test: rebuild จาก script เดิม → FAIL เซลล์ชุดเดียวกันเป๊ะ = ปัญหาอยู่ที่
@@ -40,12 +46,13 @@ spec.json schema (เพิ่มจาก V01 · ของเดิมใช้
       "freeze": "B2",
       "column_widths": {"A": 30},
       "header_fill": "1F4E79", "header_font_color": "FFFFFF",
-      "wrap_columns": ["C","G"],       # คอลัมน์ที่ให้ wrap (จะคำนวณความสูงแถวให้)
-      "row_height_lines": {"5": 2}     # override จำนวนบรรทัดที่คาดของแถวนั้น
+      "wrap_columns": ["C","G"],       # คอลัมน์ที่ให้ wrap — V02R03: ปล่อย auto-height ให้โปรแกรมคำนวณเอง
+      "row_height_lines": {"5": 2}     # สั่งความสูงคงที่ของแถวนั้น (= เลิกใช้ auto สำหรับแถวนี้)
+                                       #   ใช้เมื่อดีไซน์ต้องการความสูงตายตัว เช่น banner — ดู §3.2 E2
   }]
 }
 """
-import sys, os, json, glob, re
+import sys, os, json, glob, re, math
 
 from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
@@ -61,8 +68,66 @@ from font_policy import (RAILS, BLACKLIST_PATTERNS, LATIN_ONLY, THAI_RE,   # noq
                          APPROVED_ALT, RETIRED, rail_fallbacks, resolve_font_policy, infer_rail,
                          has_thai, installed_families, blacklist_hit, check_fonts)
 
-ROW_H_FACTOR = 1.45   # §3.2 E2 — ทดสอบแล้ว
+# §3.2 E2 (V02R03 · 2026.08.30) — ค่าเหล่านี้เป็น "พื้นขั้นต่ำ" สำหรับแถวที่ *จำเป็น* ต้องตั้งความสูงเอง
+# (แถว merge ที่ AutoFit ตาย และแถว banner ที่ดีไซน์กำหนดความสูง) ไม่ใช่ค่าที่ใช้กับทุกแถวอีกต่อไป
+# ค่าเริ่มต้นของแถวข้อความยาว = ปล่อย auto-height ให้โปรแกรมคำนวณ
+# ที่มา: CP Axtra Requirement Baseline 2026.08.30 — ×1.45 เฉือน 83/112 แถว · ×1.72 เฉือน 52/140 · auto 0/140
+ROW_H_FACTOR = 1.72   # ตัวคูณตอน "สร้าง" — เผื่อไว้เล็กน้อย (เดิม 1.45 ต่ำเกินไปจนเฉือนข้อความ)
+# ตัวคูณตอน "ตรวจ" ต้องต่ำกว่าตัวคูณตอนสร้าง มิฉะนั้นจะฟ้องแถวที่ปกติดี
+#   วัดความสูงหนึ่งบรรทัดจริงด้วย LibreOffice (2026.08.30): IBM Plex Sans Thai Looped = 1.67-1.83 × pt
+#   · TH Sarabun New = 1.40-1.49 × pt → ตั้งพื้นที่ 1.35 ซึ่งต่ำกว่าทุกค่าที่วัดได้ จึงฟ้องเฉพาะแถวที่สั้นผิดปกติจริง
+#   ส่วนคำถามว่า "ถูกเฉือนหรือไม่" ให้ xlsx_rowheight_probe.py ตอบ (§3.2 E2 ชั้น ②) ไม่ใช่ค่านี้
+ROW_H_MIN_FACTOR = 1.35   # ใช้เมื่ออ่าน metric ของฟอนต์ไม่ได้เท่านั้น (ดู min_single_line_height)
 ROW_H_PAD = 6
+ROW_H_TOL = 2.0       # ผ่อนผัน 2 pt กันเสียงรบกวนจากการประมาณ — เฉือนจริงในเคสอ้างอิงคือ 11-21 pt
+
+
+def min_single_line_height(font_pt):
+    """พื้นขั้นต่ำของแถวหนึ่งบรรทัด (point) แบบไม่รู้จักฟอนต์ — **ใช้เมื่ออ่าน metric ไม่ได้เท่านั้น**
+    ทางหลักคือ `line_ratio()` ซึ่งอ่านจากไฟล์ฟอนต์จริง ค่าคงที่ 1.35 นี้เลือกให้ต่ำกว่าทุกฟอนต์ที่วัดได้
+
+    ⚠ ข้อจำกัดที่ต้องรู้ และเป็นเหตุผลที่ฟังก์ชันนี้ไม่พยายามทำมากกว่านี้:
+      การพยากรณ์ว่าข้อความไทยจะ wrap กี่บรรทัด ทำจากข้อมูลสถิตไม่ได้จริง — วัดแล้วสองทาง
+      (หลักฐาน CP Axtra 2026.08.30 · เทียบกับผลวัด render จริง 52 แถว):
+        · นับทุกอักขระ ÷ 1.18            → ฟ้อง 105 แถว (เกินจริงราวสองเท่า = validator ที่เชื่อไม่ได้)
+        · ตัดสระ/วรรณยุกต์ที่กว้าง 0 แล้วใช้อัตราส่วนที่วัดจากไฟล์ฟอนต์จริง (1.058) → ฟ้อง 7 แถว (ต่ำกว่าจริงมาก)
+      เพราะหน่วยความกว้างคอลัมน์ของ Excel ไม่ใช่จำนวนตัวอักษรตรง ๆ และ LibreOffice ตัดบรรทัดไทย
+      ด้วยพจนานุกรม ไม่ใช่ตามจำนวนอักขระ
+      ⇒ ตัวตรวจสถิตจึงตอบได้แค่ "เตี้ยจนไม่พอแม้บรรทัดเดียวหรือไม่" ส่วน "ถูกเฉือนหรือไม่"
+        ต้องให้เครื่องมือจัดหน้าตอบ — ใช้ `xlsx_rowheight_probe.py` (§3.2 E2 ชั้น ②)
+        การแกล้งตอบให้ดูขยันคือการสร้าง false-green รอบใหม่
+    """
+    return round(font_pt * ROW_H_MIN_FACTOR, 1)
+
+
+_LINE_RATIO_CACHE = {}
+
+
+def line_ratio(family):
+    """สัดส่วนความสูงหนึ่งบรรทัดต่อขนาดฟอนต์ อ่านจากไฟล์ฟอนต์จริง (hhea) — คืน None ถ้าอ่านไม่ได้
+
+    ทำไมต้องอ่านจากไฟล์ ไม่ใช้ค่าคงที่: ค่าที่ถูกของฟอนต์หนึ่งผิดสำหรับอีกฟอนต์
+      IBM Plex Sans Thai Looped = 1.650 · TH Sarabun New = 1.331 — ต่างกัน 24%
+    ทำไมใช้ hhea ไม่ใช้ usWinAscent+usWinDescent: วัดเทียบกับความสูงที่ LibreOffice กำหนดจริง
+      (2026.08.30 · 6 เคส) แล้วพบว่าฐาน usWin สูงเกินจนฟ้องผิด 3 ใน 6 เคส ส่วนฐาน hhea
+      อยู่ใต้ค่าจริงทุกเคส จึงใช้เป็น "พื้น" ได้โดยไม่ฟ้องแถวที่ปกติดี
+      (Plex 9pt: hhea 14.8 · จริง 15.0 | 16pt: hhea 26.4 · จริง 26.9 | Sarabun 16pt: hhea 21.3 · จริง 22.4)
+    """
+    if family in _LINE_RATIO_CACHE:
+        return _LINE_RATIO_CACHE[family]
+    ratio = None
+    try:
+        from font_policy import font_file_for
+        from fontTools.ttLib import TTFont
+        path = font_file_for(family)
+        if path:
+            f = TTFont(path, fontNumber=0, lazy=True)
+            h, upm = f["hhea"], f["head"].unitsPerEm
+            ratio = (h.ascender - h.descender + h.lineGap) / upm
+    except Exception:
+        ratio = None
+    _LINE_RATIO_CACHE[family] = ratio
+    return ratio
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -75,7 +140,8 @@ def audit(path: str, strict: bool = True, rail: str = "private",
     wb = load_workbook(path)
     fams = installed_families()
     rep = {"fonts_used": set(), "unresolvable": [], "blacklisted": [],
-           "thai_cells": 0, "thai_latin_only_font": [], "thai_no_rowheight": [],
+           "thai_cells": 0, "thai_latin_only_font": [],
+           "row_too_short": [], "row_auto_height": 0, "row_fixed_height": 0,
            "merged_thai_rows": [], "merged_thai_rows_ok": [],
            "shrink_to_fit": [], "formula_cells": 0,
            "v1_skipped": not bool(fams)}
@@ -103,9 +169,23 @@ def audit(path: str, strict: bool = True, rail: str = "private",
                     rep["shrink_to_fit"].append(loc)
                 wrapped = bool(c.alignment and c.alignment.wrap_text)
                 if wrapped:
-                    has_h = ws.row_dimensions[c.row].height is not None
+                    set_h = ws.row_dimensions[c.row].height
+                    has_h = set_h is not None
                     if not has_h:
-                        rep["thai_no_rowheight"].append(loc)
+                        # V02R03: ปล่อย auto-height = ค่าเริ่มต้นที่ถูกต้องตาม E2 ใหม่ ไม่ใช่ข้อบกพร่อง
+                        #   (E4 ด้านล่างตัดสินแถว merge จากตัวแปร has_h ในเครื่อง ไม่ได้ใช้คีย์ใด)
+                        rep["row_auto_height"] += 1
+                    else:
+                        # ตั้งเอง = ตรวจได้เฉพาะข้อที่ฟันธงได้: เตี้ยจนไม่พอแม้บรรทัดเดียวหรือไม่
+                        rep["row_fixed_height"] += 1
+                        pt = float((c.font.sz if (c.font and c.font.sz) else 11) or 11)
+                        r = line_ratio(c.font.name if c.font else None)
+                        base = round(pt * r, 1) if r else min_single_line_height(pt)
+                        # นับบรรทัดจากการขึ้นบรรทัดใหม่ในเซลล์ — รู้แน่ ไม่ต้องพยากรณ์ wrap
+                        #   (แถวที่บรรจุ 3 บรรทัดแต่ตั้งความสูงไว้เท่าบรรทัดเดียว เดิมลอดด่านนี้ไปได้)
+                        floor = round(base * max(1, len(str(c.value).splitlines())), 1)
+                        if set_h < floor - ROW_H_TOL:
+                            rep["row_too_short"].append((loc, round(set_h, 1), floor))
                     # E4 — merge ฆ่า AutoFit จริง แต่เป็น "ข้อบกพร่อง" ก็ต่อเมื่อแถวนั้น *ต้องพึ่ง* AutoFit
                     #   ตั้ง row height ไว้ชัดเจนแล้ว = escape hatch ที่ builder เราใช้ตั้งใจ (merge_put) → ผ่าน
                     #   V02R02 (บทเรียน PWA 2026.08.04): เดิมไม่เช็คเงื่อนไขนี้ → ไฟล์ที่ script สร้างสด
@@ -155,8 +235,11 @@ def audit(path: str, strict: bool = True, rail: str = "private",
                      f"{rep['merged_thai_rows'][:5]}")
     if rep["shrink_to_fit"]:
         fails.append(f"E5 shrink-to-fit บนเซลล์ไทย: {rep['shrink_to_fit'][:5]}")
-    if rep["thai_no_rowheight"]:
-        fails.append(f"E2 เซลล์ไทย+wrap ไม่ตั้ง row height: {rep['thai_no_rowheight'][:5]}")
+    if rep["row_too_short"]:
+        _ex = "; ".join(f"{loc} ตั้งไว้ {h} pt · พื้นขั้นต่ำ {n} pt" for loc, h, n in rep["row_too_short"][:5])
+        fails.append(f"E2 แถวที่ตั้งความสูงเองแล้วไม่พอกับจำนวนบรรทัดที่มีอยู่จริง "
+                     f"({len(rep['row_too_short'])} เซลล์ · นับจากบรรทัดที่ขึ้นใหม่ในเซลล์ ไม่ใช่การเดา wrap) — ขยายให้ถึงค่าที่ระบุ "
+                     f"หรือเปลี่ยนมาปล่อย auto-height: {_ex}")
     rep["fails"] = fails
 
     print(f"VALIDATOR | thai_cells={rep['thai_cells']} · fonts={len(rep['fonts_used'])} "
@@ -165,6 +248,12 @@ def audit(path: str, strict: bool = True, rail: str = "private",
     if rep.get("alt_used"):
         print(f"  ℹ ใช้ตัวเลือกอนุมัติ (ไม่ใช่ฟอนต์ราง): {', '.join(rep['alt_used'])} "
               f"— ผ่านได้ แต่ GAP ไทย-ละตินกว้างกว่า ตรวจว่าไทยไม่ดูเล็กเกินไป")
+    if rep["row_auto_height"] or rep["row_fixed_height"]:
+        # แสดงเสมอ — ผู้อ่านต้องรู้ว่าอะไร "ผ่านเพราะตรวจแล้ว" กับอะไร "ผ่านเพราะตรวจไม่ได้"
+        print(f"  ℹ E2 ความสูงแถว: {rep['row_auto_height']} เซลล์ปล่อย auto-height (ค่าเริ่มต้นตาม §3.2 E2) · "
+              f"{rep['row_fixed_height']} เซลล์ตั้งความสูงเอง (ตรวจแล้วว่าไม่ต่ำกว่าพื้นหนึ่งบรรทัด)")
+        print(f"     ⚠ ตัวตรวจนี้บอกไม่ได้ว่าข้อความถูกเฉือนหรือไม่ — การ wrap ภาษาไทยพยากรณ์จากข้อมูลสถิตไม่ได้ "
+              f"(ดูเหตุผลใน min_single_line_height) → ตอบข้อนั้นด้วย xlsx_rowheight_probe.py")
     if rep["merged_thai_rows_ok"]:
         # แสดงเสมอ — ไม่เงียบ: ผู้อ่านต้องรู้ว่าเรา "ยกเว้น" อะไรไป ไม่ใช่ "ไม่เจอ"
         print(f"  ℹ E4 ยกเว้น {len(rep['merged_thai_rows_ok'])} เซลล์ merge+wrap ที่ตั้ง row height ไว้แล้ว "
@@ -176,7 +265,9 @@ def audit(path: str, strict: bool = True, rail: str = "private",
         if strict:
             sys.exit(3)
     else:
-        print(f"✅ PASS — V1 resolve ครบ · V2 ไม่มี blacklist · V4 ตรงราง '{rail}' · E2/E4/E5 ผ่าน")
+        v1txt = "V1 ข้าม (ไม่มี fontTools — ข้าม ≠ ผ่าน)" if rep["v1_skipped"] else "V1 resolve ครบ"
+        print(f"✅ PASS — {v1txt} · V2 ไม่มี blacklist · V4 ตรงราง '{rail}' · E2/E4/E5 ผ่าน "
+              f"(E2 = ไม่มีแถวที่ตั้งเองต่ำกว่าพื้นหนึ่งบรรทัด · **ไม่ได้ตรวจ**การเฉือนจาก wrap)")
     return rep
 
 
@@ -259,13 +350,23 @@ def build(spec_path: str, out_path: str):
                     vertical="center", wrap_text=want_wrap or (c.alignment.wrap_text if c.alignment else False),
                     shrink_to_fit=False,
                 )
-            # §3.2 E2 — ตั้ง row height ชัดเจนเมื่อมีไทย (หรือมี wrap)
-            if thai_in_row or wrapped_in_row:
-                lines = overrides.get(row[0].row)
-                if lines is None:
-                    longest = max((len(str(c.value)) for c in row if c.value), default=0)
-                    lines = 2 if (wrapped_in_row and longest > 60) else 1
-                ws.row_dimensions[row[0].row].height = round(SIZE * ROW_H_FACTOR * lines + ROW_H_PAD, 1)
+            # §3.2 E2 (V02R03) — ค่าเริ่มต้นคือ **ปล่อย auto-height**
+            #   ตั้งเองเฉพาะ 2 กรณีที่ auto ใช้ไม่ได้หรือดีไซน์บังคับ:
+            #     (ก) แถวที่ merge — AutoFit ถูกปิดใช้งานที่นั่น (E4) ไม่ตั้ง = ไม่มีอะไรกู้
+            #     (ข) spec สั่งจำนวนบรรทัดมาเอง (row_height_lines) = ผู้เขียน spec ยืนยันความสูงคงที่
+            #   เหตุผลที่เลิกตั้งทุกแถว: การเดา "2 บรรทัดถ้ายาวเกิน 60 ตัว" ผิดบ่อยจนเฉือนข้อความ
+            #   (CP Axtra 2026.08.30 — เฉือน 52/140 แถวแม้ใช้ตัวคูณ 1.72 แล้ว · ปล่อย auto = 0/140)
+            rownum = row[0].row
+            spec_lines = overrides.get(rownum)
+            # จำนวนบรรทัดที่ "รู้แน่" จากการขึ้นบรรทัดใหม่ในเซลล์ — ไม่ใช่การพยากรณ์ wrap จึงเชื่อได้ 100%
+            hard_lines = max((len(str(c.value).splitlines()) for c in row if c.value), default=1)
+            if spec_lines is not None or hard_lines > 1:
+                lines = max(spec_lines or 1, hard_lines)
+                ws.row_dimensions[rownum].height = round(SIZE * ROW_H_FACTOR * lines + ROW_H_PAD, 1)
+            # นอกเหนือจากนี้ = ปล่อย auto-height ตาม §3.2 E2
+            #   (เดิมมีสาขาสำหรับแถว merge ด้วย แต่ builder นี้ไม่เคยเรียก merge_cells และ spec ก็ไม่มีคีย์
+            #    สำหรับสั่ง merge → เป็น dead code ที่ซ่อนสูตรเดา "2 บรรทัดถ้ายาวเกิน 60 ตัว" ซึ่งเลิกใช้แล้วไว้ข้างใน
+            #    ถ้าวันหนึ่งเพิ่ม merge เข้ามาจริง ต้องเพิ่มคีย์ใน schema แล้วตั้งความสูงให้แถวนั้นด้วย เพราะ E4)
 
         for col, width in (sht.get("column_widths") or {}).items():
             ws.column_dimensions[col].width = width

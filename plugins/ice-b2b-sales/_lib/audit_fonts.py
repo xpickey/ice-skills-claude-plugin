@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-audit_fonts.py — จุดตรวจฟอนต์ **จุดเดียว** ครอบทุกฟอร์แมต (xlsx/pptx/docx/html/pdf)
+audit_fonts.py — จุดตรวจ **จุดเดียว** ครอบทุกฟอร์แมต (xlsx/pptx/docx/html/pdf)
+ตรวจฟอนต์เป็นหลัก และตรวจวินัยตารางของ .docx (W4-W5) กับของ .xlsx (E2-E5) ด้วย
 V01R01 | 2026.08.04 | ผูกกับ skill ice-doc-builder §3.0 FONT POLICY + §6 V1-V4
 
 ทำไมต้องมีตัวเดียว (บทเรียน 2026.08.04 — เคส PWA TCO-Breakdown V01R22):
@@ -56,6 +57,7 @@ def collect_pptx(path):
 
 def collect_docx(path):
     fonts, nocs, inherited = set(), 0, None
+    tbl_fails, tbl_infos = [], []
     with zipfile.ZipFile(path) as z:
         names = z.namelist()
         # ⭐ ต้องอ่าน docDefaults ก่อนเสมอ — run ที่ไม่มี direct formatting **inherit** จากราก
@@ -79,6 +81,9 @@ def collect_docx(path):
                 fonts.update(re.findall(r'w:ascii="([^"]+)"', r))
                 if not cs:
                     nocs += 1
+            tbl_fails, tbl_infos = check_docx_tables(xml)
+    for line in tbl_infos:
+        print("   ℹ", line)
     # W1 เป็นข้อบกพร่องจริง **ก็ต่อเมื่อ** ราก (docDefaults) ไม่ได้ตั้ง w:cs ไว้ให้ inherit
     if nocs and not inherited:
         extra = [f"W1 run ไทย {nocs} run ไม่มี w:cs **และ docDefaults ก็ไม่ได้ตั้งไว้** → "
@@ -88,7 +93,70 @@ def collect_docx(path):
         if nocs:
             print(f"   ℹ {nocs} run ไทยไม่มี w:cs ตรง ๆ แต่ inherit จาก docDefaults "
                   f"('{inherited}') — ถูกกฎตาม §3.1")
+    extra += tbl_fails
     return fonts, extra
+
+
+def _docx_tables(xml: str):
+    """แยกบล็อก <w:tbl>…</w:tbl> ออกมาทีละตาราง โดยนับความลึกของแท็กเพื่อให้ตารางซ้อนกัน
+    ไม่ทำให้ขอบเขตเพี้ยน — คืน list ของสตริง XML รายตาราง"""
+    out, i = [], 0
+    while True:
+        st = xml.find("<w:tbl>", i)
+        st2 = xml.find("<w:tbl ", i)
+        st = min(x for x in (st, st2) if x >= 0) if (st >= 0 or st2 >= 0) else -1
+        if st < 0:
+            return out
+        depth, j = 0, st
+        while j < len(xml):
+            o1, o2 = xml.find("<w:tbl>", j), xml.find("<w:tbl ", j)
+            nxt_o = min(x for x in (o1, o2) if x >= 0) if (o1 >= 0 or o2 >= 0) else -1
+            nxt_c = xml.find("</w:tbl>", j)
+            if nxt_c < 0:
+                return out
+            if nxt_o >= 0 and nxt_o < nxt_c:
+                depth += 1; j = nxt_o + 7
+            else:
+                depth -= 1; j = nxt_c + 8
+                if depth == 0:
+                    out.append(xml[st:j]); i = j; break
+        else:
+            return out
+
+
+def check_docx_tables(xml: str):
+    """ตรวจวินัยตารางของ .docx ตาม ice-doc-builder §3.1 W4-W5
+    คืน (fails, infos) — fails ทำให้ผลตรวจตก · infos เป็นข้อสังเกตที่ไม่ตัดสิน"""
+    fails, infos = [], []
+    tables = _docx_tables(xml)
+    if not tables:
+        return fails, infos
+    no_fixed, rows_free, rows_total = [], 0, 0
+    for n, tb in enumerate(tables, 1):
+        head = tb[:tb.find("</w:tblPr>") + 10] if "</w:tblPr>" in tb else tb[:400]
+        cols = len(re.findall(r"<w:gridCol\b", tb))
+        fixed = bool(re.search(r'<w:tblLayout[^>]*w:type="fixed"', head))
+        if cols >= 2 and not fixed:
+            no_fixed.append(f"ตารางที่ {n} ({cols} คอลัมน์)")
+        body = re.findall(r"<w:tr\b.*?</w:tr>", tb, re.S)
+        for r in body:
+            if "<w:tblHeader" in r:
+                continue
+            rows_total += 1
+            if "<w:cantSplit" not in r:
+                rows_free += 1
+    if no_fixed:
+        fails.append(
+            "W4 ตารางที่ไม่ได้ตั้ง <w:tblLayout w:type=\"fixed\"> — ความกว้างคอลัมน์ที่กำหนดไว้จะถูก "
+            "ละทิ้งทั้งหมด ตัวจัดหน้าจะเฉลี่ยทุกคอลัมน์เท่ากัน: " + " · ".join(no_fixed[:6])
+            + (f" … อีก {len(no_fixed)-6} ตาราง" if len(no_fixed) > 6 else ""))
+    if rows_free:
+        fails.append(
+            f"W5 แถวเนื้อหา {rows_free} จาก {rows_total} แถว ไม่ได้ตั้ง <w:cantSplit> — ผิดกฎ W5 "
+            "ซึ่งบังคับให้ทุกแถวเนื้อหาตั้งไว้ตั้งแต่ตอนสร้าง · หมายเหตุขอบเขต: ด่านนี้ตัดสินได้แค่ "
+            "'ตั้งไว้หรือไม่' ซึ่งเป็นการปฏิบัติตามกฎ ส่วนคำถามว่าแถวนั้นขาดกลางหน้าจริงหรือไม่ "
+            "ขึ้นกับการแบ่งหน้า ตอบได้จาก render เท่านั้น")
+    return fails, infos
 
 
 def collect_html(path):
