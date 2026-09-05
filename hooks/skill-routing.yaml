@@ -145,3 +145,10 @@ routes:
       any_of: [สร้างภาพ, ภาพประกอบ, generate image, Higgsfield, nanobanana, Nano Banana, hero image, ภาพ AI, วาดภาพ]
     recommended: [higgsfield-generate, nanobanana-connection]
     note: ภาพที่ใช้ในสไลด์ยังต้องตามกฎการออกแบบสไลด์ 6 ข้อ (ประเภท deck-customer)
+
+  - id: industry-fmcg
+    label: ลูกค้ากลุ่มสินค้าอุปโภคบริโภคหรือแฟชั่นที่ขายหลายช่องทาง
+    when:
+      any_of: [FMCG, แฟชั่น, ค้าปลีก, retail, omnichannel, หลายช่องทาง, marketplace, ecommerce, e-commerce, สินค้าอุปโภค, สินค้าบริโภค, แบรนด์สินค้า]
+    recommended: [fmcg-practise, ice-b2b-enterprise-sale]
+    note: ความรู้แนวปฏิบัติของอุตสาหกรรมนี้อยู่ที่ skill fmcg-practise · รายละเอียดว่าเมื่อไรต้องใช้อยู่ที่ ~/.claude/agents/reference/compass-practice-loadout.md
