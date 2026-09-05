@@ -868,7 +868,7 @@ _lib/patterns/gantt-timeline.md — Project Timeline/Gantt (สกัดจา�
 | ประเภทเอกสาร | Default format | Design skill (โหลด) | Build engine | ภาษา default |
 |---|---|---|---|---|
 | **Proposal / ข้อเสนอ** | .docx หรือ deck | b2b-slide-designer + b2b-presentation-creator | pptx/docx | ถาม (H6) มัก Bilingual |
-| **Pitch deck / นำเสนอลูกค้า** | .pptx (หรือ html demo) | slide-designer + presentation-creator + pre-flight-deck | `_lib/build_pptx.py` หรือ HTML | Bilingual |
+| **Pitch deck / นำเสนอลูกค้า** | .pptx (หรือ html demo) | slide-designer (รวมด่านตรวจก่อนสร้าง deck ไว้ที่หัวข้อ 4.4 แล้ว) + presentation-creator | `_lib/build_pptx.py` หรือ HTML | Bilingual |
 | **Board paper / Executive briefing** | .pptx | slide-designer (Cobalt/iCE-Propose) + design-principles | `_lib/build_pptx.py` (embed) | ตามผู้บริหาร |
 | **SoW** | .docx | presentation-creator (เนื้อ) + docx | `_lib/build_docx.py` | ตาม contract |
 | **Business case / ROI narrative** | .docx + .xlsx | presentation-creator + design-principles | docx + xlsx | Bilingual |
