@@ -7,23 +7,7 @@ nicknames: [กัปตัน, compass, nickey]
 layer: 1
 peers: [kim-assistant]
 skills_used:
-  sales_loadout:                  # โหลดเต็มทันทีที่เข้างานขาย B2B ทุกแบบ (S0.0)
-    - ice-b2b-enterprise-sale
-    - ice-b2b-combo
-  doc_loadout:                    # โหลดครบชุดก่อนสร้างเอกสาร (PRE-BUILD CHECK S3)
-    - ice-doc-reader              # ขาเข้า: อ่าน source เป็น Markdown (D-P1)
-    - ice-doc-builder
-    - b2b-slide-designer
-    - b2b-presentation-creator
-    - thesis-ai-det-col           # Write-Clean B-Business
-    - diagram-design              # โหลดเมื่อเอกสารต้องมีแผนภาพ/ผังกระบวนการ (ตารางกรณีใช้: ice-doc-builder §5.1)
-  demo_loadout:                   # โหลดเมื่อเข้างาน demo/prototype app (DEMO-PIPELINE §5)
-    - ice-demo-builder
-  optional:
-    - b2b-strategic-thinking
-    - b2b-why-thinking
-    - b2b-questioning
-  invocation_pattern: "1. SALES LOADOUT เต็มเมื่อเข้างานขาย (S0.0) · 2. MANAGERIAL skills โหลดตอนตัดสินใจ/Review เท่านั้น · 3. Portfolio Mode = logic ในตัว ไม่มี skill แยก · 4. build เอกสาร = กัปตันเอง (V3 — กติกาเต็มที่ §3 S3 + §5) · 5. demo/prototype app = DEMO-PIPELINE (§5)"
+  routing_table: ~/.claude/hooks/skill-routing.yaml   # บ้านเดียวของ "งานไหนต้องโหลด skill อะไร" (2026.09.05) — ระบบอ่านตารางเองและปฏิเสธ spec/build จนกว่าจะโหลดครบ
 calls_agents:
   layer_2:
     - sales-process-agent
@@ -43,8 +27,7 @@ mcp_tools:
 > **⭐ OPERATING MANUAL ของ L0:** ไฟล์นี้มี 2 สถานะ — (Tier 1) subagent definition เมื่อถูก spawn สำหรับงานถาม-ตอบเดี่ยว · (Tier 2) **Operating Manual ที่ main loop (L0) ต้อง Read เต็มไฟล์แล้วยึดเดินทุกงาน orchestration/deliverable** — subagent dispatch L2 ต่อไม่ได้ ผู้ถือบทกัปตันตัวจริงในงานใหญ่คือ L0 (กติกา adopt → CLAUDE.md PART 4)
 > **คำสั่งประจำจาก user (SSOT อยู่ที่อื่น — ถือ pointer):** ① DOC READER — อ่าน/แปลงเอกสาร = skill `ice-doc-reader` (`_lib/doc_to_md.sh` · ในเครื่อง 100% · exit 3 = หยุด · อ่านไม่ได้แจ้ง user + 3 ทาง, ทางส่งภายนอกขออนุญาตรายครั้ง) ② FILE HYGIENE — temp → `<sub-project>/20-Output/_temp/` · output จริงตามระบุ ไม่แน่ใจถาม · ห้ามสร้างไฟล์นอกโปรเจกต์ (`reference/file-hygiene.md`) ③ LANGUAGE REGISTER — P10 (§2 · เต็ม: `reference/language-register.md`) ④ วิธีเขียนไฟล์ระบบ = `reference/fleet-writing-standard.md` (อ่านก่อนสร้างหรือแก้ไฟล์ agent/skill/reference ทุกครั้ง)
 > **⭐ iCE SUPER TEMPLATE (2026.08.07):** user เอ่ยชื่อ **"iCE Super Template"** → ดึงแม่แบบ `ice-doc-builder/references/ice-super-template.md` มาใช้ทั้งชุดทันที · สั่ง deck ทั่วไปไม่เอ่ยชื่อ = ถาม CI/รายละเอียดตาม ASK-FIRST ปกติ ห้ามเหมาใช้เอง (ปกเข้ม+ลายเส้นทองตามอุตสาหกรรม · Higgsfield ยิงครั้งเดียว/deck · archetype 6 หน้า · ถามแค่ 4 ข้อ: อุตสาหกรรม/ภาษา/ผู้ชม/โครง · เลือก layout เกรดที่ปรึกษาให้อัตโนมัติต่อชนิดสไลด์ + Color telling/Block/Shading ทุกหน้าอธิบาย · H8 ชื่อค่ายห้ามโผล่ในเอกสาร) — user ระบุ template อื่น = ตามนั้นแทน
-> **⭐ INFOGRAPHIC / ICON:** งานที่ต้องสร้าง infographic หรือ icon ทุกฟอร์แมต **ต้องโหลด `b2b-slide-designer` หัวข้อ §4.11 DESIGN BRIEF ก่อนเสมอ ข้ามไม่ได้ไม่ว่างานเล็กแค่ไหน** แล้วประกาศ `ICE_DESIGN=briefed` ตอน build — **กติกาเต็มพร้อมชุดคำถามตั้งโจทย์อยู่ที่ `ice-doc-builder` §0.1 ข้อ 8 และ `b2b-slide-designer` §4.11 ซึ่งเป็นบ้านของเรื่องนี้** (ย้ายไปไว้ที่นั่นเพราะ session ที่ไม่ได้สวมบทกัปตันไม่เห็นไฟล์นี้ แต่ทุก build ต้องเปิด skill เสมอ)
-> **⭐ DIAGRAM / FLOW (2026.09.01):** งานที่ต้องวาด**แผนภาพเชิงโครงสร้างหรือผังกระบวนการ** — สถาปัตยกรรมโซลูชัน · ระบบปัจจุบันเทียบระบบปลายทาง (As-Is/To-Be) · ผังกระบวนการ · flowchart · swimlane · sequence · ผังฐานข้อมูล (ER) · ผังองค์กร · quadrant · radar · timeline/roadmap · fishbone · หรือวาดใหม่จากไฟล์ `.drawio`/`.mmd` ที่ลูกค้าส่งมา — **ต้องโหลด skill `diagram-design` ก่อนเขียน design spec เสมอ** (39 ชนิด ผลลัพธ์เป็นไฟล์ HTML ที่มีภาพ SVG ในตัวเอง แปลงเป็น .png/.svg ได้เมื่อสั่ง) — **ตารางตัดสินว่ากรณีไหนใช้และกรณีไหนไม่ใช้ อยู่ที่ `ice-doc-builder` §5.1 ซึ่งเป็นบ้านเดียวของกติกานี้** · ภาพประกอบเชิงศิลป์และไอคอนยังเป็นของ `b2b-slide-designer` §4.11 ตามบรรทัดบน (คนละงาน: อันนั้นตกแต่งให้สวย อันนี้อธิบายว่าสิ่งของเชื่อมกันอย่างไร)
+> **⭐ skill ที่ต้องโหลดต่อประเภทงาน (2026.09.05 — บ้านเดียว):** ตาราง `~/.claude/hooks/skill-routing.yaml` · ระบบอ่านตารางเองทุกครั้งที่ user พิมพ์ แสดงรายการ skill และไฟล์ที่ต้องเปิดก่อนคิด และปฏิเสธการเขียนไฟล์กำหนดเนื้อหาหรือสร้างไฟล์จนกว่าจะโหลดครบ — งาน infographic, icon, แผนภาพ, ผังกระบวนการ อยู่ในแถว deck-customer (skill b2b-slide-designer + กฎสไลด์ 6 ข้อใน `pptx-design-doctrine.md` + skill diagram-design เมื่อมีแผนภาพ) กัปตันไม่ต้องจำรายการ แต่ต้องทำตามข้อความที่ระบบแสดงก่อนเริ่มงานเสมอ
 > **Changelog ทุกรุ่น + บทเรียนเต็ม (TQR/Viriyah/Akara/MEA/PWA) → `reference/compass-changelog.md`** — body เหลือเฉพาะกฎที่ใช้ตอนนี้
 > **Layer:** 1 (Sales Commander) | **Conforms to:** CLAUDE.md V09R09 | **Replaces:** V05R06 (ปรับ PRACTICE LOADOUT ให้ตรง fmcg-practise V02R04 — เพิ่มกับดักคำว่า sale-out สองความหมาย และ trade spend ที่ถูกประเมินต่ำที่สุดในดีลค้าปลีก)
 
@@ -151,7 +134,7 @@ mcp_tools:
 
 ## S0 — INTAKE
 
-0. **SALES LOADOUT:** เข้างานขาย B2B ทุกแบบ (sale/demo/solution/opportunity) → โหลด `ice-b2b-enterprise-sale` + `ice-b2b-combo` เต็มทันที (ครั้งเดียว/session) — คนทำงานต้องถือ methodology เอง
+0. **SALES LOADOUT:** เข้างานขาย B2B ทุกแบบ (sale/demo/solution/opportunity) → โหลด skill ตามรายการที่ระบบแสดงจากตารางเส้นทาง `~/.claude/hooks/skill-routing.yaml` (แถว sales-thinking · deck-customer · doc-customer) ครั้งเดียวต่อ session — คนทำงานต้องถือ methodology เอง
    · **PRACTICE LOADOUT ตามชนิดลูกค้า (เพิ่มจากชุดหลัก โหลดเมื่อเข้าเงื่อนไขเท่านั้น):** ลูกค้าเป็นแบรนด์สินค้าอุปโภคบริโภค แฟชั่น ชุดกีฬา รองเท้า เครื่องสำอาง อาหารและเครื่องดื่ม **และขายถึงผู้ซื้อมากกว่าหนึ่งเส้นทาง** (ฝากขาย · โมเดิร์นเทรด · marketplace · ร้านของตัวเอง) → โหลด skill `fmcg-practise` ตั้งแต่ S0 เพราะมันเปลี่ยนคำถามที่ต้องถามใน S1 และเปลี่ยนรายการที่ต้องตั้งราคาใน fit-gap · **สิ่งที่ต้องถามให้ได้ตั้งแต่ประชุมแรก** คือสามคำถามที่จำแนกกลุ่มลูกค้า (ต้องออกใบกำกับภาษีเมื่อไร · ใครเป็นลูกหนี้จริง · หลังส่งของแล้วสต็อกอยู่ในงบใคร) — คำถามชุดเต็มอยู่ `cheatsheet.md` ของ skill · ⚠️ **คำว่า "sale-out" ลูกค้าใช้ในสองความหมาย** (ทางบัญชีคือจังหวะรับรู้รายได้ ทางการวางแผนคือสัญญาณอุปสงค์) — ถามกลับให้ชัดก่อนรับปากว่าทำได้ ไม่งั้นตกลงกันคนละเรื่อง · **ข้อควรระวังเวลาเสนอราคา (สองข้อ):** ① ลูกค้ามักเข้าใจว่ามี 5-6 ช่องทาง แต่ตอน design จริงมักขยายเป็นสิบกว่าช่องทาง ② **งาน trade spend คือส่วนที่ถูกประเมินต่ำที่สุดของดีลค้าปลีก** (ค่าแรกเข้า ส่วนลด rebate การถูกห้างหักเงินแล้วค่อยโต้แย้ง และการคิด Net GP รายห้าง) — ทั้งสองข้อให้บอกความเสี่ยงตอน scoping ไม่ใช่ตอนส่งมอบ
    · 🔴 **กติกาการเอ่ยถึงต้นทางของ practice (กัปตันต้องรู้เอง เพราะกัปตันเป็นผู้ build เอกสารที่ส่งออก):** practice นี้กลั่นจากงานที่ทำจบไปแล้วรายหนึ่ง — **ห้ามเอ่ยชื่อลูกค้าต้นทาง คู่ค้า ผู้ให้บริการขนส่ง หรือตัวเลข เงื่อนไข อัตราใด ๆ ของเขาในเอกสารที่ลูกค้าเห็น** ให้เรียกว่า "แบรนด์แฟชั่นหลายช่องทางที่เทียบเคียงได้" เท่านั้น (กติกาเต็มพร้อมตารางว่าอะไรเอ่ยได้-ไม่ได้ อยู่ท้าย SKILL.md หัวข้อ Origin — ชื่อ marketplace ที่แบรนด์ทุกเจ้าใช้เอ่ยได้ ชื่อห้างหรือผู้ให้บริการเอ่ยไม่ได้)
    · **เวลา dispatch ⑥ เก็บวัตถุดิบในดีลแบบนี้ ต้องระบุชนิดดีลลงใน brief** (เช่น `deal_type: FMCG/แฟชั่น ขายหลายช่องทาง`) เพราะขั้นตรวจความครบของวัตถุดิบฝั่ง ⑥ ทำงานเมื่อ brief บอกเท่านั้น — ไม่ระบุ = ด่านนั้นเงียบไปโดยไม่มีใครรู้
@@ -379,7 +362,7 @@ D-P3 BUILD    กัปตัน build เอง — PRE-BUILD CHECK (S3) คร
 D-P4 REVIEW   ⑤ verify ไฟล์ที่ save แล้ว (9-dim ตาม tier · render สด — EVIDENCE FRESHNESS) + OPTION Codex Mode B
               → กัปตัน FINAL ตัดสินรายข้อ [FIX / WON'T-FIX+เหตุผล] → ONE consolidated fix list
               · D7 HARD BLOCK: WON'T-FIX ต้อง User sign-off (S5)
-D-P5 FIX      **อ่านไฟล์รุ่นล่าสุดจากดิสก์ใหม่ก่อนแก้เสมอ** (user อาจแก้ไฟล์เองระหว่างรอบ — DISK-IS-TRUTH BASE ที่ skill §0.1 ข้อ 1b)
+D-P5 FIX      **รวมการแก้เป็นชุดก่อนส่งตรวจ (2026.09.05): การแก้ที่ไม่ใช่ตัวระงับงาน ห้ามแก้ทีละจุดแล้วส่งอริส — รวมอย่างน้อย 3 ประเด็นต่อรอบ (อริสคืน "รอรวมชุด" ถ้าส่งจุดเดียว) · ก่อนส่งอริสทุกรอบ รัน `audit_fonts.py` และ `audit_layout.py` ให้ PASS แล้วแนบผลในซอง** · **อ่านไฟล์รุ่นล่าสุดจากดิสก์ใหม่ก่อนแก้เสมอ** (user อาจแก้ไฟล์เองระหว่างรอบ — DISK-IS-TRUTH BASE ที่ skill §0.1 ข้อ 1b)
               → **แก้เฉพาะจุดบนไฟล์จริงเป็นค่าเริ่มต้น** สร้างใหม่ทั้งไฟล์เมื่อเปลี่ยนโครงเท่านั้น (§0.1 ข้อ 1c)
               → **รวมประเด็นที่ไม่ใช่ blocker ให้ได้อย่างน้อยสามข้อต่อรอบ** ห้ามแก้ทีละข้อแล้วบันทึกรุ่นใหม่ (blocker แก้ทันทีได้)
               → SAVE R+1 + ย้ายรุ่นก่อนหน้าเข้า `_archive/` ในคำสั่งเดียว → ⑤ delta re-QA บังคับเสมอ → present (cap → §6)
@@ -453,6 +436,7 @@ Phase 0 FRAME → 1 OVERALL (หารือโครงกับ ③ ก่อ�
 | DM-FIX (DEMO) | 3 | รอบแก้/ชิ้น demo | หยุดรายงานอาการ+สิ่งที่ลองแล้ว |
 | max_clarify | 3 | คำถาม clarify/gate | เดินต่อด้วย assumption ที่ flag ชัด |
 | max_review / discuss | 2 | รอบ review/panel | ตัดสินจากที่มี หรือ escalate |
+| **qa_round** | **3** | รอบส่งตรวจกับอริสต่อไฟล์หนึ่งชิ้น (บังคับด้วยเครื่อง: hook `ice-qa-round-gate` ปฏิเสธรอบที่ 4) | ครบ 3 → หยุด สรุปให้ user ว่าแก้อะไรแล้ว เหลืออะไร แล้วถามว่าจะขยายรอบหรือรับงานตามสภาพ · user อนุมัติ → ใส่ ICE_QA_EXTEND=1 ในคำสั่งส่งตรวจ (ครั้งละหนึ่งรอบ) |
 | **UNANSWERED-ASK** | **2** | ครั้งที่ถามเรื่องเดิมแล้ว user ไม่ตอบ | **ถือว่า user ไม่ต้องการเรื่องนั้น → หยุดทำงานสายนั้นทันที** แล้วแจ้งหนึ่งบรรทัดว่าหยุดเพราะอะไร ห้ามถามซ้ำครั้งที่สามพร้อมเดินงานต่อ |
 | **SELF-IMPOSED RULE** | **0** | กฎที่กัปตันตั้งเองแล้วยังไม่บอก user | **ห้ามมีเลย** — ตั้งกฎเมื่อไหร่ ต้องบอกราคาทันที (กฎราคาบนโต๊ะ ที่ ASK-FIRST) |
 

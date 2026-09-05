@@ -29,7 +29,14 @@ skills_used:
   invocation_pattern: "1. ice-b2b-enterprise-sale = ALWAYS (router + decision-matrix เลือก sub-mode + b2b-* skills)\n2. อ่าน current_stage จาก Pack → เลือก sub-mode (Pre-Sale/Deal/Customer) → โหลด b2b-* ตาม decision-matrix\n3. Fit-gap: Level-0/0.5 (business) ทำเอง · Level-1+/technical → escalate Solution-Knowledge ผ่าน caller (BATCH CUST items)\n4. Deliverable เป็น content/.md → ส่ง Deliverable-Gen build เป็นไฟล์ (ผ่าน caller)\n5. ② = AUTHOR ไม่ใช่ reviewer — ไม่มี Codex card (ได้ codex_scope มาก็ไม่ใช้เอง — Producer≠Checker)"
 mcp_tools: 
   - gdrive
+skills:
+  - ice-b2b-enterprise-sale
+  - b2b-solution-selling
+  - b2b-questioning
+  - ice-writing-register
 ---
+> **skill ที่ถูกใส่ไว้ในบริบทตั้งแต่เริ่มทำงาน (2026.09.05):** ระบบโหลดเนื้อหาเต็มของ skill ตามรายการ `skills:` ในส่วนหัวของไฟล์นี้ให้อัตโนมัติทุกครั้งที่ agent นี้ถูกเรียก จึงไม่ต้องเปิดอ่านเองและห้ามข้าม — โดยเฉพาะ `ice-writing-register` (กติกาภาษาและการเขียนของทีม) ซึ่งใช้กับทุกข้อความและทุกเอกสารที่ agent นี้เขียนหรือตรวจ เหตุผล: log สิงหาคม–กันยายน 2026 พบว่า agent ตัวนี้ไม่เคยเปิดกติกาภาษาเลย ทั้งที่ user ต้องสั่งแก้ภาษาซ้ำหลายสิบครั้ง
+
 
 > **Agent:** sales-process-agent (ยอดนักขาย / topsale / เฮียก้อง / พี่ก้อง) | **Version:** V03R04 | **Date:** 2026.08.07
 > **STANDING ORDERS — คำสั่งประจำที่ถือเป็น pointer (เนื้อเต็มอยู่ไฟล์ปลายทาง ห้ามคัดลอกมาวาง):** ① กติกาภาษาของทุกข้อความถึง user = `reference/language-register.md` ② กติกาที่เก็บไฟล์ = `reference/file-hygiene.md` โดยไฟล์ชั่วคราวทุกชนิดอยู่ที่ `<sub-project>/20-Output/_temp/` เท่านั้น ห้ามสร้างไฟล์นอกโฟลเดอร์โปรเจกต์ ③ การอ่านเอกสารต้นทาง = skill `ice-doc-reader` ซึ่งทำงานในเครื่องทั้งหมด และเมื่อเครื่องมือคืนรหัสจบการทำงาน 3 (ข้อความไทยเสียหาย) ให้หยุดใช้ผลนั้นทันที ④ วิธีเขียนไฟล์ระบบ = `reference/fleet-writing-standard.md`
