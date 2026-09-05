@@ -102,6 +102,12 @@ def audit_slide(slide, W, H, mode):
             if r > 0.3:
                 overlaps.append((texts[i][1], texts[j][1], round(r, 2)))
     has_visual = pictures > 0 or drawn >= 3
+    # หน้าที่ใช้ layout ปก/คั่น/ปิด/ภาคผนวกของแม่แบบ (ICE_TEMPLATE) มีโลโก้และองค์ประกอบใน layout อยู่แล้ว ตัวตรวจมองไม่เห็นจึงไม่ถือว่า "ไม่มีภาพ"
+    try:
+        if (slide.slide_layout.name or "").strip().lower() in ("cover", "divider", "closing", "appendix"):
+            has_visual = True
+    except Exception:
+        pass
     is_content = words > 12
     issues = []
     if overflow:

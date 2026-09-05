@@ -28,6 +28,42 @@ LATIN_BODY = "Lora"
 # ฟอนต์สำหรับ glyph สัญลักษณ์ล้วน (▸ ฯลฯ) — ไม่ใช่ข้อความ ไม่อยู่ใต้ราง
 SYMBOL_FONT = "Arial"
 
+# ⭐ V02 (2026.09.05 · Wave B) โหมดแม่แบบ: ICE_TEMPLATE=<path .pptx แม่แบบ iCE>
+#   ไม่ตั้ง = พฤติกรรมเดิมทุกอย่าง 100% · ตั้งแล้ว = เปิดแม่แบบ (ฟอนต์ theme/สี/โลโก้/footer/เลขหน้า
+#   มาจาก master) ลบสไลด์ตัวอย่างที่ติดมา แล้วเลือก layout ตามชื่อ:
+#     title-hero → "cover" (พื้นเข้มของแม่แบบ ไม่วาดพื้นหลังเอง) · หน้าอื่น → "blank" ของแม่แบบ
+#     หรือระบุเองรายหน้าใน outline ด้วย "template_layout": "<ชื่อ layout>"
+#   ฟังก์ชันวาดเนื้อหาของไฟล์นี้ยังวาด textbox/รูปทรงเองเหมือนเดิม (ยังไม่เติม placeholder) —
+#   placeholder ของ layout จึงถูกถอดออกก่อน ยกเว้น footer/เลขหน้า ซึ่งยกมาจาก layout แทน add_footer()
+#   การเติมเนื้อหาลง placeholder จริงทำที่ ~/.claude/agents/_lib/build_pptx.py (โหมดแม่แบบ V02R05)
+ICE_TEMPLATE = os.environ.get("ICE_TEMPLATE") or None
+TEMPLATE_DEFAULT_LAYOUT = {"title-hero": "cover"}
+TEMPLATE_FALLBACK_LAYOUT = "blank"
+
+
+def _template_layout(prs, name: str):
+    for lay in prs.slide_layouts:
+        if lay.name == name:
+            return lay
+    raise ValueError(f"แม่แบบไม่มี layout ชื่อ '{name}' (มี: {', '.join(l.name for l in prs.slide_layouts)})")
+
+
+def _template_remove_slides(prs) -> None:
+    sldIdLst = prs.slides._sldIdLst
+    for sldId in list(sldIdLst):
+        prs.part.drop_rel(sldId.rId)
+        sldIdLst.remove(sldId)
+
+
+def _template_prepare_slide(slide, layout) -> None:
+    """ถอด placeholder ที่ clone มาจาก layout (เนื้อหาถูกวาดเองอยู่แล้ว) แล้วยก footer/เลขหน้าจาก layout"""
+    import copy as _copy
+    for shp in list(slide.placeholders):
+        shp._element.getparent().remove(shp._element)
+    for shp in layout.placeholders:
+        if shp.placeholder_format.idx in (11, 12):
+            slide.shapes._spTree.append(_copy.deepcopy(shp._element))
+
 from pptx import Presentation
 from pptx.util import Inches, Pt, Emu
 from pptx.dml.color import RGBColor
@@ -222,11 +258,15 @@ def add_title_hero(
     primary_color = hex_to_rgb(colors["primary"])
     text_color = hex_to_rgb(colors["text"])
 
-    # Background
-    add_rectangle_shape(slide, 0, 0, 13.333, 7.5, bg_color)
+    if ICE_TEMPLATE:
+        # โหมดแม่แบบ: layout "cover" มีพื้นเข้มไล่เฉด + โลโก้ขาวอยู่แล้ว → ไม่วาดพื้นหลังทับ · ตัวอักษรขาว
+        primary_color = text_color = RGBColor(0xFF, 0xFF, 0xFF)
+    else:
+        # Background
+        add_rectangle_shape(slide, 0, 0, 13.333, 7.5, bg_color)
 
-    # Accent bar on the left
-    add_rectangle_shape(slide, 0, 0, 0.1, 7.5, primary_color)
+        # Accent bar on the left
+        add_rectangle_shape(slide, 0, 0, 0.1, 7.5, primary_color)
 
     # Title
     title = content.get("title") or content.get("title_en", "")
@@ -835,9 +875,16 @@ def build_deck(
         return
 
     # Create presentation
-    prs = Presentation()
-    prs.slide_width = SLIDE_WIDTH
-    prs.slide_height = SLIDE_HEIGHT
+    if ICE_TEMPLATE:
+        if not Path(ICE_TEMPLATE).is_file():
+            raise FileNotFoundError(f"ICE_TEMPLATE ชี้ไปไฟล์ที่ไม่มีอยู่จริง: {ICE_TEMPLATE}")
+        prs = Presentation(ICE_TEMPLATE)          # ขนาดสไลด์มาจากแม่แบบ (16:9 13.333 × 7.5 นิ้ว)
+        _template_remove_slides(prs)
+        logger.info(f"Template mode: {ICE_TEMPLATE} · layouts: {', '.join(l.name for l in prs.slide_layouts)}")
+    else:
+        prs = Presentation()
+        prs.slide_width = SLIDE_WIDTH
+        prs.slide_height = SLIDE_HEIGHT
 
     slides_data = outline.get("slides", [])
     total_slides = len(slides_data)
@@ -864,8 +911,15 @@ def build_deck(
             )
 
         # Add blank slide
-        blank_slide_layout = prs.slide_layouts[6]
-        slide = prs.slides.add_slide(blank_slide_layout)
+        if ICE_TEMPLATE:
+            tpl_name = slide_content.get("template_layout") or TEMPLATE_DEFAULT_LAYOUT.get(
+                layout_type, TEMPLATE_FALLBACK_LAYOUT)
+            tpl_layout = _template_layout(prs, tpl_name)
+            slide = prs.slides.add_slide(tpl_layout)
+            _template_prepare_slide(slide, tpl_layout)
+        else:
+            blank_slide_layout = prs.slide_layouts[6]
+            slide = prs.slides.add_slide(blank_slide_layout)
 
         # Apply layout function
         layout_fn = layout_mapping[layout_type]
@@ -876,8 +930,9 @@ def build_deck(
             logger.error(f"Error rendering slide {slide_idx + 1} ({layout_type}): {e}")
             raise
 
-        # Add footer
-        add_footer(slide, theme, slide_idx + 1, total_slides)
+        # Add footer (โหมดแม่แบบ: footer + เลขหน้ามาจาก layout แล้ว ไม่วาดซ้ำ)
+        if not ICE_TEMPLATE:
+            add_footer(slide, theme, slide_idx + 1, total_slides)
 
     # Save
     output_path_obj = Path(output_path)

@@ -109,6 +109,18 @@ if [[ "$CMD" == *ICE_BUILD=pipeline* ]] && writes_office_file && ! edits_system_
       fi
     fi
   fi
+  # ── ด่าน E TEMPLATE (Wave B · 2026.09.05 — **ยังไม่เปิดใช้ รอ user อนุมัติแม่แบบก่อน**) ──
+  # เหตุผลที่จะมีด่านนี้: log ส.ค.–ก.ย. 2026 พบว่า builder สร้าง deck จาก Presentation() เปล่าแล้ววาดทุกอย่าง
+  #   จาก shape primitive (เฉลี่ย 47 shape ต่อหน้า วัตถุทับกัน ฟอนต์ไม่คงที่) — แม่แบบจริงอยู่ที่
+  #   ~/.claude/skills/b2b-slide-designer/assets/masters/iCE-Propose_Master.pptx (README.md ในโฟลเดอร์เดียวกัน)
+  #   และ build_pptx.py / build_deck.py รองรับตัวแปร ICE_TEMPLATE=<path> แล้ว
+  # วิธีเปิดใช้: ลบเครื่องหมาย "#E" หน้าสามบรรทัดข้างล่างออก (ให้เหลือช่องว่างนำหน้าตามเดิม) แล้วบันทึกไฟล์
+  #   ด่านจะบังคับเฉพาะงาน .pptx ที่เดินเส้น pipeline · งานที่ใช้แม่แบบของลูกค้าให้ประกาศ ICE_TEMPLATE=<path แม่แบบลูกค้า>
+  #   · งานที่ตั้งใจไม่ใช้แม่แบบใดเลยให้ประกาศ ICE_TEMPLATE=none พร้อมเหตุผลใน spec ช่อง template_override_reason
+  #E  if grep -qiE '\.pptx|pptx-builder|python-pptx|from pptx' <<<"$CMD" && [[ "$CMD" != *ICE_TEMPLATE=* ]]; then
+  #E    deny "งานไฟล์นำเสนอต้องสร้างบนแม่แบบของ iCE: เติม ICE_TEMPLATE=~/.claude/skills/b2b-slide-designer/assets/masters/iCE-Propose_Master.pptx ไว้ในคำสั่งนี้ (หรือ path แม่แบบของลูกค้า หรือ ICE_TEMPLATE=none เมื่อตั้งใจไม่ใช้แม่แบบและบันทึกเหตุผลไว้ใน spec) เหตุผล: การวาดทุกอย่างจากรูปทรงพื้นฐานทำให้วัตถุทับกัน ฟอนต์ไม่คงที่ และหน้าตาไม่ตรงอัตลักษณ์องค์กร — วิธีใช้แม่แบบอยู่ที่ README.md ในโฟลเดอร์ masters"
+  #E  fi
+
   # ── ด่าน D SKILLS-LOADED (V03R02 · 2026.09.05): ตารางเส้นทาง skill ระบุว่างานนี้ต้องโหลด skill อะไรก่อน ──
   # สภาพ session ถูกจดโดย hooks/ice-skill-record.py ทุกครั้งที่ model โหลด skill หรือเปิดไฟล์
   # เหตุผล: log ส.ค.–ก.ย. 2026 พบว่า 47 จาก 56 session ที่สร้างเอกสารไม่เคยโหลด skill ออกแบบเลย

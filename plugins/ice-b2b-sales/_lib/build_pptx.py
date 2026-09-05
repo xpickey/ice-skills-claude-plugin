@@ -4,6 +4,7 @@ build_pptx.py — generic PPTX builder for sales agents.
 
 Usage:
     python3 build_pptx.py spec.json out.pptx
+    ICE_TEMPLATE=/path/iCE-Propose_Master.pptx python3 build_pptx.py spec.json out.pptx   (V02R05 โหมดแม่แบบ)
 
 FONT RULE (V02R04 · 2026.08.05) — ⚠ ข้อความเดิมที่ว่า "default = Tahoma ทุกข้อความ"
   **ยกเลิกแล้ว** (โค้ดไม่เคยอ่าน docstring นี้ · ตั้งแต่ V02R01 ฟอนต์มาจาก font_policy.RAILS)
@@ -213,6 +214,341 @@ def apply_font(prs, font):
     return n
 
 
+# ═══════════════════════════════════════════════════════════════════════════════
+# ⭐ V02R05 (2026.09.05 · Wave B) — โหมดแม่แบบ: ICE_TEMPLATE=<path ไฟล์ .pptx แม่แบบ>
+#   ต้นตอ: builder ทุกตัวสร้าง deck จาก Presentation() เปล่าแล้ววาดทุกอย่างจาก shape primitive
+#   (เฉลี่ย 47 shape ต่อหน้า วัตถุทับกัน ฟอนต์ไม่คงที่ หน้าตาไม่เหมือน CI) — โหมดนี้เปิดแม่แบบจริง
+#   ที่ฝังฟอนต์/สี/กริดของ iCE ไว้แล้ว (b2b-slide-designer/assets/masters/iCE-Propose_Master.pptx)
+#   แล้ว "เติมเนื้อหาลง placeholder" ของ layout ที่เลือกตามชื่อเท่านั้น
+#   ⚠ ไม่ตั้งตัวแปรนี้ = พฤติกรรมเดิมทุกอย่าง 100% (โค้ดด้านบนไม่ถูกแตะ)
+#
+#   ชื่อ layout ใน spec ใช้ได้ทั้งชื่อเดิม (title/section/bullets/two_column/table/kpi/image/thanks)
+#   และชื่อของแม่แบบ (cover/divider/action-title-body/two-column/three-card/table/timeline/closing/appendix)
+#   คีย์เพิ่มเติมที่โหมดแม่แบบอ่าน (ไม่บังคับ):
+#     ระดับ deck : "footer" (ข้อความท้ายหน้า) · "icon_color" (hex ของ icon ที่แปลงจาก SVG)
+#     ทุกหน้าเนื้อหา : "icon" = ชื่อไฟล์ mdi-*.svg ในคลัง หรือ path .png/.svg → icon นำหน้าหัวเรื่อง
+#     cover  : "kicker" "subtitle" "meta"          · divider : "number" "subtitle"
+#     action-title-body : "bullets" + "image_path" หรือ "image_icon" (พื้นที่ภาพด้านขวา)
+#     two-column : "left_title" "left" "left_icon" "right_title" "right" "right_icon"
+#     three-card : "cards": [{"icon","title","text"|"bullets"}] (หรือแปลงจาก "kpis" ให้อัตโนมัติ)
+#     table  : "headers" "rows" "note"              · timeline : "phases": [{"label","text"}] ≤4
+#     closing: "subtitle" "contact"                 · appendix : "bullets"
+#   bullet ระดับสอง: ข้อความขึ้นต้นด้วยสองช่องว่าง หรือ {"text": "...", "level": 1}
+# ═══════════════════════════════════════════════════════════════════════════════
+ICE_TEMPLATE = os.environ.get("ICE_TEMPLATE") or None
+ICON_DIR = os.path.expanduser("~/.claude/skills/b2b-slide-designer/assets/icons")
+
+TEMPLATE_LAYOUT_ALIAS = {
+    "title": "cover", "cover": "cover",
+    "section": "divider", "divider": "divider",
+    "bullets": "action-title-body", "image": "action-title-body", "action-title-body": "action-title-body",
+    "two_column": "two-column", "two-column": "two-column",
+    "kpi": "three-card", "cards": "three-card", "three-card": "three-card",
+    "table": "table",
+    "timeline": "timeline",
+    "thanks": "closing", "closing": "closing",
+    "appendix": "appendix",
+}
+
+
+def _layout_by_name(prs, name):
+    for lay in prs.slide_layouts:
+        if lay.name == name:
+            return lay
+    avail = ", ".join(l.name for l in prs.slide_layouts)
+    sys.exit(f"แม่แบบไม่มี layout ชื่อ '{name}' (มี: {avail})")
+
+
+def _remove_all_slides(prs):
+    """ลบสไลด์ตัวอย่างที่ติดมากับแม่แบบ — เหลือแต่ master/layout"""
+    sldIdLst = prs.slides._sldIdLst
+    for sldId in list(sldIdLst):
+        prs.part.drop_rel(sldId.rId)
+        sldIdLst.remove(sldId)
+
+
+def _ph(slide, idx):
+    for shp in slide.placeholders:
+        if shp.placeholder_format.idx == idx:
+            return shp
+    return None
+
+
+def _set_text(ph, items):
+    """เติมข้อความลง placeholder · str = ย่อหน้าเดียว · list = หลายย่อหน้า (bullet ตาม layout)"""
+    if ph is None or items in (None, "", []):
+        return False
+    if isinstance(items, str):
+        items = [items]
+    tf = ph.text_frame
+    first = True
+    for it in items:
+        level = 0
+        if isinstance(it, dict):
+            level, it = int(it.get("level", 0)), str(it.get("text", ""))
+        elif it.startswith("  "):
+            level, it = 1, it.strip()
+        p = tf.paragraphs[0] if first else tf.add_paragraph()
+        p.text = it
+        p.level = level
+        first = False
+    return True
+
+
+def _icon_png(src, color, out_dir):
+    """คืน path PNG ของ icon · รับชื่อ mdi-xxx / ไฟล์ .svg / ไฟล์ .png
+    SVG → PNG ใช้ qlmanage ของ macOS (ไม่ต้องติดตั้งอะไร) · ย้อมสีด้วยการแทน currentColor ก่อนแปลง"""
+    if not src:
+        return None
+    if src.lower().endswith(".png") and os.path.isfile(src):
+        return src
+    name = os.path.basename(src)
+    if not name.endswith(".svg"):
+        name += ".svg"
+    if not name.startswith("mdi-") and not os.path.isfile(src):
+        name = "mdi-" + name
+    svg_path = src if os.path.isfile(src) else os.path.join(ICON_DIR, name)
+    if not os.path.isfile(svg_path):
+        sys.exit(f"ไม่พบ icon: {src} (ค้นใน {ICON_DIR} — ดูรายชื่อที่ INDEX.md)")
+    icon_dir = os.path.join(out_dir, "_icons")
+    os.makedirs(icon_dir, exist_ok=True)
+    hexcol = (color or "1E66A4").lstrip("#").upper()
+    stem = os.path.splitext(os.path.basename(svg_path))[0]
+    png = os.path.join(icon_dir, f"{stem}-{hexcol}.png")
+    if os.path.isfile(png):
+        return png
+    tinted = os.path.join(icon_dir, f"{stem}-{hexcol}.svg")
+    with open(svg_path, encoding="utf-8") as f:
+        svg = f.read().replace("currentColor", f"#{hexcol}")
+    with open(tinted, "w", encoding="utf-8") as f:
+        f.write(svg)
+    r = subprocess.run(["qlmanage", "-t", "-s", "512", "-o", icon_dir, tinted],
+                       capture_output=True, text=True)
+    made = tinted + ".png"
+    if not os.path.isfile(made):
+        sys.exit(f"แปลง SVG เป็น PNG ไม่สำเร็จ ({r.stderr.strip()[:200]}) — ดูวิธีทางเลือกใน "
+                 f"{ICON_DIR}/INDEX.md หัวข้อ 'การแปลง SVG เป็น PNG'")
+    os.remove(tinted)
+    # qlmanage คืนภาพพื้นขาวทึบ → คำนวณความโปร่งใสจากความเข้มของพิกเซล แล้วระบายสีที่ต้องการ
+    # (icon ของคลังเป็นสีเดียวบนพื้นขาว จึงใช้ช่องสีต่ำสุดเป็นตัวบอกว่าพิกเซลนั้นเป็นเนื้อ icon แค่ไหน)
+    try:
+        from PIL import Image
+        rr, gg, bb = int(hexcol[0:2], 16), int(hexcol[2:4], 16), int(hexcol[4:6], 16)
+        floor = min(rr, gg, bb)
+        with Image.open(made) as im:
+            im = im.convert("RGBA")
+            px = im.load()
+            w, h = im.size
+            for yy in range(h):
+                for xx in range(w):
+                    r, g, b, _ = px[xx, yy]
+                    a = 255 - min(r, g, b)
+                    a = int(round(a * 255 / max(1, 255 - floor)))
+                    px[xx, yy] = (rr, gg, bb, max(0, min(255, a)))
+            im.save(png)
+        os.remove(made)
+    except Exception as e:                      # ไม่มี PIL → ใช้ภาพพื้นขาวไปก่อน (แจ้งเสมอ)
+        print(f"⚠ icon {stem}: ทำพื้นโปร่งใสไม่ได้ ({e}) — ใช้ภาพพื้นขาว", file=sys.stderr)
+        os.replace(made, png)
+    return png
+
+
+def _fill_pic(slide, ph, path):
+    """วางภาพให้พอดีในกรอบ placeholder แบบไม่ตัดขอบ (contain) แล้วถอด placeholder ออก"""
+    if ph is None or not path:
+        return False
+    try:
+        from PIL import Image
+        with Image.open(path) as im:
+            iw, ih = im.size
+    except Exception:
+        iw, ih = 1, 1
+    bx, by, bw, bh = ph.left, ph.top, ph.width, ph.height
+    scale = min(bw / iw, bh / ih)
+    w, h = int(iw * scale), int(ih * scale)
+    x, y = bx + (bw - w) // 2, by + (bh - h) // 2
+    slide.shapes.add_picture(path, x, y, w, h)
+    ph._element.getparent().remove(ph._element)
+    return True
+
+
+def _clone_footer(slide, layout, footer_text):
+    """ยก footer (idx 11) และเลขหน้า (idx 12) จาก layout ลงสไลด์ — python-pptx ไม่ clone ให้เอง
+    (PowerPoint แสดงสองอย่างนี้เฉพาะเมื่อสไลด์มี placeholder ของตัวเอง)"""
+    import copy as _copy
+    spTree = slide.shapes._spTree
+    for shp in layout.placeholders:
+        idx = shp.placeholder_format.idx
+        if idx not in (11, 12):
+            continue
+        el = _copy.deepcopy(shp._element)
+        spTree.append(el)
+    for shp in slide.placeholders:
+        if shp.placeholder_format.idx == 11 and footer_text:
+            shp.text_frame.paragraphs[0].text = footer_text
+
+
+def _prune_empty(slide):
+    """ถอด placeholder ที่ไม่ได้เติม (กันข้อความ 'Click to add' และกล่องว่างค้างในไฟล์)"""
+    for shp in list(slide.placeholders):
+        pf = shp.placeholder_format
+        if pf.idx in (11, 12):
+            continue
+        if shp.has_text_frame and shp.text_frame.text.strip():
+            continue
+        if not shp.has_text_frame and getattr(shp, "has_table", False) and shp.has_table:
+            continue
+        shp._element.getparent().remove(shp._element)
+
+
+def _title_icon(slide, spec_slide, deck, out_dir):
+    icon = spec_slide.get("icon")
+    if icon:
+        _fill_pic(slide, _ph(slide, 10), _icon_png(icon, deck.get("icon_color"), out_dir))
+
+
+def _tpl_slide(prs, name):
+    layout = _layout_by_name(prs, TEMPLATE_LAYOUT_ALIAS.get(name, name))
+    return prs.slides.add_slide(layout), layout
+
+
+def tpl_cover(prs, sl, deck, out_dir):
+    s, lay = _tpl_slide(prs, "cover")
+    s.shapes.title.text = sl.get("title", deck.get("title", ""))
+    _set_text(_ph(s, 1), sl.get("kicker", deck.get("kicker")))
+    _set_text(_ph(s, 2), sl.get("subtitle", deck.get("subtitle")))
+    _set_text(_ph(s, 3), sl.get("meta"))
+    return s, lay
+
+
+def tpl_divider(prs, sl, deck, out_dir):
+    s, lay = _tpl_slide(prs, "divider")
+    s.shapes.title.text = sl.get("title", "")
+    _set_text(_ph(s, 1), sl.get("number"))
+    _set_text(_ph(s, 2), sl.get("subtitle"))
+    return s, lay
+
+
+def tpl_action_title_body(prs, sl, deck, out_dir):
+    s, lay = _tpl_slide(prs, "action-title-body")
+    s.shapes.title.text = sl.get("title", "")
+    _set_text(_ph(s, 1), sl.get("bullets"))
+    if sl.get("image_path"):
+        _fill_pic(s, _ph(s, 2), sl["image_path"])
+    elif sl.get("image_icon"):
+        _fill_pic(s, _ph(s, 2), _icon_png(sl["image_icon"], deck.get("icon_color"), out_dir))
+    _title_icon(s, sl, deck, out_dir)
+    return s, lay
+
+
+def tpl_two_column(prs, sl, deck, out_dir):
+    s, lay = _tpl_slide(prs, "two-column")
+    s.shapes.title.text = sl.get("title", "")
+    _set_text(_ph(s, 1), sl.get("left_title"))
+    _set_text(_ph(s, 2), sl.get("left"))
+    _set_text(_ph(s, 3), sl.get("right_title"))
+    _set_text(_ph(s, 4), sl.get("right"))
+    for idx, key in ((5, "left_icon"), (6, "right_icon")):
+        if sl.get(key):
+            _fill_pic(s, _ph(s, idx), _icon_png(sl[key], deck.get("icon_color"), out_dir))
+    _title_icon(s, sl, deck, out_dir)
+    return s, lay
+
+
+def tpl_three_card(prs, sl, deck, out_dir):
+    s, lay = _tpl_slide(prs, "three-card")
+    s.shapes.title.text = sl.get("title", "")
+    cards = sl.get("cards")
+    if not cards and sl.get("kpis"):
+        cards = [{"title": k.get("value", ""), "text": [k.get("label", ""), k.get("delta", "")]}
+                 for k in sl["kpis"]]
+    for i, c in enumerate((cards or [])[:3]):
+        base = i * 3
+        if c.get("icon"):
+            _fill_pic(s, _ph(s, base + 1), _icon_png(c["icon"], deck.get("icon_color"), out_dir))
+        _set_text(_ph(s, base + 2), c.get("title"))
+        body = c.get("bullets") or c.get("text")
+        if isinstance(body, list):
+            body = [t for t in body if t]
+        _set_text(_ph(s, base + 3), body)
+    _title_icon(s, sl, deck, out_dir)
+    return s, lay
+
+
+def tpl_table(prs, sl, deck, out_dir):
+    s, lay = _tpl_slide(prs, "table")
+    s.shapes.title.text = sl.get("title", "")
+    headers, rows = sl.get("headers", []), sl.get("rows", [])
+    ph = _ph(s, 1)
+    if headers and ph is not None:
+        gf = ph.insert_table(len(rows) + 1, len(headers))
+        tbl = gf.table
+        sz = Pt(16) if len(rows) <= 6 else Pt(14)
+        for j, h in enumerate(headers):
+            tbl.cell(0, j).text = str(h)
+        for i, row in enumerate(rows, start=1):
+            for j, v in enumerate(row):
+                tbl.cell(i, j).text = str(v)
+        for r in tbl.rows:
+            r.height = Inches(0.45)
+            for c in r.cells:
+                for p in c.text_frame.paragraphs:
+                    for run in p.runs:
+                        run.font.size = sz
+    _set_text(_ph(s, 2), sl.get("note"))
+    _title_icon(s, sl, deck, out_dir)
+    return s, lay
+
+
+def tpl_timeline(prs, sl, deck, out_dir):
+    s, lay = _tpl_slide(prs, "timeline")
+    s.shapes.title.text = sl.get("title", "")
+    for i, ph_ in enumerate((sl.get("phases") or [])[:4]):
+        _set_text(_ph(s, i + 1), ph_.get("label"))
+        _set_text(_ph(s, i + 5), ph_.get("text"))
+    _title_icon(s, sl, deck, out_dir)
+    return s, lay
+
+
+def tpl_closing(prs, sl, deck, out_dir):
+    s, lay = _tpl_slide(prs, "closing")
+    s.shapes.title.text = sl.get("title", "ขอบคุณ")
+    _set_text(_ph(s, 1), sl.get("subtitle"))
+    _set_text(_ph(s, 2), sl.get("contact"))
+    return s, lay
+
+
+def tpl_appendix(prs, sl, deck, out_dir):
+    s, lay = _tpl_slide(prs, "appendix")
+    s.shapes.title.text = sl.get("title", "")
+    _set_text(_ph(s, 1), sl.get("bullets"))
+    _title_icon(s, sl, deck, out_dir)
+    return s, lay
+
+
+TEMPLATE_LAYOUTS = {
+    "cover": tpl_cover, "divider": tpl_divider, "action-title-body": tpl_action_title_body,
+    "two-column": tpl_two_column, "three-card": tpl_three_card, "table": tpl_table,
+    "timeline": tpl_timeline, "closing": tpl_closing, "appendix": tpl_appendix,
+}
+
+
+def build_with_template(prs, spec, out_path):
+    """โหมดแม่แบบ — เติม placeholder ตามชื่อ layout · คืนจำนวนสไลด์"""
+    out_dir = os.path.dirname(os.path.abspath(out_path))
+    _remove_all_slides(prs)
+    footer = spec.get("footer", "iCE Consulting · เอกสารลับ")
+    for sl in spec["slides"]:
+        name = TEMPLATE_LAYOUT_ALIAS.get(sl.get("layout", "bullets"), sl.get("layout"))
+        fn = TEMPLATE_LAYOUTS.get(name)
+        if fn is None:
+            sys.exit(f"layout '{sl.get('layout')}' ไม่มีในแม่แบบ (ใช้ได้: {', '.join(TEMPLATE_LAYOUTS)})")
+        s, lay = fn(prs, sl, spec, out_dir)
+        _prune_empty(s)
+        _clone_footer(s, lay, footer)
+    return len(prs.slides)
+
+
 LAYOUTS = {
     "title": add_title_slide,
     "section": add_section_slide,
@@ -232,17 +568,27 @@ def build(spec_path, out_path):
     spec, _n = _sanitize_chars(spec)
     if _n:
         print(f"CHAR-GUARD: replaced {_n} arrow char(s) (U+2192/etc → ▸) — would have caused PowerPoint Repair", file=sys.stderr)
-    prs = Presentation()
-    prs.slide_width = Inches(10)
-    prs.slide_height = Inches(7.5)
+    if ICE_TEMPLATE:
+        # ⭐ V02R05 โหมดแม่แบบ — ขนาดสไลด์/ฟอนต์ theme/สี/โลโก้/footer มาจากไฟล์แม่แบบทั้งหมด
+        if not os.path.isfile(ICE_TEMPLATE):
+            sys.exit(f"ICE_TEMPLATE ชี้ไปไฟล์ที่ไม่มีอยู่จริง: {ICE_TEMPLATE}")
+        prs = Presentation(ICE_TEMPLATE)
+        print(f"🧩 แม่แบบ: {ICE_TEMPLATE} · layout: {', '.join(l.name for l in prs.slide_layouts)}")
+    else:
+        prs = Presentation()
+        prs.slide_width = Inches(10)
+        prs.slide_height = Inches(7.5)
     theme = spec.get("theme", {})
     if not spec.get("slides"):
         spec["slides"] = [{"layout": "title", "title": spec.get("title", "Untitled"), "subtitle": spec.get("subtitle", "")}]
-    elif spec["slides"][0].get("layout") != "title":
+    elif spec["slides"][0].get("layout") not in ("title", "cover"):
         spec["slides"].insert(0, {"layout": "title", "title": spec.get("title", "Untitled"), "subtitle": spec.get("subtitle", "")})
-    for slide in spec["slides"]:
-        layout = slide.get("layout", "bullets")
-        LAYOUTS.get(layout, add_bullets_slide)(prs, slide, theme)
+    if ICE_TEMPLATE:
+        build_with_template(prs, spec, out_path)
+    else:
+        for slide in spec["slides"]:
+            layout = slide.get("layout", "bullets")
+            LAYOUTS.get(layout, add_bullets_slide)(prs, slide, theme)
 
     # ⭐ D1 — ฟอนต์มาจากราง (§3.0) · spec override ได้เมื่อลูกค้า/แบรนด์บังคับ
     rail, _why = infer_rail(spec, out_path)

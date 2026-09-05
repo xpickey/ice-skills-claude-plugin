@@ -1,0 +1,31 @@
+{
+  "title": "ชื่อเรื่องตัวอย่าง",
+  "subtitle": "คำอธิบายตัวอย่าง",
+  "rail": "private",
+  "mode": "presenter",
+  "footer": "iCE Consulting · เอกสารลับ",
+  "icon_color": "#1E66A4",
+  "slides": [
+    {"layout": "cover", "kicker": "ตัวอย่าง", "title": "ชื่อเรื่องตัวอย่าง", "subtitle": "คำอธิบายตัวอย่าง", "meta": "iCE"},
+    {"layout": "divider", "number": "01", "title": "ตัวอย่างหัวข้อ", "subtitle": "ตัวอย่างข้อความ"},
+    {"layout": "action-title-body", "icon": "mdi-lightbulb-on", "title": "ตัวอย่างหัวเรื่องเป็นประโยคสรุปของหน้า",
+     "bullets": ["ตัวอย่างข้อที่ 1", "ตัวอย่างข้อที่ 2", "ตัวอย่างข้อที่ 3"], "image_icon": "mdi-chart-line"},
+    {"layout": "two-column", "icon": "mdi-swap-horizontal", "title": "ตัวอย่างการเปรียบเทียบสองด้าน",
+     "left_icon": "mdi-clock-outline", "left_title": "ตัวอย่าง ก", "left": ["ตัวอย่างข้อ 1"],
+     "right_icon": "mdi-target", "right_title": "ตัวอย่าง ข", "right": ["ตัวอย่างข้อ 1"]},
+    {"layout": "three-card", "icon": "mdi-view-grid", "title": "ตัวอย่างสามหัวข้อหลัก",
+     "cards": [{"icon": "mdi-finance", "title": "ตัวอย่าง 1", "text": "ตัวอย่าง"},
+               {"icon": "mdi-account-group", "title": "ตัวอย่าง 2", "text": "ตัวอย่าง"},
+               {"icon": "mdi-shield-check", "title": "ตัวอย่าง 3", "text": "ตัวอย่าง"}]},
+    {"layout": "table", "icon": "mdi-table", "title": "ตัวอย่างตารางเปรียบเทียบ",
+     "headers": ["รายการ", "ตัวอย่าง ก", "ตัวอย่าง ข"],
+     "rows": [["ข้อ 1", "ตัวอย่าง", "ตัวอย่าง"], ["ข้อ 2", "ตัวอย่าง", "ตัวอย่าง"], ["ข้อ 3", "ตัวอย่าง", "ตัวอย่าง"]],
+     "note": "ตัวอย่างหมายเหตุ"},
+    {"layout": "timeline", "icon": "mdi-chart-timeline-variant", "title": "ตัวอย่างแผนงานสี่ช่วง",
+     "phases": [{"label": "ช่วง 1", "text": "ตัวอย่าง"}, {"label": "ช่วง 2", "text": "ตัวอย่าง"},
+                {"label": "ช่วง 3", "text": "ตัวอย่าง"}, {"label": "ช่วง 4", "text": "ตัวอย่าง"}]},
+    {"layout": "appendix", "icon": "mdi-paperclip", "title": "ตัวอย่างภาคผนวก",
+     "bullets": ["ตัวอย่างข้อ 1", "ตัวอย่างข้อ 2", "ตัวอย่างข้อ 3"]},
+    {"layout": "closing", "title": "ขอบคุณ", "subtitle": "ตัวอย่างข้อความปิด", "contact": "ตัวอย่างชื่อ · ตัวอย่างอีเมล"}
+  ]
+}
