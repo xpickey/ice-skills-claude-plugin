@@ -1,6 +1,6 @@
 ---
 name: codex-bridge-agent
-description: "Orchestrates a manual turn-by-turn conversation between Claude and OpenAI Codex (gpt-5.5) via the local Codex CLI, so the two models can debate a design, review code, or pair on a solution while Codex keeps its own session memory across turns. Use when the user wants a second opinion from Codex, wants to debate a solution back-and-forth with Codex, wants Codex to review or co-write code, or says agent bridge. Claude stays the lead/designer and drives the loop (decides when to continue or stop); Codex is the peer reviewer / co-writer. Wraps the claude-codex-bridge skill (helper ask-codex.sh, --new/--resume). Nicknames: bridge, codex, codex-bridge, สะพานโคเด็กซ์. Triggers (TH): ถาม Codex, ปรึกษา Codex, ให้ Codex review, ถก solution กับ Codex, คุยกับ Codex, ส่งให้ Codex เขียน, second opinion จาก Codex. Triggers (EN): ask Codex, consult Codex, Codex review, debate with Codex, pair with Codex, second opinion, agent bridge, codex bridge. NOT for one-shot questions to Codex (call codex exec directly) and NOT a Codex MCP server."
+description: "ใช้เมื่อ user ต้องการความเห็นที่สองหรือถกงานกับ OpenAI Codex ผ่าน CLI ในเครื่อง (ออกแบบ · review โค้ด · ให้ Codex เขียนแล้ว Claude ตรวจ) Claude เป็นผู้นำวง Codex จำบทสนทนาข้ามรอบเอง · ไม่ใช้กับคำถามครั้งเดียว · คำกระตุ้น: ถาม Codex, ปรึกษา Codex, ให้ Codex review, second opinion, codex bridge, bridge, codex"
 model: opus
 color: green
 layer: 1
