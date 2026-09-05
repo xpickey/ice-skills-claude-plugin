@@ -33,6 +33,7 @@ CASES = [
     ("ทำ demo app dashboard ให้ลูกค้ากดได้", PROJ, ["demo-app"], []),
     ("GFMIS กับ e-GP ต่างกันอย่างไร", PROJ, ["govt-thailand"], []),
     ("สวัสดีครับ วันนี้อากาศดี", "/Users/xpickey/Documents/Claude", [], ["deck-customer", "doc-customer"]),
+    ("ทำ Pass 2.3 ตามแผน", "/Users/xpickey/Documents/Claude/Custom Skill/iCE-Skills-Marketplace", ["fleet-maintenance"], ["deck-customer"]),
 ]
 
 

@@ -1,4 +1,4 @@
-# ตารางเส้นทาง skill ของทีม iCE — จุดแก้จุดเดียว (V01R03 · 2026.09.05 — V01R02 เพิ่ม ice-writing-register · V01R03 เพิ่มกติกาการจับคู่จากผลทดสอบด้วยผู้อ่านที่ไม่มีบริบทมาก่อน (Cold-Reader Test))
+# ตารางเส้นทาง skill ของทีม iCE — จุดแก้จุดเดียว (V01R04 · 2026.09.05 — V01R04 เพิ่มประเภท fleet-maintenance ส่งต่องานข้าม session · V01R02 เพิ่ม ice-writing-register · V01R03 เพิ่มกติกาการจับคู่จากผลทดสอบด้วยผู้อ่านที่ไม่มีบริบทมาก่อน (Cold-Reader Test))
 #
 # ไฟล์นี้คืออะไร: ตารางที่บอกว่า "งานแบบไหน ต้องโหลด skill อะไร ก่อนเริ่มคิด" เครื่องเป็นคนอ่านไฟล์นี้
 # ไม่ใช่ตัว model — hook อ่านทุกครั้งที่ user พิมพ์ข้อความ แล้วเพิ่มคำสั่งโหลด skill เข้าบริบทของ Claude ให้เอง
@@ -113,3 +113,15 @@ routes:
       any_of: [อ่านไฟล์, อ่าน File, แปลงไฟล์, extract, OCR, สรุปเอกสาร, อ่านเอกสาร]
     required: []
     recommended: [ice-doc-reader]
+
+  - id: fleet-maintenance
+    label: งานแก้ agent skill hook หรือกติกาของทีมเอง (Pass 2–6 ของแผนแก้ fleet)
+    when:
+      any_of: [ทำ Pass, Pass 2., Pass 3, Pass 4, Pass 6, ผ่าตัด skill, แก้ agent, แก้ skill, fleet, ตารางเส้นทาง, hook]
+      path: ["*iCE-Skills-Marketplace*"]
+    required: [ice-writing-register]
+    read_first:
+      - ~/Documents/Claude/LLM-Memory/70-Fleet/pass1-rule-ledger.md
+      - ~/.claude/agents/reference/fleet-writing-standard.md
+    card: ~/Documents/Claude/LLM-Memory/70-Fleet/_handoff-fleet-fix.md
+    note: หนึ่ง session แก้หนึ่งไฟล์ · ห้ามเพิ่มกฎใหม่ · ทุกไฟล์ต้องผ่าน grep-gate และการทดสอบด้วยผู้อ่านที่ไม่มีบริบทมาก่อน (Cold-Reader Test) · การตัดสินใจที่จบแล้วอยู่ท้ายบันทึกส่งต่อ ห้ามถามซ้ำ
