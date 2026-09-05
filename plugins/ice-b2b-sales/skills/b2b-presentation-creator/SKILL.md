@@ -1,619 +1,279 @@
 ---
 name: b2b-presentation-creator
-description: |
-  World-class PowerPoint (.pptx) skill for B2B Enterprise Software Sales — full lifecycle Discovery to Renewal. Generates executive-grade decks with 9 industry themes, 6 vendor accents (Oracle, SAP, Microsoft, Salesforce, NetSuite, Workday), 1 iCE-branded proprietary theme (ice-propose), bilingual Thai+English typography, 4 infographic methods, and 5-dimensional visual QA. Use when the user asks to build a deck, slides, presentation, pitch, proposal deck, demo deck, RFP/TOR response, business case, QBR/EBR, or any .pptx for B2B sales, presales, or customer success. Trigger especially for iCE Consulting branded decks, iCE proposals, or iCE-themed output. Thai triggers: ทำ slide, สร้าง presentation, เตรียม deck, ทำ pitch, deck ลูกค้า, deck QBR, ทำ infographic, deck iCE, ธีม iCE. Pairs with pptx engine, theme-factory, ice-b2b-enterprise-sale, brand-guidelines.
+description: ใช้เมื่อต้องสร้างหรือแก้ไฟล์นำเสนอ .pptx หรือ HTML deck สำหรับงานขายซอฟต์แวร์องค์กร — proposal deck, demo deck, business case, QBR, ตอบ TOR หรือ RFP, deck ในนาม iCE Consulting · คำกระตุ้น: ทำ slide, สร้าง presentation, เตรียม deck, ทำ pitch, ทำ infographic, build a deck, pitch deck, slides
 license: Proprietary
 ---
 
-# b2b-presentation-creator — World-Class Deck Skill for Enterprise Sales
+# b2b-presentation-creator — สร้างสไลด์นำเสนอสำหรับงานขายซอฟต์แวร์องค์กร
 
-> **Persona:** Senior B2B Presentation Architect. You produce executive-grade .pptx decks for Enterprise Service Providers across the full B2B sales lifecycle — Discovery, Solution & Demo, Proposal & Business Case, Customer Success / QBR. Every deck is industry-aware, vendor-aware, bilingual where required, and visually rigorous.
->
-> **Mission:** Turn any B2B sales context (industry, vendor product, sales stage, audience) into a beautiful, on-brand deck that closes faster and reads cleaner than the competition's.
+> **Version:** V02R01 | **Date:** 2026.09.05
+> **ไฟล์นี้ใช้ทำอะไร:** เป็นลำดับขั้นตอนเดียวตั้งแต่รับโจทย์จนส่งมอบไฟล์นำเสนอ ให้ผู้สร้างเดินจากขั้นที่ 1 ถึงขั้นที่ 8 ตามลำดับโดยไม่ต้องเดาว่าขั้นถัดไปคืออะไร
+> **ใครใช้:** ผู้ที่ได้รับมอบหมายให้ทำสไลด์ในงานขายและงานก่อนการขาย ทั้งที่เป็น session หลักและ agent ผู้สร้างไฟล์ (เจนนี่)
+> **ขอบเขต:** ไฟล์นำเสนอทุกชุดในสายงานขาย ตั้งแต่การสำรวจความต้องการจนถึงการต่อสัญญา ทั้งรูปแบบ .pptx และ HTML
+> **เรื่องที่ไม่อยู่ในไฟล์นี้และอยู่ที่ใด:** กฎออกแบบประจำที่ใช้กับสไลด์ทุกชุด (ภาษา ภาพประกอบ icon การไล่เฉดสี ชุดสีที่สื่อความหมาย งบคำ มุมลูกค้า) อยู่ที่ `~/.claude/skills/b2b-slide-designer/references/pptx-design-doctrine.md` ซึ่งเป็นบ้านเดียวของเรื่องเหล่านั้น · ค่าตัวเลขของการจัดหน้า (สัดส่วนพื้นที่ว่าง ขนาดตัวอักษร ระยะห่าง คอนทราสต์) อยู่ที่ `design-principles.md` ในโฟลเดอร์เดียวกันนั้น · การเลือกแม่แบบ ชุดสี icon และฟอนต์ อยู่ที่สกิล `b2b-slide-designer` · กติกาภาษาอยู่ที่สกิล `ice-writing-register`
 
-> **นิยามศัพท์และรหัสที่ไฟล์นี้ใช้** (มาตรฐานการเขียนไฟล์ระบบ: `~/.claude/agents/reference/fleet-writing-standard.md`)
->
-> · **`V##R##`** รหัสรุ่นเอกสาร เช่น `V02R05` — V คือรุ่นหลัก R คือการแก้ย่อย ต้องมีทั้งในชื่อไฟล์และในตัวเอกสาร
-> · **เจนนี่** = `deliverable-gen-agent` ผู้สร้างไฟล์เบื้องหลัง ทำงานเฉพาะเมื่อผู้ใช้เรียกชื่อตรงเท่านั้น
-> · **อริส (เจ้าระเบียบ)** = `qa-master-agent` ผู้ตรวจคุณภาพอิสระ ตรวจในบริบทแยกจากผู้สร้างเสมอ — เป็นปลายทางบังคับของทุกไฟล์ที่ส่งออก
-> · **กัปตัน (Compass)** = `iCE-Compass-Next` เจ้าของงานขาย ผู้สั่งงานและตัดสินใจขั้นสุดท้ายในดีลนั้น
-> · **D1 ถึง D4 (tri-slot ฟอนต์)** = วินัยการ build ฟอนต์ของ skill `ice-doc-builder` — D1 กำหนดชื่อฟอนต์ครบ 3 ช่องในทุก text run (อังกฤษ · เอเชียตะวันออก · ภาษาไทย) · D3 คุมขนาดตัวอักษรไทยเทียบละติน · รายละเอียดเต็มอยู่สกิลนั้น
-> · **D7 (และ D7.7 / D7.H8)** = มิติตรวจฟอนต์และการจัดหน้าของอริส ซึ่งเป็นด่านหยุดงานสำหรับไฟล์ที่ส่งลูกค้า
+## ตารางนิยาม — รหัสและชื่อเฉพาะที่ไฟล์นี้ใช้
 
----
-
-## 0. Quick Reference
-
-| If the user wants… | Read… |
+| คำหรือรหัส | ความหมาย |
 |---|---|
-| To start a new deck from a brief | This file (continue below) |
-| Slide-by-slide blueprint for a specific deck type | `references/01-deck-types.md` |
-| Industry-specific colors and visual codes | `references/02-themes-industry.md` |
-| Vendor-aligned brand styling (Oracle, SAP, Microsoft, etc.) | `references/03-themes-vendor.md` |
-| Custom theme from customer logo / brand color | `references/04-themes-custom.md` |
-| Thai + English font pairing and bilingual rules | `references/05-typography.md` |
-| Layout patterns (Process / Narrative / Workflow / Infographic) | `references/06-layouts.md` |
-| How to build infographics (4 methods) | `references/07-infographics.md` |
-| **⭐ ตั้งโจทย์ก่อนวาด (บังคับก่อนทุกหน้า infographic/icon):** ชุดคำถาม 5 ข้อ + ตัด→จัด→วาด + เสนอโครง 2 ทางให้ user เลือกก่อน + ตรวจตัวเลขย้อนกลับ — ครอบ PPTX/ภาพ/HTML/PDF | `b2b-slide-designer §4.11` (บ้านเดียว ห้ามทำซ้ำที่นี่) |
-| Color system and accessibility | `references/08-color-system.md` |
-| QA framework (5-dimensional review) | `references/09-qa-framework.md` |
-| Bilingual mode switching (TH-only / EN-only / Bilingual) | `references/10-bilingual-handling.md` |
-| **iCE Propose theme** — iCE Consulting proprietary branding | `references/11-ice-propose-theme.md` |
-| **B2B Deck Quality Charter** — 9-item Mandatory pre-build checklist + Pre-Build Workflow + Pass ≥8/9 threshold | `references/12-quality-charter.md` |
-| **HTML Presentation Slide** — web-native deck (zero-dep, 16:9), PPT→HTML conversion, build via `scripts/build_html.py` | `references/13-html-deck-builder.md` |
-| **Design principles (20 codified rules)** — format-agnostic (pptx + html); whitespace/contrast/grid/type thresholds | `b2b-slide-designer/references/design-principles.md` |
-| **Build from Design Spec** — รับ template/color/icon/font_strategy จาก slide-designer §4.5 → build ตามนั้น | §0.5 below + `b2b-slide-designer §4.5-4.7` |
-| **Design Library (template/infographic/icon/gradient)** — เลือกจาก 1,186 refs + 71 framework .pptx | `b2b-slide-designer §4.5` (Router) |
-
-**Engine dependency:** This skill produces .pptx output. It uses the `pptx` skill as its rendering engine (python-pptx + pptxgenjs). Always read the `pptx` skill's SKILL.md before generating a final file.
-
-**Mandatory Charter Read:** Before any executive-facing deck build, read `references/12-quality-charter.md` first. It defines 9 mandatory visual elements (Brand Chrome, Icon Library, Color Semantics, Big Number Callouts, Layout Variation, Realistic Data, Outcome Cards, Section Labels, Font Discipline) plus the 8-step Pre-Build Workflow and Pass ≥8/9 threshold.
+| **`V##R##`** | รหัสรุ่นเอกสาร เช่น `V02R05` — V คือรุ่นหลัก R คือการแก้ย่อย ต้องมีทั้งในชื่อไฟล์และในตัวเอกสาร |
+| **content-spec** | ไฟล์กำหนดเนื้อหาและการออกแบบรายหน้า ที่เขียนขึ้นก่อนสร้างไฟล์จริง และใช้เป็นต้นทางของทั้งการสร้างและการตรวจ |
+| **action title** | หัวเรื่องของสไลด์ที่เป็นประโยคสมบูรณ์บอกข้อสรุปของหน้านั้น ไม่ใช่ชื่อหัวข้อ เช่น "ปิดงบเร็วขึ้นจาก 12 วันเหลือ 5 วัน" ไม่ใช่ "ระยะเวลาปิดงบ" |
+| **โหมดนำเสนอสด · โหมดเอกสารอ่านเอง** | สองโหมดของสไลด์ที่มีงบคำต่างกัน ตัดสินหนึ่งโหมดต่อหนึ่งชุด รายละเอียดอยู่ที่ขั้นที่ 2 |
+| **เจนนี่** | agent `deliverable-gen-agent` ผู้สร้างไฟล์เบื้องหลัง ทำงานเฉพาะเมื่อ user เรียกชื่อตรงเท่านั้น |
+| **อริส (เจ้าระเบียบ)** | agent `qa-master-agent` ผู้ตรวจคุณภาพอิสระ ตรวจในบริบทแยกจากผู้สร้างเสมอ เป็นปลายทางของทุกไฟล์ที่ส่งออก |
+| **กัปตัน** | agent `iCE-Compass-Next` เจ้าของงานขาย ผู้สั่งงานและตัดสินใจขั้นสุดท้ายในดีลนั้น |
+| **D1 ถึง D4** | วินัยการกำหนดฟอนต์ตอนสร้างไฟล์ของสกิล `ice-doc-builder` — D1 คือการกำหนดชื่อฟอนต์ครบสามช่องในทุก text run (ช่องอังกฤษ · ช่องเอเชียตะวันออก · ช่องภาษาไทย) · D3 คือการคุมขนาดอักษรไทยเทียบละติน |
+| **D7** | มิติตรวจฟอนต์และการจัดหน้าของอริส ซึ่งเป็นด่านหยุดงานสำหรับไฟล์ที่ส่งลูกค้า |
+| **เครื่องหมายก่อนสร้างไฟล์** | ข้อความ `ICE_BUILD=pipeline` `ICE_DESIGN=briefed` และ `ICE_BASE=<ที่อยู่ไฟล์ฐาน>` ที่ต้องเติมหน้าคำสั่งสร้างไฟล์ รายละเอียดอยู่ที่ขั้นที่ 7 |
 
 ---
 
-## 0.5 — Build from Design Spec (รับจาก b2b-slide-designer §4.5) ⭐⭐⭐
-
-> **เมื่อ slide-designer ส่ง Design Spec มา** (จาก §4.5 Router STEP 6) — skill นี้ **build ตาม spec นั้นจริง**
-> (template/color/icon/layout) ไม่ใช่ default มั่ว. Design Spec เป็น **format-agnostic** → build ได้ทั้ง PPTX/HTML/PDF.
-
-**Design Spec schema (รับเข้า):**
-```
-{ layout_pattern · infographic_type · icon_set · gradient ·
-  color (จาก CI/color-pattern — ใช้ตามนี้ ไม่ override เอง) ·
-  font_strategy: { mode: TH-only|EN-only|TH+EN, approach: unified|pair, latin, cs } ·
-  title_treatment · mode: presenter|document · template_ready_path (ถ้าใช้ 71 framework .pptx) }
-```
-
-**Build per format:**
-| format | engine | font handling |
-|---|---|---|
-| **PPTX** | theme JSON (ref 02/04) → `_lib/build_pptx.py` (เจนนี่) | D1-D4 tri-slot + embed ตาม font_strategy |
-| **HTML** | `scripts/build_html.py` (PATH A/B, ref 13) | §5.6 web-safe ตาม font_strategy (CSS var) |
-| **PDF** | HTML→PDF (`scripts/export-pdf.sh` Playwright) **หรือ** PPTX→PDF (LibreOffice/PowerPoint) | ตาม format ต้นทาง |
-
-**⭐ Content-Aware Font (font_strategy — ไม่ใช้ font ตาม template ดื้อ ๆ):**
-- **3 mode:** TH-only / EN-only / TH+EN กล่องเดียว → set ตาม `font_strategy.approach`:
-  - `unified` → font ตัวเดียว TH+EN glyph (IBM Plex Sans Thai/Sarabun) ทั้ง latin+cs slot
-  - `pair` → latin font + cs font แยก (D1 tri-slot) — balance ตาม §5.5 Visual Parity
-- **ขนาดตามเนื้อหา:** TH +1-2pt > EN (D3) · document(≤75คำ)→body เล็กลง 1 step · presenter(≤25)→title ใหญ่ขึ้น
-- **font-override (กันไทยแตก):** ถ้า template/spec เป็น EN-only font แต่เนื้อหามีไทย → swap unified/pair อัตโนมัติ
-- **color จาก spec:** ใช้สีที่ slide-designer ส่งมา (CI/gradient) — ไม่ override เอง
-
-**ใช้ 71 framework .pptx (catalog-templates-ready):** ถ้า spec มี `template_ready` →
-resolve ผ่าน **cache-on-demand**: `python b2b-slide-designer/scripts/template_cache.py get "<framework>"`
-→ ได้ path (cache หรือ copy จากต้นทาง) → เปิด .pptx **ดู "แนว/ลักษณะ"** → **Adaptive Mix (ดูล่าง)** → build.
-**ถ้า status=missing** (template หาย/ย้ายเครื่อง) → fallback: build จาก catalog-infographics (inspiration)
-หรือ MCP + แจ้ง user (ไม่ crash). ดู slide-designer catalog-templates-ready.md §Cache-on-Demand.
-
-**Icon:** ตาม Icon-First (slide-designer §4.7) — recolor SVG จาก spec.icon_set ก่อน → MCP เฉพาะถ้าไม่มี.
-
----
-
-### ⭐⭐⭐ ADAPTIVE MIX ENGINE (ผสม: แนว template + เนื้อจริง — ไม่คงโครงเป๊ะ)
-
-> **หลักเหล็ก (บทเรียนจริง):** "ผสม" ≠ ยัดเนื้อเข้า template เป๊ะ (จะเหลือ placeholder "SUBTITLE" ค้าง + font ล้น).
-> **ผสม = เอา "แนว/ลักษณะ" (decision-tree/matrix/funnel/timeline) + สร้าง object เท่าเนื้อจริง + จัด layout สมดุล.**
-> object สร้างเท่าจำนวนข้อมูล — ข้อมูลน้อย = ลด object/ลดขนาด · ข้อมูลมาก = เพิ่ม/แตก slide.
-
-**Algorithm (เมื่อเปิด template .pptx):**
-```
-1. ANALYZE แนว — เปิด template → ดูว่าเป็น "ลักษณะ" อะไร (decision-tree branching · 2-col compare ·
-   funnel · pyramid · timeline · matrix) + palette/shape-style (rounded/sharp, line weight, spacing)
-   → ไม่ต้องอ่าน 94 shape ทีละอัน — จับ "pattern" พอ
-2. COUNT เนื้อจริง — content-tree มีกี่ node/branch/leaf? (เช่น 3 ทางเลือก × 2 detail = 3 branch 6 leaf)
-3. BUILD เท่าเนื้อ — สร้าง object **ตามจำนวนเนื้อจริง** (ไม่ใช่ตาม template):
-   • ข้อมูล < template slot → สร้างแค่เท่าเนื้อ (ไม่เหลือ placeholder) · จัด layout สมดุลใหม่ (3 branch = 3 row เต็มสูง)
-   • ข้อมูล > template slot → ลดขนาด object/ย่อ font ให้พอดี · ถ้าเกินจริง → แตกเป็น 2 slide + แจ้ง
-4. STYLE จาก spec — ใช้ palette/shape-style "แนว" template + override: color→iCE CI (#1E66A4/#41A8B5/accent) ·
-   font→ไทย (font_strategy unified IBM Plex Sans Thai, tri-slot latin+cs)
-5. FONT-FIT — ไทยยาวกว่า EN → word_wrap + ย่อ size ต่อ tier (root 14 / node 11 / detail 9pt) กันล้น ·
-   ทุก text box ตั้ง font ไทย (ไม่ใช่แค่ที่แทน — กัน placeholder เดิมฟอนต์ใหญ่ค้าง)
-6. VERIFY — render → ไม่มี "TITLE/SUBTITLE" ค้าง · ไม่มี text ล้นกรอบ · object = จำนวนเนื้อ
-```
-
-**กฎ node-count mismatch (สำคัญ):** สร้าง object = จำนวนเนื้อจริงเสมอ — template เป็นแค่ "แรงบันดาลใจแนว"
-ไม่ใช่ "กรอบตายตัว". เหลือ slot = ลบ · ขาด slot = เพิ่ม. **ห้ามปล่อย placeholder ค้าง.**
-
-**Fallback → draw-new:** ถ้า template ซับซ้อนเกิน map (94-shape nested) + เนื้อไม่ตรงโครงเลย →
-**วาดใหม่ตามแนว** (python-pptx สร้าง decision-tree/matrix เอง ตาม spec) เร็วกว่า + สะอาดกว่า map.
-*(POC ยืนยัน: วาดตามแนว + object เท่าเนื้อ = สวย+เนื้อครบ กว่า map เข้า template ดิบ)*
-
----
-
-### ⭐⭐⭐ PREVIEW-FIRST (เจนนี่ทำ preview ให้เลือกก่อน build เต็ม — ไม่เสียเวลา)
-
-> **หลัก:** อย่า build เอกสารเต็มแล้วค่อยรู้ว่า user ไม่ชอบ. **ทำ infographic preview ให้เลือก+confirm ก่อน.**
+## ขั้นตอนการทำงาน — เดินจากขั้นที่ 1 ถึงขั้นที่ 8 ตามลำดับ
 
 ```
-FLOW (สำหรับ infographic/deck ที่มีหลาย "แนว" ให้เลือก):
-1. เจนนี่สร้าง 2-3 PREVIEW (แนวต่างกัน — เช่น decision-tree vs matrix vs flow) — แต่ละอัน:
-   • build .pptx แค่ 1 slide (Adaptive Mix, object เท่าเนื้อ) → render เป็น PNG
-2. แสดง 2-3 PNG ให้ user ดู + อธิบายสั้น ๆ ว่าแต่ละแนวเหมาะอะไร
-3. user เลือก 1 (หรือขอปรับ) → confirm
-4. เจนนี่ build เอกสารเต็ม (ทุก slide) เฉพาะแนวที่เลือก → PPTX/HTML/PDF
-→ ประหยัดเวลา: ไม่ build จบ 20 slide แล้วพบว่าผิดแนว
+1. รับโจทย์และจำแนกงาน       → ชนิด deck · ขั้นการขาย · ผู้ฟัง · จำนวนหน้าโดยประมาณ
+2. เลือกโหมดและงบคำ          → นำเสนอสด 25 คำต่อหน้า หรือ เอกสารอ่านเอง 75 คำต่อหน้า
+3. เลือกธีมและภาษา            → ถามครบเป็นชุดเดียว แล้วให้ user ยืนยัน
+4. วางลำดับเรื่อง             → นำด้วยข้อสรุป · สลับหน้าความเชื่อกับหน้าหลักฐาน
+5. ร่างเป็นหัวเรื่องล้วนก่อน   → ทั้งชุดมีเฉพาะ action title แล้วขอการยืนยันจาก user
+6. เขียน content-spec เต็ม     → เติมเนื้อหา ภาพ ชุดสี และเลือกรูปแบบผลลัพธ์
+7. สร้างไฟล์                  → .pptx หรือ HTML ตามที่เลือก
+8. ตรวจด้วยเครื่อง แล้วตรวจด้วยคน → ผ่านตัวตรวจอัตโนมัติก่อน จึงส่งอริส
 ```
-- preview = **PNG** (เร็ว, เห็นภาพจริง — render 1 slide ผ่าน LibreOffice/qlmanage) · ถ้า user ขอ interactive → HTML
-- ใช้กับงานที่ "แนว" ไม่ชัด (เลือกได้หลาย infographic) — งานที่แนวชัดอยู่แล้ว ข้าม preview ได้ (เร็ว)
 
-### 0.5.5 — Pitch Architecture ⭐⭐⭐ (โครง argument ของ deck ก่อนออกแบบราย slide)
+### ขั้นที่ 1 — รับโจทย์และจำแนกงาน
 
-**INTENT:** ตัดสิน **ARGUMENT SHAPE** ของ deck = future-state belief + how-we-build-it (de-risk spine). *two-voice COPY (ฝัน+จริง) มาจาก `b2b-why-thinking` Mode 3 — ที่นี่จัด**ลำดับ**เท่านั้น.* → `b2b-why-thinking/references/pitch-belief-card.md` L3.
+ตัดสินสองอย่างจากคำสั่งของ user หรือถามถ้ายังไม่ชัด: ชนิดของ deck และขั้นการขาย ชนิดกำหนดว่าจะมีสไลด์อะไรบ้างและเรียงอย่างไร ส่วนขั้นการขายกำหนดว่าจะเน้นน้ำหนักตรงไหน เช่น deck ทางออกที่ใช้ตอนออกแบบทางออกเน้นการเทียบความต้องการกับความสามารถ แต่ deck เดียวกันที่ใช้ตอนยื่นข้อเสนอเน้นเหตุผลทางธุรกิจแทน
 
-**(a) De-risk spine** — วาง backbone ตาม WHY-stack เดิม (Why Change→Now→Invest→Us→Stay). **กฎ: ทุก belief slot ต้องคู่ proof slot ทันที** — "ห้าม vision 3 สไลด์ติด → committee down-scope. สลับ belief↔proof."
-**(b) Stage-timing (vision/proof weight ตาม Sales Stage)** — vision/reframing pays ต่างกันตาม stage:
+| ชนิด deck | ผู้ฟังหลัก | ขั้นการขายที่ใช้ | จำนวนหน้า | รูปแบบเลย์เอาต์ตั้งต้น |
+|---|---|---|---|---|
+| สำรวจความต้องการและคัดกรอง | ผู้สนับสนุนภายในและทีมทำงาน | สำรวจความต้องการ ถึง คัดกรอง | 8 ถึง 12 | ผังกระบวนการ นำด้วยคำถาม |
+| ทางออกและการสาธิต | ผู้สนับสนุนถึงผู้มีอำนาจอนุมัติงบ | ออกแบบทางออก ถึง เจรจา | 12 ถึง 18 | ผังลำดับงานและการเล่าเรื่องด้วยภาพ |
+| ข้อเสนอและเหตุผลทางธุรกิจ | ผู้อนุมัติงบและผู้บริหารระดับสูง | ยื่นข้อเสนอ ถึง ปิดการขาย | 18 ถึง 25 | เล่าเรื่องพร้อมภาพประกอบเป็นหลัก |
+| ทบทวนผลงานกับลูกค้าปัจจุบัน | ผู้สนับสนุนและผู้อุปถัมภ์ | เริ่มใช้งาน ถึง ต่อสัญญาและขยายผล | 10 ถึง 15 | หน้าสรุปตัวเลข นำด้วยผลลัพธ์ |
 
-| Sales Stage (axis เดิม §ล่าง) | vision weight | เหตุผล |
-|---|---|---|
-| Solutioning | สูง | reframing pays ที่ solution-exploration `[source: buyer-enablement research — to confirm ~+41%]` |
-| Proposal | กลาง (proof นำ) | requirements/proposal → proof นำ `[to confirm ~+28%]` · committee de-risk สำคัญ |
-| Negotiation/Close | proof นำ | vision จบแล้ว — เน้น feasibility/commercial proof ลด indecision |
+โครงสไลด์รายหน้าของแต่ละชนิดอยู่ที่ `references/01-deck-types.md` เปิดอ่านเฉพาะชนิดที่ตรงกับงาน
 
-**(c) Future-state immersion** — vision slot แสดง To-Be ของลูกค้าเอง (data จริง) ไม่ใช่ generic demo — ใช้ §6 `[NEED FROM USER]` discipline เดิม (ไม่ restate).
+ก่อนวางโครงงานที่ผู้บริหารจะเห็น ให้เปิด `references/12-quality-charter.md` ซึ่งกำหนดองค์ประกอบที่ต้องมี 9 อย่าง ลำดับงานก่อนสร้าง 8 ขั้น และเกณฑ์ผ่านที่ 8 จาก 9 ข้อ
 
-> → **Pitch-Belief Card (L1 SSOT):** `~/.claude/skills/b2b-why-thinking/references/pitch-belief-card.md` — home นี้ owns **STRUCTURE** layer เท่านั้น (ลำดับ+timing). two-voice copy = HOME 2 · visual craft = เจนนี่. งานวิจัยอยู่ในไกด์.
+### ขั้นที่ 2 — เลือกโหมดและงบคำ
 
-### 0.5.6 — 6-Axis Pre-Emit Critique ⭐⭐⭐ (self-critique ก่อนปล่อยงาน)
+เลือกหนึ่งโหมดต่อหนึ่งชุด แล้วบันทึกไว้ในช่อง `mode` ของ content-spec ผู้ตรวจและตัวตรวจอัตโนมัติใช้ค่านี้ ไม่ระบุถือว่าเป็นโหมดเอกสารอ่านเอง
 
-> หลัง Adaptive Mix สร้าง spec/preview เสร็จ **แต่ก่อน build เต็ม/emit** — ให้คะแนนตัวเอง 6 แกน (1-5).
-> **ถ้าแกนใด `<3` = แก้ก่อน emit** (อย่าปล่อยงานที่รู้ตัวว่าหลุด). adapted from hallmark (MIT, ดู slide-designer NOTICE).
-
-| # | แกน | ถาม | 1 (slop) → 5 (คม) |
+| โหมด | ค่าในช่อง `mode` | ใช้เมื่อ | งบคำต่อหน้าเนื้อหา |
 |---|---|---|---|
-| 1 | **Philosophy** | งานนี้มี POV ชัดไหม หรือ default สวยลอย ๆ (incl. deck carry ทั้ง future-state belief AND de-risk proof, timed ตาม stage? → §0.5.5) | 1=generic · 5=มีจุดยืน/เหตุผลออกแบบ |
-| 2 | **Hierarchy** | ตา่นำไปจุดสำคัญก่อนไหม | 1=ทุกอย่างเด่นเท่ากัน · 5=ลำดับชัด |
-| 3 | **Execution** | คม/เนี้ยบ ไม่มี element ค้าง/เพี้ยน | 1=placeholder ค้าง/ขอบเบี้ยว · 5=เนี้ยบ |
-| 4 | **Specificity** | ตรงเนื้อหา-แบรนด์-อุตสาหกรรมจริง | 1=template สำเร็จรูป · 5=ตรง CI/เนื้อ |
-| 5 | **Restraint** | ตัดส่วนเกินหรือยัดทุกอย่าง | 1=ยัดเต็ม/effect รก · 5=พอดี มี whitespace |
-| 6 | **Variety** | slide ต่าง ๆ ไม่ซ้ำแม่แบบเดียวรัว ๆ | 1=ทุก slide หน้าตาเดียว · 5=หลากแต่กลมกลืน |
+| นำเสนอสด | `presenter` | ผู้พูดอยู่ในห้องและเป็นผู้เล่ารายละเอียด สไลด์นำด้วยภาพ | ไม่เกิน 25 คำ |
+| เอกสารอ่านเอง | `document` | ส่งไฟล์ให้อ่านเอง หรือแนบไปกับข้อเสนอ ยังต้องมีลำดับชั้นชัดเจน | ไม่เกิน 75 คำ |
 
-**กฎ:** stamp คะแนน 6 แกนใน comment ของ spec/build · `<3 ข้อใด → แก้ก่อน emit` · **revision ปกติ ≤2 รอบ · ถ้า 3 รอบยังไม่ผ่าน = brief ผิด** (กลับไปถาม Compass/user ไม่ใช่ขัดเงาต่อ) · ผูกกับ **Preview-First** (critique ก่อนทำ preview ให้ user — ปล่อย preview ที่ผ่าน critique แล้วเท่านั้น) · คู่กับ slide-designer §4.8 Anti-Slop (visual tells) + §4.10 Audit.
+หน้าปกไม่เกิน 10 คำ · หน้าคั่นไม่เกิน 8 คำ · หน้าอ้างคำพูดไม่เกิน 30 คำ · หน้าปิดไม่เกิน 10 คำ บ้านของกฎงบคำคือ `~/.claude/skills/b2b-slide-designer/references/pptx-design-doctrine.md` ข้อ 5 ส่วนที่มาของตัวเลขและวิธีวัดอยู่ที่ `~/.claude/skills/b2b-slide-designer/references/design-principles.md` หัวข้องบความหนาแน่นของข้อมูล
 
----
+วิธีนับคำ: นับข้อความทุกกล่องบนหน้า รวม action title และป้ายในแผนภาพ ไม่รวมส่วนท้ายหน้าและเลขหน้า ภาษาไทยนับด้วยการตัดคำที่ค่าประมาณ 4.5 ตัวอักษรต่อคำ ซึ่งเป็นค่าเดียวกับที่ตัวตรวจอัตโนมัติใช้ · การผสมสองโหมดในชุดเดียวกันทำให้สไลด์บางหน้าอ่านไม่ทันและบางหน้าว่างเกินไป
 
-## 1. Operating Principle
+### ขั้นที่ 3 — เลือกธีมและภาษา
 
-**Substance through silent expertise.** This skill applies design thinking, sales-stage awareness, and Thai/APAC market sensibility silently in the background. The output is a deck — not a list of frameworks. Never name-drop methodology or consulting firms in the deck content unless the user explicitly requests citations.
+รวบคำถามทั้งหมดถามครั้งเดียวก่อนเริ่มงาน อย่าทยอยถามระหว่างทาง · ชุดคำถามครั้งเดียวนี้รวมคำถามที่ขั้นอื่นของไฟล์นี้ต้องการด้วย ได้แก่ ขั้นการขาย (ขั้นที่ 1) · โหมดนำเสนอสดหรือเอกสารอ่านเอง (ขั้นที่ 2 — ผู้เลือกคือ user ถ้าไม่ตอบใช้ค่าตั้งต้นคือเอกสารอ่านเอง) · รูปแบบผลลัพธ์ .pptx / HTML / PDF (ขั้นที่ 6) · โฟลเดอร์ที่จะเก็บไฟล์ถ้าไม่ชัดว่าผูกดีลใด (ขั้นที่ 8) · ข้อใดที่ user บอกมาแล้วในคำสั่ง ให้ตัดออกจากชุดคำถามและทวนสั้น ๆ ว่ารับทราบค่านั้นแล้ว
 
-**Quality through visual rigor.** Every deck passes a 5-dimensional QA pass before delivery. Visual QA via subagent inspection is mandatory for decks of 5+ slides — see `references/09-qa-framework.md`.
+> "ก่อนเริ่มทำสไลด์ ขอเรียนถามห้าข้อครับ
+> 1. **อุตสาหกรรมของลูกค้า** คืออะไรครับ (เช่น ธนาคารและการเงิน ราชการ การผลิต สุขภาพ พลังงาน ค้าปลีก เทคโนโลยี โทรคมนาคม การศึกษา)
+> 2. **product ที่จะเสนอ** คืออะไรครับ (เช่น Oracle Fusion, SAP S/4HANA, Microsoft D365, NetSuite, Salesforce, Workday — หรือไม่ผูกกับรายใด)
+> 3. มี **สีหรือโลโก้ของลูกค้า** ที่ต้องการให้ใช้เป็นสีเน้นหรือไม่ครับ
+> 4. เอกสารชุดนี้ออกในนาม **iCE Consulting** หรือไม่ครับ
+> 5. **ภาษาของสไลด์** เป็นแบบใดครับ — ไทยล้วน (ผู้ฟังคนไทยทั้งหมด ราชการ องค์กรปกครองส่วนท้องถิ่น) · อังกฤษล้วน (ผู้ฟังต่างชาติหรือสำนักงานภูมิภาค) · หรือไทยและอังกฤษคู่กัน (ผู้บริหารทั้งสองกลุ่ม ซึ่งเป็นค่าที่แนะนำสำหรับผู้บริหารองค์กรไทย)"
 
-**Respect the audience.** Default to executive-grade tone. Match language (TH / EN / Bilingual) to the actual audience, not the user's preference. When in doubt, ask.
+ธีมมีสี่ชั้นและใช้เรียงตามลำดับนี้
 
-**Never fabricate.** Customer names, financial figures, dates, logos, quotes, and KPIs must come from source material. If any of these are missing, ask before placing a placeholder. See Section 6.
+1. **ชั้นอุตสาหกรรม** ใช้ทุกครั้ง อุตสาหกรรมของลูกค้ากำหนดชุดสีและบุคลิกทางสายตา รายละเอียดที่ `references/02-themes-industry.md`
+2. **ชั้น product** ใช้เมื่อเสนอ product รายใดรายหนึ่ง เคารพสีที่คนจดจำได้ของเจ้าของ product โดยใช้เป็นสีเน้นในสัดส่วนน้อย ไม่เลียนแบบทั้งชุด รายละเอียดที่ `references/03-themes-vendor.md`
+3. **ชั้นแบรนด์ลูกค้า** ใช้เมื่อลูกค้าให้โลโก้หรือสีมา ให้สร้างชุดสีที่อ่านแล้วรู้ว่าทำเพื่อลูกค้ารายนี้ รายละเอียดที่ `references/04-themes-custom.md`
+4. **ชั้น iCE Propose** ใช้เมื่อเอกสารออกในนาม iCE Consulting เช่น ข้อเสนอ เอกสารวิธีทำงาน สถาปัตยกรรมของงานที่ iCE รับผิดชอบ และการตอบ TOR ธีมนี้ยืนบน Corporate Identity ของ iCE คือสีน้ำเงิน `#1E66A4` กับสีฟ้าอมเขียว `#41A8B5` เป็นโทนเย็นกลาง จึงใช้ร่วมกับสีเน้นของเจ้าของ product ได้ในสัดส่วนราว 5 ถึง 10 เปอร์เซ็นต์ รายละเอียดที่ `references/11-ice-propose-theme.md`
 
----
+แสดงตัวอย่างธีมให้ user ดูก่อนลงมือทำสไลด์ โดยอธิบายเป็นข้อความพร้อมตัวอย่างสีสามช่อง ถ้ามีไฟล์ `assets/theme-showcase.html` ให้เปิดเป็นภาพตัวอย่าง ถ้า user ไม่ถูกใจทุกตัวเลือก ให้สร้างธีมใหม่ตาม `references/04-themes-custom.md`
 
-## 2. The Six-Step Workflow
+การเลือกฟอนต์ตามภาษาที่เลือกไว้ เป็นเรื่องของสกิล `b2b-slide-designer` หัวข้อ 5.5.1 ซึ่งเป็นเจ้าของเรื่องตัวอักษร รูปแบบการวางสองภาษาบนหน้าเดียวอยู่ที่ `references/10-bilingual-handling.md` และคู่ฟอนต์ที่ผ่านการใช้งานจริงอยู่ที่ `references/05-typography.md`
 
-Follow these six steps in order. Steps 1–3 gather requirements; Steps 4–6 produce and validate the deck.
+### ขั้นที่ 4 — วางลำดับเรื่อง
 
-```
-1. Classify       → What deck type? Where in the sales lifecycle?
-2. Theme          → Industry × Vendor × Custom — pick or build
-3. Language       → TH-only / EN-only / Bilingual + font pair
-4. Outline        → Slide-by-slide content plan, validated with user
-5. Build          → Render .pptx using pptx engine + chosen theme + assets
-6. QA             → 5-dim visual review + content QA + final delivery
-```
+หลักสามข้อที่ใช้จัดลำดับ
 
-### Step 1 — Classify the deck (use the matrix below)
+- **นำด้วยข้อสรุป** เริ่มจากคำตอบที่อยากให้ผู้ฟังจำ แล้วจึงตามด้วยเหตุผลและหลักฐาน ไม่ใช่เล่าที่มาก่อนแล้วค่อยสรุปท้าย
+- **หนึ่งหน้าหนึ่งข้อความ** แต่ละหน้าตอบคำถามเดียว ถ้าต้องมีหัวเรื่องที่สอง แปลว่าต้องแยกเป็นสองหน้า
+- **สลับหน้าความเชื่อกับหน้าหลักฐาน** หน้าความเชื่อคือหน้าที่วาดภาพสถานะปลายทางซึ่งยังต้องพิสูจน์ กำกับว่า `[VISION]` · หน้าหลักฐานคือหน้าที่แสดงตัวเลข วิธีทำ หรือประสบการณ์ที่ทำให้หน้าก่อนหน้าน่าเชื่อ กำกับว่า `[PROOF]` · ทุกหน้าความเชื่อต้องมีหน้าหลักฐานตามติดทันที และกำกับให้ครบทุกหน้าเพื่อให้เห็นการสลับได้ด้วยตา
 
-Ask the user (or infer from their brief) two things:
+น้ำหนักของภาพอนาคตเทียบกับหลักฐานเปลี่ยนไปตามขั้นการขาย และเหตุผลของแต่ละข้ออยู่ที่ `references/deck-craft-and-argument.md` หัวข้อ 1 ซึ่งมีตารางน้ำหนักรายขั้นการขายและคำอธิบายว่าทำไมการวางหน้าความเชื่อติดกันหลายหน้าจึงทำให้คณะกรรมการลดขอบเขตงาน
 
-| Dimension | Options |
-|---|---|
-| **Deck Type** | Discovery & Qualification / Solution & Demo / Proposal & Business Case / Customer Success & QBR / Hybrid |
-| **Sales Stage** | Prospect → Discovery → Qualification → Solutioning → Proposal → Negotiation → Close → Handover → Adoption / Success → Renewal / Expansion |
+### ขั้นที่ 5 — ร่างเป็นหัวเรื่องล้วนก่อน แล้วขอการยืนยัน
 
-The deck type sets the **slide blueprint** (what slides, in what order). The stage tightens the **emphasis** (e.g. a Solution deck at Solutioning emphasizes fit-gap; at Proposal stage it emphasizes business case).
+ร่างแรกของทั้งชุดมีเฉพาะ action title เรียงตามลำดับ ไม่มีเนื้อหาในหน้า ไม่มีภาพ ไม่มีการจัดหน้า เหตุผลคืออ่านหัวเรื่องเรียงกันแล้วจะเห็นทันทีว่าเรื่องเดินสมเหตุสมผลหรือไม่ และแก้ตอนนี้ถูกกว่าแก้ตอนที่ทำหน้าเสร็จแล้ว หัวเรื่องแต่ละหน้าต้องเป็นประโยคสรุปพร้อมกริยาหรือการเปรียบเทียบ หัวเรื่องที่เป็นแค่คำนามลอย ๆ ให้เขียนใหม่
 
-→ Once both are known, read the matching section in `references/01-deck-types.md`.
-
-### Step 2 — Pick the theme
-
-Themes have three layers, applied in order:
-
-1. **Industry layer** (always) — the customer's industry sets the color/visual code. e.g. Banking & FinTech reads as navy + serif, Government reads as deep blue + restrained, Manufacturing reads as steel grey + bold. See `references/02-themes-industry.md`.
-
-2. **Vendor layer** (when relevant) — when pitching a specific vendor product (Oracle, SAP, Microsoft, Salesforce, NetSuite, Workday), respect the vendor's recognizable accent without becoming a clone. e.g. an Oracle pitch uses a controlled red accent; SAP uses a constrained blue. See `references/03-themes-vendor.md`.
-
-3. **Custom layer** (when given a customer brand) — if the customer has provided a logo or brand color, derive a custom palette that reads as "for this customer". See `references/04-themes-custom.md`.
-
-4. **iCE Propose layer** (when iCE Consulting is the issuer) — for any deck where iCE Consulting is the brand on the document (proposals, methodology decks, solution architecture for iCE engagements, TOR responses issued by iCE), use the `ice-propose` theme directly. This theme is built on the iCE Corporate Identity (iCE Blue `#1E66A4` + iCE Cyan `#41A8B5`) with bilingual Thai+English hierarchy and 3D glass-metallic infographic style. See `references/11-ice-propose-theme.md`. The theme is cool-neutral, so it pairs cleanly with vendor accents (Oracle, SAP, Microsoft, NetSuite) as 5-10% accent.
-
-**Selection process — always ask:**
-
-> "ก่อนเริ่มสร้าง Deck ผมขอเรียนสอบถาม Theme ที่เหมาะกับงานนี้ครับ:
-> 1. **Industry ของลูกค้า** คืออะไรครับ? (เช่น Banking, Government, Manufacturing, Healthcare, Energy, Retail, Tech, Telco, Education)
-> 2. **Vendor / Product** ที่จะเสนอคืออะไรครับ? (เช่น Oracle Fusion, SAP S/4HANA, Microsoft D365, NetSuite, Salesforce, Workday — หรือ vendor-neutral)
-> 3. มี **Customer Brand Color / Logo** ที่อยากให้ใช้เป็น accent หรือไม่ครับ?
-> 4. Deck นี้ออกในนาม **iCE Consulting** หรือไม่ครับ? (หากใช่ จะใช้ iCE Propose theme เป็นแกน)"
-
-Show the **theme preview** (text description + 3 sample swatches) to the user before generating slides. If `assets/theme-showcase.html` exists, render it as a quick visual preview. If the user is dissatisfied with all options, build a custom theme via `references/04-themes-custom.md`.
-
-### Step 3 — Pick the language mode
-
-Three modes are supported:
-
-| Mode | When to use | Font pair example |
-|---|---|---|
-| **EN-only** | International audience, regional HQ, non-Thai stakeholders | Inter / Lora |
-| **TH-only** | Thai-only audience, Thai government, อปท., Thai SME | IBM Plex Sans Thai / Sarabun |
-| **Bilingual TH+EN** | Mixed audience, executive Thai + technical EN, default for Thai enterprise C-suite | IBM Plex Sans Thai + Inter (paired) |
-
-Bilingual layout patterns (side-by-side, stacked title, EN headline + TH body) are in `references/10-bilingual-handling.md`. Font pairs and rendering rules are in `references/05-typography.md`.
-
-**Ask the user:**
-
-> "Deck นี้จะนำเสนอด้วยภาษาใดครับ?
-> - **EN-only** (ผู้ฟังเป็น International / Regional)
-> - **TH-only** (ผู้ฟังเป็นคนไทยทั้งหมด)
-> - **Bilingual TH+EN** (มี Executive ทั้งสองกลุ่ม — แนะนำสำหรับ Thai Enterprise C-Suite)"
-
-### Step 4 — Produce the outline (validate before building)
-
-Before generating any .pptx file, produce a **slide-by-slide outline** in markdown and show it to the user for confirmation. **⭐ apply §0.5.5 Pitch Architecture ตอนวาง outline:** สลับ belief↔proof (ห้าม vision 3 สไลด์ติด) · set vision/proof weight ตาม stage · mark แต่ละสไลด์ `[VISION]` หรือ `[PROOF]`. Format:
+รูปแบบร่างที่ส่งให้ user ดู
 
 ```markdown
-## Deck Outline — V01R01 — [Deck Type] for [Customer]
+## โครงเรื่อง — V01R01 — [ชนิด deck] สำหรับ [ลูกค้า] — โหมด [presenter|document]
 
-### Slide 1: Title
-- Headline: [proposed headline]
-- Subhead: [proposed subhead]
-- Visual: [hero image / accent shape]
+1. [VISION] ปิดงบการเงินได้ภายใน 5 วันทำการภายในปีแรก
+2. [PROOF]  ขั้นตอนปิดงบปัจจุบันใช้ 12 วัน จากงานกระทบยอด 3 จุด
+3. ...
 
-### Slide 2: [Section]
-- Layout: [Two-column / Icon + text rows / 2x2 grid / Half-bleed image / Stat callout]
-- Content: [3-5 bullets in plain language, NOT final copy]
-- Visual: [chart / icon / infographic / image]
-
-… etc.
-
-## Open Questions
-1. [Anything missing — customer name, KPI, logo, etc.]
-2. [Stage-specific gap — e.g. "Did we run discovery? Need pain points"]
+## สิ่งที่ต้องได้จาก user ก่อนทำต่อ
+1. [ข้อมูลที่ยังขาด เช่น ชื่อผู้บริหารที่จะเข้าฟัง ตัวเลขปัจจุบัน โลโก้]
+2. [ช่องว่างตามขั้นการขาย เช่น ยังไม่ได้สำรวจความต้องการ จึงยังไม่มีรายการปัญหา]
 ```
 
-Wait for confirmation or revisions. **Do not generate the deck until the outline is signed off.** This step alone catches 80% of rework.
+**ห้ามสร้างไฟล์นำเสนอก่อนโครงเรื่องนี้ได้รับการยืนยันจาก user** เหตุผล: ขั้นนี้ตัดงานแก้ซ้ำได้ราวแปดสิบเปอร์เซ็นต์ของงานแก้ทั้งหมด เพราะความเข้าใจผิดเรื่องลำดับและใจความปรากฏตั้งแต่ยังไม่มีต้นทุนการจัดหน้า
+❌ สร้างไฟล์ 20 หน้าเสร็จแล้วส่งให้ user ดูพร้อมกับถามว่าลำดับแบบนี้ใช่ไหม
+✅ ส่งรายการหัวเรื่อง 20 บรรทัดให้ user ดู ปรับตามที่สั่ง แล้วจึงลงมือ
 
-### Step 4.5 — Output Format Decision (NEW — pptx | html | both)
+งานที่ยังไม่ชัดว่าควรใช้แนวภาพแบบใด ให้ทำตัวอย่างสองถึงสามแนวเป็นภาพให้ user เลือกก่อนสร้างเต็ม วิธีทำอยู่ที่ `references/deck-craft-and-argument.md` หัวข้อ 3
 
-After the outline is signed off, **before building**, decide the output format. The outline JSON is renderable to either format, so this is a clean branch — Steps 1–4 (theme/language/typography/outline) are already done and shared.
+### ขั้นที่ 6 — เขียน content-spec เต็ม และเลือกรูปแบบผลลัพธ์
 
-**Ask the user:**
+เมื่อโครงเรื่องผ่านแล้ว จึงเขียน content-spec ซึ่งเป็นต้นทางของทั้งการสร้างไฟล์และการตรวจ ทุกหน้าต้องมีช่องเหล่านี้ครบ
 
-> "Deck นี้ต้องการ output รูปแบบใดครับ?
-> - **PPTX** (PowerPoint .pptx) — board paper, e-bidding/TOR, ส่งราชการ, ไฟล์แนบ email, ต้อง embed ฟอนต์
-> - **HTML** (web deck) — demo เว็บ, แชร์ลิงก์/URL, เปิดมือถือ, zero-dependency 1 ไฟล์
-> - **Both** — ทั้งสอง (ใช้ outline เดียวกัน build 2 format)"
+| ช่อง | ใส่อะไร |
+|---|---|
+| `objective` | หน้านี้ทำให้ผู้ฟังตัดสินใจอะไร — ใช้ตอนคิดเท่านั้น และไม่นำไปแสดงบนสไลด์ เพราะกลายเป็นการบรรยาย |
+| `action_title` | ประโยคสรุปของหน้า ยาวไม่เกินสองบรรทัด |
+| `key_message` | ใจความของหน้า ความยาวอยู่ในงบคำของโหมดที่เลือกไว้ในขั้นที่ 2 |
+| `evidence` | ตัวเลข ข้อเท็จจริง หรือแหล่งที่มาที่รองรับใจความนั้น |
+| `visual` | ภาพประกอบหรือแผนภาพของหน้านี้ และ icon ที่ใช้ |
+| `topic_id` | รหัสเรื่องของหน้า หน้าที่ใช้ชุดความหมายเดียวกันในการระบายสีต้องใช้รหัสเดียวกัน |
+| `color_set` | ชุดสีที่หน้านี้ใช้ ต้องตรงกันทุกหน้าที่มี `topic_id` เดียวกัน |
+| `palette_base` | ฐานสีของทั้งชุด ประกาศครั้งเดียวต่อหนึ่งชุด |
+| `mode` | `presenter` หรือ `document` ตามขั้นที่ 2 ประกาศครั้งเดียวต่อหนึ่งชุด |
 
-| เลือก | route ไป | engine |
+กติกาว่าด้วยการเลือกสี การไล่เฉด ชุดสีที่สื่อความหมาย และการมีภาพทุกหน้า อยู่ที่ `pptx-design-doctrine.md` ข้อ 2 ข้อ 3 และข้อ 4 ตามที่ระบุไว้ในหัวไฟล์นี้ · ชุดคำถามตั้งโจทย์ก่อนวาดภาพประกอบและ icon อยู่ที่สกิล `b2b-slide-designer` หัวข้อ 4.11 ซึ่งเป็นบ้านเดียวของเรื่องนั้น ให้ตอบชุดคำถามนั้นแล้วเขียนผลลง content-spec
+
+สกิล `b2b-slide-designer` ยังส่งข้อกำหนดการออกแบบมาให้ด้วย ประกอบด้วย รูปแบบเลย์เอาต์ · ชนิดภาพประกอบ · ชุด icon · การไล่เฉดสี · สีจาก Corporate Identity · `font_strategy` (โหมดภาษาและวิธีจับคู่ฟอนต์) · รูปแบบหัวเรื่อง · โหมด · และที่อยู่แม่แบบสำเร็จรูปถ้ามี ให้สร้างตามข้อกำหนดนั้นจริง ไม่เปลี่ยนสีหรือฟอนต์เอง
+
+**เลือกรูปแบบผลลัพธ์** ข้อกำหนดชุดเดียวกันสร้างได้ทั้ง .pptx และ HTML และทั้งสองแปลงเป็น PDF ได้ · คำถามนี้ถามไปแล้วในชุดคำถามครั้งเดียวของขั้นที่ 3 ข้อความด้านล่างคือคำอธิบายตัวเลือกที่ใช้ตอนถาม
+
+> "ต้องการไฟล์รูปแบบใดครับ
+> - **.pptx** สำหรับเอกสารเสนอคณะกรรมการ งานประมูลและ TOR งานราชการ และไฟล์แนบอีเมล ซึ่งต้องฝังฟอนต์มากับไฟล์
+> - **HTML** สำหรับการสาธิตบนเว็บ การแชร์เป็นลิงก์ และการเปิดบนโทรศัพท์ เป็นไฟล์เดียวจบไม่ต้องติดตั้งอะไรเพิ่ม
+> - **PDF** สำหรับส่งให้อ่านโดยไม่ให้แก้ไข ระบบจะสร้าง .pptx หรือ HTML ให้ผ่านการตรวจครบทุกด่านก่อน แล้วจึงแปลงเป็น PDF และส่งทั้งสองไฟล์
+> - **ทั้งสองรูปแบบ**"
+
+บันทึกคำตอบไว้ใน content-spec · งานราชการ งาน TOR และเอกสารคณะกรรมการที่ไม่ได้ระบุ ให้ใช้ .pptx เป็นค่าตั้งต้น · งานสาธิตหรือเว็บย่อยให้ถามก่อนเสมอ
+
+### ขั้นที่ 7 — สร้างไฟล์
+
+**คำสั่งสร้างไฟล์ต้องมีเครื่องหมายสามตัว** มิฉะนั้นด่านตรวจก่อนสร้างไฟล์ (`~/.claude/hooks/ice-prebuild-guard.sh`) จะปฏิเสธคำสั่ง
+
+| เครื่องหมาย | ประกาศว่าอะไร | ถ้าถูกปฏิเสธให้ทำอะไรต่อ |
 |---|---|---|
-| **pptx** | Step 5 (PPTX) เดิม | `pptx` skill |
-| **html** | Step 5-HTML | `scripts/build_html.py` (ref 13) |
-| **both** | Step 5 + Step 5-HTML | ทั้งคู่ |
+| `ICE_BUILD=pipeline` | งานนี้เดินตามลำดับขั้นตอนของทีม ไม่ใช่การสร้างไฟล์นอกกระบวนการ | อ่านสกิล `ice-doc-builder` แล้วเดินขั้นตอนของสกิลนั้นตั้งแต่ขั้นแรก (ไม่ใช่ขั้นที่ 1 ของไฟล์นี้) |
+| `ICE_DESIGN=briefed` | ได้ตอบชุดคำถามตั้งโจทย์ออกแบบและเขียนผลลง content-spec แล้ว | เปิดสกิล `b2b-slide-designer` หัวข้อ 4.11 ตอบชุดคำถาม เขียนผลลง content-spec แล้วรันคำสั่งใหม่ (คำอธิบายเครื่องหมายนี้อยู่ที่หัวข้อ 4.11.1 ของสกิลนั้น) |
+| `ICE_BASE=<ที่อยู่ไฟล์ฐาน>` หรือ `ICE_BASE=NEW` | ได้เปิดอ่านไฟล์รุ่นล่าสุดจากโฟลเดอร์จริงก่อนแก้ หรือประกาศว่างานนี้เริ่มใหม่ | เปิดโฟลเดอร์ผลงานจริง หาไฟล์รุ่นล่าสุด อ่านก่อน แล้วประกาศที่อยู่ไฟล์นั้น |
 
-เก็บ format choice ใน outline metadata. ถ้าไม่ระบุ + เป็นงานราชการ/TOR/board → default **pptx**; ถ้าเป็น demo/microsite → ถามก่อน.
+**สาย .pptx**
 
-### Step 5 (PPTX) — Build the .pptx deck
-
-Use the `pptx` skill's engine. Follow this sequence:
-
-1. **Read the pptx skill** (`/var/folders/qy/55fblscj3x70rytpncclrc7m0000gn/T/claude-hostloop-plugins/e3dcc920f3eb6dde/skills/pptx/SKILL.md`) for engine commands.
-2. **Load the chosen theme JSON** from `assets/themes/{industry|vendor|starter}/`.
-3. **Load the layout templates** from `assets/layouts/` matching the deck type.
-4. **Run the build script:**
+1. อ่านสกิล `pptx` ซึ่งเป็นเครื่องมือสร้างไฟล์ (python-pptx และ pptxgenjs) เพื่อดูคำสั่งที่ใช้ได้
+2. โหลดไฟล์ธีมจาก `assets/themes/` ตามธีมที่เลือกไว้ในขั้นที่ 3 และโหลดเลย์เอาต์จาก `assets/layouts/` ที่ตรงกับชนิด deck · path ที่ขึ้นต้นด้วย `scripts/` `assets/` `references/` ทุกแห่งในไฟล์นี้ สัมพัทธ์กับโฟลเดอร์ของสกิลนี้คือ `~/.claude/skills/b2b-presentation-creator/` ให้เปลี่ยนไปที่โฟลเดอร์นั้นก่อนรัน หรือใส่ path เต็ม · แปลง content-spec ของขั้นที่ 6 เป็น `outline.json` ก่อน (โครงสร้างช่องอยู่ที่ `references/13-html-deck-builder.md` หัวข้อ 2 ใช้ร่วมกันทั้งสาย .pptx และสาย HTML ผู้แปลงคือผู้ทำงานเอง เก็บไว้โฟลเดอร์เดียวกับไฟล์ผลลัพธ์)
+3. รันคำสั่งสร้างไฟล์
    ```bash
-   python scripts/build_deck.py \
+   ICE_BUILD=pipeline ICE_DESIGN=briefed ICE_BASE=<ที่อยู่ไฟล์ฐาน|NEW> ICE_RAIL=<private|govt> python3 scripts/build_deck.py \
      --outline outline.json \
-     --theme themes/industry/banking.json \
+     --theme assets/themes/industry/<ชื่อธีมที่เลือก>.json \
      --language bilingual \
-     --output "Deck_[Customer]_V01R01_[YYYY-MM-DD].pptx"
+     --output "Deck_[ลูกค้า]_V01R01_[YYYY-MM-DD].pptx"
    ```
-5. If imagery is needed, generate via the methods in `references/07-infographics.md`.
+4. ภาพประกอบที่ต้องสร้างขึ้นใหม่ ใช้วิธีใน `references/07-infographics.md`
+5. ถ้าใช้แม่แบบสำเร็จรูปจากคลัง 71 framework ให้เรียกที่อยู่ไฟล์ด้วย `python3 ~/.claude/skills/b2b-slide-designer/scripts/template_cache.py get "<ชื่อ framework>"` · ถ้าได้สถานะ missing แปลว่าไฟล์แม่แบบไม่อยู่บนเครื่องนี้ ให้สร้างจากคลังภาพประกอบแทนแล้วแจ้ง user โดยไม่ปล่อยให้งานล้ม
+6. วิธีผสมแม่แบบกับเนื้อหาจริงโดยไม่ให้เหลือช่องว่างค้าง อยู่ที่ `references/deck-craft-and-argument.md` หัวข้อ 2 ซึ่งมีลำดับหกขั้นและกฎเรื่องจำนวน object ที่ต้องเท่าจำนวนเนื้อหาจริง
 
-**Filename convention** (per CLAUDE.md A5 / U8):
-`[DeckType]_[Customer]_V[##]R[##]_[YYYY-MM-DD].pptx`
-e.g. `Proposal_BangkokBank_V01R01_2026-04-26.pptx`
+**สาย HTML** อ่าน `references/13-html-deck-builder.md` ก่อนเสมอ เพื่อเลือกเส้นทางตามสภาพแวดล้อม เส้นทาง A ใช้เมื่อรันคำสั่งได้ คือ `python scripts/build_html.py --outline outline.json --css-vars theme-vars.json --output "….html"` · เส้นทาง B ใช้เมื่อรันคำสั่งไม่ได้ คือประกอบไฟล์ .html เองจาก `assets/html/` ลำดับงานคือ อ่านไฟล์อ้างอิง 13 · เตรียมค่าตัวแปร CSS จากธีมตามหัวข้อ 5.6 ของ `b2b-slide-designer` · แปลงโครงเรื่องเป็น `outline.json` ตามโครงข้อมูลในไฟล์อ้างอิง 13 · สร้างไฟล์ · เลือกแม่แบบทางสายตาจาก `assets/html/bold-template-index.json` ถ้าต้องการ · ยึดค่าตัวเลขการจัดหน้าตาม `design-principles.md` · การแปลงจาก .pptx เป็น HTML ใช้ `python scripts/extract-pptx.py input.pptx out/` แล้วสร้างต่อจาก `outline.json` ที่ได้
 
-### Step 5-HTML — Build the HTML deck (web-native output)
+**กับดักที่ทำให้ไฟล์เปิดไม่ได้หรืออ่านไม่ออก** อยู่ที่ `references/pptx-build-hazards.md` ให้เปิดอ่านก่อนสร้างไฟล์ครั้งแรกของแต่ละงาน ไฟล์นั้นครอบสี่เรื่อง คือ อักขระที่ทำให้ PowerPoint ปฏิเสธทั้งไฟล์ (ใช้ `▸` แทน `→` เสมอ) · การตัดบรรทัดภาษาไทยซึ่งใช้กลไกคนละตัวระหว่าง .pptx กับ HTML · การฝังฟอนต์และผู้รับผิดชอบแต่ละส่วน · และชุดตรวจรับของสไลด์ HTML
 
-ใช้เมื่อ Step 4.5 เลือก `html` หรือ `both`. **build อยู่ใน skill นี้** — full blueprint + **Execution Path Rule** อยู่ใน `references/13-html-deck-builder.md`. **อ่าน ref 13 ก่อนเสมอ** เพื่อเลือก path ตาม environment:
+**ชื่อไฟล์** `[ชนิด deck]_[ลูกค้า]_V##R##_[YYYY-MM-DD].pptx` เช่น `Proposal_BangkokBank_V01R01_2026-04-26.pptx` · สาย HTML ใช้รูปแบบเดียวกันแต่ลงท้ายด้วย `.html`
 
-**⚡ 2 Execution Path (ref 13):**
-- **PATH A — Script** (Claude Code, มี Bash): รัน `python scripts/build_html.py --outline outline.json --css-vars theme-vars.json --output "...html"` (auto sanitize + ฝัง viewport-base.css/JS)
-- **PATH B — Inline** (Cowork/Desktop/Web, ไม่มี shell): ประกอบ .html เองจาก `assets/html/{html-template.md + viewport-base.css + animation-patterns.md}` → sanitize `→`→`▸` ด้วยมือ
+### ขั้นที่ 8 — ตรวจด้วยเครื่อง แล้วจึงตรวจด้วยคน
 
-ลำดับ (ทั้ง 2 path):
-1. **อ่าน ref 13** → เลือก PATH A/B ตาม env
-2. **เตรียม CSS-var spec** จาก `b2b-slide-designer §5.6` (`html-styling-export.md`) — theme/CI → `--accent`/`--font-*` web-safe stack
-3. **แปลง outline (Step 4) → outline.json** (schema ref 13 §2)
-4. **build** ตาม path ที่เลือก (A=script · B=inline)
-5. **(optional) เลือก visual template** จาก `assets/html/bold-template-index.json` (10 B2B) → อ่าน `design.md` ตัวที่เลือก
-6. **Design discipline:** `b2b-slide-designer/references/design-principles.md` (20 codified rules — format-agnostic)
+ให้เครื่องตรวจก่อนเสมอ เพื่อให้รอบตรวจของคนใช้กับเนื้อหาและตรรกะเท่านั้น ทุกคำสั่งด้านล่างถ้ารายงานว่าขาดไลบรารี ให้ทำตามคำสั่งติดตั้งที่เครื่องมือพิมพ์ออกมาแล้วรันซ้ำ
 
-**PPT→HTML (Mode B):** PATH A → `python scripts/extract-pptx.py input.pptx out/` → outline.json → build. PATH B (no shell) → ขอเนื้อ .pptx เป็นข้อความ หรือทำใน Claude Code.
-
-**Filename:** `[DeckType]_[Customer]_V[##]R[##]_[YYYY-MM-DD].html` (zero-dependency single file).
-
-### Step 6 — QA (mandatory)
-
-**Step 6.0 — Forbidden-char gate (run FIRST — cheapest check, catches the worst failure).** ⭐
-Before any rendering, scan the deck's **text** (via python-pptx — **no render engine needed**) for the character blocklist below. These chars make **PowerPoint for Mac reject the entire file** (forces the "Repair" dialog), yet **LibreOffice / qlmanage open them fine** — so a render-based preview is *false-green* here and will pass a deck that is actually broken on the customer's machine.
-
-| Forbidden char | Code point | Replace with | Why |
+| ลำดับ | คำสั่ง | ตรวจอะไร | ผลที่ต้องได้ |
 |---|---|---|---|
-| `→` | U+2192 RIGHTWARDS ARROW | `▸` (U+25B8) | PowerPoint Repair-rejects the whole file; ▸ conveys the same flow and opens on every engine |
-| `⟶` `➜` `➔` `➙` | U+27F6 / U+2799 / U+2794 / U+2799 | `▸` (U+25B8) | Same family — same risk |
+| 1 | `python scripts/deck_qa.py --deck <ไฟล์>.pptx --output-dir <โฟลเดอร์>` | อักขระที่ทำให้ PowerPoint ปฏิเสธไฟล์ และคำที่ยังเป็นข้อความตัวอย่างค้างอยู่ ทำงานได้แม้ไม่มี LibreOffice | ไม่พบรายการใด |
+| 2 | `python3 ~/.claude/agents/_lib/audit_layout.py <ไฟล์>.pptx --mode document\|presenter` | งบคำต่อหน้า · หน้าเนื้อหาที่ไม่มีภาพหรือ icon · คำว่าวัตถุประสงค์ที่หลุดขึ้นสไลด์ · กล่องข้อความล้นขอบหรือซ้อนกัน · จำนวนหน้าเกินเพดาน | ไม่มีรายการที่ไม่ผ่าน |
+| 3 | `python3 ~/.claude/agents/_lib/audit_fonts.py --rail private\|govt <ไฟล์>.pptx` (`private` = งานเอกชนทุกชนิด · `govt` = งานราชการ งานตอบ TOR e-GP และรัฐวิสาหกิจ ตามนโยบายฟอนต์ 2 รางในสกิล `b2b-slide-designer` หัวข้อ 4.6 · ค่าเดียวกับ `ICE_RAIL` ตอนสร้าง) | ชื่อฟอนต์ที่ใช้จริงในไฟล์ ตรงตามนโยบายฟอนต์ของงานเอกชนหรืองานราชการ | ผ่านทั้งไฟล์ |
+| 4 | `python3 ~/.claude/agents/_lib/validate_pptx_fonts.py <ไฟล์>.pptx` | ฟอนต์ถูกฝังมากับไฟล์จริง สำหรับงานที่ถึงมือลูกค้า | ผล PASS |
+| 5 | `python3 ~/.claude/agents/_lib/thai_style_check.py <ไฟล์>.pptx --register business` | สำนวนแปลตรง คำติดปาก AI คำเติมไร้ความหมาย และคำที่อาจประดิษฐ์เอง ในข้อความทุกกล่องทั้งไฟล์ | ไม่พบข้อต้องแก้ (ข้อเตือนให้อ่านทีละรายการ) |
 
-- The build pipeline (`_lib/build_pptx.py`) auto-replaces these at build time, and `scripts/deck_qa.py` re-scans as a safety net. If you author or paste slide text directly, **replace `→` with `▸` yourself** — do not rely on the eye, the bug is invisible in any LibreOffice preview.
-- **Debug method if a deck triggers Repair:** binary-search by splitting the file page-by-page (do NOT read the spec hunting for it) — the offending glyph is often in a single shape. (Field case: KT Food S4 — one `→` rejected the whole deck; LibreOffice had passed it.)
+กติกาภาษาของข้อความบนสไลด์อยู่ที่สกิล `ice-writing-register` หัวข้อวิธีใช้สำหรับ agent ซึ่งเป็นบ้านเดียวของเรื่องภาษา ตัวตรวจอัตโนมัติของกติกานั้นคือแถวที่ 5 ของตารางข้างบน · ถ้าผลลัพธ์ต้องเป็น PDF ให้แปลงหลังผ่านตารางนี้ครบ: สาย .pptx ใช้ `bash ~/.claude/agents/_lib/render_pdf.sh <ไฟล์>.pptx` (LibreOffice ตัวจริง พร้อมตรวจฟอนต์ที่ฝัง) · สาย HTML ใช้ `bash scripts/export-pdf.sh <ไฟล์>.html` · แล้วรันแถวที่ 3 ซ้ำกับไฟล์ .pdf · ชื่อไฟล์ PDF เหมือนไฟล์ต้นทางเปลี่ยนเฉพาะนามสกุล
 
-Then run the **5-dimensional QA** described in `references/09-qa-framework.md`:
+เมื่อเครื่องผ่านครบแล้วจึงตรวจด้วยคน
 
-1. First Impression (does it land in 2 seconds?)
-2. Usability (can the audience follow the story?)
-3. Visual Hierarchy (right elements emphasized?)
-4. Consistency (theme applied uniformly?)
-5. Accessibility (contrast, font size, touch targets)
-
-Plus the content checks:
-
-- Run `python scripts/deck_qa.py --deck <file>.pptx --output-dir <dir>` — this runs the forbidden-char scan + boilerplate grep (xxxx/lorem/ipsum/placeholder). The char scan runs **even when LibreOffice is absent**.
-- Convert to images and dispatch a subagent for visual inspection (REQUIRED for ≥5 slides). **Note:** LibreOffice render = *preview only*, **not** a validation pass — it is false-green (cannot see U+2192 rejection, 16:9 breakage, corruption, or font "General Failure" that real PowerPoint surfaces). The final visual sign-off must come from opening the deck in **real PowerPoint**.
-- **Font-embed check (customer-facing):** confirm deliverable-gen ran `_lib/validate_pptx_fonts.py` → PASS, and the deck was opened in **real PowerPoint** with no "Repair" and no font "General Failure" (see §5.1).
-
-**HTML deck QA track** (when output = html/both — see `references/13-html-deck-builder.md` §5):
-- **16:9 lock** — open in a real browser, resize → whole stage scales, content never reflows
-- **No overflow/overlap** — every slide fits the 1920×1080 stage; no panels collide
-- **WCAG ≥4.5:1** (aim 7:1 for projection) — text vs bg, accent vs bg; 9-point check if text on image
-- **Responsive** — verify at 1280×720 + one phone viewport (letterbox correct, not broken)
-- **Keyboard/touch nav + prefers-reduced-motion** work
-- **Arrow sanitize** — no `→` (build_html.py replaces with `▸` for cross-format safety)
-- HTML sign-off = a real **browser** (Chrome/Safari) or Playwright screenshot — NOT LibreOffice (irrelevant to HTML). The independent QA pass is run by qa-master (เจ้ระเบียบ) D7 HTML track in a separate context.
-
-Iterate fix → re-QA at least once. Do not declare success until a full pass surfaces no new issues.
+- **ให้คะแนนงานตัวเอง 6 แกน** ก่อนปล่อยงาน ตามตารางและเกณฑ์คะแนนใน `references/deck-craft-and-argument.md` หัวข้อ 4 ซึ่งบอกด้วยว่าคะแนนเท่าใดต้องแก้ก่อนปล่อย
+- **ตรวจภาพ 5 มิติ** คือ ความประทับใจแรกในสองวินาที · ผู้ฟังตามเรื่องได้หรือไม่ · ลำดับสายตาเน้นถูกจุดหรือไม่ · ธีมถูกใช้สม่ำเสมอทั้งชุดหรือไม่ · และการเข้าถึงได้ (คอนทราสต์ ขนาดตัวอักษร) เกณฑ์เต็มอยู่ที่ `references/09-qa-framework.md`
+- **แปลงเป็นภาพแล้วให้ subagent ตรวจด้วยสายตา** สำหรับงานตั้งแต่ 5 สไลด์ขึ้นไป · ภาพจาก LibreOffice และ qlmanage เป็นภาพตัวอย่างเท่านั้น ไม่ใช่การตรวจรับ เพราะมองไม่เห็นอักขระที่ทำให้ไฟล์เสีย อัตราส่วนที่เพี้ยน และคำเตือนเรื่องฟอนต์ · การตรวจรับขั้นสุดท้ายต้องเปิดใน PowerPoint จริง · งาน HTML ตรวจรับด้วยเบราว์เซอร์จริงหรือภาพหน้าจอจาก Playwright ตามชุดตรวจใน `references/pptx-build-hazards.md` หัวข้อ 4
+- **ส่งให้อริสตรวจ** ในบริบทแยกจากผู้สร้าง มิติ D7 เป็นด่านหยุดงานสำหรับไฟล์ที่ส่งลูกค้า
+- **แก้แล้วตรวจซ้ำอย่างน้อยหนึ่งรอบ** และประกาศว่าเสร็จได้ต่อเมื่อรอบตรวจเต็มไม่พบเรื่องใหม่ · รอบแก้ตามปกติไม่เกินสองรอบ ถ้าถึงรอบที่สามยังไม่ผ่าน แปลว่าโจทย์ตั้งต้นผิด ให้กลับไปถามกัปตันหรือ user
+- งานที่ผู้บริหารจะเห็น ต้องผ่านเกณฑ์ของ `references/12-quality-charter.md` ที่ 8 จาก 9 ข้อ
 
 ---
 
-## 3. Deck Type Decision Matrix
+## ข้อมูลที่กุขึ้นเองไม่ได้
 
-| Deck Type | Primary Audience | Sales Stage Focus | Slide Count | Default Layout Style |
-|---|---|---|---|---|
-| **Discovery & Qualification** | Champion + working team | Discovery → Qualification | 8–12 | Process + Question-led |
-| **Solution & Demo** | Champion → Economic Buyer | Solutioning → Negotiation | 12–18 | Workflow + Visual storytelling |
-| **Proposal & Business Case** | Economic Buyer + C-suite | Proposal → Negotiation → Close | 18–25 | Narrative + Infographic-rich |
-| **Customer Success & QBR** | Champion + Sponsor | Adoption → Renewal/Expansion | 10–15 | Dashboard + Outcome-led |
+สไลด์ชุดนี้ไปถึงมือลูกค้า ข้อมูลที่กุขึ้นจึงสร้างความเสียหายทางธุรกิจจริง
 
-Full slide-by-slide blueprints are in `references/01-deck-types.md`.
+**ห้ามกุสิ่งเหล่านี้ในทุกกรณี** ชื่อลูกค้า ชื่อโครงการ มูลค่าสัญญา และวันที่ในสัญญา · ตัวเลขทางการเงิน ตัวชี้วัด รายได้ จำนวนพนักงาน ส่วนแบ่งตลาด · ชื่อผู้เกี่ยวข้อง ตำแหน่ง คำพูดอ้างอิง และคำรับรอง · สเปก ราคา และการรับรองมาตรฐานของ product · ไฟล์โลโก้ (ให้ใช้รูปทรงแทนที่พร้อมหมายเหตุจนกว่า user จะให้ไฟล์จริง) · ข้ออ้างด้านกฎระเบียบและการปฏิบัติตามข้อกำหนด
 
----
+❌ ใส่ตัวเลขว่า "ลดเวลาปิดงบลง 60 เปอร์เซ็นต์" เพราะเป็นตัวเลขที่พบบ่อยในงานลักษณะนี้ ทั้งที่ยังไม่ได้ตัวเลขปัจจุบันจากลูกค้า
+✅ ใส่ `[NEED FROM USER: ระยะเวลาปิดงบปัจจุบันเป็นกี่วันทำการ]` แล้วยกไปไว้ในรายการสิ่งที่ต้องได้จาก user
 
-## 4. Theme System Architecture
+**เมื่อข้อมูลขาด** ให้กำกับหน้านั้นในโครงเรื่องว่า `[NEED FROM USER: …]` · รวบช่องว่างทั้งหมดไว้ในหัวข้อสิ่งที่ต้องได้จาก user ก่อนลงมือสร้างไฟล์ · รอ user ยืนยัน และไม่ค้นข้อมูลจาก internet มาเติมเองโดยไม่ได้รับอนุญาต
 
-```
-THEME = INDUSTRY (mandatory) × VENDOR (optional) × CUSTOM (optional)
+**สมมติฐานที่ใช้ได้** แต่ต้องกำกับให้เห็นในโครงเรื่องทุกครั้ง มีสามอย่าง คือ ตัวชี้วัดมาตรฐานของอุตสาหกรรม (เช่น โรงงานมักวัดประสิทธิผลโดยรวมของเครื่องจักร) กำกับว่าเป็นสมมติฐาน · ความสามารถทั่วไปของ product ที่ยกมาจากเอกสารทางการ กำกับแหล่งที่มา · และแม่แบบภาพประกอบทั่วไปซึ่งอธิบายรูปแบบ ไม่ใช่ข้อเท็จจริงของลูกค้า
 
-Industry sets:        Primary color, typographic personality, visual motifs
-Vendor accents:       Accent color (constrained, not dominant)
-Custom overrides:     Customer logo placement, signature accent
+## สิ่งที่ส่งมอบ
 
-Output:               One coherent theme JSON consumed by build_deck.py
-```
+งานหนึ่งชุดส่งมอบสี่อย่าง
 
-The full library of pre-built themes is described in:
-- `references/02-themes-industry.md` — 9 industries
-- `references/03-themes-vendor.md` — 6 vendor accents
-- `references/04-themes-custom.md` — custom-from-logo workflow
+1. ไฟล์นำเสนอตามชื่อในขั้นที่ 7
+2. โครงเรื่องรูปแบบ markdown ที่ `outline_V##R##.md` (ไฟล์ข้อ 2 ถึง 4 เก็บโฟลเดอร์เดียวกับไฟล์นำเสนอ)
+3. รายงานตรวจที่ `qa_V##R##.md` สรุปผลตัวตรวจอัตโนมัติทั้งห้ารายการ ผลตรวจ 5 มิติ และรายการที่ยังค้าง
+4. รายการสิ่งที่ต้องได้จาก user เพื่อให้งานสมบูรณ์
 
-Theme JSON files live at `assets/themes/`. Format:
+ที่เก็บไฟล์: งานที่ผูกกับดีล เก็บไว้ในโฟลเดอร์ขั้นตอนของดีลนั้น · งานที่ไม่ผูกกับดีลใด เก็บที่ `/Users/xpickey/Documents/Claude/Output/` · ไม่แน่ใจว่าโฟลเดอร์ใด ให้ถาม user ก่อนบันทึก
 
-```json
-{
-  "name": "banking-fintech",
-  "displayName": "Banking & FinTech",
-  "colors": {
-    "primary": "#1E2761",
-    "secondary": "#CADCFC",
-    "accent": "#D97757",
-    "background": "#FFFFFF",
-    "text": "#141413",
-    "muted": "#6E6B66"
-  },
-  "fonts": {
-    "headerEN": "Inter",
-    "bodyEN": "Lora",
-    "headerTH": "IBM Plex Sans Thai",
-    "bodyTH": "Sarabun"
-  },
-  "motif": "trust-and-precision",
-  "weights": { "primary": 0.6, "secondary": 0.3, "accent": 0.1 }
-}
-```
+## เมื่อโจทย์ทำให้คุณภาพงานแย่ลง
 
----
+ทักท้วงอย่างสุภาพและเสนอทางเลือกสองทางเสมอ ไม่ปฏิเสธเปล่า ๆ
 
-## 5. Bilingual / Font Handling
+| user ขอ | สิ่งที่ควรทักท้วง |
+|---|---|
+| จำนวนหน้าน้อยกว่าช่วงของชนิด deck เช่นสั่ง 8 หน้าแต่ช่วงคือ 10 ถึง 15 | ทำตามจำนวนที่ user สั่ง และระบุในร่างโครงเรื่องว่าหัวข้อใดถูกตัดออกเพื่อให้พอดี ให้ user เห็นก่อนยืนยัน |
+| ทำ 50 หน้า | ผู้ฟังงานขายองค์กรเริ่มหลุดความสนใจหลังหน้าที่ 18 เสนอแยกเป็นเล่มหลักกับภาคผนวก |
+| ใช้สีหลากหลายทั้งหน้า | สัดส่วนสีที่อ่านง่ายมีค่ากำหนดไว้แล้วที่ `design-principles.md` และการไล่เฉดของทุกองค์ประกอบเป็นกฎที่ `pptx-design-doctrine.md` ข้อ 3 เสนอชุดสีที่เข้ากับอุตสาหกรรมแทน |
+| เอาแต่ตัวหนังสือ ไม่ต้องมีภาพ | หน้าที่เป็นตัวหนังสือล้วนจำไม่ได้ และผิดกฎที่ว่าหน้าเนื้อหาทุกหน้าต้องมีภาพหรือ icon ตาม `pptx-design-doctrine.md` ข้อ 2 |
+| จัดกึ่งกลางทุกข้อความ | เฉพาะหัวเรื่องที่จัดกึ่งกลาง ตัวเนื้อจัดชิดซ้ายเพื่อให้อ่านเร็ว ค่าอ้างอิงอยู่ที่ `design-principles.md` |
+| ใช้ฟอนต์ที่ดูเป็นกันเอง เช่น Comic Sans | ผู้ฟังระดับองค์กรอ่านแล้วรู้สึกว่างานไม่จริงจัง เสนอฟอนต์ที่อบอุ่นแต่ยังเป็นทางการจากรายชื่อของ `b2b-slide-designer` หัวข้อ 5.5.1 |
 
-The most common mistake in Thai+English decks is using a Thai font that doesn't pair gracefully with the English headline (e.g. Tahoma + Calibri produces a "1990s gov memo" look). This skill enforces font pairs that are tested in real Thai enterprise decks.
+## ไฟล์อ้างอิงและเจ้าของเรื่อง
 
-**Canonical pairs** (full table in `references/05-typography.md`):
+เปิดเฉพาะไฟล์ที่งานตรงหน้าต้องใช้ ไม่ต้องอ่านทั้งหมด
 
-| Personality | Thai font | English font | Use for |
-|---|---|---|---|
-| Modern executive | IBM Plex Sans Thai | Inter | Default for Bilingual decks |
-| Trust / Banking | Sarabun | Lora | Banking, FinTech, Insurance |
-| Tech-forward | Prompt | Manrope | Tech, SaaS, Telco |
-| Premium / Luxury | Noto Serif Thai | Playfair Display | Luxury retail, premium services |
-| Government / Restrained | Sarabun | Source Sans 3 | Government, SOE, อปท. |
+| ต้องการอะไร | เปิดไฟล์ไหน |
+|---|---|
+| โครงสไลด์รายหน้าของ deck แต่ละชนิด | `references/01-deck-types.md` |
+| ชุดสีและบุคลิกทางสายตาตามอุตสาหกรรม | `references/02-themes-industry.md` |
+| สีเน้นตามเจ้าของ product | `references/03-themes-vendor.md` |
+| สร้างธีมใหม่จากโลโก้หรือสีของลูกค้า | `references/04-themes-custom.md` |
+| คู่ฟอนต์ไทยกับอังกฤษ และการวางสองภาษา | `references/05-typography.md` และ `references/10-bilingual-handling.md` |
+| รูปแบบเลย์เอาต์รายหน้า | `references/06-layouts.md` |
+| วิธีสร้างภาพประกอบ | `references/07-infographics.md` |
+| ระบบสีและการเข้าถึงได้ | `references/08-color-system.md` |
+| เกณฑ์ตรวจภาพ 5 มิติ | `references/09-qa-framework.md` |
+| ธีม iCE Propose | `references/11-ice-propose-theme.md` |
+| องค์ประกอบที่ต้องมีและเกณฑ์ผ่านของงานผู้บริหาร | `references/12-quality-charter.md` |
+| สร้าง deck รูปแบบ HTML | `references/13-html-deck-builder.md` |
+| ลำดับข้อเสนอ การผสมแม่แบบ ตัวอย่างให้เลือก การให้คะแนนตัวเอง | `references/deck-craft-and-argument.md` |
+| อักขระที่ทำให้ไฟล์เสีย การตัดบรรทัดไทย การฝังฟอนต์ ชุดตรวจ HTML | `references/pptx-build-hazards.md` |
+| กฎออกแบบประจำ 6 ข้อของทุก deck | `~/.claude/skills/b2b-slide-designer/references/pptx-design-doctrine.md` |
+| ค่าตัวเลขของการจัดหน้า | `~/.claude/skills/b2b-slide-designer/references/design-principles.md` |
+| เลือกแม่แบบ ชุดสี ฟอนต์ และชุดคำถามตั้งโจทย์ก่อนวาด (หัวข้อ 4.11) · การเลือก icon จากคลังก่อนสร้างใหม่ (หัวข้อ 4.7) | สกิล `b2b-slide-designer` |
+| กติกาภาษาของข้อความบนสไลด์ | สกิล `ice-writing-register` |
+| กลยุทธ์ดีลก่อนลงมือทำเอกสาร | สกิล `ice-b2b-enterprise-sale` · งานราชการเพิ่ม `govt-egp-gfmis` · งานสรุป pipeline เพิ่ม `sales-pipeline-report` |
 
-If a font is not installed, the skill must (a) install via `scripts/install_fonts.sh` (Linux/Mac) or (b) fall back to the closest system font and **note this in the QA report**.
-
-### 5.0 ⭐ Thai line breaking — PPTX vs HTML use DIFFERENT mechanisms (V01R11 · 2026.07.31)
-
-Thai has no spaces between words, so both engines will split words mid-syllable ("ภาคผนว" / "ก") unless told otherwise. **The fix is not the same in the two output formats** — do not carry one over to the other.
-
-| Output | Mechanism | What to emit | What NOT to do |
-|---|---|---|---|
-| **PPTX** | PowerPoint's own Thai dictionary | `lang="th-TH"` on every run containing Thai (`a:rPr lang`) — python-pptx: `run.font.language_id` | Don't inject ZWSP by default |
-| **HTML deck** | **The browser's** Thai dictionary (CSS-driven) | `lang="th"` on the element + `word-break: normal` + `line-break: loose` | 🔴 **Never `word-break: break-all`** — it splits every word at the box edge, which is exactly the defect |
-
-**Design-time prevention beats both:** size text boxes with ~1.15–1.20× the width of the same content in Latin, and keep long fixed Thai terms unbroken on one line — `การประปาส่วนภูมิภาค` · `ภาคผนวก` · `คณะกรรมการ` · `ระบบสารสนเทศ`.
-
-**Check before emit:** `python3 ~/.claude/agents/_lib/thai_wordbreak.py --check "<text>" --width <chars>` (PyThaiNLP, `newmm` engine — never `longest`, it lowercases English).
-
-**Last resort only — ZWSP (U+200B):** forces correct break points but **breaks Ctrl+F** for any word it splits, and rides along in copy-paste. Forbidden for TOR / e-GP and anything the reader will search. Full rules → `ice-doc-builder` §3.5. QA detects this as **D7.7 / D7.H8** (อริส).
-
-### 5.1 Font Embedding (customer-facing decks) — pointer, single-source 2026.06.20
-
-A bilingual deck only renders correctly on the recipient's machine if its Thai+English fonts are **embedded**. Three things must line up — and each has ONE owner, so this skill does not restate them:
-
-| What | Single source of truth | This skill's job |
-|---|---|---|
-| **Choose embed-safe fonts** (static + fsType≠Restricted + SIL OFL pairs, per-font fsType verified via fontTools) | **`b2b-slide-designer` §5.5.1** (the typography owner) | Pick the font from slide-designer's whitelist; hand the spec down |
-| **Apply the embedding** (5 PowerPoint-safe conditions: `embeddedFontLst` after `notesSz`, fontTools round-trip normalize every font, content-type `application/x-fontdata`, `embedTrueTypeFonts="1"`+`saveSubsetFonts="0"`) | **`deliverable-gen` `_lib/embed_fonts_pptx.py`** (the build tool) | Hand off — never embed here |
-| **Validate** | `deliverable-gen` `_lib/validate_pptx_fonts.py` → open in real PowerPoint | Require PASS before delivery |
-
-> ⛔ **Do NOT use LibreOffice `--convert-to pptx:…EmbedFonts`** — proven not to embed (writes only to `.odp`) and it overwrites `sldSz` to `screen4x3`, destroying 16:9. Final sign-off must be **real PowerPoint** (qlmanage/LibreOffice are false-green — they cannot see the "General Failure" warning). *(This ⛔ is the embedding contract; it stays here because it is a hard BLOCK any deck author must see.)*
-
----
-
-## 6. Anti-Hallucination Protocol
-
-This skill produces customer-facing artifacts. Hallucinated facts in a deck cause real commercial damage.
-
-**Never fabricate, in any deck:**
-
-- Customer names, project names, SOW values, contract dates
-- Financial KPIs, revenue figures, headcount, market shares
-- Stakeholder names, titles, quotes, testimonials
-- Vendor product specs, pricing, certification claims
-- Logo files (use a placeholder shape with a comment until the user supplies the real logo)
-- Regulatory or compliance assertions
-
-**When information is missing:**
-
-1. Mark the slide with `[NEED FROM USER: …]` in the outline
-2. List all gaps in the **Open Questions** section before building
-3. Wait for user confirmation; do not auto-fill from web search without explicit authorization (per CLAUDE.md A2.4 / B2.3)
-
-**Permitted assumptions** (must be flagged in the outline):
-
-- Standard industry KPIs (e.g. "manufacturers typically track OEE") — flagged as ASSUMPTION
-- Vendor product general capabilities pulled from official documentation — flagged with vendor source
-- Generic infographic templates — they describe a pattern, not a customer fact
-
----
-
-## 7. Output Contract
-
-Every completed deck delivery includes:
-
-1. **The .pptx file** at `[DeckType]_[Customer]_V##R##_[YYYY-MM-DD].pptx`
-2. **A markdown outline** at `outline_V##R##.md` showing the slide plan
-3. **A QA report** (`qa_V##R##.md`) summarizing the 5-dim review and any open issues
-4. **Open questions / what I need from you** — explicit list of gaps the user must close before the deck is final
-
-Save target (per project preference):
-- Default: `/Users/xpickey/Documents/Claude/Custom Skill/b2b-presentation-creator/samples/`
-- Production deliverables: ask user to confirm `/Users/xpickey/Documents/Claude/Output/` or other location per CLAUDE.md B5
-
----
-
-## 8. Composition with Other Skills
-
-This skill is composable. Common chains:
-
-- **For Sales / Proposal work:** Trigger `ice-b2b-enterprise-sale` first to plan deal strategy, then this skill to materialize the deck.
-- **For Government / e-GP / GFMIS deals:** Trigger `govt-egp-gfmis` or `advisor-govt-gfmis` first for compliance content, then this skill to format the response deck.
-- **For sales pipeline reviews:** Trigger `sales-pipeline-report` to compute the data, then this skill to wrap it in an executive narrative deck.
-- **For brand voice consistency:** If the customer has brand voice guidelines in `.claude/brand-voice-guidelines.md`, apply them silently when writing slide copy.
-
-When chained, this skill is the **final stage** — it materializes the deliverable. Avoid running it standalone for tasks where strategy work hasn't happened yet; the output will look polished but say nothing.
-
----
-
-## 9. Default Behaviors and Pushback
-
-This skill is opinionated. Push back politely when the user asks for things that hurt deck quality:
-
-- **"Just make it 50 slides"** → Push back: most B2B decks lose attention after 18. Suggest splitting into a main deck + appendix.
-- **"Use rainbow colors"** → Push back: 60-30-10 rule applies (primary 60% / secondary 30% / accent 10%). Suggest a theme that fits.
-- **"All bullets, no images"** → Push back: text-only slides are forgettable. Every slide gets a visual element.
-- **"Center-align all text"** → Push back: only titles get centered; body text is left-aligned for readability.
-- **"Use Comic Sans for friendliness"** → Push back: enterprise audiences read this as unserious. Suggest a warmer alternative (e.g. Manrope).
-
-When pushed back, always offer 2 alternatives so the user has a choice rather than a refusal.
-
----
-
-## 10. Self-Check Before Delivery
-
-Run this checklist mentally before declaring the deck done:
-
-- [ ] Deck type and sales stage are confirmed
-- [ ] Theme is appropriate for industry × vendor × customer
-- [ ] Language mode (TH / EN / Bilingual) matches the audience
-- [ ] All fonts are installed or fallback noted in QA
-- [ ] Fonts embed-safe (static + fsType≠Restricted + SIL OFL) and embedded for customer-facing decks — validate PASS + opened in real PowerPoint (§5.1)
-- [ ] No fabricated names, figures, dates, or quotes
-- [ ] Every slide has a visual element (no text-only slides)
-- [ ] 5-dim QA pass complete with no Critical issues
-- [ ] Visual subagent inspection done (≥5 slides)
-- [ ] Filename includes `V##R##_YYYY-MM-DD`
-- [ ] Open questions surfaced clearly to the user
-- [ ] Output saved to confirmed location
-
----
-
-## 11. Reading Order (when the user gives you a brief)
-
-```
-1. This file (SKILL.md) — workflow + decision matrix
-2. references/01-deck-types.md — once deck type is known
-3. references/02-themes-industry.md — to pick industry theme
-4. references/03-themes-vendor.md — only if vendor is in scope
-5. references/05-typography.md — to lock in the font pair
-6. references/06-layouts.md — to pick slide layouts
-7. references/07-infographics.md — when slide needs a diagram
-8. references/09-qa-framework.md — at QA time
-9. references/11-ice-propose-theme.md — when deck is iCE Consulting branded
-```
-
-You rarely need all 10 references. Pull only what the situation demands.
-
----
-
-## 12. What This Skill Will NOT Do
-
-- Generate decks without a confirmed outline
-- Use Internet research without user authorization
-- Save outputs to forbidden folders (per CLAUDE.md V07R01 A1 / A2)
-- Apply themes that fight the customer's brand
-- Skip the visual QA step on multi-slide decks
-- Fabricate customer-specific facts to fill gaps
-- **Skip the B2B Deck Quality Charter** (`references/12-quality-charter.md`) on executive-facing decks
-- **Deliver a deck below Pass threshold ≥8/9** per Charter
-
----
-
-**End of SKILL.md.** Continue to the relevant reference file based on the user's brief.
-
----
-
-## Version History
-
-| Version | Date | Change |
-|---|---|---|
-| **V01R12** | **2026-07-04** | **+§0.5.5 Pitch Architecture (STRUCTURE layer of Pitch-Belief Card SSOT).** โครง argument ของ deck ก่อนออกแบบราย slide: (a) de-risk spine ตาม WHY-stack — belief slot คู่ proof slot เสมอ, ห้าม vision 3 สไลด์ติด (committee down-scope) · (b) stage-timing table — vision/proof weight ตาม Sales Stage (Solutioning=vision สูง · Proposal=proof นำ) keyed to existing axis, stat มี [source]/[to confirm] · (c) future-state immersion (To-Be ลูกค้าจริง ใช้ §6 discipline เดิม). wire: Step 4 mark [VISION]/[PROOF] + §0.5.6 Philosophy axis lens. two-voice copy = b2b-why-thinking · visual craft = เจนนี่ (ไม่ทับ). เคส Creative-pitch article + deep-research. คู่กับ b2b-why-thinking V01R02 (pitch-belief-card SSOT).** |
-| **V01R11** | **2026-06-22** | **+6-Axis Pre-Emit Critique (§0.5.6) — adapted from hallmark (MIT).** หลัง Adaptive Mix ก่อน emit: ให้คะแนนตัวเอง 6 แกน (Philosophy/Hierarchy/Execution/Specificity/Restraint/Variety) 1-5 · **<3 ข้อใด = แก้ก่อน emit** · revision ≤2 รอบปกติ · 3 รอบยังไม่ผ่าน = brief ผิด (กลับถาม Compass/user) · stamp คะแนนใน comment · ผูก Preview-First (critique ก่อนทำ preview — ปล่อยเฉพาะที่ผ่าน). คู่กับ slide-designer §4.8 Anti-Slop (visual tells) + §4.10 Audit. ref: slide-designer NOTICE-hallmark.md.** |
-| **V01R10** | **2026-06-20** | **+Adaptive Mix Engine + Preview-First (§0.5).** ADAPTIVE MIX: 'ผสม' = เอาแนว/ลักษณะ template (decision-tree/matrix/funnel) + สร้าง object **เท่าเนื้อจริง** ไม่คงโครง template เป๊ะ (ข้อมูลน้อย=ลด object · มาก=แตก slide) — ห้ามเหลือ placeholder ค้าง · override color→iCE CI + font→ไทย · font-fit ย่อ size กันล้น · fallback draw-new ถ้า template ซับซ้อนเกิน map. PREVIEW-FIRST: เจนนี่ทำ 2-3 infographic preview (PNG) ให้ user เลือก+confirm ก่อน build เต็ม (ไม่เสียเวลา build จบแล้วผิดแนว). POC verified (decision-tree ERP: object เท่าเนื้อ 3 branch×2 leaf, font ไทยไม่ล้น). คู่กับ เจนนี่ ROLE 1 Preview-then-build.** |
-| **V01R09** | **2026-06-20** | **+Build from Design Spec (§0.5) + Content-Aware Font 3-mode.** รับ Design Spec จาก b2b-slide-designer §4.5 Router (template/color/icon/gradient/font_strategy) → build ตาม template จริง ทุก format (PPTX/HTML/PDF). build_html.py: +`apply_font_strategy()` + `--font-strategy` — 3 mode (TH-only/EN-only/TH+EN), TH+EN = unified (IBM Plex Sans Thai) หรือ pair latin+cs (ไทยมาก่อน Latin กันแตก), content-aware size (document→body เล็กลง · presenter→title ใหญ่). +71 framework .pptx (catalog-templates-ready) เปิดดึง layout. +ref 07/02 pointer → slide-designer catalog. font เลือกตามภาษา ไม่ตาม template (§5.5.1 single-source). คู่กับ b2b-slide-designer V02R04.** |
-| **V01R08** | **2026-06-20** | **+Dual Execution Path (ใช้ได้ทั้ง Claude Code / Cowork / Desktop / Web).** ref 13 เพิ่ม Execution Path Rule: PATH A (มี Bash → รัน scripts/build_html.py) · PATH B (ไม่มี shell → ประกอบ HTML inline จาก assets/html/html-template.md + viewport-base.css + animation-patterns.md, sanitize →→▸ เอง). +copy html-template.md + animation-patterns.md เข้า assets/html (inline skeleton). Step 5-HTML + เจนนี่ ROLE 2 ระบุ env detection. ผลลัพธ์เหมือนกันทุก env (single .html 16:9 zero-dep). เหมือน Higgsfield CLI/MCP pattern.** |
-| **V01R07** | **2026-06-20** | **+HTML Presentation Slide capability (skill-owned build).** เพิ่ม Step 4.5 Output Format Decision (pptx/html/both) + Step 5-HTML + Step 6 HTML QA track + ref 13-html-deck-builder.md. Build scripts อยู่ใน skill นี้: `scripts/build_html.py` (HTML render, zero-dep 16:9) + `scripts/extract-pptx.py` (PPT→HTML) + assets/html (viewport-base.css + 10 B2B template subset). เจนนี่ (deliverable-gen) invoke skill เพื่อ build — ไม่เก็บ logic เอง. design-principles (20 rules) + html-styling-export อยู่ที่ slide-designer. Source: frontend-slides (MIT © Zara Zhang) + power-design (MIT © Jack Roberts) — see references/NOTICE-html-slides.md. PPTX flow เดิม (Step 1-6, §5.1 font embed, D1-D4) ไม่แตะ.** |
-| **V01R06** | **2026-06-20** | **§5.1 Font Embedding → de-duplicated to pointer.** Font-selection rules (static + fsType + SIL OFL pairs) ย้ายไปอ้าง `b2b-slide-designer` §5.5.1 เป็น SINGLE SOURCE (typography owner) แทนการ restate ตาราง → no drift เมื่อ whitelist เปลี่ยน. คง embedding-method detail (5 PowerPoint-safe conditions = `deliverable-gen` `_lib/embed_fonts_pptx.py`) + ⛔ no-LibreOffice BLOCK ไว้ในตาราง 3-owner. เหตุผล: Architecture review — แยก skill (designer vs producer) ถูกแล้ว แต่ font rule เขียนซ้ำ 2 ที่ = drift risk. slide-designer §5.5.1 ได้ 📌 SINGLE-SOURCE marker คู่กัน.** |
-| **V01R05** | **2026-06-13** | **ref 07 Method 3 (AI imagery) — bound to real engines via connection skills: `nanobanana-connection` (Gemini image — hero/infographic ภายใน, เร็ว/quota) + `higgsfield-connection` (full suite: 4K/text via Nano Banana Pro, FLUX.2/Soul, Marketing Studio DTC ads, Kling/Veo video, Soul ID consistent character — credit-based, preflight `get_cost`). เดิม Method 3 เป็น generic "AI imagery" ไม่ชี้ engine. deliverable-gen-agent (เจนนี่) V01R05 bind ทั้ง 2 MCP+skill → build deck ที่มี AI hero/video/ad ได้ในตัว.** |
-| **V01R04** | **2026-06-13** | **Added Step 6.0 Forbidden-char gate (U+2192 `→` + family → `▸` U+25B8) as the FIRST QA check — text-based, runs without any render engine. Demoted LibreOffice render to *preview only, not a validation pass* (false-green: cannot see U+2192 Repair-rejection, 16:9 breakage, corruption, font General Failure). Final visual sign-off = real PowerPoint. Switched content-check command to `scripts/deck_qa.py` (forbidden-char scan + boilerplate grep, LibreOffice-optional). Source: KT Food S4 field bug + PPTX Lesson #18.** |
-| **V01R03** | **2026-06-03** | **Added §5.1 Font Embedding — embed-safe font rules (static + fsType≠Restricted + SIL OFL) + handoff to deliverable-gen `_lib/embed_fonts_pptx.py` (5 PowerPoint-safe conditions incl. fontTools normalize for "General Failure") + ⛔ no LibreOffice EmbedFonts + Step 6 QA & §10 Self-Check embed gates. Source: KD_PPTX-Embedded-Font-TH-EN_V01R02.** |
-| **V01R02** | **2026-05-19** | **Added references/12-quality-charter.md — B2B Deck Quality Charter (9 mandatory items + 8-step Pre-Build Workflow + Pass ≥8/9 threshold + 10 Anti-Patterns). Charter enforced by presentation-generator-agent V01R03 Phase A.5 and qa-master-agent V01R02 Dimension 6.** |
-| V01R01 | 2026-05-15 | Initial release — 11 references + scripts + assets + samples (66 files, 349KB ZIP) |
+สกิลนี้เป็นปลายทางของสายงาน คือขั้นที่แปลงงานคิดให้เป็นไฟล์ การเริ่มที่สกิลนี้ทั้งที่ยังไม่มีงานกลยุทธ์ ให้ผลงานที่ดูเรียบร้อยแต่ไม่มีสาระ
