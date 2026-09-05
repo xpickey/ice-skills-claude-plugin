@@ -27,7 +27,9 @@ CASES = [
     ("จากข้อมูลทั้งหมด ตั้งคำถามสอบถามเพิ่มเพื่อ Qualify เลือก Software", PROJ, ["sales-thinking"], []),
     ("แปลเป็นไทยไม่เข้าเลย ลองแปลแบบคนทำงานด้าน Lab", PROJ, ["thai-translation"], []),
     ("ท่านสมนึกและอริส เช็คการเขียนภาษาไทยในบทความวิชาการ อ้างอิง APA", ACA, ["academic-article"], ["deck-customer"]),
-    ("รีวิวบทนำ สะกดผิด", ACA, ["academic-article"], []),          # จับจาก path อย่างเดียว
+    ("รีวิวบทนำ สะกดผิด", ACA, ["academic-article"], []),
+    ("ทำ deck ซ้อมจริง 6 หน้า เสนอ ERP ให้ลูกค้าค้าปลีก", PROJ, ["deck-customer", "industry-fmcg"], ["academic-article"]),  # "มจร" ต้องไม่จับใน "ซ้อมจริง"
+    ("ส่งบทความ มจร วารสารรัฐศาสตร์", ACA, ["academic-article"], []),          # จับจาก path อย่างเดียว
     ("PPTX mapping SAP to Oracle for King Power ด้วย NetSuite", PROJ, ["deck-customer", "product-netsuite"], []),
     ("อ่าน File นี้ แล้วสรุปการประชุม MOM 27 aug", PROJ, ["doc-customer", "doc-reading"], []),
     ("ทำ demo app dashboard ให้ลูกค้ากดได้", PROJ, ["demo-app"], []),

@@ -31,13 +31,27 @@ def _norm(text):
     return str(text if text is not None else "").lower()
 
 
+try:
+    from pythainlp.tokenize import word_tokenize as _th_tok
+except Exception:  # ไม่มี PyThaiNLP = ถอยไปจับข้อความย่อยเหมือนเดิม
+    _th_tok = None
+
+_TH_SHORT = 4  # คำไทยยาวไม่เกินเท่านี้ (ตัวอักษร) ต้องตรงระดับคำ ไม่ใช่ข้อความย่อย
+
+
 def _keyword_hit(keyword, text):
     """คำภาษาอังกฤษล้วนจับแบบทั้งคำ (กัน word ไปตรงกับ keyword, pain ไปตรงกับ campaign)
-    คำที่มีอักษรไทยหรืออักขระอื่นจับแบบข้อความย่อย"""
+    คำที่มีอักษรไทยจับแบบข้อความย่อย ยกเว้นคำไทยสั้น (≤4 ตัวอักษร เช่น มจร · APA ไทย) ต้องตรงระดับคำ
+    ที่ PyThaiNLP ตัดให้ — บทเรียน 2026.09.05: "มจร" ไปจับใน "ซ้อมจริง" ทำให้ deck งานขายถูกบังคับโหลด skill วิชาการ"""
     k = _norm(keyword)
     if re.fullmatch(r"[a-z0-9 .\-]+", k):
         return re.search(r"(?<![a-z0-9])" + re.escape(k) + r"(?![a-z0-9])", text) is not None
-    return k in text
+    if k not in text:
+        return False
+    if _th_tok is not None and re.fullmatch(r"[\u0e00-\u0e7f]+", k) and len(k) <= _TH_SHORT:
+        toks = [w for w in _th_tok(text, keep_whitespace=False) if w.strip()]
+        return k in toks
+    return True
 
 
 def match_routes(prompt, cwd, routes=None):

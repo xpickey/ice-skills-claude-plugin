@@ -127,7 +127,7 @@ if [[ "$CMD" == *ICE_BUILD=pipeline* ]] && writes_office_file && ! edits_system_
   if [[ -n "$SID" && -f "$HOME/.claude/hooks/ice_route_lib.py" ]]; then
     MISSING="$(python3 "$HOME/.claude/hooks/ice_route_lib.py" check "$SID" 2>/dev/null)" || RC=$? ; RC="${RC:-0}"
     if [[ "$RC" -eq 3 ]]; then
-      deny "ยังสร้างไฟล์ไม่ได้ เพราะยังโหลด skill ที่ตารางเส้นทางกำหนดไว้สำหรับงานประเภทนี้ไม่ครบ — $MISSING — ให้โหลด skill ด้วย Skill tool และเปิดอ่านไฟล์ที่ระบุก่อน แล้วรันคำสั่งนี้อีกครั้ง (ตารางอยู่ที่ ~/.claude/hooks/skill-routing.yaml)"
+      deny "ยังสร้างไฟล์ไม่ได้ เพราะยังโหลด skill ที่ตารางเส้นทางกำหนดไว้สำหรับงานประเภทนี้ไม่ครบ — $MISSING — ให้โหลด skill (เรียกด้วย Skill tool หรือเปิดอ่าน ~/.claude/skills/<ชื่อ>/SKILL.md ทั้งไฟล์ นับให้ทั้งสองทาง) และเปิดอ่านไฟล์ที่ระบุก่อน แล้วรันคำสั่งนี้อีกครั้ง (ตารางอยู่ที่ ~/.claude/hooks/skill-routing.yaml)"
     fi
   fi
   exit 0
