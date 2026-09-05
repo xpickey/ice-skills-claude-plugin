@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# iCE POST-BUILD RECORD (V01R02 | 2026.09.05) — ทำงานหลังคำสั่งสร้างเอกสารสำเร็จ
+# iCE POST-BUILD RECORD (V01R03 | 2026.09.05) — ทำงานหลังคำสั่งสร้างเอกสารสำเร็จ
 # หน้าที่: 1) บันทึกลายนิ้วมือไฟล์ที่เพิ่งสร้าง เพื่อให้ด่านก่อนสร้าง (ice-prebuild-guard V03R01)
 #             รู้ได้ว่าไฟล์ถูก user แก้ไขเองในภายหลังหรือไม่
 #          2) เรียกตัวตรวจฟอนต์ให้อัตโนมัติ แล้วส่งผลกลับให้ผู้ทำงานเห็นทันที
@@ -56,6 +56,12 @@ LAYOUT="$HOME/.claude/agents/_lib/audit_layout.py"
 if [[ -f "$LAYOUT" && "$first" == *.pptx ]]; then
   lay="$(run_limited 60 python3 "$LAYOUT" "$first" 2>&1 | tail -12 | tr '\n' ' ')"
   [[ -n "$lay" ]] && MSG="$MSG · ผลตรวจเลย์เอาต์อัตโนมัติ (ต้องเป็น PASS ก่อนส่งผู้ตรวจคุณภาพ): $lay"
+fi
+
+STYLE="$HOME/.claude/agents/_lib/thai_style_check.py"
+if [[ -f "$STYLE" && ( "$first" == *.pptx || "$first" == *.docx ) ]]; then
+  sty="$(run_limited 60 python3 "$STYLE" "$first" 2>&1 | tail -6 | tr '\n' ' ')"
+  [[ -n "$sty" ]] && MSG="$MSG · ผลตรวจภาษาแปลและสำนวน AI อัตโนมัติ (ต้องไม่มีข้อต้องแก้ก่อนส่งผู้ตรวจคุณภาพ): $sty"
 fi
 
 [[ -z "$MSG" ]] && exit 0
