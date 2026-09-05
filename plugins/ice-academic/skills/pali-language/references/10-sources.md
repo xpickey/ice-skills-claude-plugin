@@ -1,6 +1,6 @@
 # 10 — ทะเบียนแหล่งอ้างอิงและวิธีสกัด (Source Registry)
 
-> **Version:** V01R06 · 2026.09.04 · ส่วนหนึ่งของ skill `pali-language` · R06: +ตาราง ง4. ผล delta ของอริส (PALI-011…015) · R05: +ผล delta รอบ 2 ของเทพ (แถวท้ายตาราง ง3.) + ข้อจำกัด จ.7-จ.8 · R04: +ผลเทพ FACT review (ตาราง ง3.) · R03: +ผลอริส 9 มิติ (ตาราง ง2.) · ถอน จ.2 · R02: +ผล Codex รอบ 2 (ตาราง ง.) + ข้อจำกัด จ.6
+> **Version:** V01R07 · 2026.09.05 · ส่วนหนึ่งของ skill `pali-language` · R07: +แหล่ง internet รอบบาลีโรมัน (§ค) + ไฟล์ `11` และ `pali_translit.py` ใน §ฉ · R06: +ตาราง ง4. ผล delta ของอริส (PALI-011…015) · R05: +ผล delta รอบ 2 ของเทพ (แถวท้ายตาราง ง3.) + ข้อจำกัด จ.7-จ.8 · R04: +ผลเทพ FACT review (ตาราง ง3.) · R03: +ผลอริส 9 มิติ (ตาราง ง2.) · ถอน จ.2 · R02: +ผล Codex รอบ 2 (ตาราง ง.) + ข้อจำกัด จ.6
 > ทุก claim ใน skill นี้อ้างด้วย **รหัสย่อ + เลขหน้า** เช่น `(ตำรา น.16)` `(สไลด์2 น.7)` — ตารางนี้แมปรหัสย่อ → ไฟล์จริง + ระบุว่าส่วนใดสกัดด้วยวิธีใด
 > **โฟลเดอร์ต้นทาง:** `<workspace>/Academic/ภาษาบาลี/` ในเครื่องของผู้ใช้ (5 ไฟล์ · 177 หน้า — ไม่ได้แนบมากับ skill)
 
@@ -36,6 +36,15 @@
 | SuttaCentral | https://suttacentral.net/ | 08 §4 | จากผลค้น |
 | Warder, *Introduction to Pali* (PTS) + answer key | https://palitextsociety.org/ · accesstoinsight.org/lib/authors/kelly/warder-key/ | 08 §4 | จากผลค้น |
 | Off-site Pali resources (Access to Insight mirror) | https://zugangzureinsicht.org/html/outsources/pali.html | 08 §4 (DPR, VRI CST, BUDSIR) | จากผลค้น |
+| **รอบ 2026.09.05 (บาลีโรมัน — ผู้ใช้อนุญาตในคำสั่ง)** | | | |
+| Wiktionary — Pali entry guidelines | https://en.wiktionary.org/wiki/Wiktionary:Pali_entry_guidelines | 11 §1 (ŋ ของ PTS · n แทน ṅ) · §3.1 ข้อ 5, 7 (อ นำสระลอย · นิคหิตเขียนด้วย ง · โยฺห/ยฺโห) | ดึงได้ 2026.09.05 |
+| Wikipedia — ISO 15919 · IAST · Pali | https://en.wikipedia.org/wiki/ISO_15919 · /International_Alphabet_of_Sanskrit_Transliteration · /Pali | 11 §1 (ṃ กับ ṁ · anusvāra) | ดึงได้ |
+| Access to Insight — Coping with Diacritics | https://www.accesstoinsight.org/lib/diacritics.html | 11 §1 Velthuis (aa ii uu .m .t ~n "n) · §1.2 Unicode | ดึงได้ |
+| dhammatalks.org — A Chanting Guide: Pronunciation | https://www.dhammatalks.org/books/ChantingGuide/Section0003.html | 11 §2 การออกเสียง | ดึงได้ |
+| Pāli Phonetics and Pronunciation (bhikkhu-manual · alokavihara) | https://bhikkhu-manual.github.io/pali-phonetics-and-pronunciation.html | 11 §2 (ปฏิวรรค · โฆษะมีลม) | จากผลค้น |
+| Learn Pali — Pali Alphabet & using the PED | https://palistudies.blogspot.com/2018/05/pali-alphabet-using-ped-dictionary.html | 11 §6 ลำดับอักษร | จากผลค้น |
+| Digital Pāḷi Dictionary (GitHub) · SuttaCentral · tipitaka.org · pitaka.lk converter · Open Buddhist University converter · RianThai Pali transliteration | https://github.com/digitalpalidictionary · https://suttacentral.net · https://tipitaka.org · https://pitaka.lk/tools/converter.html · https://buddhistuniversity.net/content/reference/pali-script-converter · https://rianthai.pro/pali/transliteration/ | 11 §5 | จากผลค้น (RianThai ดึงได้ — หน้าไม่แสดงตาราง ชี้ไป GitHub) |
+| ราชบัณฑิตยสภา — เกณฑ์ถอดอักษรไทยเป็นโรมันแบบถ่ายเสียง | https://th.wikipedia.org/wiki/หลักเกณฑ์การถอดอักษรไทยเป็นอักษรโรมันแบบถ่ายเสียงของราชบัณฑิตยสถาน · orst.go.th | 11 §4 — **ค้นไม่พบ**เกณฑ์ถอดบาลีโดยเฉพาะ (ไฟล์ 11 จึงยึด IAST และไม่อ้างว่ามีหรือไม่มี) | จากผลค้น |
 
 ## ง. การตรวจสอบโดย second detector (Codex gpt-5.6 ผ่าน claude-codex-bridge · 2026.09.03) และผลที่ใช้
 | รหัส | ประเด็น | การตัดสินของผู้เขียน | ที่แก้ |
@@ -116,9 +125,10 @@
 6. ป้ายแหล่งที่มาของตัวอย่างในไฟล์ 05 อยู่ระดับตาราง + ป้าย `[มาตรฐาน]` รายรายการ ยังไม่มี metadata (source_type/raw_form/normalized_form) ต่อตัวอย่าง — ผู้ใช้ที่จะนำตัวอย่างไปอ้างในงานวิชาการต้องตรวจกับไวยากรณ์มาตรฐานอีกชั้น
 7. สระสนธิ: ไฟล์ 05 §1 นับ **7 วิธี** ตาม PALIdict · สายไวยากรณ์วชิรญาณวโรรสนับ **8** (มีวิการ/รัสสะ แยกต่างหาก) — ต่างกันที่วิธีจัดหมวด ไม่ใช่เนื้อหา · ผู้ที่จะใช้สอบสนามหลวงให้ยึดตำราของสนามสอบ (เทพ M9 · delta รอบ 2)
 8. ประเด็นที่ยังชี้ขาดไม่ได้ในทีม (เทพระบุเองว่าไม่มีแหล่งอ้างอิงในมือ): วจนะของ ตุมฺหํ/อมฺหํ (03 §3-4 — ไฟล์ให้ทั้งสองวจนะพร้อมป้ายแหล่ง) และรายการมาตราหิ (02 §7.6) — **ต้องให้ผู้รู้ ป.ธ. หรือแหล่งที่เปิดตรวจได้ชี้ขาด อย่าถือหมายเหตุในไฟล์เป็นข้อยุติ**
+9. `scripts/pali_check.sh` ออกแบบไว้ตรวจ**เอกสารที่สกัดมา** ไม่ใช่ไฟล์อ้างอิงของ skill เอง — ไฟล์ที่จงใจยกตัวอย่างพินทุลอยหรือข้อความเสีย (SKILL.md · 00 · 03 · 08 · 09) และไฟล์ร้อยแก้วไทยที่มีคำบาลีน้อย (07 · 08 ติดกฎ P1 เพราะสระอุไทยมากกว่าพินทุ) จึงได้ exit 3 โดยไม่ได้เสียหายจริง (ตรวจแล้ว 2026.09.05: PUA 0 · NFC ผ่านทุกไฟล์) · ใช้ตัวตรวจนี้กับไฟล์ paradigm (02 · 04 · 06 · 11) และเอกสารที่สกัดเท่านั้น
 
 ## ฉ. ไฟล์ของ skill นี้
-`SKILL.md` · `references/00-history-script.md` · `01-parts-of-speech.md` · `02-noun-declension.md` · `03-pronouns-numerals.md` · `04-verbs-akhyata.md` · `05-sandhi-samasa-taddhita.md` · `06-syntax-translation.md` · `07-pali-in-thai-tipitaka.md` · `08-research-usage.md` · `09-document-ingestion.md` · `10-sources.md` · `scripts/pali_extract.sh` · `scripts/pali_check.sh` · `scripts/pali_restore_pua.py`
+`SKILL.md` · `references/00-history-script.md` · `01-parts-of-speech.md` · `02-noun-declension.md` · `03-pronouns-numerals.md` · `04-verbs-akhyata.md` · `05-sandhi-samasa-taddhita.md` · `06-syntax-translation.md` · `07-pali-in-thai-tipitaka.md` · `08-research-usage.md` · `09-document-ingestion.md` · `10-sources.md` · `11-roman-pali.md` · `scripts/pali_extract.sh` · `scripts/pali_check.sh` · `scripts/pali_restore_pua.py` · `scripts/pali_translit.py`
 
 ---
 *สกัดและเรียบเรียง 2026.09.03 โดยผู้ทรง (thesis-ai-det-col-agent persona) · QA: Codex round 1 (ตาราง A-J) → อริส + Codex round 2 (ทั้ง skill) ก่อน deploy*
