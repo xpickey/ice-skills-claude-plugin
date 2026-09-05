@@ -203,14 +203,16 @@ def audit_file(path: str, fragment_max: float) -> dict:
     elif frag_ratio > fragment_max * 0.7 and verdict == "PASS":
         verdict = "WARN"
         reasons.append(f"บรรทัดคำสั่งเป็นเศษวลี {frag_ratio:.0%} — ใกล้เพดาน")
-    # ── LANGUAGE POINTER gate (2026.08.16 แทนการ์ดฝัง — คำสั่ง user: กติกาอยู่ไฟล์กลางไฟล์เดียว
-    # ระบบยัดเข้า context ผ่าน SessionStart hook · ด่านนี้ยืนยันว่าทุก agent ยังถือ pointer ถึงไฟล์กลาง)
+    # ── LANGUAGE POINTER gate (2026.08.16 แทนการ์ดฝัง · ปรับ 2026.09.05 หลังย้ายบ้าน)
+    # คำสั่ง user: กติกาภาษาอยู่ที่เดียว · ตั้งแต่ 2026.09.05 บ้านคือ skill `ice-writing-register`
+    # ส่วน reference/language-register.md เหลือเป็นป้ายชี้ทาง — ด่านนี้จึงรับได้ทั้งสองชื่อ
+    # ยอมรับเพิ่มกรณีที่ agent ประกาศ skill นั้นใน frontmatter `skills:` (ระบบโหลดให้เองก่อนเริ่มงาน)
     import pathlib as _pl
     _p = _pl.Path(path)
     if _p.parent.name == "agents" and _p.suffix == ".md" and ".bak" not in _p.name:
-        if "language-register" not in raw:
+        if "language-register" not in raw and "ice-writing-register" not in raw:
             verdict = "FAIL"
-            reasons.append("ไฟล์ agent ไม่อ้างถึงกติกาภาษากลาง reference/language-register.md")
+            reasons.append("ไฟล์ agent ไม่อ้างถึงกติกาภาษากลาง — ต้องมี skill ice-writing-register (บ้านปัจจุบัน) หรือ reference/language-register.md")
 
     if short_headings and verdict == "PASS":
         verdict = "WARN"
