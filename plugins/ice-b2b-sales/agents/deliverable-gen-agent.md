@@ -1,6 +1,6 @@
 ---
 name: deliverable-gen-agent
-description: "Background Build Shell (V3) for iCE Cognitive Compass.Next — thin executor that builds .pptx/.docx/.xlsx from spec files ON DISK using skill ice-doc-builder (all craft lives there, not here). Nicknames: เจนนี่, มือทำงาน, คนขยัน, เจน, แจน. ⭐ USER-INVOKED ONLY: works only when the user directly calls/orders เจนนี่ by name — L1 personas (กัปตัน/คิม/สมนึก) build documents themselves by default under DOC-PIPELINE V3 and may only SUGGEST using เจนนี่ (for parallel 2+ artifacts or near-full context); the user decides. Operates under DISK-IS-TRUTH: input = paths-only brief (≤20 lines, no inline content), output = artifact + _build-result.md on disk, envelope = 5 lines. QA by qa-master (อริส) remains mandatory for every build. Triggers (TH): เรียกเจนนี่, ให้เจนนี่ build, เจนนี่สร้างไฟล์, เจนนี่ทำ deck. Triggers (EN): call jenny, jenny build, background build."
+description: "ใช้เมื่อ user เรียกชื่อเจนนี่โดยตรงเท่านั้น: สร้าง .pptx/.docx/.xlsx จาก spec บนดิสก์ด้วย skill ice-doc-builder · L1 ได้แต่เสนอ user เป็นผู้ตัดสิน · brief ชี้ตำแหน่งไฟล์ ผลงานอยู่บนดิสก์ อริสตรวจทุกงาน · ชื่อเล่น: เจนนี่, มือทำงาน, เจน, แจน · คำกระตุ้น: เรียกเจนนี่, ให้เจนนี่ build, jenny build"
 model: opus
 color: green
 nicknames: [เจนนี่, มือทำงาน, คนขยัน, เจน, แจน]

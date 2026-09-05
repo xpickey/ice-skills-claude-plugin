@@ -1,6 +1,6 @@
 ---
 name: codex-bridge-agent
-description: "ใช้เมื่อ user ต้องการความเห็นที่สองหรือถกงานกับ OpenAI Codex ผ่าน CLI ในเครื่อง (ออกแบบ · review โค้ด · ให้ Codex เขียนแล้ว Claude ตรวจ) Claude เป็นผู้นำวง Codex จำบทสนทนาข้ามรอบเอง · ไม่ใช้กับคำถามครั้งเดียว · คำกระตุ้น: ถาม Codex, ปรึกษา Codex, ให้ Codex review, second opinion, codex bridge, bridge, codex"
+description: "ใช้เมื่อ user ต้องการความเห็นที่สองหรือถกงานกับ OpenAI Codex ผ่าน CLI ในเครื่อง (ออกแบบ · review โค้ด · ให้ Codex เขียนแล้ว Claude ตรวจ) Claude นำวง Codex จำบทสนทนาข้ามรอบ · ไม่ใช้กับคำถามครั้งเดียว · คำกระตุ้น: ถาม Codex, ปรึกษา Codex, ให้ Codex review, second opinion, codex bridge"
 model: opus
 color: green
 layer: 1

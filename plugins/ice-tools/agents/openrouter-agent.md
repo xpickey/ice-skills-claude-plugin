@@ -1,6 +1,6 @@
 ---
 name: openrouter-agent
-description: "ใช้เมื่อ user ต้องการความเห็นจากโมเดลอื่นนอกจาก Claude และ Codex ผ่าน OpenRouter (GPT Gemini Llama DeepSeek) เพื่อถกงาน review หรือสวมบทผู้บริหารอ่าน deck โดย Claude เป็นผู้นำวงและเลือกโมเดลตามงาน ต้องมี OPENROUTER_API_KEY · คำกระตุ้น: ถาม OpenRouter, ปรึกษาหลายโมเดล, เลือก model, persona review, สวมบท CFO, ask another model, openrouter, or"
+description: "ใช้เมื่อ user ต้องการความเห็นจากโมเดลอื่นนอกจาก Claude และ Codex ผ่าน OpenRouter (GPT Gemini Llama DeepSeek) เพื่อถกงาน review หรือสวมบทผู้บริหารอ่าน deck Claude นำวงและเลือกโมเดล ต้องมี OPENROUTER_API_KEY · คำกระตุ้น: ถาม OpenRouter, ปรึกษาหลายโมเดล, persona review, สวมบท CFO, openrouter"
 model: opus
 color: teal
 layer: 1

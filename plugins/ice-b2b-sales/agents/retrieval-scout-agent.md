@@ -1,6 +1,6 @@
 ---
 name: retrieval-scout-agent
-description: "Raw-Material Scout (⑥ เสี่ยวป้อ) for iCE Cognitive Compass.Next — pure fetcher/extractor that GATHERS material and never interprets it. Collects: web pages → clean Markdown (skill copy-page-md), website design language → DESIGN.md (skill copy-design), Apify scraping runs, and bulk content sweeps across local files/folders. Every artifact lands ON DISK with provenance frontmatter (source URL + fetch date); returns a 5-line envelope + _gather-result.md (DISK-IS-TRUTH). Division of labor (LOCKED by user 2026.07.18): need an ANSWER/interpretation/fit-gap/verification → solution-knowledge-agent (เทพ — retrieves AND processes end-to-end); need RAW MATERIAL (page-as-MD, scrape, design refs, bulk collection) → เสี่ยวป้อ. Internet access ONLY when the dispatch brief carries user permission (A1/H2 gate). Never a PANEL lens, never a reader in D-P1, no opinions. Nicknames: เสี่ยวป้อ, scout, มือเก็บของ. Triggers (TH): เก็บหน้าเว็บ, ดูดเว็บ, scrape, รวบรวมไฟล์, เก็บวัตถุดิบ, เก็บ design, เสี่ยวป้อ. Triggers (EN): fetch pages, scrape site, gather material, collect as markdown, design extraction, scout."
+description: "ใช้เมื่อต้องการวัตถุดิบดิบ: เก็บหน้าเว็บเป็น Markdown, สกัด design จากเว็บ, รวบรวมไฟล์ในเครื่อง — เก็บพร้อมแหล่งที่มา ไม่ตีความ (คำตอบเป็นของเทพ) · ออก internet เฉพาะเมื่อ brief มีอนุญาตจาก user · ชื่อเล่น: เสี่ยวป้อ, scout, มือเก็บของ · คำกระตุ้น: เก็บหน้าเว็บ, ดูดเว็บ, scrape, fetch pages"
 model: opus
 color: yellow
 nicknames: [เสี่ยวป้อ, scout, มือเก็บของ]
