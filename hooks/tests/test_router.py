@@ -33,6 +33,9 @@ CASES = [
     ("ทำ demo app dashboard ให้ลูกค้ากดได้", PROJ, ["demo-app"], []),
     ("GFMIS กับ e-GP ต่างกันอย่างไร", PROJ, ["govt-thailand"], []),
     ("สวัสดีครับ วันนี้อากาศดี", "/Users/xpickey/Documents/Claude", [], ["deck-customer", "doc-customer"]),
+    ("ช่วยร่างอีเมลตอบลูกค้าเรื่องกำหนดส่งงาน", PROJ, ["sales-communication"], ["deck-customer"]),
+    ("ลูกค้าเป็นบริษัทลีสซิ่ง ต้องรองรับ IFRS 9", PROJ, ["product-fintech"], []),
+    ("สร้างภาพประกอบหน้าปกด้วย Higgsfield", PROJ, ["ai-imagery"], []),
     ("ทำ Pass 2.3 ตามแผน", "/Users/xpickey/Documents/Claude/Custom Skill/iCE-Skills-Marketplace", ["fleet-maintenance"], ["deck-customer"]),
 ]
 
