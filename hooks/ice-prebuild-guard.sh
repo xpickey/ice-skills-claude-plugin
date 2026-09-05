@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# iCE PRE-BUILD GUARD (V03R02 | 2026.09.05) — DOC-PIPELINE V3 enforcement: "L0 BUILDS, ARIS CHECKS"
+# iCE PRE-BUILD GUARD (V03R03 | 2026.09.06) — DOC-PIPELINE V3 enforcement: "L0 BUILDS, ARIS CHECKS"
 # block เฉพาะ "การสร้าง/แก้" office artifact (.pptx/.docx/.xlsx) — การอ่าน/inspect ผ่านเสมอ
 #
 # V03R02 (2026.09.05): + ด่าน D SKILLS-LOADED — ตรวจสภาพ session (hooks/ice_route_lib.py check) ว่าโหลด skill ตามตารางเส้นทางแล้ว
@@ -52,7 +52,15 @@ writes_office_file() {
 # เหตุผล: ไฟล์กติกาและสคริปต์ของทีมมักมีข้อความอธิบายชื่อเครื่องหมายและชนิดไฟล์เอกสารอยู่ในตัว
 #         ถ้าไม่ยกเว้น ด่านจะปิดกั้นการดูแลระบบของตัวเองจนแก้อะไรไม่ได้
 edits_system_files() {
-  grep -qE '(\.claude/(hooks|agents|skills|plugins)|_lib/)' <<<"$CMD"
+  # V03R03 (2026.09.06 — ซ้อมจริง Pass 6): เดิมยกเว้นทันทีที่คำสั่ง "เอ่ยถึง" path ระบบ ทำให้ทุก build ที่เรียก
+  # ~/.claude/agents/_lib/build_pptx.py หลุดด่านทั้งหมด (บทเรียนซ้ำ: ด่านจับข้อความ ไม่ใช่เจตนา)
+  # ตอนนี้: ต้องเป็นการ "แก้" ไฟล์ระบบจริง (มีคำสั่งแก้ไฟล์หรือ redirect หรือ heredoc) และถ้าคำสั่งนั้นสร้างไฟล์เอกสารด้วย
+  # จะยกเว้นได้เฉพาะเมื่อไฟล์เอกสารปลายทางอยู่ในคลังแม่แบบของ skill (assets/ หรือ masters/) เท่านั้น
+  grep -qE '(\.claude/(hooks|agents|skills|plugins)|_lib/)' <<<"$CMD" || return 1
+  if writes_office_file; then
+    grep -qE '(\.claude/skills/[^[:space:]]*/assets/|masters/)[^[:space:]]*\.(pptx|docx|xlsx)' <<<"$CMD" || return 1
+  fi
+  grep -qE '(^|[[:space:];&|])(cp|mv|rm|sed|tee|patch|chmod|ln|cat|touch|mkdir)[[:space:]]|>>?[[:space:]]|<<' <<<"$CMD"
 }
 
 # ── เส้น pipeline: เข้าด่าน A/B/C เฉพาะคำสั่งที่เขียนไฟล์เอกสารจริง ──

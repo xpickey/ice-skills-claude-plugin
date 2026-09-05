@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# iCE POST-BUILD RECORD (V01R03 | 2026.09.05) — ทำงานหลังคำสั่งสร้างเอกสารสำเร็จ
+# iCE POST-BUILD RECORD (V01R04 | 2026.09.05) — ทำงานหลังคำสั่งสร้างเอกสารสำเร็จ
 # หน้าที่: 1) บันทึกลายนิ้วมือไฟล์ที่เพิ่งสร้าง เพื่อให้ด่านก่อนสร้าง (ice-prebuild-guard V03R01)
 #             รู้ได้ว่าไฟล์ถูก user แก้ไขเองในภายหลังหรือไม่
 #          2) เรียกตัวตรวจฟอนต์ให้อัตโนมัติ แล้วส่งผลกลับให้ผู้ทำงานเห็นทันที
@@ -13,8 +13,15 @@ CMD="$(jq -r '.tool_input.command // empty' <<<"$IN" 2>/dev/null)"
 
 # หาไฟล์เอกสารที่ถูกแตะล่าสุดภายใน 2 นาที จากโฟลเดอร์ที่คำสั่งทำงาน
 CWD="$(jq -r '.cwd // empty' <<<"$IN" 2>/dev/null)"; [[ -d "${CWD:-}" ]] || CWD="$PWD"
+# V01R04 (2026.09.06 — ซ้อมจริง Pass 6): คำสั่งที่ขึ้นต้นด้วย `cd <โฟลเดอร์> &&` สร้างไฟล์นอก cwd ของ session
+# ทำให้ find ใต้ cwd ไม่เจอไฟล์ และตัวบันทึกกับตัวตรวจอัตโนมัติไม่ทำงานเงียบ ๆ → อ่านโฟลเดอร์จาก cd ก่อน
+CDDIR="$(sed -nE 's/^[[:space:]]*cd[[:space:]]+"?([^"&;|]+)"?[[:space:]]*&&.*/\1/p' <<<"$CMD" | head -1)"
+CDDIR="${CDDIR/#\~/$HOME}"; CDDIR="${CDDIR%"${CDDIR##*[![:space:]]}"}"; [[ -n "$CDDIR" && -d "$CDDIR" ]] && CWD="$CDDIR"   # ตัดช่องว่างท้ายที่ sed จับติดมา
 FILES="$(find "$CWD" -maxdepth 3 -type f \( -name '*.pptx' -o -name '*.docx' -o -name '*.xlsx' \) \
          -not -path '*/_archive/*' -not -path '*/_temp/*' -newermt '-2 minutes' 2>/dev/null | head -5)"
+# ไฟล์ผลลัพธ์ที่ระบุเป็น path เต็มในคำสั่ง (อยู่นอก cwd ก็เจอ)
+for tok in $(grep -oE '(/|~/)[^[:space:]"'"'"']+\.(pptx|docx|xlsx)' <<<"$CMD"); do tok="${tok/#\~/$HOME}"; [[ -f "$tok" ]] && FILES="$FILES"$'\n'"$tok"; done
+FILES="$(printf '%s\n' "$FILES" | awk 'NF && !seen[$0]++')"
 [[ -z "$FILES" ]] && exit 0
 
 MSG=""
