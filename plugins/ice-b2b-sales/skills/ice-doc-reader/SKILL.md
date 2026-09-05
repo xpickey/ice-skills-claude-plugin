@@ -119,7 +119,7 @@ bash ~/.claude/agents/_lib/doc_to_md.sh FILE --ocr-all -o OUT.md  # บังค
 **R4 — ผลลัพธ์ลงดิสก์ตามกติกาที่เก็บไฟล์**
 Markdown ที่แปลงแล้ว → `<sub-project>/20-Output/_temp/` ถ้าเป็นของชั่วคราว ·
 ถ้าเก็บเข้าคลังถาวร → `90-Brain/` หรือ `00 - Context/_retrieved/` พร้อม **provenance**
-(ที่มาไฟล์ · วันที่แปลง · ผลตรวจไทย) — กติกาเต็ม: `agents/reference/file-hygiene.md`
+(ที่มาไฟล์ · วันที่แปลง · ผลตรวจไทย) — กติกาเต็ม: `~/.claude/agents/reference/file-hygiene.md`
 
 **R2b — ⭐ บันไดทางออกเมื่ออ่านไม่ได้ (คำสั่ง user 2026.08.06: "ถ้าอ่านแล้วอ่านไม่ได้ แจ้งนะ
 ไม่ติดถ้าต้องให้ LLM ข้างนอกช่วย")**
