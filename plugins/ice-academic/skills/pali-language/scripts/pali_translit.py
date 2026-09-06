@@ -9,9 +9,10 @@
   python3 ~/.claude/skills/pali-language/scripts/pali_translit.py --from iast --to iso "saṅghaṃ"        # ṃ → ṁ
   python3 ~/.claude/skills/pali-language/scripts/pali_translit.py --from thai --to iast -f in.md -o out.md   # ทั้งไฟล์
   python3 ~/.claude/skills/pali-language/scripts/pali_translit.py --sort "saṅgha kāya ñāṇa aṅga"           # เรียงตามลำดับอักษรบาลี
+  python3 ~/.claude/skills/pali-language/scripts/pali_translit.py --to reading "อตฺตา หิ อตฺตโน นาโถ"      # คำอ่านไทย
   python3 ~/.claude/skills/pali-language/scripts/pali_translit.py --selftest                                 # ทดสอบไป-กลับ
 
-รูปแบบที่รับ (--from): thai · iast · iso · velthuis · pts (ŋ = นิคหิต)   |   รูปแบบที่ให้ (--to): thai · iast · iso · velthuis
+รูปแบบที่รับ (--from): thai · iast · iso · velthuis · pts (ŋ = นิคหิต)   |   รูปแบบที่ให้ (--to): thai · iast · iso · velthuis · reading (คำอ่านภาษาไทย — สำหรับสวด/ออกเสียง ดู 12)
 exit code: 0 = ไม่มีคำเตือน · 2 = มีคำเตือน (ผลยังใช้ไม่ได้จนกว่าจะตรวจ) · 1 = ไม่มีข้อความ/selftest ตก
 กติกาอักขรวิธีไทยที่ใช้ (references/11-roman-pali.md §3):
   · พยัญชนะที่ไม่มีสระกำกับและไม่มีพินทุ = มีเสียง a ในตัว (ก = ka)   · พินทุ ฺ ใต้ตัว = ไม่มีสระ (กฺ = k)
@@ -23,7 +24,7 @@ exit code: 0 = ไม่มีคำเตือน · 2 = มีคำเตื
 ข้อจำกัด: ไม่แยกเสียง ṅ กับนิคหิตในต้นฉบับที่เขียนนิคหิตด้วย ง (บางสำนักพิมพ์) · ไม่ตัดคำ · อักขระที่ไม่ใช่ไทย (ละติน ตัวเลข
   เครื่องหมาย) ส่งผ่านตามเดิม · อักขระไทยนอกอักขรวิธีบาลี (ั ็ ่ ้ ์ ะ แ ไ ใ ฯลฯ = คำไทย) ส่งผ่านและ **เตือน** — ผลที่ได้ใช้ไม่ได้
   · PTS รับเฉพาะ ŋ → ṃ (ฉบับที่พิมพ์ n แทน ṅ ต้องแก้มือ)
-script V01R03 · skill pali-language V01R06 · 2026.09.05 (R03 ตาม QA อริส PALI-025: exit 2 เมื่อมีคำเตือน · R02 PALI-019: +คำเตือนอักขระไทยนอกบาลี · พินทุท้ายคำ) · ที่มาของกติกา: ตำราอบรมบาลี น.5-9 + Access to Insight (Velthuis) + ISO 15919/IAST (ดู 11 §1)
+script V01R04 · skill pali-language V01R07 · 2026.09.06 (R04: +โหมด --to reading คำอ่านภาษาไทย ทดสอบกับตำรา 30/31 แถว · R03 ตาม QA อริส PALI-025: exit 2 เมื่อมีคำเตือน · R02 PALI-019: +คำเตือนอักขระไทยนอกบาลี · พินทุท้ายคำ) · ที่มาของกติกา: ตำราอบรมบาลี น.5-9 + Access to Insight (Velthuis) + ISO 15919/IAST (ดู 11 §1)
 """
 import sys, re, argparse, unicodedata
 
@@ -235,11 +236,66 @@ def pali_sort_key(word):
         key.append(ORDER_RANK.get(val, 99))
     return key
 
+# ---------- ไทย (รูปบาลี) → คำอ่านภาษาไทย ----------
+# กติกาจาก "แนวทาง การอ่าน.pdf" (พุทธศาสนสุภาษิต 28 บท) — ทดสอบตรงตำรา 30/31 แถว (11 §7 · 12 §2)
+TH_CONS = set('กขคฆงจฉชฌญฏฐฑฒณตถทธนปผพภมยรลวสหฬอ')   # รวม อ ที่รองรับสระลอย
+READ_ONSET = {'ฑ':'ด','ฒ':'ท'}    # ต้นพยางค์อ่านตามเสียงไทยปัจจุบัน (ปณฺฑิตา = ปัณดิตา)
+READ_CODA  = {'ฑ':'ต','ฒ':'ท'}    # ตัวสะกด (ยโสภิวฑฺฒติ = ยะโสภิวัตทะติ)
+
+def _syllables(word):
+    """แยกพยางค์เป็น [สระหน้า, พยัญชนะต้น, สระหลัง, ตัวสะกด, นิคหิต]"""
+    out = []; i = 0; n = len(word); pre = ''
+    while i < n:
+        ch = word[i]
+        if ch in PREFIX_VOWELS: pre += ch; i += 1; continue
+        if ch not in TH_CONS: i += 1; continue
+        ons = ch; i += 1; vow = ''; coda = ''; nik = ''
+        if i < n and word[i] == PINTHU:        # ไม่มีสระ = ตัวสะกดของพยางค์ก่อน หรือตัวควบต้นคำ
+            if out: out[-1][3] += ons; i += 1; pre = ''; continue
+            i += 1
+            if i < n and word[i] in TH_CONS: ons += word[i]; i += 1
+            else: continue
+        if i < n and word[i] in AFTER_VOWELS: vow = word[i]; i += 1
+        elif i < n and word[i] == SARA_UE: vow = SARA_UE; i += 1
+        if i < n and word[i] == NIKHAHIT: nik = NIKHAHIT; i += 1
+        if i < n and word[i] in TH_CONS and i+1 < n and word[i+1] == PINTHU:
+            coda = word[i]; i += 2
+        out.append([pre, ons, vow, coda, nik]); pre = ''
+    return out
+
+def _read_word(word):
+    res = []
+    for pre, ons, vow, coda, nik in _syllables(word):
+        o = ''.join(READ_ONSET.get(c, c) for c in ons)
+        c = ''.join(READ_CODA.get(x, x) for x in coda)
+        if pre == 'เ' and coda == 'ย' and not vow:   # เ + ตัวสะกด ย = ไ (เสยฺโย = ไสโย)
+            res.append('ไ' + o); continue
+        if nik: res.append(pre + o + (vow + 'ง' if vow else 'ัง')); continue
+        if vow: res.append(pre + o + vow + c); continue
+        if c:   res.append(pre + o + 'ั' + c); continue    # สระอะในตัว + ตัวสะกด = ไม้หันอากาศ
+        if pre: res.append(pre + o); continue
+        res.append(o + 'ะ')                                 # สระอะในตัว พยางค์เปิด = เติม ะ
+    return ''.join(res)
+
+def thai_to_reading(text, warnings=None):
+    words = nfc(text).split(' ')
+    out = []
+    for w in words:
+        if re.search(r'[ก-ฮ]', w):
+            if re.search(r'[ัํ็่้๊๋์ะแไใ]'.replace('ํ',''), w) and warnings is not None:
+                warnings.append(f'"{w}" มีอักขระของคำอ่านไทยอยู่แล้ว — คำอ่านรับเฉพาะรูปบาลี (มีพินทุ/นิคหิต)')
+            out.append(_read_word(w))
+        else: out.append(w)
+    return ' '.join(out)
+
 def convert(text, src, dst, warnings=None):
     if src == 'velthuis': text = velthuis_to_iast(text)
     elif src == 'iso': text = iso_to_iast(text)
     elif src == 'pts': text = pts_to_iast(text)
     # ตอนนี้ text เป็น thai หรือ iast
+    if dst == 'reading':
+        if src != 'thai': text = iast_to_thai(text, warnings)   # โรมัน → ไทย ก่อน แล้วจึงทำคำอ่าน
+        return nfc(thai_to_reading(text, warnings))
     if src == 'thai' and dst == 'thai': return nfc(text)
     if src == 'thai': text = thai_to_iast(text, warnings)
     if dst == 'thai': return nfc(iast_to_thai(text, warnings))
@@ -255,6 +311,17 @@ SELFTEST = [   # (ไทย, IAST) — คำจากตำราอบรม/p
     ('วฏฺฏ', 'vaṭṭa'), ('ฐาน', 'ṭhāna'), ('ทฬฺห', 'daḷha'), ('อุโปสถาคาเร', 'uposathāgāre'), ('ภนฺเต', 'bhante'),
     ('พุทฺโธ', 'buddho'), ('ธมฺมํ', 'dhammaṃ'), ('สนฺโต', 'santo'), ('อคฺเค', 'agge'), ('โยฺห', 'yho'), ('ตสฺเสว', 'tasseva'), ('สรณํ คจฺฉามิ', 'saraṇaṃ gacchāmi'),
 ]
+READING_TESTS = [   # (บาลีอักษรไทย, คำอ่านไทย) จาก "แนวทาง การอ่าน.pdf" — ดู 12 §3
+    ('อตฺตา หิ อตฺตโน นาโถ', 'อัตตา หิ อัตตะโน นาโถ'),
+    ('อุฏฺฐาตา วินฺทเต ธนํ', 'อุฏฐาตา วินทะเต ธะนัง'),
+    ('ปญฺญาว ธเนน เสยฺโย', 'ปัญญาวะ ธะเนนะ ไสโย'),
+    ('อตฺตานํ ทมยนฺติ ปณฺฑิตา', 'อัตตานัง ทะมะยันติ ปัณดิตา'),
+    ('อปฺปมตฺโต หิ ฌายนฺโต', 'อัปปะมัตโต หิ ฌายันโต'),
+    ('สญฺโญชนํ อณํ ถูลํ ฑหํ', 'สัญโญชะนัง อะณัง ถูลัง ดะหัง'),
+    ('อปฺปมตฺตสฺส ยโสภิวฑฺฒติ', 'อัปปะมัตตัสสะ ยะโสภิวัตทะติ'),
+    ('เอวํวิหารี สโต', 'เอวังวิหารี สะโต'),
+]
+
 def selftest():
     bad = 0
     for th, ro in SELFTEST:
@@ -263,14 +330,19 @@ def selftest():
         ok = (got_ro == ro) and (got_th == nfc(th))
         print(('✓' if ok else '✗'), th, '→', got_ro, '|', ro, '→', got_th, ('' if not w else ' ⚠ '+'; '.join(w)))
         bad += (not ok)
-    print(f'selftest: {len(SELFTEST)-bad}/{len(SELFTEST)} ผ่าน')
-    return 0 if bad == 0 else 1
+    rbad = 0
+    for th, rd in READING_TESTS:
+        got = thai_to_reading(th)
+        ok = (got == rd); rbad += (not ok)
+        print(('✓' if ok else '✗'), 'อ่าน:', th, '→', got, ('' if ok else f' | ตำรา: {rd}'))
+    print(f'selftest: ถอดอักษร {len(SELFTEST)-bad}/{len(SELFTEST)} · คำอ่าน {len(READING_TESTS)-rbad}/{len(READING_TESTS)} ผ่าน')
+    return 0 if (bad == 0 and rbad == 0) else 1
 
 def main():
     ap = argparse.ArgumentParser(description='ถอดอักษรบาลี ไทย ↔ โรมัน (IAST/ISO 15919/Velthuis)')
     ap.add_argument('text', nargs='?', help='ข้อความ (หรือใช้ -f)')
     ap.add_argument('--from', dest='src', choices=['thai','iast','iso','velthuis','pts'], default='thai')
-    ap.add_argument('--to', dest='dst', choices=['thai','iast','iso','velthuis'], default='iast')
+    ap.add_argument('--to', dest='dst', choices=['thai','iast','iso','velthuis','reading'], default='iast')
     ap.add_argument('-f','--file', help='อ่านจากไฟล์')
     ap.add_argument('-o','--out', help='เขียนผลลงไฟล์')
     ap.add_argument('--sort', action='store_true', help='เรียงคำ (คั่นด้วยช่องว่าง) ตามลำดับอักษรบาลี — รับ IAST')

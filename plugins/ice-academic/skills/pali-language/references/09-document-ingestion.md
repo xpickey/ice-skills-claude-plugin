@@ -1,6 +1,6 @@
 # 09 — อ่านเอกสารบาลีจาก PDF/ไฟล์ → Text/Markdown (Document Ingestion Pipeline)
 
-> **Version:** V01R03 · 2026.09.04 · ส่วนหนึ่งของ skill `pali-language` · R03 (QA อริส delta PALI-011): ตัวเลขผลคืนอักขระ §2.3 คัดจาก output จริง (6,544) · R02 (QA อริส PALI-001/002/005/009): P1 ใช้อัตราส่วน · +P5 · +P7 Private Use + §2.3 วิธีคืนอักขระจากหลักฐาน + `pali_restore_pua.py` · exit code จริง · path เต็มทุกคำสั่ง
+> **Version:** V01R04 · 2026.09.06 · ส่วนหนึ่งของ skill `pali-language` · R04: +กฎตรวจ P8 พยัญชนะหลังพินทุหาย (พบจากเอกสาร "แนวทางการอ่าน" — ดู `12` §5) · V01R03 · 2026.09.04 · ส่วนหนึ่งของ skill `pali-language` · R03 (QA อริส delta PALI-011): ตัวเลขผลคืนอักขระ §2.3 คัดจาก output จริง (6,544) · R02 (QA อริส PALI-001/002/005/009): P1 ใช้อัตราส่วน · +P5 · +P7 Private Use + §2.3 วิธีคืนอักขระจากหลักฐาน + `pali_restore_pua.py` · exit code จริง · path เต็มทุกคำสั่ง
 > **ที่มา:** บทเรียนจริงจากการสกัดเอกสารอบรมภาษาบาลี 5 ไฟล์ (177 หน้า) เมื่อ 2026.09.03 ด้วยเครื่องมือ `ice-doc-reader` ของ fleet — ทุกอาการที่ระบุในไฟล์นี้**พบจริง วัดจริง** ไม่ใช่สมมติฐาน
 > **เครื่องมือหลัก:** skill `ice-doc-reader` (helper `~/.claude/agents/_lib/doc_to_md.sh`) + script `scripts/pali_extract.sh` และ `scripts/pali_check.sh` ของ skill นี้
 > **กติกาที่สืบทอด:** R2 ของ ice-doc-reader — ข้อความที่เสียหาย**ห้ามซ่อมด้วยการเดา** (= กุข้อมูล ผิด H3) · ต้องเทียบกับต้นฉบับหรือแหล่งที่สองเสมอ
@@ -77,6 +77,7 @@ python3 ~/.claude/skills/pali-language/scripts/pali_restore_pua.py <text-layer.m
 | P4 | **diacritics หาย** — โรมันไม่มี ā ī ū ṅ ñ ṭ ḍ ṇ ḷ ṃ เลยทั้งไฟล์ | นับ diacritics | เอกสารบาลีโรมันจริงต้องมี (สถิติ: ไฟล์สไลด์ 25 หน้า มี >100 ตัว) |
 | P5 | **ตารางแตก** | ⚠ เมื่อไม่มีบรรทัด `|` เลย แต่มีบรรทัดสั้น ≤12 อักขระ ≥50 บรรทัด | OCR ทำตารางกระจาย (ตำรา text layer 733 บรรทัดตาราง · OCR 1) |
 | P6 | **สระอำ = 0** ทั้งที่ไทย ≥1,000 อักขระ | 🔴 (ice-doc-reader ตรวจให้แล้วเช่นกัน) | text layer พัง |
+| P8 | **พยัญชนะหลังพินทุหายกลายเป็นช่องว่าง** | 🔴 เมื่อพบ `ฺ` ตามด้วยช่องว่างทันที | ต่างจาก P7 ตรงที่อักขระ**หายไปเฉย ๆ** ไม่ได้กลายเป็นรหัสสำรอง ตัวตรวจเดิมจึงรายงานว่าสะอาด — พบครั้งแรกในไฟล์ "แนวทางการอ่าน" 6 จุด (ปญฺ า ที่ควรเป็น ปญฺญา · อุฏฺ าตา ที่ควรเป็น อุฏฺฐาตา) โดย OCR ฝั่งตรงข้ามมีอักขระครบ · วิธีแก้คือเทียบกับ OCR แล้วเติมกลับ ห้ามเดา (`12` §5) |
 | P7 | **อักขระ Private Use / พินทุกำพร้า** | 🔴 เมื่อพบ U+F700-F8FF หรือ ฺ ที่ไม่มีพยัญชนะไทยนำหน้า | ญ/ฐ ก่อนพินทุ และสระ/วรรณยุกต์ถูกแทนด้วย glyph สำรอง (§2.1 แถว 3) — ต้องคืนอักขระตาม §2.3 ก่อนใช้คำบาลีจาก text layer |
 **ผลลัพธ์ที่คาดของแต่ละแหล่ง:** text layer ของ PDF ฟอนต์พัง = 🔴 P6 (+P7 บ่อย) · OCR = 🔴 P1 · **ไฟล์ที่ประกอบ dual-source เสร็จแล้วต้องได้ exit 0** — script คืน exit 3 เมื่อพบ 🔴 ข้อใดข้อหนึ่ง
 
@@ -90,7 +91,7 @@ python3 ~/.claude/skills/pali-language/scripts/pali_restore_pua.py <text-layer.m
 | ไฟล์ | ทำอะไร | ใช้เมื่อ |
 |---|---|---|
 | `bash ~/.claude/skills/pali-language/scripts/pali_extract.sh <FILE> <OUTDIR>` | รัน text-layer + OCR-all ทั้งสองแบบ ลงโฟลเดอร์เดียวกัน แล้วเรียก pali_check | เริ่มต้นอ่านเอกสารบาลีทุกครั้ง |
-| `bash ~/.claude/skills/pali-language/scripts/pali_check.sh <text.md> [<ocr.md>]` | ตรวจ P1-P7 ทั้งสองไฟล์ รายงานเป็นตาราง + คำแนะนำว่าส่วนใดใช้ไฟล์ใด · exit 3 เมื่อพบ 🔴 | หลังสกัด / ก่อนเก็บเข้าคลัง / ตรวจไฟล์ที่ประกอบเสร็จ (ต้องได้ exit 0) |
+| `bash ~/.claude/skills/pali-language/scripts/pali_check.sh <text.md> [<ocr.md>]` | ตรวจ P1-P8 ทั้งสองไฟล์ รายงานเป็นตาราง + คำแนะนำว่าส่วนใดใช้ไฟล์ใด · exit 3 เมื่อพบ 🔴 | หลังสกัด / ก่อนเก็บเข้าคลัง / ตรวจไฟล์ที่ประกอบเสร็จ (ต้องได้ exit 0) |
 ทั้งสองไม่แก้ไฟล์ต้นทาง ไม่ส่งอะไรออกนอกเครื่อง (สืบทอดหลัก local-only ของ ice-doc-reader) · เรียกด้วย path เต็มได้จากทุกโฟลเดอร์ (ระหว่างพัฒนา skill อยู่ที่ `Custom Skill/pali-language/scripts/`)
 
 ## 7. ฟอร์แมตปลายทางอื่น
@@ -102,7 +103,7 @@ python3 ~/.claude/skills/pali-language/scripts/pali_restore_pua.py <text-layer.m
 | **เอกสารประเภทอื่นเข้ามา** (.docx .epub .pptx) | `doc_to_md.sh` รองรับ 16 นามสกุลเหมือน PDF · .docx บาลีมักไม่มีปัญหาสระอำ (ไม่มี CMap) แต่ยังต้องรัน `pali_check.sh` ตรวจพินทุ |
 
 ## 8. เก็บเข้าคลัง (provenance บังคับ)
-frontmatter ของ MD ที่ประกอบแล้ว ต้องมี: `source:` (ไฟล์ต้นทาง) · `extracted:` (วันที่) · `method: dual-source (text-layer for Pali, OCR for Thai prose)` · `thai_check:` (ผล exit code ของแต่ละแหล่ง) · `pali_check:` (สรุป P1-P7 + exit code ของไฟล์ที่ประกอบแล้ว ต้องเป็น 0) · `pua_restored:` (จำนวนอักขระที่คืนตาม §2.3 ถ้ามี) · `unresolved:` (จำนวนคำที่ flag `[?]`) — ไม่มี provenance = ใช้อ้างอิงไม่ได้ (กติกา ice-doc-reader R4)
+frontmatter ของ MD ที่ประกอบแล้ว ต้องมี: `source:` (ไฟล์ต้นทาง) · `extracted:` (วันที่) · `method: dual-source (text-layer for Pali, OCR for Thai prose)` · `thai_check:` (ผล exit code ของแต่ละแหล่ง) · `pali_check:` (สรุป P1-P8 + exit code ของไฟล์ที่ประกอบแล้ว ต้องเป็น 0) · `pua_restored:` (จำนวนอักขระที่คืนตาม §2.3 ถ้ามี) · `unresolved:` (จำนวนคำที่ flag `[?]`) — ไม่มี provenance = ใช้อ้างอิงไม่ได้ (กติกา ice-doc-reader R4)
 
 ---
 *เครื่องมืออ่านเอกสารทั่วไป → skill `ice-doc-reader` · การอ่านออกเสียง/ถอดอักษรหลังได้ข้อความแล้ว → `06-syntax-translation.md` §8*

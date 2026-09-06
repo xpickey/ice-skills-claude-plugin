@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # pali_check.sh — ตรวจความเสียหายเฉพาะข้อความบาลีใน Markdown ที่สกัดจากเอกสาร
 # ใช้: bash ~/.claude/skills/pali-language/scripts/pali_check.sh <text-layer.md> [<ocr.md>]
-# ตรวจ P1-P7 ตาม references/09-document-ingestion.md §4 · ไม่แก้ไฟล์ · ไม่ส่งอะไรออกนอกเครื่อง
+# ตรวจ P1-P8 ตาม references/09-document-ingestion.md §4 · ไม่แก้ไฟล์ · ไม่ส่งอะไรออกนอกเครื่อง
 # exit 0 = ไม่พบ 🔴 ในไฟล์ใด · exit 3 = พบ 🔴 อย่างน้อย 1 ข้อ (ส่วนนั้นห้ามใช้โดยไม่ประกอบ dual-source) · exit 1 = ไม่พบไฟล์
 # ใช้ python3 ของระบบสำหรับ regex Unicode (grep ช่วงอักษรไทยบน macOS ไม่เสถียรตาม locale)
-# skill: pali-language V01R03 · 2026.09.04 — R03 แก้ตาม QA อริส delta PALI-012/013: pointer → 09 §2.3 · P5 ใช้อัตราส่วน short > tbl×20 · regex PUA เขียนเป็น \uXXXX · R02 แก้ตาม QA อริส PALI-001/002/005: P1 ใช้อัตราส่วนแทนตัวเลขดิบ · +P5 ตารางแตก · +P7 Private Use/พินทุกำพร้า · คืน exit code จริง
+# skill: pali-language V01R04 · 2026.09.06 — R04: +P8 พินทุแล้วเว้นวรรค = พยัญชนะหาย (พบจาก "แนวทาง การอ่าน.pdf" ที่ ญ/ฐ หลังพินทุหาย 6 จุด ขณะที่ OCR มีครบ) · R03 แก้ตาม QA อริส delta PALI-012/013: pointer → 09 §2.3 · P5 ใช้อัตราส่วน short > tbl×20 · regex PUA เขียนเป็น \uXXXX · R02 แก้ตาม QA อริส PALI-001/002/005: P1 ใช้อัตราส่วนแทนตัวเลขดิบ · +P5 ตารางแตก · +P7 Private Use/พินทุกำพร้า · คืน exit code จริง
 set -uo pipefail
 export LC_ALL=en_US.UTF-8 2>/dev/null || true
 RC=0
@@ -31,6 +31,7 @@ p2 = len(re.findall(r"(?<![฀-๿])[ก-ฮ]{1,3}ฺ?[ก-ฮ]?์(?![฀-๿])
 p3 = len([m for m in re.findall(r"[A-Za-z]+[฀-๿!0-9]+[A-Za-z]*|[A-Za-z]*[฀-๿!0-9]+[A-Za-z]+", t) if not m.isdigit()])
 pua    = len(re.findall(r"[\uf700-\uf8ff]", t))            # อักขระเขต Private Use ที่ฟอนต์ไทยใช้แทน glyph สำรอง
 orphan = len(re.findall(r"(?<![ก-ฮ])ฺ", t))          # พินทุที่ไม่มีพยัญชนะไทยนำหน้า (พยัญชนะกลายเป็น PUA ไปแล้ว)
+p8 = len(re.findall(r"ฺ(?=[ \u00a0])", t))            # พินทุแล้วเว้นวรรค = พยัญชนะหลังพินทุถูกตัดหาย (ญ ฐ พบบ่อย)
 red = []
 print(f"── {label}: {os.path.basename(f)}")
 print(f"   ไทย {thai:,} อักขระ · สระอำ {amm} · พินทุ ฺ {pinthu} · นิคหิต ํ {nikkh} · IAST diacritics {diacr} · บรรทัดตาราง {tbl}")
@@ -49,6 +50,10 @@ if thai >= 1000 and amm == 0:
     red.append("P6"); print("   🔴 P6 ไทย ≥1,000 แต่สระอำ = 0 — text layer พัง (ใช้ OCR สำหรับร้อยแก้ว)")
 else:
     print(f"   ✓ P6 สระอำ {amm}")
+if p8:
+    red.append("P8"); print(f"   🔴 P8 พินทุแล้วเว้นวรรค {p8} จุด — พยัญชนะหลังพินทุถูกตัดหาย (มักเป็น ญ ฐ เช่น ปญฺ า ที่ควรเป็น ปญฺญา) ให้เทียบกับ OCR แล้วเติมกลับ ห้ามเดา")
+else:
+    print("   ✓ P8 ไม่พบพินทุที่ตามด้วยช่องว่าง")
 if pua or orphan:
     red.append("P7"); print(f"   🔴 P7 อักขระ Private Use (U+F700-F8FF) {pua} ตัว · พินทุกำพร้า {orphan} จุด — ฟอนต์ใช้ glyph สำรองแทน ญ/ฐ ก่อนพินทุ และสระ/วรรณยุกต์ (ดู 09 §2.3 วิธีคืนอักขระ · scripts/pali_restore_pua.py)")
 else:
@@ -59,7 +64,7 @@ PY
   return 0
 }
 
-echo "═══ pali_check — ตรวจความเสียหายเฉพาะบาลี (P1-P7) ═══"
+echo "═══ pali_check — ตรวจความเสียหายเฉพาะบาลี (P1-P8) ═══"
 check_one "${1:?ใส่ไฟล์ text-layer.md}" "TEXT-LAYER" || exit 1
 if [ -n "${2:-}" ]; then
   check_one "$2" "OCR" || exit 1
