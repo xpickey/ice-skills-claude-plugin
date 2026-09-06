@@ -159,8 +159,10 @@ def audit_pptx(path: str, width: float = None, show_all: bool = False):
             inches = Emu(sh.width).inches if sh.width else 0
             if inches <= 0:
                 continue
-            # ตัวอักษรไทยกว้างราว 0.55 เท่าของขนาดฟอนต์ (จากการวัดกับ IBM Plex Sans Thai Looped)
-            w = width or max(8.0, (inches * 72.0) / (pt * 0.55))
+            # ตัวอักษรไทยกว้าง 0.50 เท่าของขนาดฟอนต์ — วัดจากภาพ render จริงที่ 150 จุดต่อนิ้ว (2026.09.06)
+            # ข้อความ 51 ตัวอักษรที่ 18pt กินความกว้าง 6.43 นิ้ว = 9.08 pt ต่อตัวอักษร = 0.504 em
+            # ค่าเดิม 0.55 ทำให้เตือนเกินจริง ผู้ใช้ต้องไล่ย่อข้อความทีละคำโดยไม่จำเป็น
+            w = width or max(8.0, (inches * 72.0) / (pt * 0.50))
             total += 1
             bad = find_bad_breaks(text, w)
             if bad:

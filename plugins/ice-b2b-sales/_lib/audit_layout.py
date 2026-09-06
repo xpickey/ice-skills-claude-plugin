@@ -224,6 +224,34 @@ def audit_slide(slide, W, H, mode):
             "content": is_content, "visual": has_visual, "issues": issues, "fail": fail}
 
 
+def icon_style_spread(prs):
+    """ความสม่ำเสมอของสไตล์ภาพประกอบ — วัดสัดส่วนพิกเซลที่มีหมึกของภาพเล็กทุกชิ้น (ภาพที่กว้างไม่เกิน 1.2 นิ้ว = icon)
+    ภาพแบบเส้นโปร่งกับแบบทึบตันมีสัดส่วนหมึกต่างกันชัด ถ้าค่ากระจายเป็นสองกลุ่มแปลว่าปนสองสไตล์ในเล่มเดียว
+    (ข้อเสนอของผู้ตรวจคุณภาพ 2026.09.06 — ก่อนหน้านี้ต้องใช้คนดูทุกครั้ง) · คืน (ค่าต่ำสุด ค่าสูงสุด จำนวนภาพ) หรือ None เมื่อวัดไม่ได้"""
+    try:
+        import io as _io
+        from PIL import Image
+    except Exception:
+        return None
+    ratios = []
+    for s in prs.slides:
+        for sh in s.shapes:
+            if sh.shape_type != MSO_SHAPE_TYPE.PICTURE or not sh.width:
+                continue
+            if sh.width > int(1.2 * 914400):   # 914400 EMU = 1 นิ้ว
+                continue
+            try:
+                im = Image.open(_io.BytesIO(sh.image.blob)).convert("LA")
+                px = list(im.getdata())
+                on = [p for p in px if p[1] > 40]          # นับเฉพาะพิกเซลที่ไม่โปร่งใส
+                if not on:
+                    continue
+                ratios.append(sum(1 for p in on if p[0] < 200) / len(px))
+            except Exception:
+                continue
+    return (min(ratios), max(ratios), len(ratios)) if len(ratios) >= 3 else None
+
+
 def audit(path, mode):
     prs = Presentation(path)
     W, H = prs.slide_width, prs.slide_height
@@ -243,6 +271,15 @@ def audit(path, mode):
         "fail_slides": fails, "warn_slides": warns,
         "verdict": "FAIL" if fails else ("WARN" if warns or n > max_slides else "PASS"),
     }
+    sp = icon_style_spread(prs)
+    if sp:
+        lo, hi, cnt = sp
+        summary["icon_ink"] = {"min": round(lo, 3), "max": round(hi, 3), "count": cnt, "spread": round(hi - lo, 3)}
+        # ช่วงห่างเกิน 0.18 = มีทั้งภาพแบบเส้นโปร่งและแบบทึบตันปนกัน (วัดจากคลัง icon ของทีม: เส้นโปร่งอยู่ราว 0.18–0.28 · ทึบตันอยู่ราว 0.34–0.52)
+        if hi - lo > 0.18:
+            summary["icon_mixed_style"] = True
+            if summary["verdict"] == "PASS":
+                summary["verdict"] = "WARN"
     return summary, rows
 
 
@@ -262,6 +299,10 @@ def main():
             for i, r in enumerate(rows, 1):
                 if r["issues"]:
                     print(f"  หน้า {i:2d} [{'ไม่ผ่าน' if r['fail'] else 'เตือน'}] " + " · ".join(r["issues"]))
+            if s.get("icon_mixed_style"):
+                ii = s["icon_ink"]
+                print(f"  [เตือน] ภาพประกอบปนสองสไตล์ในเล่มเดียว — สัดส่วนหมึกของภาพเล็ก {ii['count']} ชิ้นกระจายตั้งแต่ "
+                      f"{ii['min']*100:.0f}% ถึง {ii['max']*100:.0f}% (ห่างกัน {ii['spread']*100:.0f} จุด) · แบบเส้นโปร่งกับแบบทึบตันไม่ควรอยู่ในเล่มเดียวกัน ให้เลือกสไตล์เดียว")
             if s["too_many_slides"]:
                 print(f"  [เตือน] จำนวนหน้า {s['slides']} เกินเพดานของโหมด {BUDGET[a.mode][2]}")
             print(f"  ผล: {s['verdict']} — ไม่ผ่าน {len(s['fail_slides'])} หน้า · เตือน {len(s['warn_slides'])} หน้า")
