@@ -37,7 +37,13 @@ def main():
     session_id = payload.get("session_id") or "unknown"
     names = ARTIFACT.findall(prompt)
     # ตัดเลขรุ่นออก เพื่อให้ทุกรุ่นของงานชิ้นเดียวกันนับเป็นชิ้นเดียว
-    key = re.sub(r"_?V\d\dR\d\d.*$", "", os.path.basename(names[0])) if names else "(ไม่ระบุไฟล์)"
+    # คีย์ = ชื่อไฟล์ล้วน: ตัดคำที่อยู่หน้าชื่อไฟล์ (เช่น "ตรวจ X.pptx" → "X") และเลขรุ่น
+    # บทเรียนซ้อมจริง 2026.09.06: คำหน้าชื่อไฟล์ติดมาในคีย์ ทำให้เปลี่ยนคำแล้วนับใหม่ = เลี่ยงเพดานได้
+    key = "(ไม่ระบุไฟล์)"
+    if names:
+        base = os.path.basename(names[0]).strip()
+        base = re.sub(r"^.*[\s]", "", base) if re.search(r"[\u0e00-\u0e7f]\s", base) else base
+        key = re.sub(r"_?V\d\dR\d\d.*$", "", base)
     st = lib.load_state(session_id)
     rounds = st.setdefault("qa_rounds", {})
     n = rounds.get(key, 0)
