@@ -64,7 +64,7 @@ routes:
   - id: academic-article
     label: บทความวิชาการ วิจัย ดุษฎีนิพนธ์
     when:
-      any_of: [บทความวิชาการ, บทความวิจัย, ดุษฎีนิพนธ์, วารสาร, TCI, มจร, APA, citation, อ้างอิง, ThaiJO, humanize, GPTZero, Turnitin]
+      any_of: [บทความวิชาการ, บทความวิจัย, ดุษฎีนิพนธ์, วารสาร, TCI, มจร, APA, citation, รายการอ้างอิง, เอกสารอ้างอิง, ThaiJO, humanize, GPTZero, Turnitin]
       path: ["*/Academic/*", "*/Academic"]
     required: [thesis-ai-det-col, ice-writing-register]
     recommended: [soc-sci-academic-article, jpspa-academic-article, agj-academic-article, phd-mcu-pa-dissertation, research-compass-nrct]
