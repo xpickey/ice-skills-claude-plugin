@@ -40,6 +40,29 @@ def main():
                 PAGE.format(n=6, t="ปิด", a="ขั้นถัดไปคือประชุมยืนยันขอบเขตกับทีมบัญชี", k="x", e=""), False)
     bad += case("ตัวเลขอยู่ใน evidence เอง ไม่ใช่บนหน้า → ผ่าน",
                 PAGE.format(n=3, t="ทางออก", a="ใช้ระบบงาน ERP เดียวกันทั้งกลุ่ม", k="ลดงานกระทบยอดด้วยมือ (ตัวเลขรอจากลูกค้า)", e="[NEED FROM USER: ชั่วโมงกระทบยอดต่อเดือน]"), False)
+    # ขอบเขตของด่าน (V01R02 · 2026.09.06): ทุกไฟล์ผลลัพธ์ในโฟลเดอร์งาน ไม่ใช่เฉพาะไฟล์กำหนดเนื้อหา
+    import sys as _s
+    _s.path.insert(0, os.path.dirname(HERE))
+    import ice_route_lib as lib
+    sid = "specscope"
+    st = lib.merge_routes_into_state(lib.load_state(sid), [r for r in lib.load_table() if r["id"] == "deck-customer"])
+    lib.save_state(sid, st)
+
+    def scope(name, path, expect):
+        p = subprocess.run([sys.executable, GATE], input=json.dumps({"session_id": sid, "tool_name": "Write", "tool_input": {"file_path": path, "content": "x"}}), capture_output=True, text=True)
+        got = "deny" in p.stdout
+        ok = got == expect
+        print(("  ✓ " if ok else "  ✗ ") + name + ("" if ok else f"  (deny={got} expected={expect})"))
+        return 0 if ok else 1
+
+    bad += scope("ร่างในโฟลเดอร์ผลงาน โหลดไม่ครบ → ปฏิเสธ", "/Users/x/Documents/Claude/Projects/A/11-A/20 - Output/outline.md", True)
+    bad += scope("บันทึกในเขตคลังสมองของงาน โหลดไม่ครบ → ปฏิเสธ", "/Users/x/Documents/Claude/Projects/A/11-A/90-Brain/approach.md", True)
+    bad += scope("ไฟล์นอกโฟลเดอร์ผลงาน → ผ่าน", "/tmp/scratch/notes.md", False)
+    bad += scope("ไฟล์ระบบของทีม → ผ่าน", "/Users/x/.claude/hooks/a.md", False)
+    try:
+        os.remove(lib.state_path(sid))
+    except OSError:
+        pass
     print("\nผล: " + ("ผ่านทั้งหมด" if bad == 0 else f"ไม่ผ่าน {bad} ข้อ"))
     return 1 if bad else 0
 

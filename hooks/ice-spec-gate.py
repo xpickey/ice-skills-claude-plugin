@@ -16,6 +16,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(os.path.realpath(__file__))))
 import ice_route_lib as lib  # noqa: E402
 
 SPEC_PATTERN = re.compile(r"(_build/[^/]*spec[^/]*\.md$|content-spec|design-spec|demo-spec|plan-card|CONTENT-SPEC|DESIGN-SPEC|DEMO-SPEC)", re.I)
+# V01R02 (2026.09.06 · คำถามของ user "ทำอย่างไรไม่ให้คิดหรือออกแบบก่อนโหลด"): ด่านเดิมดักเฉพาะไฟล์กำหนดเนื้อหา
+# แต่ผลลัพธ์ชิ้นแรกของการคิดอาจเป็นไฟล์อื่นในโฟลเดอร์ผลงาน (ร่าง โครงเรื่อง บันทึกแนวทาง) ซึ่งเขียนได้โดยยังไม่โหลดสกิล
+# จึงขยายให้ดักทุกไฟล์ที่เขียนลงโฟลเดอร์ผลงานของงานลูกค้า — เครื่องกันการคิดในหัวไม่ได้ แต่กันผลลัพธ์แรกของการคิดได้
+WORK_OUTPUT = re.compile(r"/(20 - Output|20-Output|40 - Present Proposal|_build|90-Brain)/", re.I)
 
 
 NUM_ON_SLIDE = re.compile(r"\d+(?:[.,]\d+)?\s*(?:%|เปอร์เซ็นต์|เท่า|วัน|เดือน|ปี|ชั่วโมง|ล้าน|พัน|บาท|คน|ราย|ครั้ง|ข้อ)")
@@ -53,7 +57,9 @@ def main():
         return 0
     inp = payload.get("tool_input") or {}
     path = inp.get("file_path") or ""
-    if not path or not SPEC_PATTERN.search(path):
+    is_spec = bool(path and SPEC_PATTERN.search(path))
+    is_work_output = bool(path and WORK_OUTPUT.search(path) and path.endswith((".md", ".txt", ".json", ".yaml", ".yml", ".html")))
+    if not (is_spec or is_work_output):
         return 0
     if "/.claude/" in path or "iCE-Skills-Marketplace" in path:
         return 0  # ไฟล์ระบบของทีมเอง ไม่ใช่ spec ของงานลูกค้า
@@ -78,7 +84,8 @@ def main():
         parts.append("โหลด skill เหล่านี้ก่อน (เรียกด้วย Skill tool หรือเปิดอ่าน ~/.claude/skills/<ชื่อ>/SKILL.md ทั้งไฟล์ ระบบนับให้ทั้งสองทาง): " + ", ".join(ms))
     if mr:
         parts.append("เปิดอ่านไฟล์เหล่านี้ก่อน: " + ", ".join(mr))
-    return deny("ยังเขียนไฟล์กำหนดเนื้อหาไม่ได้ เพราะยังโหลด skill ที่ประเภทงานนี้ต้องใช้ไม่ครบ — " + " · ".join(parts) + " — เหตุผล: งานสิงหาคม–กันยายน 2026 ที่คิดก่อนโหลด skill ต้องกลับมาแก้ภาษา สี และเลย์เอาต์ซ้ำหลายสิบรอบ")
+    what = "ไฟล์กำหนดเนื้อหา" if is_spec else "ไฟล์ผลงานในโฟลเดอร์ของงานนี้"
+    return deny(f"ยังเขียน{what}ไม่ได้ เพราะยังโหลด skill ที่ประเภทงานนี้ต้องใช้ไม่ครบ — " + " · ".join(parts) + " — เหตุผล: งานสิงหาคม–กันยายน 2026 ที่คิดก่อนโหลด skill ต้องกลับมาแก้ภาษา สี และเลย์เอาต์ซ้ำหลายสิบรอบ")
 
 
 if __name__ == "__main__":

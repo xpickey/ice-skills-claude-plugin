@@ -58,7 +58,22 @@ def main():
     except Exception:
         return 0
     inp = payload.get("tool_input") or {}
-    if "qa-master" not in str(inp.get("subagent_type", "")):
+    sub = str(inp.get("subagent_type", ""))
+    # ด่านก่อนแจกงานสร้าง (2026.09.06): ห้ามส่งงานสร้างเอกสารหรือแอปให้เพื่อนร่วมทีม ถ้า session ยังโหลดสกิลที่ประเภทงานนี้ต้องใช้ไม่ครบ
+    # เหตุผล: การแจกงานคือผลลัพธ์อย่างหนึ่งของการคิด ถ้าคิดโดยไม่มีกติกาในมือ ผู้รับงานจะได้โจทย์ที่ผิดตั้งแต่ต้น
+    if any(k in sub for k in ("deliverable-gen", "demo-builder")):
+        st0 = lib.load_state(payload.get("session_id") or "unknown")
+        ms0, mr0 = lib.missing_required(st0)
+        if ms0 or mr0:
+            parts = []
+            if ms0:
+                parts.append("โหลด skill: " + ", ".join(ms0))
+            if mr0:
+                parts.append("เปิดอ่าน: " + ", ".join(os.path.basename(p) for p in mr0))
+            deny("ยังแจกงานสร้างไฟล์ให้เพื่อนร่วมทีมไม่ได้ เพราะ session นี้ยังโหลดสิ่งที่ประเภทงานนี้ต้องใช้ไม่ครบ — " + " · ".join(parts) +
+                 " — เหตุผล: ผู้รับงานทำตามโจทย์ที่ได้ ถ้าโจทย์เขียนโดยยังไม่มีกติกาในมือ งานจะผิดตั้งแต่ต้นแล้วต้องแก้ทั้งชุด")
+            return 0
+    if "qa-master" not in sub:
         return 0
     prompt = inp.get("prompt") or ""
     session_id = payload.get("session_id") or "unknown"

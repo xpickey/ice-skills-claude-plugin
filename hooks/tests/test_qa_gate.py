@@ -40,6 +40,29 @@ def main():
     d = call(sid, "qa-master-agent", deck.replace("R03", "R05")); ok = d; bad += 0 if ok else 1; print(("  ✓ " if ok else "  ✗ ") + "รอบถัดไปโดยไม่มีอนุมัติ ถูกปฏิเสธอีก")
     d = call(sid, "qa-master-agent", "ตรวจ /x/Workbook_V01R01.xlsx"); ok = not d; bad += 0 if ok else 1; print(("  ✓ " if ok else "  ✗ ") + "ไฟล์คนละชิ้น นับแยก")
     d = call(sid, "solution-knowledge-agent", deck); ok = not d; bad += 0 if ok else 1; print(("  ✓ " if ok else "  ✗ ") + "agent อื่นไม่ถูกแตะ")
+    # ด่านก่อนแจกงานสร้าง (2026.09.06): ยังโหลดไม่ครบ = แจกงานสร้างไฟล์หรือแอปไม่ได้
+    sid2 = "dispatchtest-" + next(tempfile._get_candidate_names())
+    st2 = lib.merge_routes_into_state(lib.load_state(sid2), [r for r in lib.load_table() if r["id"] == "deck-customer"])
+    lib.save_state(sid2, st2)
+    for sub, want in (("deliverable-gen-agent", True), ("demo-builder-agent", True), ("solution-knowledge-agent", False)):
+        d = call(sid2, sub, "สร้าง deck ตาม spec")
+        ok = d == want
+        bad += 0 if ok else 1
+        print(("  ✓ " if ok else "  ✗ ") + f"แจกงานให้ {sub} ขณะโหลดไม่ครบ → {'ปฏิเสธ' if want else 'ผ่าน'}")
+    for s in ("ice-doc-builder", "b2b-slide-designer", "ice-writing-register"):
+        lib.record_skill(st2, s)
+    for rp in st2["read_first"]:
+        lib.record_read(st2, lib.expand(rp))
+    lib.save_state(sid2, st2)
+    d = call(sid2, "deliverable-gen-agent", "สร้าง deck")
+    ok = not d
+    bad += 0 if ok else 1
+    print(("  ✓ " if ok else "  ✗ ") + "โหลดครบแล้ว แจกงานสร้างไฟล์ได้ → ผ่าน")
+    try:
+        os.remove(lib.state_path(sid2))
+    except OSError:
+        pass
+
     # ด่าน is_final (ซ้อมจริง 2026.09.06) — ต้องอ่าน path เต็มได้ ARTIFACT ตัวเดิมจับเฉพาะชื่อไฟล์
     import tempfile as _tf
     from pptx import Presentation
