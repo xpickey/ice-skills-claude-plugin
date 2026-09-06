@@ -19,6 +19,15 @@ def call(sid, agent, prompt):
     return '"deny"' in p.stdout
 
 
+def case_final(name, prompt, expect_deny):
+    """ด่าน is_final: งานฉบับสุดท้ายต้องไม่มีข้อความรอเติม (ซ้อมจริง 2026.09.06)"""
+    p = subprocess.run([sys.executable, GATE], input=json.dumps({"session_id": "finaltest", "tool_input": {"subagent_type": "qa-master-agent", "prompt": prompt}}), capture_output=True, text=True)
+    denied = "deny" in p.stdout
+    ok = denied == expect_deny
+    print(("  ✓ " if ok else "  ✗ ") + name + ("" if ok else f"  (deny={denied} expected={expect_deny})"))
+    return 0 if ok else 1
+
+
 def main():
     sid = "qatest-" + next(tempfile._get_candidate_names())
     bad = 0
@@ -31,8 +40,21 @@ def main():
     d = call(sid, "qa-master-agent", deck.replace("R03", "R05")); ok = d; bad += 0 if ok else 1; print(("  ✓ " if ok else "  ✗ ") + "รอบถัดไปโดยไม่มีอนุมัติ ถูกปฏิเสธอีก")
     d = call(sid, "qa-master-agent", "ตรวจ /x/Workbook_V01R01.xlsx"); ok = not d; bad += 0 if ok else 1; print(("  ✓ " if ok else "  ✗ ") + "ไฟล์คนละชิ้น นับแยก")
     d = call(sid, "solution-knowledge-agent", deck); ok = not d; bad += 0 if ok else 1; print(("  ✓ " if ok else "  ✗ ") + "agent อื่นไม่ถูกแตะ")
+    # ด่าน is_final (ซ้อมจริง 2026.09.06) — ต้องอ่าน path เต็มได้ ARTIFACT ตัวเดิมจับเฉพาะชื่อไฟล์
+    import tempfile as _tf
+    from pptx import Presentation
+    tmpd = _tf.mkdtemp(prefix="qafinal-")
+    for nm, txt in (("WithHolder_V01R01.pptx", "รายได้ [รอตัวเลขจริงจากลูกค้า]"), ("Clean_V01R01.pptx", "ปิดงบเร็วขึ้นด้วยระบบงาน ERP เดียวกันทั้งกลุ่ม")):
+        prs = Presentation()
+        s = prs.slides.add_slide(prs.slide_layouts[5])
+        s.shapes.title.text = txt
+        prs.save(os.path.join(tmpd, nm))
+    bad += case_final("is_final ที่ยังมีข้อความรอเติม → ปฏิเสธ", f"ตรวจ is_final: true artifact_path: {tmpd}/WithHolder_V01R01.pptx", True)
+    bad += case_final("is_final ที่สะอาดแล้ว → ผ่าน", f"ตรวจ is_final: true artifact_path: {tmpd}/Clean_V01R01.pptx", False)
+    bad += case_final("ไม่ใช่ is_final แม้มีข้อความรอเติม → ผ่าน", f"ตรวจ is_final: false artifact_path: {tmpd}/WithHolder_V01R01.pptx", False)
     try:
         os.remove(lib.state_path(sid))
+        os.remove(lib.state_path("finaltest"))
     except OSError:
         pass
     print("\nผล: " + ("ผ่านทั้งหมด" if bad == 0 else f"ไม่ผ่าน {bad} ข้อ"))

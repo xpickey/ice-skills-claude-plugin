@@ -21,6 +21,9 @@ CAP = 3
 ARTIFACT = re.compile(r"([\w\-. ()]+\.(?:pptx|docx|xlsx|pdf|md))", re.I)
 
 
+# ที่อยู่ไฟล์เต็มในซองคำสั่ง — ARTIFACT ด้านบนจับเฉพาะชื่อไฟล์ (ไม่มีเครื่องหมายทับ) จึงต้องมีอีกตัวสำหรับหา path จริงบนดิสก์
+ARTIFACT_PATH = re.compile(r"((?:/|~/)[^\s\"'`]+\.(?:pptx|docx|xlsx|pdf|md))")
+
 PLACEHOLDER = re.compile(r"\[(?:รอ|NEED FROM USER|TBD|XXX|TODO)[^\]]*\]|รอตัวเลข|ตัวอย่างข้อความ|\bTBD\b|\bXXX\b|lorem ipsum", re.I)
 
 
@@ -71,7 +74,7 @@ def main():
     # ด่านก่อนส่งตรวจ (2026.09.06 ซ้อมจริง): งานที่ประกาศว่าเป็นฉบับสุดท้ายต้องไม่มีข้อความรอเติม และผลตรวจอัตโนมัติล่าสุดต้องไม่ FAIL
     # เหตุผล: อริสพบ "[รอตัวเลขจริงจากลูกค้า]" บนสไลด์ของงาน is_final และผู้สร้างส่งต่อทั้งที่ audit เตือน — ทั้งสองอย่างเครื่องกันได้ก่อนเสียรอบตรวจ
     if re.search(r"is_final\s*:\s*true", prompt, re.I):
-        art = next((a for a in ARTIFACT.findall(prompt) if a.strip().startswith("/") and os.path.isfile(a.strip())), None)
+        art = next((a for a in ARTIFACT_PATH.findall(prompt) if os.path.isfile(a)), None)
         if art:
             art = art.strip()
             holders = _placeholders_in(art)

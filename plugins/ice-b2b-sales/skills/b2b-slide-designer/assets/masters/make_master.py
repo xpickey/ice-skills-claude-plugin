@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 make_master.py — สร้างแม่แบบ iCE-Propose_Master.pptx (16:9 · 13.333 × 7.5 นิ้ว) จากศูนย์
+V01R02 | 2026.09.06 | แก้ตามผลตรวจของอริสจากการซ้อมจริง Pass 6:
+  ISS-001 กล่องหัวเรื่องหน้าเนื้อหา 1.05 → 1.5 นิ้ว (รับไทยสองบรรทัด) ปิด autofit ล็อกระยะบรรทัด 100% พื้นที่เนื้อหาเลื่อนลง
+  ISS-002 layout timeline เหลือแต่ placeholder — เส้นแกน/หมุดให้ builder วาดตามจำนวนช่วงจริง (ค่าคงที่ TL_* ในไฟล์นี้)
 V01R01 | 2026.09.05 | Wave B ของแผนแก้ทีม agent (ต้นตอ: builder วาดทุกอย่างจาก shape primitive
 เฉลี่ย 47 shape ต่อหน้า วัตถุทับกัน ฟอนต์ไม่คงที่ หน้าตาไม่เหมือน CI)
 
@@ -182,13 +185,14 @@ def para(text, sz, color, bold=False, align="l", spc_after=0):
 
 
 def ph(key, name, ph_type, idx, x, y, w, h, sz, color, bold=False, align="l", anchor="t",
-       prompt="", lvl_extra="", bullets=False, sz2=None, autofit=True, cap=None):
-    """placeholder จริง — ทุกช่องข้อความในแม่แบบใช้ตัวนี้"""
+       prompt="", lvl_extra="", bullets=False, sz2=None, autofit=True, cap=None, lnspc=None):
+    """placeholder จริง — ทุกช่องข้อความในแม่แบบใช้ตัวนี้ · lnspc = ระยะบรรทัดเป็น % (None = ค่าเริ่มต้นของโปรแกรม)"""
     idx_attr = f' idx="{idx}"' if idx is not None else ''
     type_attr = f' type="{ph_type}"' if ph_type else ''
     sz_attr = ' sz="quarter"' if ph_type in ("ftr", "sldNum", "dt") else ''
     b = ' b="1"' if bold else ''
     fit = '<a:normAutofit/>' if autofit else ''
+    ls = f'<a:lnSpc><a:spcPct val="{int(lnspc) * 1000}"/></a:lnSpc>' if lnspc else ''
     if bullets:
         lvl1 = (f'<a:lvl1pPr marL="228600" indent="-228600" algn="{align}">'
                 f'<a:spcBef><a:spcPts val="600"/></a:spcBef><a:buClr><a:srgbClr val="{C["teal"]}"/></a:buClr>'
@@ -199,9 +203,9 @@ def ph(key, name, ph_type, idx, x, y, w, h, sz, color, bold=False, align="l", an
                 f'<a:buFont typeface="{FONT}"/><a:buChar char="–"/>'
                 f'<a:defRPr sz="{(sz2 or sz - 2) * 100}">{solid(color)}{rpr_font()}</a:defRPr></a:lvl2pPr>')
     else:
-        lvl1 = (f'<a:lvl1pPr marL="0" indent="0" algn="{align}"><a:buNone/>'
+        lvl1 = (f'<a:lvl1pPr marL="0" indent="0" algn="{align}">{ls}<a:buNone/>'
                 f'<a:defRPr sz="{sz * 100}"{b}>{solid(color)}{rpr_font()}</a:defRPr></a:lvl1pPr>'
-                f'<a:lvl2pPr marL="0" indent="0" algn="{align}"><a:buNone/>'
+                f'<a:lvl2pPr marL="0" indent="0" algn="{align}">{ls}<a:buNone/>'
                 f'<a:defRPr sz="{(sz2 or sz) * 100}">{solid(color)}{rpr_font()}</a:defRPr></a:lvl2pPr>')
     cap_attr = f' cap="{cap}"' if cap else ''
     body = (f'<p:txBody><a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" rtlCol="0" anchor="{anchor}">{fit}</a:bodyPr>'
@@ -268,23 +272,33 @@ def hairline(key, x1, y1, x2, y2, alpha=22):
 # ─────────────────────────────────────────────────────────────────────────────
 ML, MR = 0.6, 0.6
 CW = W_IN - ML - MR              # 12.133
-TITLE_Y, TITLE_H = 0.45, 1.05
-ICON_X, ICON_Y, ICON_S = ML, 0.6, 0.75
+# V01R02 (ISS-001 จากการซ้อมจริง Pass 6): กล่องหัวเรื่องหน้าเนื้อหาสูง 1.05 นิ้ว รับหัวเรื่องไทยสองบรรทัดไม่ได้
+#   ฟอนต์รางมีความสูงบรรทัด (ascender+descender) = 1.65 em → 26pt สองบรรทัด = 85.8pt = 1.19 นิ้ว > 1.05
+#   LibreOffice จึงบีบระยะบรรทัดตาม normAutofit จนสระบน/วรรณยุกต์ทับบรรทัดบน · แก้เป็น 1.5 นิ้ว (108pt รับสองบรรทัด
+#   พร้อมช่องว่างสระบน-ล่าง) ปิด autofit ของหัวเรื่อง และล็อกระยะบรรทัดขั้นต่ำ 100% ของฟอนต์ (TITLE_LNSPC)
+#   พื้นที่เนื้อหาเลื่อนลง 0.4 นิ้ว และหดเท่ากันเพื่อคงขอบล่าง 6.5 นิ้ว (เส้นทอง 6.72 · footer 6.86)
+TITLE_Y, TITLE_H = 0.45, 1.5
+TITLE_LNSPC = 100                # ระยะบรรทัดหัวเรื่อง (%) — ไม่ต่ำกว่านี้ ห้ามให้ autofit บีบ
+ICON_S = 0.75
+ICON_X, ICON_Y = ML, TITLE_Y + (TITLE_H - ICON_S) / 2     # icon อยู่กึ่งกลางแนวตั้งของกล่องหัวเรื่อง
 TITLE_X = 1.55
 LOGO_H = 0.45
 LOGO_W = LOGO_H * LOGO_RATIO
 LOGO_X = W_IN - MR - LOGO_W
 TITLE_W = LOGO_X - 0.25 - TITLE_X
-RULE_Y = 1.65
-BODY_Y, BODY_H = 1.95, 4.55
+RULE_Y = TITLE_Y + TITLE_H + 0.15          # 2.10
+BODY_Y = RULE_Y + 0.25                     # 2.35
+BODY_BOTTOM = 6.5                          # ขอบล่างของพื้นที่เนื้อหา (ห่างเส้นทอง 0.22 · footer 0.36)
+BODY_H = BODY_BOTTOM - BODY_Y              # 4.15
 FOOT_LINE_Y = 6.72
 
 
 def title_block(key, prompt="หัวเรื่องเป็นประโยคสรุปหนึ่งข้อความต่อหน้า"):
-    """หัวเรื่อง (title) + icon นำหน้า (pic idx 10) — ชุดเดียวกันทุกหน้าเนื้อหา"""
+    """หัวเรื่อง (title) + icon นำหน้า (pic idx 10) — ชุดเดียวกันทุกหน้าเนื้อหา
+    หัวเรื่องไม่ใช้ autofit: ล้นสองบรรทัด = ให้เห็นและให้ audit_layout.py เตือน ดีกว่าถูกบีบเงียบจนสระทับกัน"""
     return (ph_pic(key, "Title Icon Placeholder", 10, ICON_X, ICON_Y, ICON_S, ICON_S, prompt="icon")
             + ph(key, "Title Placeholder", "title", None, TITLE_X, TITLE_Y, TITLE_W, TITLE_H, 26, TITLE_INK,
-                 bold=True, anchor="ctr", prompt=prompt))
+                 bold=True, anchor="ctr", prompt=prompt, autofit=False, lnspc=TITLE_LNSPC))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -302,13 +316,14 @@ def master_xml(logo_rid):
     shapes += hairline(key, ML, FOOT_LINE_Y, W_IN - MR, FOOT_LINE_Y, alpha=30)
     # placeholder ระดับ master (layout สืบทอดรูปแบบจากตรงนี้)
     shapes += ph(key, "Title Placeholder", "title", None, TITLE_X, TITLE_Y, TITLE_W, TITLE_H, 26, TITLE_INK,
-                 bold=True, anchor="ctr", prompt="หัวเรื่องเป็นประโยคสรุป")
+                 bold=True, anchor="ctr", prompt="หัวเรื่องเป็นประโยคสรุป", autofit=False, lnspc=TITLE_LNSPC)
     shapes += ph(key, "Body Placeholder", "body", 1, ML, BODY_Y, CW, BODY_H, 18, BODY_INK, bullets=True,
                  prompt="เนื้อหา")
     shapes += footer_phs(key)
 
     tx = (f'<p:txStyles>'
-          f'<p:titleStyle><a:lvl1pPr algn="l"><a:defRPr sz="2600" b="1">{solid(TITLE_INK)}{rpr_font()}</a:defRPr></a:lvl1pPr></p:titleStyle>'
+          f'<p:titleStyle><a:lvl1pPr algn="l"><a:lnSpc><a:spcPct val="{TITLE_LNSPC * 1000}"/></a:lnSpc>'
+          f'<a:defRPr sz="2600" b="1">{solid(TITLE_INK)}{rpr_font()}</a:defRPr></a:lvl1pPr></p:titleStyle>'
           f'<p:bodyStyle>'
           f'<a:lvl1pPr marL="228600" indent="-228600"><a:spcBef><a:spcPts val="600"/></a:spcBef>'
           f'<a:buClr><a:srgbClr val="{C["teal"]}"/></a:buClr><a:buFont typeface="{FONT}"/><a:buChar char="•"/>'
@@ -434,33 +449,40 @@ def layout_three_card(key):
 def layout_table(key):
     s = title_block(key)
     s += gold_rule(key, ML, RULE_Y, 2.2)
-    s += ph_tbl(key, "Table Placeholder", 1, ML, BODY_Y, CW, 3.9)
-    s += ph(key, "Note Placeholder", "body", 2, ML, 6.0, CW, 0.5, 12, MUTED, anchor="ctr",
+    s += ph_tbl(key, "Table Placeholder", 1, ML, BODY_Y, CW, BODY_H - 0.6)
+    s += ph(key, "Note Placeholder", "body", 2, ML, BODY_BOTTOM - 0.5, CW, 0.5, 12, MUTED, anchor="ctr",
             prompt="หมายเหตุหรือที่มาของข้อมูล", autofit=False)
     s += footer_phs(key)
     return None, s, False
 
 
+# แกนเวลา — ค่าที่ builder (build_pptx.py tpl_timeline) ใช้วาดเส้นแกนและหมุดลงสไลด์ให้พอดีจำนวนช่วงจริง
+# V01R02 (ISS-002 จากการซ้อมจริง Pass 6): เดิมเส้นแกนและหมุด 1–4 เป็นรูปทรงตายตัวใน layout → deck ที่มี 3 ช่วง
+#   เหลือหมุดที่ 4 ว่างและเส้นยาวเกิน (รูปทรงของ layout ถอดออกรายสไลด์ไม่ได้) · ตอนนี้ layout มีแต่ placeholder
+#   ป้าย/รายละเอียด 4 ชุด ส่วนเส้นแกน+หมุดให้ builder วาดบนสไลด์ตามจำนวน phases (2–4) และจัดตำแหน่ง placeholder
+#   ให้กระจายเต็มความกว้าง — ตรวจได้ตรง ๆ ว่าจำนวนหมุดบนสไลด์ = จำนวนช่วง
+TL_PHASES_MAX = 4
+TL_LABEL_Y, TL_LABEL_H = BODY_Y + 0.35, 0.8          # ป้ายช่วง (ชิดล่าง เหนือเส้นแกน)
+TL_TRACK_Y = TL_LABEL_Y + TL_LABEL_H + 0.35           # 3.85 — เส้นแกนเวลา
+TL_DETAIL_Y = TL_TRACK_Y + 0.4                        # 4.25 — รายละเอียดใต้หมุด
+TL_DETAIL_H = BODY_BOTTOM - TL_DETAIL_Y               # 2.25
+TL_PIN_D = 0.52                                       # เส้นผ่านศูนย์กลางหมุด (นิ้ว)
+TL_TRACK_PT = 5                                       # ความหนาเส้นแกน (pt)
+TL_TONES = ["navyDeep", "navy", "tealBright", "teal"]  # สีหมุดไล่จากเข้มไปอ่อน (คีย์ใน tokens.json)
+
+
 def layout_timeline(key):
     s = title_block(key)
     s += gold_rule(key, ML, RULE_Y, 2.2)
-    n = 4
+    n = TL_PHASES_MAX
     seg = CW / n
-    track_y = 3.7
-    g = C["grad_brand"]
-    s += cxn_line(key, "Timeline Track", ML + 0.3, track_y, W_IN - MR - 0.3, track_y, C["navy"], 5,
-                  grad=grad_fill([(0, g[0], None), (100, g[1], None)], 90))
-    tones = [C["navyDeep"], C["navy"], C["tealBright"], C["teal"]]
     for i in range(n):
         cx = ML + (i + 0.5) * seg
-        d = 0.52
-        s += sp_rect(key, f"Milestone {i + 1}", cx - d / 2, track_y - d / 2, d, d, solid(tones[i]),
-                     ln(C["white"], 1.5), prst="ellipse",
-                     text_xml=para(str(i + 1), 14, C["white"], bold=True, align="ctr"))
-        s += ph(key, f"Phase {i + 1} Label Placeholder", "body", i + 1, cx - seg / 2 + 0.1, 2.55, seg - 0.2, 0.8, 16,
-                C["navy"], bold=True, align="ctr", anchor="b", prompt=f"ช่วงที่ {i + 1} · ระยะเวลา", autofit=False)
-        s += ph(key, f"Phase {i + 1} Detail Placeholder", "body", n + i + 1, cx - seg / 2 + 0.1, 4.1, seg - 0.2, 2.4, 16,
-                BODY_INK, align="ctr", anchor="t", prompt="สิ่งที่เกิดขึ้นในช่วงนี้")
+        s += ph(key, f"Phase {i + 1} Label Placeholder", "body", i + 1, cx - seg / 2 + 0.1, TL_LABEL_Y, seg - 0.2,
+                TL_LABEL_H, 16, C["navy"], bold=True, align="ctr", anchor="b",
+                prompt=f"ช่วงที่ {i + 1} · ระยะเวลา", autofit=False)
+        s += ph(key, f"Phase {i + 1} Detail Placeholder", "body", n + i + 1, cx - seg / 2 + 0.1, TL_DETAIL_Y,
+                seg - 0.2, TL_DETAIL_H, 16, BODY_INK, align="ctr", anchor="t", prompt="สิ่งที่เกิดขึ้นในช่วงนี้")
     s += footer_phs(key)
     return None, s, False
 

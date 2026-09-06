@@ -20,3 +20,6 @@ agt-skill-pack/
 **/assets/templates-cache/
 **/evals/
 **/thesis-ai-det-col/archive/
+
+# ไฟล์ลายนิ้วมือของตัวบันทึกหลัง build (สร้างอัตโนมัติ ไม่ต้องเก็บเข้าคลัง)
+.last-built.json
