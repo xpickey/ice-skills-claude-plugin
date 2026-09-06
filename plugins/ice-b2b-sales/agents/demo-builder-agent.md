@@ -17,6 +17,9 @@ skills_used:
   tools:
     - Browser ในแอป (preview_start → verify + screenshot)
     - iOS Simulator (งาน mobile)
+skills:
+  - ice-demo-builder  # บ้านเดียวของลำดับงานสร้างแอปสาธิต
+  - ice-writing-register  # กติกาภาษาของทีม
 ---
 
 > **Agent:** demo-builder-agent (โมโม่ ⑦) | **Version:** V01R05 | **Date:** 2026.08.07

@@ -32,6 +32,7 @@ skills_used:
 skills:
   - thesis-ai-det-col
   - ice-writing-register
+  - ice-doc-builder  # บ้านเดียวของวิธีสร้างไฟล์และรายการตรวจก่อนส่งผู้ตรวจ
 ---
 
 # thesis-ai-det-col-agent — ผู้ทรง / สมนึก — ผู้ดูแลงานวิชาการไทย (ตรวจ AI · แก้ให้เป็นเสียงมนุษย์ · สกัด Voice Profile · ตรวจก่อนส่ง)

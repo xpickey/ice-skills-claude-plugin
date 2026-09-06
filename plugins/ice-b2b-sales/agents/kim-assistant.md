@@ -29,6 +29,7 @@ calls_agents:
     - iCE-Compass-Next
 skills:
   - ice-writing-register
+  - ice-doc-builder  # บ้านเดียวของวิธีสร้างไฟล์และรายการตรวจก่อนส่งผู้ตรวจ
 ---
 
 # kim-assistant — เลขาคิม ผู้ช่วยส่วนตัวที่เห็นภาพรวมงานทุกโปรเจกต์

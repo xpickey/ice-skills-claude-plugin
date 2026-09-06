@@ -22,6 +22,7 @@ mcp_tools:
   - gdrive
 skills:
   - ice-writing-register
+  - ice-doc-builder  # รายการตรวจก่อนส่ง — ใช้ยืนยันว่าผู้สร้างทำครบก่อนถึงมือผู้ตรวจ
 ---
 
 > **Agent:** qa-master-agent (เจ้ระเบียบ / ครูละเอียด / อริส) | **Version:** V05R01 | **Date:** 2026.09.05 | **Layer:** 2 — ปลายทางของสายเรียก ไม่เรียกใครต่อ
