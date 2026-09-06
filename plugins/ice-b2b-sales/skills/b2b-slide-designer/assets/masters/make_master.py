@@ -368,7 +368,7 @@ def layout_cover(key, logo_w_rid):
     s = dark_decor(key)
     s += ph(key, "Kicker Placeholder", "body", 1, ML, 1.95, 9.0, 0.45, 14, C["goldLight"], anchor="b",
             prompt="ชื่อชุดเอกสาร เช่น ข้อเสนอโครงการ", autofit=False)
-    s += ph(key, "Title Placeholder", "ctrTitle", None, ML, 2.5, 10.2, 1.7, 40, C["white"], bold=True,
+    s += ph(key, "Title Placeholder", "ctrTitle", None, ML, 2.5, 10.2, 1.7, 40, C["white"], bold=True, lnspc=TITLE_LNSPC,
             anchor="ctr", prompt="ชื่อเรื่องหลัก")
     s += ph(key, "Subtitle Placeholder", "subTitle", 2, ML, 4.3, 10.2, 0.85, 20, "D9E4EE", anchor="t",
             prompt="คำอธิบายสั้นหนึ่งประโยค")
@@ -384,7 +384,7 @@ def layout_divider(key, logo_w_rid):
     s += pic_xml(key, "iCE Logo White", logo_w_rid, LOGO_X, 0.38, LOGO_W, LOGO_H)
     s += ph(key, "Section Number Placeholder", "body", 1, ML, 2.25, 2.3, 1.5, 60, C["goldLight"], anchor="ctr",
             align="l", prompt="01", autofit=False)
-    s += ph(key, "Title Placeholder", "title", None, 3.05, 2.35, 9.7, 1.3, 36, C["white"], bold=True,
+    s += ph(key, "Title Placeholder", "title", None, 3.05, 2.35, 9.7, 1.3, 36, C["white"], bold=True, lnspc=TITLE_LNSPC,
             anchor="ctr", prompt="ชื่อหัวข้อของช่วงนี้")
     s += ph(key, "Subtitle Placeholder", "body", 2, 3.05, 3.7, 9.7, 0.9, 20, "D9E4EE", anchor="t",
             prompt="หนึ่งประโยคบอกว่าช่วงนี้ตอบคำถามอะไร", autofit=False)
@@ -489,7 +489,7 @@ def layout_timeline(key):
 
 def layout_closing(key, logo_w_rid):
     s = dark_decor(key)
-    s += ph(key, "Title Placeholder", "ctrTitle", None, ML, 2.4, 10.2, 1.4, 40, C["white"], bold=True,
+    s += ph(key, "Title Placeholder", "ctrTitle", None, ML, 2.4, 10.2, 1.4, 40, C["white"], bold=True, lnspc=TITLE_LNSPC,
             anchor="ctr", prompt="ขอบคุณ")
     s += ph(key, "Subtitle Placeholder", "subTitle", 1, ML, 3.9, 10.2, 0.8, 20, "D9E4EE", anchor="t",
             prompt="ประโยคปิดหรือขั้นถัดไปที่เสนอ")
@@ -630,12 +630,37 @@ def build(out_path):
     prs.core_properties.comments = f"สร้างโดย make_master.py · ฟอนต์ theme = {FONT} · สีจาก iCE Design System tokens.json"
 
     prs.save(out_path)
+
+    # ลบแอตทริบิวต์ type ของขนาดสไลด์ (2026.09.06 · ผู้ตรวจคุณภาพพบในการซ้อมจริง)
+    # python-pptx เริ่มจากไฟล์เปล่าที่ประกาศ type="screen4x3" ไว้ แม้เราตั้งขนาดเป็น 16:9 แล้วก็ไม่ลบให้
+    # ผลคือ PowerPoint รายงานสัดส่วนเป็น 4:3 ทั้งที่ภาพจริงเป็น 16:9 · ค่านี้ไม่จำเป็นเมื่อระบุขนาดเป็นตัวเลขแล้ว
+    _fix_slide_size_attr(out_path)
+
     names = [l.name for l in prs.slide_layouts]
     print(f"OK: {out_path}")
     print(f"   layouts ({len(names)}): {', '.join(names)}")
     print(f"   theme font (latin/ea/cs): {FONT}")
     print(f"   slide size: {prs.slide_width / EMU:.3f} × {prs.slide_height / EMU:.2f} นิ้ว")
 
+
+
+def _fix_slide_size_attr(path):
+    """ลบ type="screen4x3" ออกจาก <p:sldSz> ของไฟล์ที่บันทึกแล้ว — เขียนไฟล์ zip ใหม่ทั้งชุดโดยแทนที่เฉพาะ presentation.xml"""
+    import re as _re
+    import shutil as _sh
+    import zipfile as _zip
+    tmp = path + ".tmp"
+    with _zip.ZipFile(path) as zin, _zip.ZipFile(tmp, "w", _zip.ZIP_DEFLATED) as zout:
+        for item in zin.infolist():
+            data = zin.read(item.filename)
+            if item.filename == "ppt/presentation.xml":
+                xml = data.decode("utf-8")
+                new = _re.sub(r'(<p:sldSz\b[^>]*?)\s+type="[^"]*"', r"\1", xml)
+                if new != xml:
+                    print("   แก้ขนาดสไลด์: ลบแอตทริบิวต์ type ที่ทำให้รายงานเป็น 4:3")
+                data = new.encode("utf-8")
+            zout.writestr(item, data)
+    _sh.move(tmp, path)
 
 if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "iCE-Propose_Master.pptx")

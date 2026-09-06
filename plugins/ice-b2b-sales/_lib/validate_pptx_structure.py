@@ -109,6 +109,34 @@ def scan_xml(xmlbytes, partname):
     return viol
 
 
+def check_declared_shape(z):
+    """ค่าที่ประกาศไว้ในไฟล์ต้องตรงกับของจริง (เพิ่ม 2026.09.06 จากผลตรวจซ้อมจริง)
+    1. ขนาดสไลด์: แอตทริบิวต์ type ของ <p:sldSz> ที่ค้างมาจากไฟล์ตั้งต้นทำให้ PowerPoint รายงานสัดส่วนผิด
+       (พบจริง: ขนาด 13.333 × 7.5 นิ้ว แต่ประกาศ type="screen4x3") — ระบุขนาดเป็นตัวเลขแล้วไม่ต้องมี type
+    2. ข้อมูลกำกับไฟล์ส่วนขยาย: จำนวนสไลด์เป็น 0 แปลว่าผู้สร้างไม่ได้เขียนทับของแม่แบบ"""
+    out = []
+    try:
+        pres = z.read("ppt/presentation.xml").decode("utf-8")
+    except KeyError:
+        return out
+    m = re.search(r"<p:sldSz\b([^>]*)/>", pres)
+    if m and 'type="' in m.group(1):
+        cx = re.search(r'cx="(\d+)"', m.group(1))
+        cy = re.search(r'cy="(\d+)"', m.group(1))
+        ratio = f"{int(cx.group(1)) / int(cy.group(1)):.3f}" if cx and cy else "?"
+        typ = re.search(r'type="([^"]*)"', m.group(1)).group(1)
+        out.append(f"presentation.xml: ขนาดสไลด์ประกาศ type=\"{typ}\" ทั้งที่สัดส่วนจริงคือ {ratio} — "
+                   f"PowerPoint จะรายงานสัดส่วนผิด ให้ลบแอตทริบิวต์ type ออก")
+    try:
+        app = z.read("docProps/app.xml").decode("utf-8")
+        n = re.search(r"<Slides>(\d+)</Slides>", app)
+        if n and n.group(1) == "0" and any(x.startswith("ppt/slides/slide") for x in z.namelist()):
+            out.append("docProps/app.xml: จำนวนสไลด์เป็น 0 ทั้งที่ไฟล์มีสไลด์จริง — ข้อมูลกำกับยังเป็นของแม่แบบ ผู้สร้างไฟล์ควรเขียนทับ")
+    except KeyError:
+        pass
+    return out
+
+
 def validate(path):
     viol = []
     with zipfile.ZipFile(path) as z:
@@ -116,6 +144,7 @@ def validate(path):
                    if re.match(r"ppt/(slides|slideLayouts|slideMasters|notesSlides)/[^/]+\.xml$", n)]
         for n in sorted(targets):
             viol.extend(scan_xml(z.read(n), n.split("/")[-1]))
+        viol.extend(check_declared_shape(z))
     return viol
 
 
@@ -128,5 +157,5 @@ if __name__ == "__main__":
         for x in v:
             print("  -", x)
         sys.exit(1)
-    print("PASS — no duplicate singleton children in spPr/txBody/rPr across all slides")
+    print("PASS — โครงสร้าง XML ไม่ซ้ำซ้อน · ขนาดสไลด์และข้อมูลกำกับไฟล์ตรงกับของจริง")
     sys.exit(0)

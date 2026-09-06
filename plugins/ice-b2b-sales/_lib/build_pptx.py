@@ -709,6 +709,36 @@ def _version_stamp(out_path):
     return (ver.group(0) if ver else None), (date.group(0) if date else None)
 
 
+def _fix_app_properties(out_path, spec, n_slides, title):
+    """ข้อมูลกำกับส่วนขยาย (docProps/app.xml) ยังเป็นของแม่แบบเสมอ เพราะ python-pptx ไม่แตะไฟล์นี้
+    ผลคือจำนวนสไลด์เป็น 0 และชื่อโปรแกรมเป็นของเครื่องที่ทำแม่แบบ ทำให้ระบบจัดเก็บเอกสารอ่านค่าผิด
+    (พบจากผลตรวจของผู้ตรวจคุณภาพ 2026.09.06 · ตัวตรวจ validate_pptx_structure.py จับข้อนี้แล้ว)"""
+    import re as _re
+    import shutil as _sh
+    import zipfile as _zip
+    tmp = out_path + ".tmp"
+    try:
+        with _zip.ZipFile(out_path) as zin, _zip.ZipFile(tmp, "w", _zip.ZIP_DEFLATED) as zout:
+            for item in zin.infolist():
+                data = zin.read(item.filename)
+                if item.filename == "docProps/app.xml":
+                    xml = data.decode("utf-8")
+                    xml = _re.sub(r"<Slides>\d*</Slides>", f"<Slides>{n_slides}</Slides>", xml)
+                    xml = _re.sub(r"<TitlesOfParts>.*?</TitlesOfParts>", "", xml, flags=_re.S)
+                    xml = _re.sub(r"<HeadingPairs>.*?</HeadingPairs>", "", xml, flags=_re.S)
+                    if "<Company>" in xml:
+                        xml = _re.sub(r"<Company>.*?</Company>", f"<Company>{spec.get('author', 'iCE Consulting')}</Company>", xml, flags=_re.S)
+                    if "<TitleOfParts>" not in xml and "<Application>" in xml:
+                        xml = _re.sub(r"<Application>.*?</Application>", "<Application>iCE build_pptx.py</Application>", xml, flags=_re.S)
+                    data = xml.encode("utf-8")
+                zout.writestr(item, data)
+        _sh.move(tmp, out_path)
+    except Exception as e:                      # ไฟล์ยังใช้ได้ ถ้าขั้นนี้ล้ม จึงไม่หยุดงาน
+        print(f"⚠ เขียนข้อมูลกำกับส่วนขยายไม่สำเร็จ ({e}) — ไฟล์ยังใช้ได้ แต่ตัวตรวจจะรายงานข้อนี้")
+        if os.path.exists(tmp):
+            os.remove(tmp)
+
+
 def _set_core_properties(prs, spec, out_path, template_path):
     """ISS-010: Document Properties ต้องเป็นของ deck ไม่ใช่ของแม่แบบ"""
     ver, date = _version_stamp(out_path)
@@ -843,6 +873,7 @@ def build(spec_path, out_path):
         print(_n)
     n = apply_font(prs, font)
     prs.save(out_path)
+    _fix_app_properties(out_path, spec, len(prs.slides), spec.get("title", ""))
     print(f"OK: wrote {out_path} with {len(prs.slides)} slides · "
           f"font='{font}' (rail={rail}) ผูกครบ 3 slot ใน {n} text frame")
 

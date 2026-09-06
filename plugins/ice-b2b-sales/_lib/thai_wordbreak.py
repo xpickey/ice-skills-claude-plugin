@@ -78,26 +78,44 @@ def strip_zwsp(text: str) -> str:
     return text.replace(ZWSP, "") if isinstance(text, str) else text
 
 
+# คำที่ผูกกับคำถัดไปจนคนอ่านเห็นเป็นคำเดียว — ขึ้นบรรทัดใหม่หลังคำเหล่านี้ถือว่าผ่ากลางคำ
+# แม้ตัวตัดคำจะถือว่าเป็นสองคำ (ที่มา: คำทักของ user 2026.09.06 กรณี "ทีมบัญชี" ถูกแยกเป็น "ทีม" / "บัญชี")
+BIND_NEXT = {
+    "ทีม", "ฝ่าย", "กลุ่ม", "คณะ", "หน่วย", "สำนัก", "กอง", "ศูนย์", "แผนก", "สาย",
+    "ระบบ", "งาน", "โครงการ", "บริษัท", "องค์กร", "สำนักงาน", "การประปา", "การไฟฟ้า",
+    "ผู้", "เจ้าหน้าที่", "พนักงาน", "รอบ", "ขั้น", "ระยะ", "ช่วง", "แบบ", "ชุด",
+}
+
+
 def find_bad_breaks(text: str, width: float, engine: str = _ENGINE) -> list:
     """T2 — ทำนายว่าถ้า wrap ที่ความกว้างนี้ บรรทัดจะตัด 'กลางคำ' ตรงไหนบ้าง
     คืน list ของ (ลำดับบรรทัด, คำที่ถูกผ่า, ซ้าย, ขวา) — ไม่แก้ข้อความใด ๆ"""
     if not has_thai(text) or width <= 0:
         return []
     toks = segment(text, engine)
-    bad, line_w, line_no = [], 0.0, 1
+    bad, line_w, line_no, prev = [], 0.0, 1, None
     for t in toks:
         w = display_width(t)
         if line_w + w > width:
             # คำนี้ล้นบรรทัด — ถ้ามันเป็นคำไทยยาวและไม่มีที่ว่างพอ engine จะผ่ากลางคำ
+            hit = False
             if line_w > 0 and has_thai(t) and w > 1:
                 room = width - line_w
                 if 0 < room < w:
                     cut = int(room)
                     bad.append((line_no, t, t[:cut], t[cut:]))
+                    hit = True
+            # คำที่ผูกกับคำถัดไปจนอ่านเป็นคำเดียว ("ทีม" + "บัญชี" = ทีมบัญชี) — ตัวตัดคำถือเป็นสองคำ
+            # การขึ้นบรรทัดใหม่ตรงนี้จึงถูกตามหลักการตัดคำ แต่คนอ่านเห็นคำเดียวถูกผ่าครึ่ง
+            # ต้องตรวจแยกจากเงื่อนไขบน เพราะกรณีที่บรรทัดเต็มพอดี (ที่ว่างเหลือศูนย์) เงื่อนไขบนไม่เข้า
+            # (เคสจริง 2026.09.06: หัวเรื่อง "…กับทีม / บัญชี" user ทักเอง)
+            if not hit and line_w > 0 and prev and prev in BIND_NEXT and has_thai(t):
+                bad.append((line_no, prev + t, prev, t))
             line_no += 1
             line_w = w
         else:
             line_w += w
+        prev = t
     return bad
 
 
