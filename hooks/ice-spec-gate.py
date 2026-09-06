@@ -74,6 +74,27 @@ def main():
                         "เหตุผล: user ทักตัวเลข 80% ที่กุขึ้นเป็นตัวอย่างในการซ้อม 2026.09.06 ว่าอวดอ้างเกินจริง")
     session_id = payload.get("session_id") or "unknown"
     st = lib.load_state(session_id)
+
+    # ด่านจากเนื้อหา (2026.09.06 · คำสั่ง user): ตารางเส้นทางอ่านได้เฉพาะข้อความที่ user พิมพ์ จึงไม่รู้เรื่องที่เพิ่งค้นพบ
+    # ระหว่างอ่านเอกสารต้นทาง เช่น อ่าน TOR แล้วพบว่าเป็นงานราชการ · ด่านนี้จึงอ่านเนื้อไฟล์ที่กำลังเขียน
+    # แล้วเทียบกับตารางเส้นทางอีกครั้ง ถ้าเนื้อหาเข้าเส้นทางใดที่ยังไม่ได้โหลด ให้หยุดและโหลดก่อน
+    body_now = inp.get("content") or inp.get("new_string") or ""
+    if body_now:
+        # ตัดที่อยู่ไฟล์และนามสกุลออกก่อนเทียบ — ชื่อไฟล์อ้างอิงอย่าง "close-report.xlsx" ไม่ได้แปลว่างานนี้เป็นงานสร้าง Excel
+        body_now = re.sub(r"[^\s\"'`]+\.(?:xlsx|docx|pptx|pdf|md|json|csv)\b", " ", body_now)
+        extra, new_topics = [], []
+        for r in lib.match_routes(body_now, "", lib.load_table()):
+            if r["id"] in st.get("routes", []):
+                continue          # เรื่องที่ตารางจับได้ตั้งแต่ข้อความแรกแล้ว ไม่ใช่เรื่องที่เพิ่งค้นพบ
+            new_topics.append(r.get("label") or r["id"])
+            for s in (r.get("required") or []) + (r.get("recommended") or []):
+                if s not in st.get("loaded", []) and s not in extra:
+                    extra.append(s)
+        if extra:
+            return deny("เนื้อหาที่กำลังเขียนบอกว่างานนี้ยังเกี่ยวกับ " + " · ".join(new_topics[:3]) +
+                        " ซึ่งยังไม่ได้โหลดกติกามาก่อน — โหลด skill เหล่านี้ก่อนแล้วเขียนใหม่: " + ", ".join(extra[:6]) +
+                        " · เหตุผล: ตารางเส้นทางอ่านได้เฉพาะข้อความแรกที่ user พิมพ์ เรื่องที่เพิ่งรู้ตอนอ่านเอกสารต้นทาง (เช่นพบว่าเป็นงานราชการ หรือพบว่าต้องใช้ผลิตภัณฑ์ตัวใด) จึงต้องให้เนื้อหาเป็นตัวเรียกกติกาเอง")
+
     if not st.get("required") and not st.get("read_first"):
         return 0
     ms, mr = lib.missing_required(st)

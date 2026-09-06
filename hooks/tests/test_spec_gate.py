@@ -59,6 +59,30 @@ def main():
     bad += scope("บันทึกในเขตคลังสมองของงาน โหลดไม่ครบ → ปฏิเสธ", "/Users/x/Documents/Claude/Projects/A/11-A/90-Brain/approach.md", True)
     bad += scope("ไฟล์นอกโฟลเดอร์ผลงาน → ผ่าน", "/tmp/scratch/notes.md", False)
     bad += scope("ไฟล์ระบบของทีม → ผ่าน", "/Users/x/.claude/hooks/a.md", False)
+
+    # ด่านจากเนื้อหา (2026.09.06): เรื่องที่เพิ่งรู้ตอนอ่านเอกสารต้นทาง ต้องโหลดกติกาก่อนเขียน
+    sid2 = "contentroute"
+    st2 = lib.merge_routes_into_state(lib.load_state(sid2), [r for r in lib.load_table() if r["id"] == "deck-customer"])
+    for s in ("ice-doc-builder", "b2b-slide-designer", "ice-writing-register"):
+        lib.record_skill(st2, s)
+    for rp in st2["read_first"]:
+        lib.record_read(st2, lib.expand(rp))
+    lib.save_state(sid2, st2)
+
+    def content(name, body, expect):
+        p = subprocess.run([sys.executable, GATE], input=json.dumps({"session_id": sid2, "tool_name": "Write", "tool_input": {"file_path": PATH, "content": body}}), capture_output=True, text=True)
+        got = "deny" in p.stdout
+        ok = got == expect
+        print(("  ✓ " if ok else "  ✗ ") + name + ("" if ok else f"  (deny={got} expected={expect})"))
+        return 0 if ok else 1
+
+    bad += content("เนื้อหาอยู่ในเรื่องที่โหลดครบแล้ว → ผ่าน", PAGE.format(n=1, t="ปก", a="ปิดงบเร็วขึ้น", k="x", e=""), False)
+    bad += content("เนื้อหาเผยว่าเป็นงานราชการ e-GP → ปฏิเสธให้โหลดก่อน", PAGE.format(n=1, t="ตอบข้อกำหนด", a="ตอบ TOR ของการประปาส่วนภูมิภาค ระบบ e-GP", k="x", e=""), True)
+    bad += content("เนื้อหาเผยว่าใช้ NetSuite → ปฏิเสธให้โหลดก่อน", PAGE.format(n=1, t="ทางออก", a="ใช้ NetSuite SuiteScript ทำ workflow", k="x", e=""), True)
+    try:
+        os.remove(lib.state_path(sid2))
+    except OSError:
+        pass
     try:
         os.remove(lib.state_path(sid))
     except OSError:
