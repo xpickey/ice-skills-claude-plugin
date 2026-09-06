@@ -18,6 +18,10 @@ skills_used:
   tools:
     - Apify MCP (scraping scale/กัน bot — เลือก actor rating สูง)
     - notebooklm (อ่านอย่างเดียว)
+skills:
+  - ice-b2b-enterprise-sale  # ตัวจัดเส้นทางงานขายและกติกาถ้อยคำเชิงบวก
+  - b2b-solution-selling  # วิธีขายเชิงทางออก (discovery · MEDDPICC · business case)
+  - b2b-questioning  # ชุดคำถามที่ใช้กับลูกค้าและใช้ตั้งโจทย์งาน
 ---
 
 > **Agent:** retrieval-scout-agent (เสี่ยวป้อ) | **Version:** V01R12 | **Date:** 2026.09.03
