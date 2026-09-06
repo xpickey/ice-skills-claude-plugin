@@ -520,6 +520,26 @@ def _title_icon(slide, spec_slide, deck, out_dir):
 DARK_LAYOUTS = {"cover", "divider", "closing"}
 
 
+def _check_background_origin(spec, out_path):
+    """เตือนเมื่อภาพพื้นหลังไม่ได้สร้างขึ้นสำหรับเอกสารชิ้นนี้
+    กติกาของ user 2026.09.06: พื้นหลังต้องสร้างใหม่ทุกครั้งตามหัวเรื่องของเอกสาร ห้ามหยิบของงานอื่นมาใช้ซ้ำ
+    การนับว่า "มีภาพพื้นหลัง" อย่างเดียวยังบังคับได้แค่ครึ่งเดียว เพราะไฟล์ที่ยืมมาจากเล่มอื่นก็นับผ่าน
+    จึงตรวจเพิ่มว่าไฟล์อยู่ในคลังภาพของงานชิ้นนี้เอง (_build/assets/bg/ ข้างไฟล์ผลงาน) หรือไม่"""
+    home = os.path.join(os.path.dirname(os.path.abspath(out_path)), "_build", "assets", "bg")
+    declared = [(k, spec.get(k)) for k in ("background_dark", "background_light") if spec.get(k)]
+    if not declared:
+        print("⚠ ยังไม่ได้ประกาศภาพพื้นหลังของเล่มนี้ (ช่อง background_dark และ background_light) — "
+              "ทุก deck ต้องมีพื้นหลังลายเส้นทองที่สร้างใหม่ตามหัวเรื่องของเอกสาร "
+              "สูตรอยู่ที่ ice-super-template หัวข้อ 4", file=sys.stderr)
+        return
+    home_real = os.path.realpath(home)
+    for key, path in declared:
+        parent = os.path.dirname(os.path.realpath(os.path.expanduser(path)))
+        if parent != home_real:
+            print(f"⚠ ภาพพื้นหลังช่อง {key} ไม่ได้อยู่ในคลังภาพของงานชิ้นนี้ ({home}) — "
+                  f"ถ้าเป็นไฟล์ที่ยืมมาจากเอกสารเรื่องอื่น ให้สร้างใหม่ตามหัวเรื่องของเล่มนี้ก่อน", file=sys.stderr)
+
+
 def _apply_background(prs, slide, layout_name, deck):
     """วางภาพพื้นหลังของ deck นี้ทับพื้นไล่เฉดของแม่แบบ แล้วดันไปหลังสุด
     (คำสั่ง user 2026.09.06: ลายเส้นทองต้องสร้างใหม่ทุกครั้งตามหัวเรื่องของเอกสาร ไม่ใช่ไฟล์ตายตัว —
@@ -847,6 +867,7 @@ def build(spec_path, out_path):
         prs = Presentation()
         prs.slide_width = Inches(10)
         prs.slide_height = Inches(7.5)
+    _check_background_origin(spec, out_path)
     theme = spec.get("theme", {})
     if not spec.get("slides"):
         spec["slides"] = [{"layout": "title", "title": spec.get("title", "Untitled"), "subtitle": spec.get("subtitle", "")}]
