@@ -104,6 +104,18 @@ def check(text, register="business"):
             finds.append(("T7", "block", "ระบบเป็นตัวละคร: " + m.group(0) + " — เขียนเป็นข้อเท็จจริง เช่น ข้อมูลไม่เชื่อมกัน ต้องกรอกซ้ำ", ctx(text, m.start())))
         for m in T7_ABSOLUTE.finditer(text):
             finds.append(("T7", "block", "อ้างสัมบูรณ์ขายเกินจริง: " + m.group(0) + " — ระบุขอบเขตและเงื่อนไขจริงแทน", ctx(text, m.start())))
+        # T10 (เตือน · 2026.09.06): โครงประโยคที่แปลจากอังกฤษทั้งประโยค — หัวเรื่อง/บรรทัดที่ขึ้นต้น "วันนี้/ปัจจุบัน" แล้วตามด้วยประธาน+กริยา
+        # และบรรทัดสั้น (หัวเรื่อง) ที่ยาวเกิน 14 คำ · วัดได้แค่ผิวเผิน ผู้เขียนต้องอ่านออกเสียงในใจเองตาม ice-writing-register
+        for line in text.split("\n"):
+            l = line.strip()
+            if not l or len(l) > 160:
+                continue
+            if re.match(r"^(\[หน้า \d+\] )?(วันนี้|ปัจจุบัน)[ก-๙]", l):
+                finds.append(("T10", "warn", "ขึ้นต้นด้วย วันนี้/ปัจจุบัน แบบประโยคอังกฤษ (Today, …)", l[:80]))
+            if HAVE_NLP and re.search(r"[ก-๙]", l):
+                n = len([w for w in word_tokenize(re.sub(r"^\[หน้า \d+\] ", "", l), keep_whitespace=False) if w.strip()])
+                if n > 14 and not re.search(r"[.!?]$|ฯ", l) and len(l) < 120:
+                    finds.append(("T10", "warn", f"หัวเรื่องยาว {n} คำ (เกิน 14) มักเป็นประโยคแปลทั้งประโยค", l[:80]))
     lens = []
     if HAVE_NLP:
         for s in sentences(text):
