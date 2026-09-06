@@ -58,6 +58,10 @@ def main():
     bad += case("session ไม่มีเส้นทาง → ด่าน D ไม่แตะ", build_ok_markers, "no-route-session", False)
     bad += case("คำสั่งที่เพียงเอ่ยคำว่า pptx และ .save( แต่ไม่ได้เขียนเอกสารจริง → ผ่าน (V03R05)", "python3 ~/.claude/agents/_lib/patch.py pptx .save(", sid, False)
     bad += case("สคริปต์ build ใน _lib ที่เขียนเอกสารจริงโดยไม่มี marker → ปฏิเสธ (V03R03)", "python3 ~/.claude/agents/_lib/build_pptx.py spec.json out.pptx", sid, True)
+    # V03R06 — การดูแลตัวสคริปต์สร้างเอกสารเอง ต้องไม่ถูกปิดกั้น (ชื่อสคริปต์ปรากฏในคำสั่ง แต่ไม่ได้สั่งให้ทำงาน)
+    bad += case("ตรวจไวยากรณ์สคริปต์สร้างสไลด์ → ผ่าน (V03R06)", "python3 -m py_compile plugins/ice-b2b-sales/_lib/build_pptx.py", sid, False)
+    bad += case("แก้สคริปต์สร้างสไลด์แล้วตรวจไวยากรณ์ → ผ่าน (V03R06)", "cd /r && perl -0pi -e 's/a/b/g' plugins/ice-b2b-sales/_lib/build_pptx.py && python3 -m py_compile plugins/ice-b2b-sales/_lib/build_pptx.py", sid, False)
+    bad += case("ค้นบรรทัดในสคริปต์สร้างสไลด์ → ผ่าน (V03R06)", "grep -n '_tpl_slide' plugins/ice-b2b-sales/_lib/build_pptx.py", sid, False)
     try:
         os.remove(lib.state_path(sid))
     except OSError:

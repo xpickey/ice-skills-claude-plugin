@@ -517,13 +517,40 @@ def _title_icon(slide, spec_slide, deck, out_dir):
         _icon_into(slide, _ph(slide, 10), icon, _slide_color(spec_slide, deck), out_dir)
 
 
-def _tpl_slide(prs, name):
+DARK_LAYOUTS = {"cover", "divider", "closing"}
+
+
+def _apply_background(prs, slide, layout_name, deck):
+    """วางภาพพื้นหลังของ deck นี้ทับพื้นไล่เฉดของแม่แบบ แล้วดันไปหลังสุด
+    (คำสั่ง user 2026.09.06: ลายเส้นทองต้องสร้างใหม่ทุกครั้งตามหัวเรื่องของเอกสาร ไม่ใช่ไฟล์ตายตัว —
+     กติกาเต็มอยู่ที่ ice-doc-builder/references/ice-super-template.md §3 ลายตามอุตสาหกรรม และ §4 สูตรสร้าง)
+    ช่องใน spec: background_dark ใช้กับหน้าปก คั่น ปิด · background_light ใช้กับหน้าเนื้อหา
+    ไม่ใส่ = ใช้พื้นไล่เฉดของแม่แบบตามเดิม"""
+    key = "background_dark" if layout_name in DARK_LAYOUTS else "background_light"
+    path = deck.get(key)
+    if not path:
+        return
+    path = os.path.expanduser(path)
+    if not os.path.isfile(path):
+        print(f"⚠ ไม่พบไฟล์พื้นหลัง {key}: {path} — ใช้พื้นไล่เฉดของแม่แบบแทน", file=sys.stderr)
+        return
+    pic = slide.shapes.add_picture(path, 0, 0, width=prs.slide_width, height=prs.slide_height)
+    tree = slide.shapes._spTree
+    tree.remove(pic._element)
+    tree.insert(2, pic._element)      # หลังสุด ก่อนทุก placeholder
+    pic._element.nvPicPr.cNvPr.set("name", "Deck Background")
+
+
+def _tpl_slide(prs, name, deck=None):
     layout = _layout_by_name(prs, TEMPLATE_LAYOUT_ALIAS.get(name, name))
-    return prs.slides.add_slide(layout), layout
+    slide = prs.slides.add_slide(layout)
+    if deck is not None:
+        _apply_background(prs, slide, TEMPLATE_LAYOUT_ALIAS.get(name, name), deck)
+    return slide, layout
 
 
 def tpl_cover(prs, sl, deck, out_dir):
-    s, lay = _tpl_slide(prs, "cover")
+    s, lay = _tpl_slide(prs, "cover", deck)
     s.shapes.title.text = sl.get("title", deck.get("title", ""))
     _set_text(_ph(s, 1), sl.get("kicker", deck.get("kicker")))
     _set_text(_ph(s, 2), sl.get("subtitle", deck.get("subtitle")))
@@ -532,7 +559,7 @@ def tpl_cover(prs, sl, deck, out_dir):
 
 
 def tpl_divider(prs, sl, deck, out_dir):
-    s, lay = _tpl_slide(prs, "divider")
+    s, lay = _tpl_slide(prs, "divider", deck)
     s.shapes.title.text = sl.get("title", "")
     _set_text(_ph(s, 1), sl.get("number"))
     _set_text(_ph(s, 2), sl.get("subtitle"))
@@ -540,7 +567,7 @@ def tpl_divider(prs, sl, deck, out_dir):
 
 
 def tpl_action_title_body(prs, sl, deck, out_dir):
-    s, lay = _tpl_slide(prs, "action-title-body")
+    s, lay = _tpl_slide(prs, "action-title-body", deck)
     s.shapes.title.text = sl.get("title", "")
     _set_text(_ph(s, 1), sl.get("bullets"))
     if sl.get("image_path"):
@@ -553,7 +580,7 @@ def tpl_action_title_body(prs, sl, deck, out_dir):
 
 
 def tpl_two_column(prs, sl, deck, out_dir):
-    s, lay = _tpl_slide(prs, "two-column")
+    s, lay = _tpl_slide(prs, "two-column", deck)
     s.shapes.title.text = sl.get("title", "")
     _set_text(_ph(s, 1), sl.get("left_title"))
     _set_text(_ph(s, 2), sl.get("left"))
@@ -567,7 +594,7 @@ def tpl_two_column(prs, sl, deck, out_dir):
 
 
 def tpl_three_card(prs, sl, deck, out_dir):
-    s, lay = _tpl_slide(prs, "three-card")
+    s, lay = _tpl_slide(prs, "three-card", deck)
     s.shapes.title.text = sl.get("title", "")
     cards = sl.get("cards")
     if not cards and sl.get("kpis"):
@@ -587,7 +614,7 @@ def tpl_three_card(prs, sl, deck, out_dir):
 
 
 def tpl_table(prs, sl, deck, out_dir):
-    s, lay = _tpl_slide(prs, "table")
+    s, lay = _tpl_slide(prs, "table", deck)
     s.shapes.title.text = sl.get("title", "")
     headers, rows = sl.get("headers", []), sl.get("rows", [])
     ph = _ph(s, 1)
@@ -653,7 +680,7 @@ def _timeline_track_and_pins(slide, n, centers_in, pin_font):
 
 
 def tpl_timeline(prs, sl, deck, out_dir):
-    s, lay = _tpl_slide(prs, "timeline")
+    s, lay = _tpl_slide(prs, "timeline", deck)
     s.shapes.title.text = sl.get("title", "")
     phases = (sl.get("phases") or [])[:4]
     n = len(phases)
@@ -679,7 +706,7 @@ def tpl_timeline(prs, sl, deck, out_dir):
 
 
 def tpl_closing(prs, sl, deck, out_dir):
-    s, lay = _tpl_slide(prs, "closing")
+    s, lay = _tpl_slide(prs, "closing", deck)
     s.shapes.title.text = sl.get("title", "ขอบคุณ")
     _set_text(_ph(s, 1), sl.get("subtitle"))
     _set_text(_ph(s, 2), sl.get("contact"))
@@ -687,7 +714,7 @@ def tpl_closing(prs, sl, deck, out_dir):
 
 
 def tpl_appendix(prs, sl, deck, out_dir):
-    s, lay = _tpl_slide(prs, "appendix")
+    s, lay = _tpl_slide(prs, "appendix", deck)
     s.shapes.title.text = sl.get("title", "")
     _set_text(_ph(s, 1), sl.get("bullets"))
     _title_icon(s, sl, deck, out_dir)

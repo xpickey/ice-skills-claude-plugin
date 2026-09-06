@@ -252,6 +252,23 @@ def icon_style_spread(prs):
     return (min(ratios), max(ratios), len(ratios)) if len(ratios) >= 3 else None
 
 
+def deck_background_slides(prs):
+    """นับหน้าที่มีภาพพื้นหลังของ deck วางเต็มหน้า (กว้างและสูงเกือบเท่าหน้าสไลด์)
+    กติกาบังคับ: ทุก deck ต้องมีพื้นหลังลายเส้นทองที่สร้างใหม่ตามหัวเรื่องของเอกสารชิ้นนั้น
+    (คำสั่ง user 2026.09.06 · สูตรอยู่ที่ ice-doc-builder/references/ice-super-template.md §4)
+    ก่อนหน้านี้กติกานี้เป็นตัวหนังสืออย่างเดียว ไม่มีเครื่องตรวจ จึงไม่มีผลบังคับจริง"""
+    W, H = prs.slide_width, prs.slide_height
+    hit = 0
+    for s in prs.slides:
+        for sh in s.shapes:
+            if sh.shape_type != MSO_SHAPE_TYPE.PICTURE:
+                continue
+            if (sh.width or 0) >= 0.98 * W and (sh.height or 0) >= 0.98 * H:
+                hit += 1
+                break
+    return hit
+
+
 def audit(path, mode):
     prs = Presentation(path)
     W, H = prs.slide_width, prs.slide_height
@@ -271,6 +288,12 @@ def audit(path, mode):
         "fail_slides": fails, "warn_slides": warns,
         "verdict": "FAIL" if fails else ("WARN" if warns or n > max_slides else "PASS"),
     }
+    bg = deck_background_slides(prs)
+    summary["background_slides"] = bg
+    if bg == 0:
+        summary["no_deck_background"] = True
+        if summary["verdict"] == "PASS":
+            summary["verdict"] = "WARN"
     sp = icon_style_spread(prs)
     if sp:
         lo, hi, cnt = sp
@@ -303,6 +326,9 @@ def main():
                 ii = s["icon_ink"]
                 print(f"  [เตือน] ภาพประกอบปนสองสไตล์ในเล่มเดียว — สัดส่วนหมึกของภาพเล็ก {ii['count']} ชิ้นกระจายตั้งแต่ "
                       f"{ii['min']*100:.0f}% ถึง {ii['max']*100:.0f}% (ห่างกัน {ii['spread']*100:.0f} จุด) · แบบเส้นโปร่งกับแบบทึบตันไม่ควรอยู่ในเล่มเดียวกัน ให้เลือกสไตล์เดียว")
+            if s.get("no_deck_background"):
+                print("  [เตือน] เล่มนี้ยังไม่มีภาพพื้นหลังของตัวเอง — ทุก deck ต้องมีพื้นหลังลายเส้นทองที่สร้างใหม่ตามหัวเรื่องของเอกสารชิ้นนั้น "
+                      "ให้ยิงภาพตามสูตรใน ice-super-template หัวข้อ 4 แล้วประกาศที่อยู่ไฟล์ในช่อง background_dark และ background_light ของไฟล์กำหนดเนื้อหา")
             if s["too_many_slides"]:
                 print(f"  [เตือน] จำนวนหน้า {s['slides']} เกินเพดานของโหมด {BUDGET[a.mode][2]}")
             print(f"  ผล: {s['verdict']} — ไม่ผ่าน {len(s['fail_slides'])} หน้า · เตือน {len(s['warn_slides'])} หน้า")

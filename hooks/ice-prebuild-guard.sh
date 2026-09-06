@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# iCE PRE-BUILD GUARD (V03R04 | 2026.09.06) — DOC-PIPELINE V3 enforcement: "L0 BUILDS, ARIS CHECKS"
+# iCE PRE-BUILD GUARD (V03R06 | 2026.09.06) — DOC-PIPELINE V3 enforcement: "L0 BUILDS, ARIS CHECKS"
 # block เฉพาะ "การสร้าง/แก้" office artifact (.pptx/.docx/.xlsx) — การอ่าน/inspect ผ่านเสมอ
 #
 # V03R02 (2026.09.05): + ด่าน D SKILLS-LOADED — ตรวจสภาพ session (hooks/ice_route_lib.py check) ว่าโหลด skill ตามตารางเส้นทางแล้ว
@@ -41,9 +41,17 @@ esac
 # ── ตัวชี้วัดว่าคำสั่งนี้ "เขียนไฟล์เอกสารจริง" (ไม่ใช่แค่กล่าวถึงชื่อเครื่องหมายในข้อความ) ──
 # เหตุผล: คำสั่งที่เพียงเขียนเอกสารอธิบายเครื่องหมาย ค้นหาคำ หรือแก้ไฟล์กติกาของทีม ไม่ควรถูกปิดกั้น
 #         (บทเรียนเดียวกับเคส Viriyah 2026.07.14 ที่การเปิดอ่านไฟล์เคยถูกปิดกั้นผิด)
+# V03R06 (2026.09.06): เดิมนับว่า "สั่งสร้างเอกสาร" เมื่อชื่อสคริปต์สร้างเอกสารปรากฏที่ใดก็ได้ในคำสั่ง
+# ทำให้การดูแลตัวสคริปต์เอง (แก้ไข ตรวจไวยากรณ์ ค้นหาบรรทัด) ถูกปิดกั้น เพราะชื่อไฟล์ไปโผล่ในคำสั่งด้วย
+# ตอนนี้ต้องเป็นการ "เรียกให้สคริปต์ทำงาน" จริง คือชื่อสคริปต์เป็นเป้าหมายที่ตามหลัง python3 โดยตรง
+# (บทเรียนเดิมซ้ำรอบที่สอง: ด่านอ่านตัวหนังสือ ไม่ได้อ่านเจตนา — ครั้งแรกคือการยกเว้นไฟล์ระบบ V03R03)
+runs_build_script() {
+  grep -qE 'python3?[[:space:]]+(-[^[:space:]]+[[:space:]]+)*[^[:space:]]*(build_[a-z0-9_]*|[a-z0-9_]*_build[a-z0-9_]*)\.py' <<<"$CMD"
+}
+
 writes_office_file() {
   grep -qE '(^|[[:space:];&|(])python3?([[:space:]]|$)' <<<"$CMD" || return 1
-  grep -qiE '(build_[a-z0-9_]*\.py|[a-z0-9_]*_build[a-z0-9_]*\.py)' <<<"$CMD" && return 0
+  runs_build_script && return 0
   # V03R05 (2026.09.06): เดิมนับว่า "เขียนเอกสาร" เมื่อคำสั่งเอ่ยคำว่า pptx ที่ใดก็ได้ บวกกับมี .save( ที่ใดก็ได้
   # ทำให้คำสั่งที่บันทึกภาพ .png จากไฟล์ชื่อ *.pptx ถูกปฏิเสธ (เกิดจริงตอนทำภาพรวมหน้าในการซ้อม Pass 6)
   # ตอนนี้ต้องเป็นการบันทึกที่ปลายทางเป็นนามสกุลเอกสารจริง หรือมีการนำเข้าไลบรารีเอกสารในคำสั่งเดียวกัน
@@ -66,7 +74,7 @@ edits_system_files() {
   if writes_office_file; then
     grep -qE '(\.claude/skills/[^[:space:]]*/assets/|masters/)[^[:space:]]*\.(pptx|docx|xlsx)' <<<"$CMD" || return 1
   fi
-  grep -qE '(^|[[:space:];&|])(cp|mv|rm|sed|tee|patch|chmod|ln|cat|touch|mkdir)[[:space:]]|>>?[[:space:]]|<<' <<<"$CMD"
+  grep -qE '(^|[[:space:];&|])(cp|mv|rm|sed|perl|awk|tee|patch|chmod|ln|cat|touch|mkdir)[[:space:]]|>>?[[:space:]]|<<' <<<"$CMD"
 }
 
 # ── เส้น pipeline: เข้าด่าน A/B/C เฉพาะคำสั่งที่เขียนไฟล์เอกสารจริง ──
@@ -167,7 +175,7 @@ fi
 grep -qE '(^|[[:space:];&|(])python3?([[:space:]]|$)' <<<"$CMD" || exit 0
 
 is_build_script=0; is_office_write=0
-grep -qiE '(build_[a-z0-9_]*\.py|[a-z0-9_]*_build[a-z0-9_]*\.py)' <<<"$CMD" && is_build_script=1
+runs_build_script && is_build_script=1
 if grep -q '\.save(' <<<"$CMD" && { grep -qE '\.save\([^)]*\.(pptx|docx|xlsx)' <<<"$CMD" || grep -qiE '(from|import)[[:space:]]+(pptx|docx|openpyxl)' <<<"$CMD"; }; then is_office_write=1; fi
 [[ $is_build_script -eq 0 && $is_office_write -eq 0 ]] && exit 0
 edits_system_files && exit 0   # งานดูแลไฟล์ระบบของทีมเอง ไม่ใช่การผลิตเอกสาร
