@@ -4,7 +4,7 @@ build_pptx.py — generic PPTX builder for sales agents.
 
 Usage:
     python3 build_pptx.py spec.json out.pptx
-    ICE_TEMPLATE=/path/iCE-Propose_Master.pptx python3 build_pptx.py spec.json out.pptx   (V02R05 โหมดแม่แบบ)
+    ICE_TEMPLATE=/path/iCE-Propose_Master.pptx python3 build_pptx.py spec.json out.pptx   (V02R05 โหมดแม่แบบ · V02R06 แก้ ISS-002/006/007/010)
 
 FONT RULE (V02R04 · 2026.08.05) — ⚠ ข้อความเดิมที่ว่า "default = Tahoma ทุกข้อความ"
   **ยกเลิกแล้ว** (โค้ดไม่เคยอ่าน docstring นี้ · ตั้งแต่ V02R01 ฟอนต์มาจาก font_policy.RAILS)
@@ -33,7 +33,8 @@ spec.json schema:
   ]
 }
 """
-import sys, os, json, subprocess
+import sys, os, re, json, math, subprocess
+from datetime import datetime
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
@@ -235,8 +236,89 @@ def apply_font(prs, font):
 #     closing: "subtitle" "contact"                 · appendix : "bullets"
 #   bullet ระดับสอง: ข้อความขึ้นต้นด้วยสองช่องว่าง หรือ {"text": "...", "level": 1}
 # ═══════════════════════════════════════════════════════════════════════════════
+#
+#   ⭐ V02R06 (2026.09.06 · แก้ตามผลตรวจของอริสจากการซ้อมจริง Pass 6 — ทั้งหมดทำงานเฉพาะโหมดแม่แบบ):
+#     ISS-002 timeline : เส้นแกนและหมุดวาดบนสไลด์ตามจำนวน phases จริง (2–4) และจัดตำแหน่ง placeholder ให้กระจายเต็มความกว้าง
+#                        (แม่แบบ V01R02 ถอดหมุดตายตัวออกแล้ว) — ตรวจได้: จำนวนวงกลมบนสไลด์ = จำนวนช่วง
+#     ISS-006 icon     : icon ที่ใช้เป็นภาพประกอบ (image_icon / icon การ์ด / icon คอลัมน์) จำกัดขนาดไม่เกิน ICON_MAX_IN นิ้ว
+#                        จัดกึ่งกลางพื้นที่ภาพ และแปลง SVG ที่ความละเอียดตามขนาดที่วางจริง (≥ ICON_MIN_DPI) · ภาพทุกชิ้นถูกวัด dpi จริง
+#                        แล้วเตือนเมื่อต่ำกว่าเกณฑ์
+#     ISS-007 color    : สี icon กำหนดได้รายหน้า — "icon_color" (hex) หรือ "color_set" (ชื่อชุดสีจาก tokens.json ของ iCE Design System:
+#                        cool/teal/deep/warm/danger/success หรือ path เช่น "brand.teal" "status.danger") ระดับหน้าชนะระดับ deck
+#                        · ห้ามคิดสีเอง: ทุกชื่อชุดแปลงเป็นค่าจาก tokens.json เท่านั้น
+#     ISS-010 version  : core_properties (title/subject/author/version/comments) มาจาก spec · รหัสรุ่น V##R## และวันที่ YYYY.MM.DD
+#                        อ่านจากชื่อไฟล์ผลลัพธ์แล้วต่อท้าย footer ทุกหน้าเนื้อหา (spec "footer_version": false เพื่อปิด)
+# ═══════════════════════════════════════════════════════════════════════════════
 ICE_TEMPLATE = os.environ.get("ICE_TEMPLATE") or None
 ICON_DIR = os.path.expanduser("~/.claude/skills/b2b-slide-designer/assets/icons")
+DS_TOKENS = "/Users/xpickey/Documents/Claude/iCE-Design-System/tokens/tokens.json"   # ต้นทางสีเดียวกับ make_master.py
+ICON_MAX_IN = 2.0        # icon ที่ใช้เป็นภาพประกอบ ขยายได้ไม่เกินกี่นิ้ว (ISS-006: 4.55 นิ้ว จาก 512px = 113 dpi หยาบ)
+ICON_MIN_DPI = 150       # ความละเอียดจริงขั้นต่ำของภาพทุกชิ้นที่วางบนสไลด์
+ICON_RENDER_DPI = 200    # แปลง SVG ที่ความละเอียดนี้ตามขนาดที่วางจริง (ไม่ต่ำกว่า 512px)
+SLIDE_W_IN, SAFE_MARGIN_IN = 13.333, 0.6     # กริดของแม่แบบ (make_master.py W_IN · ML/MR)
+TIMELINE = {  # ค่ากริดแกนเวลาของแม่แบบ V01R02 (make_master.py TL_*) — แก้ที่โน่นต้องแก้ที่นี่ให้ตรงกัน
+    "label_y": 2.70, "label_h": 0.80, "track_y": 3.85, "detail_y": 4.25, "detail_h": 2.25,
+    "pin_d": 0.52, "track_pt": 5, "tones": ["navyDeep", "navy", "tealBright", "teal"],
+}
+
+
+def _load_tokens():
+    try:
+        with open(DS_TOKENS, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"⚠ อ่าน tokens.json ไม่ได้ ({e}) — ใช้ได้เฉพาะ icon_color แบบ hex", file=sys.stderr)
+        return {}
+
+
+_TOKENS = None
+
+
+def _token_color(path):
+    """คืน hex (ไม่มี #) ของสีจาก tokens.json ตาม path เช่น 'brand.navy' 'status.warning' 'gold.deep' · ไม่พบ = None"""
+    global _TOKENS
+    if _TOKENS is None:
+        _TOKENS = _load_tokens()
+    node = _TOKENS.get("color", {})
+    for part in path.split("."):
+        node = node.get(part) if isinstance(node, dict) else None
+        if node is None:
+            return None
+    val = node.get("value") if isinstance(node, dict) else node
+    if isinstance(val, str) and re.fullmatch(r"#?[0-9A-Fa-f]{6}", val):
+        return val.lstrip("#").upper()
+    return None
+
+
+# ชื่อชุดสีที่ content-spec ใช้ (color_set) → path ใน tokens.json — ไม่มีค่าสีเขียนตรง ๆ ในไฟล์นี้
+COLOR_SETS = {
+    "cool": "brand.navy", "navy": "brand.navy", "teal": "brand.teal", "deep": "brand.navyDeep",
+    "bright": "brand.tealBright", "warm": "status.warning", "amber": "status.warning",
+    "danger": "status.danger", "alert": "status.danger", "success": "status.success", "gold": "gold.deep",
+}
+
+
+def _resolve_color(value, where):
+    """แปลงค่าที่ spec ให้ (hex / ชื่อชุด / path ใน tokens) เป็น hex · ค่าที่ไม่รู้จัก = หยุดพร้อมบอกตัวเลือก"""
+    if value in (None, "", "none", "default"):
+        return None
+    v = str(value).strip()
+    if re.fullmatch(r"#?[0-9A-Fa-f]{6}", v):
+        return v.lstrip("#").upper()
+    hexcol = _token_color(COLOR_SETS.get(v.lower(), v))
+    if hexcol is None:
+        sys.exit(f"{where}: ไม่รู้จักชุดสี '{value}' — ใช้ hex, ชื่อชุด ({', '.join(COLOR_SETS)}) "
+                 f"หรือ path ใน tokens.json เช่น brand.teal / status.danger")
+    return hexcol
+
+
+def _slide_color(sl, deck):
+    """สี icon ของหน้านี้ — ระดับหน้า (icon_color > color_set) ชนะระดับ deck (icon_color > color_set) · ไม่ระบุ = brand.navy"""
+    for src, key in ((sl, "icon_color"), (sl, "color_set"), (deck, "icon_color"), (deck, "color_set")):
+        c = _resolve_color(src.get(key), f"{key} ของหน้า '{sl.get('title', '')[:30]}'" if src is sl else f"{key} ระดับ deck")
+        if c:
+            return c
+    return _token_color("brand.navy") or "1E66A4"
 
 TEMPLATE_LAYOUT_ALIAS = {
     "title": "cover", "cover": "cover",
@@ -295,8 +377,15 @@ def _set_text(ph, items):
     return True
 
 
-def _icon_png(src, color, out_dir):
-    """คืน path PNG ของ icon · รับชื่อ mdi-xxx / ไฟล์ .svg / ไฟล์ .png
+def _icon_px(size_in):
+    """ความละเอียดที่จะแปลง SVG: ตามขนาดที่วางจริง × ICON_RENDER_DPI ปัดขึ้นเป็นขั้น 64px และไม่ต่ำกว่า 512px"""
+    if not size_in:
+        return 512
+    return max(512, int(math.ceil(size_in * ICON_RENDER_DPI / 64.0)) * 64)
+
+
+def _icon_png(src, color, out_dir, size_in=None):
+    """คืน path PNG ของ icon · รับชื่อ mdi-xxx / ไฟล์ .svg / ไฟล์ .png · size_in = ขนาดที่จะวางจริง (นิ้ว) กำหนดความละเอียด
     SVG → PNG ใช้ qlmanage ของ macOS (ไม่ต้องติดตั้งอะไร) · ย้อมสีด้วยการแทน currentColor ก่อนแปลง"""
     if not src:
         return None
@@ -312,9 +401,10 @@ def _icon_png(src, color, out_dir):
         sys.exit(f"ไม่พบ icon: {src} (ค้นใน {ICON_DIR} — ดูรายชื่อที่ INDEX.md)")
     icon_dir = os.path.join(out_dir, "_icons")
     os.makedirs(icon_dir, exist_ok=True)
-    hexcol = (color or "1E66A4").lstrip("#").upper()
+    hexcol = (color or _token_color("brand.navy") or "1E66A4").lstrip("#").upper()
+    px = _icon_px(size_in)
     stem = os.path.splitext(os.path.basename(svg_path))[0]
-    png = os.path.join(icon_dir, f"{stem}-{hexcol}.png")
+    png = os.path.join(icon_dir, f"{stem}-{hexcol}.png" if px == 512 else f"{stem}-{hexcol}-{px}px.png")
     if os.path.isfile(png):
         return png
     tinted = os.path.join(icon_dir, f"{stem}-{hexcol}.svg")
@@ -322,7 +412,7 @@ def _icon_png(src, color, out_dir):
         svg = f.read().replace("currentColor", f"#{hexcol}")
     with open(tinted, "w", encoding="utf-8") as f:
         f.write(svg)
-    r = subprocess.run(["qlmanage", "-t", "-s", "512", "-o", icon_dir, tinted],
+    r = subprocess.run(["qlmanage", "-t", "-s", str(px), "-o", icon_dir, tinted],
                        capture_output=True, text=True)
     made = tinted + ".png"
     if not os.path.isfile(made):
@@ -353,8 +443,12 @@ def _icon_png(src, color, out_dir):
     return png
 
 
-def _fill_pic(slide, ph, path):
-    """วางภาพให้พอดีในกรอบ placeholder แบบไม่ตัดขอบ (contain) แล้วถอด placeholder ออก"""
+_DPI_WARNINGS = []
+
+
+def _fill_pic(slide, ph, path, max_in=None):
+    """วางภาพให้พอดีในกรอบ placeholder แบบไม่ตัดขอบ (contain) จัดกึ่งกลาง แล้วถอด placeholder ออก
+    max_in = เพดานขนาด (นิ้ว) สำหรับ icon ที่ใช้เป็นภาพประกอบ (ISS-006) · วัด dpi จริงของทุกภาพ ต่ำกว่าเกณฑ์ = เตือน"""
     if ph is None or not path:
         return False
     try:
@@ -364,12 +458,28 @@ def _fill_pic(slide, ph, path):
     except Exception:
         iw, ih = 1, 1
     bx, by, bw, bh = ph.left, ph.top, ph.width, ph.height
-    scale = min(bw / iw, bh / ih)
+    cap_w = min(bw, Inches(max_in)) if max_in else bw
+    cap_h = min(bh, Inches(max_in)) if max_in else bh
+    scale = min(cap_w / iw, cap_h / ih)
     w, h = int(iw * scale), int(ih * scale)
     x, y = bx + (bw - w) // 2, by + (bh - h) // 2
     slide.shapes.add_picture(path, x, y, w, h)
     ph._element.getparent().remove(ph._element)
+    dpi = iw / (w / 914400.0) if w else 0
+    if dpi < ICON_MIN_DPI:
+        _DPI_WARNINGS.append(f"{os.path.basename(path)} วางกว้าง {w / 914400:.2f} นิ้ว จาก {iw}px = {dpi:.0f} dpi "
+                             f"(เกณฑ์ ≥{ICON_MIN_DPI})")
     return True
+
+
+def _icon_into(slide, ph, src, color, out_dir, max_in=None):
+    """แปลง icon ที่ความละเอียดตามขนาดที่จะวางจริง แล้ววางลง placeholder (ขนาดจริง = เล็กสุดของกรอบกับ max_in)"""
+    if ph is None or not src:
+        return False
+    size_in = min(ph.width, ph.height) / 914400.0
+    if max_in:
+        size_in = min(size_in, max_in)
+    return _fill_pic(slide, ph, _icon_png(src, color, out_dir, size_in=size_in), max_in=max_in)
 
 
 def _clone_footer(slide, layout, footer_text):
@@ -404,7 +514,7 @@ def _prune_empty(slide):
 def _title_icon(slide, spec_slide, deck, out_dir):
     icon = spec_slide.get("icon")
     if icon:
-        _fill_pic(slide, _ph(slide, 10), _icon_png(icon, deck.get("icon_color"), out_dir))
+        _icon_into(slide, _ph(slide, 10), icon, _slide_color(spec_slide, deck), out_dir)
 
 
 def _tpl_slide(prs, name):
@@ -436,7 +546,8 @@ def tpl_action_title_body(prs, sl, deck, out_dir):
     if sl.get("image_path"):
         _fill_pic(s, _ph(s, 2), sl["image_path"])
     elif sl.get("image_icon"):
-        _fill_pic(s, _ph(s, 2), _icon_png(sl["image_icon"], deck.get("icon_color"), out_dir))
+        # ISS-006: icon เป็นภาพประกอบ ไม่ขยายเต็มกรอบ 4.7 นิ้ว — จำกัด ICON_MAX_IN และวางกึ่งกลางพื้นที่ภาพ
+        _icon_into(s, _ph(s, 2), sl["image_icon"], _slide_color(sl, deck), out_dir, max_in=ICON_MAX_IN)
     _title_icon(s, sl, deck, out_dir)
     return s, lay
 
@@ -450,7 +561,7 @@ def tpl_two_column(prs, sl, deck, out_dir):
     _set_text(_ph(s, 4), sl.get("right"))
     for idx, key in ((5, "left_icon"), (6, "right_icon")):
         if sl.get(key):
-            _fill_pic(s, _ph(s, idx), _icon_png(sl[key], deck.get("icon_color"), out_dir))
+            _icon_into(s, _ph(s, idx), sl[key], _slide_color(sl, deck), out_dir)
     _title_icon(s, sl, deck, out_dir)
     return s, lay
 
@@ -465,7 +576,7 @@ def tpl_three_card(prs, sl, deck, out_dir):
     for i, c in enumerate((cards or [])[:3]):
         base = i * 3
         if c.get("icon"):
-            _fill_pic(s, _ph(s, base + 1), _icon_png(c["icon"], deck.get("icon_color"), out_dir))
+            _icon_into(s, _ph(s, base + 1), c["icon"], _slide_color(sl, deck), out_dir)
         _set_text(_ph(s, base + 2), c.get("title"))
         body = c.get("bullets") or c.get("text")
         if isinstance(body, list):
@@ -500,12 +611,69 @@ def tpl_table(prs, sl, deck, out_dir):
     return s, lay
 
 
+def _timeline_track_and_pins(slide, n, centers_in, pin_font):
+    """วาดเส้นแกน (ไล่เฉด brand) ยาวพอดีจากหมุดแรกถึงหมุดสุดท้าย + หมุดเลข 1..n บนสไลด์ (ISS-002)
+    สีทั้งหมดจาก tokens.json ตามคีย์ใน TIMELINE['tones'] · ฟอนต์ตัวเลขในหมุด = ฟอนต์รางที่ผู้เรียกส่งมา"""
+    T = TIMELINE
+    ty, d = T["track_y"], T["pin_d"]
+    g0, g1 = _token_color("brand.navy"), _token_color("brand.teal")
+    x1, x2 = centers_in[0] - 0.3, centers_in[-1] + 0.3
+    spTree = slide.shapes._spTree
+    A = 'xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" ' \
+        'xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"'
+    E = lambda v: int(round(v * 914400))
+    track = parse_xml(
+        f'<p:cxnSp {A}><p:nvCxnSpPr><p:cNvPr id="0" name="Timeline Track"/><p:cNvCxnSpPr/><p:nvPr/></p:nvCxnSpPr>'
+        f'<p:spPr><a:xfrm><a:off x="{E(x1)}" y="{E(ty)}"/><a:ext cx="{E(x2 - x1)}" cy="0"/></a:xfrm>'
+        f'<a:prstGeom prst="line"><a:avLst/></a:prstGeom>'
+        f'<a:ln w="{int(T["track_pt"] * 12700)}" cap="rnd"><a:gradFill rotWithShape="1"><a:gsLst>'
+        f'<a:gs pos="0"><a:srgbClr val="{g0}"/></a:gs><a:gs pos="100000"><a:srgbClr val="{g1}"/></a:gs>'
+        f'</a:gsLst><a:lin ang="0" scaled="0"/></a:gradFill><a:round/></a:ln></p:spPr></p:cxnSp>')
+    spTree.append(track)
+    tones = T["tones"]
+    white = _token_color("brand.white") or "FFFFFF"
+    for i, cx in enumerate(centers_in):
+        tone = _token_color("brand." + tones[int(round(i * (len(tones) - 1) / max(1, n - 1)))])   # กระจายเฉดเข้ม→อ่อนตามจำนวนช่วง
+        pin = parse_xml(
+            f'<p:sp {A}><p:nvSpPr><p:cNvPr id="0" name="Milestone {i + 1}"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr>'
+            f'<p:spPr><a:xfrm><a:off x="{E(cx - d / 2)}" y="{E(ty - d / 2)}"/><a:ext cx="{E(d)}" cy="{E(d)}"/></a:xfrm>'
+            f'<a:prstGeom prst="ellipse"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val="{tone}"/></a:solidFill>'
+            f'<a:ln w="19050"><a:solidFill><a:srgbClr val="{white}"/></a:solidFill></a:ln></p:spPr>'
+            f'<p:txBody><a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr" rtlCol="0"/><a:lstStyle/>'
+            f'<a:p><a:pPr algn="ctr"/><a:r><a:rPr lang="en-US" sz="1400" b="1" dirty="0"><a:solidFill><a:srgbClr val="{white}"/></a:solidFill>'
+            f'<a:latin typeface="{pin_font}"/><a:ea typeface="{pin_font}"/><a:cs typeface="{pin_font}"/></a:rPr>'
+            f'<a:t>{i + 1}</a:t></a:r></a:p></p:txBody></p:sp>')
+        spTree.append(pin)
+    # id ของรูปทรงต้องไม่ซ้ำในสไลด์ — ให้ python-pptx จ่ายให้ใหม่
+    used = max((int(el.get("id")) for el in spTree.iter() if el.tag.endswith("}cNvPr") and el.get("id", "0").isdigit()), default=1)
+    for el in spTree.iter():
+        if el.tag.endswith("}cNvPr") and el.get("id") == "0":
+            used += 1
+            el.set("id", str(used))
+
+
 def tpl_timeline(prs, sl, deck, out_dir):
     s, lay = _tpl_slide(prs, "timeline")
     s.shapes.title.text = sl.get("title", "")
-    for i, ph_ in enumerate((sl.get("phases") or [])[:4]):
-        _set_text(_ph(s, i + 1), ph_.get("label"))
-        _set_text(_ph(s, i + 5), ph_.get("text"))
+    phases = (sl.get("phases") or [])[:4]
+    n = len(phases)
+    if n < 2:
+        sys.exit(f"timeline '{sl.get('title', '')[:30]}': ต้องมี phases อย่างน้อย 2 ช่วง (ได้ {n})")
+    # ISS-002: กระจาย placeholder ป้าย/รายละเอียดเต็มความกว้างตามจำนวนช่วงจริง แล้ววาดเส้นแกน+หมุดให้พอดี
+    cw = SLIDE_W_IN - 2 * SAFE_MARGIN_IN
+    seg = cw / n
+    centers = [SAFE_MARGIN_IN + (i + 0.5) * seg for i in range(n)]
+    T = TIMELINE
+    for i, ph_ in enumerate(phases):
+        for idx, key, y, h in ((i + 1, "label", T["label_y"], T["label_h"]), (i + 5, "text", T["detail_y"], T["detail_h"])):
+            p = _ph(s, idx)
+            if p is None:
+                continue
+            p.left, p.top = Inches(centers[i] - seg / 2 + 0.1), Inches(y)
+            p.width, p.height = Inches(seg - 0.2), Inches(h)
+            _set_text(p, ph_.get(key))
+    rail_font = RAILS[deck.get("_rail", "private")]["font"]
+    _timeline_track_and_pins(s, n, centers, rail_font)
     _title_icon(s, sl, deck, out_dir)
     return s, lay
 
@@ -533,11 +701,46 @@ TEMPLATE_LAYOUTS = {
 }
 
 
+def _version_stamp(out_path):
+    """อ่านรหัสรุ่น V##R## และวันที่ YYYY.MM.DD จากชื่อไฟล์ผลลัพธ์ (กติกา PART 6: [Name]_V##R##_YYYY.MM.DD.ext) · ไม่พบ = None"""
+    base = os.path.basename(out_path)
+    ver = re.search(r"V\d{2,}R\d{2,}", base)
+    date = re.search(r"\d{4}\.\d{2}\.\d{2}", base)
+    return (ver.group(0) if ver else None), (date.group(0) if date else None)
+
+
+def _set_core_properties(prs, spec, out_path, template_path):
+    """ISS-010: Document Properties ต้องเป็นของ deck ไม่ใช่ของแม่แบบ"""
+    ver, date = _version_stamp(out_path)
+    cp = prs.core_properties
+    cp.title = spec.get("title", "") or os.path.splitext(os.path.basename(out_path))[0]
+    cp.subject = spec.get("subject") or spec.get("subtitle", "") or ""
+    cp.author = spec.get("author", "") or "iCE Consulting"
+    cp.last_modified_by = cp.author
+    cp.keywords = spec.get("keywords", "") or ""
+    cp.category = spec.get("category", "") or ""
+    cp.version = ver or ""
+    cp.comments = (f"{ver or ''} {date or ''}".strip() + f" · สร้างจาก spec ด้วย build_pptx.py บนแม่แบบ "
+                   f"{os.path.basename(template_path)}").strip(" ·")
+    now = datetime.now()
+    cp.created = cp.modified = cp.last_printed = now
+    cp.revision = 1
+    return ver, date
+
+
 def build_with_template(prs, spec, out_path):
     """โหมดแม่แบบ — เติม placeholder ตามชื่อ layout · คืนจำนวนสไลด์"""
     out_dir = os.path.dirname(os.path.abspath(out_path))
     _remove_all_slides(prs)
     footer = spec.get("footer", "iCE Consulting · เอกสารลับ")
+    # ISS-010: รหัสรุ่น + วันที่ ในแถบท้ายหน้าทุกหน้าเนื้อหา (อ่านจากชื่อไฟล์ผลลัพธ์ · ปิดด้วย "footer_version": false)
+    ver, date = _version_stamp(out_path)
+    if spec.get("footer_version", True):
+        if ver:
+            footer = f"{footer} · {ver}" + (f" · {date}" if date else "")
+        else:
+            print(f"⚠ ชื่อไฟล์ผลลัพธ์ไม่มีรหัสรุ่น V##R## ({os.path.basename(out_path)}) — footer จึงไม่มีรหัสรุ่น (กฎ H9)",
+                  file=sys.stderr)
     for sl in spec["slides"]:
         name = TEMPLATE_LAYOUT_ALIAS.get(sl.get("layout", "bullets"), sl.get("layout"))
         fn = TEMPLATE_LAYOUTS.get(name)
@@ -546,7 +749,16 @@ def build_with_template(prs, spec, out_path):
         s, lay = fn(prs, sl, spec, out_dir)
         _prune_empty(s)
         _clone_footer(s, lay, footer)
+    if _DPI_WARNINGS:
+        print(f"⚠ ภาพความละเอียดต่ำกว่า {ICON_MIN_DPI} dpi {len(_DPI_WARNINGS)} ชิ้น:", file=sys.stderr)
+        for w in _DPI_WARNINGS[:MAX_DPI_SHOW]:
+            print(f"   - {w}", file=sys.stderr)
+    else:
+        print(f"🖼 ภาพทุกชิ้นความละเอียดจริง ≥{ICON_MIN_DPI} dpi")
     return len(prs.slides)
+
+
+MAX_DPI_SHOW = 10
 
 
 LAYOUTS = {
@@ -583,19 +795,21 @@ def build(spec_path, out_path):
         spec["slides"] = [{"layout": "title", "title": spec.get("title", "Untitled"), "subtitle": spec.get("subtitle", "")}]
     elif spec["slides"][0].get("layout") not in ("title", "cover"):
         spec["slides"].insert(0, {"layout": "title", "title": spec.get("title", "Untitled"), "subtitle": spec.get("subtitle", "")})
-    if ICE_TEMPLATE:
-        build_with_template(prs, spec, out_path)
-    else:
-        for slide in spec["slides"]:
-            layout = slide.get("layout", "bullets")
-            LAYOUTS.get(layout, add_bullets_slide)(prs, slide, theme)
-
     # ⭐ D1 — ฟอนต์มาจากราง (§3.0) · spec override ได้เมื่อลูกค้า/แบรนด์บังคับ
     rail, _why = infer_rail(spec, out_path)
     print(f"📄 ราง: {rail}  ({_why})")
     if rail not in RAILS:
         sys.exit(f"rail ต้องเป็น {'|'.join(RAILS)} (ได้: {rail})")
     font = spec.get("font_family") or RAILS[rail]["font"]
+
+    if ICE_TEMPLATE:
+        spec["_rail"] = rail                      # ให้รูปทรงที่ builder วาดเอง (หมุด timeline) ใช้ฟอนต์รางเดียวกัน
+        build_with_template(prs, spec, out_path)
+        _set_core_properties(prs, spec, out_path, ICE_TEMPLATE)     # ISS-010
+    else:
+        for slide in spec["slides"]:
+            layout = slide.get("layout", "bullets")
+            LAYOUTS.get(layout, add_bullets_slide)(prs, slide, theme)
 
     # ⭐ V02R03 (คำสั่ง user 2026.08.05) — สไลด์แน่น/ต้องบีบบรรทัด → DENSE_FONT ทั้งเด็ค
     #   เหตุผลเชิงตัวเลข: ยอดวรรณยุกต์ Leelawadee 0.737 em vs ฟอนต์ราง 0.924 em

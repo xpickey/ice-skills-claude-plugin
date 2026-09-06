@@ -18,6 +18,29 @@ import ice_route_lib as lib  # noqa: E402
 SPEC_PATTERN = re.compile(r"(_build/[^/]*spec[^/]*\.md$|content-spec|design-spec|demo-spec|plan-card|CONTENT-SPEC|DESIGN-SPEC|DEMO-SPEC)", re.I)
 
 
+NUM_ON_SLIDE = re.compile(r"\d+(?:[.,]\d+)?\s*(?:%|เปอร์เซ็นต์|เท่า|วัน|เดือน|ปี|ชั่วโมง|ล้าน|พัน|บาท|คน|ราย|ครั้ง|ข้อ)")
+FAKE_EVIDENCE = re.compile(r"^\s*\[?\s*(?:ตัวอย่าง|สมมติ|NEED FROM USER|รอ|ไม่มี|placeholder|TBD)", re.I)
+
+
+def _numbers_without_evidence(text):
+    """คืนรายการ 'หน้า N: ตัวเลข' ที่ action_title/key_message มีตัวเลขแต่ evidence ไม่ใช่แหล่งจริง"""
+    out = []
+    blocks = re.split(r"^##\s+", text, flags=re.M)
+    for b in blocks[1:]:
+        head = b.split("\n", 1)[0].strip()
+        f = {}
+        for line in b.split("\n")[1:]:
+            m = re.match(r"^\s*(action_title|key_message|evidence)\s*:\s*(.*)$", line)
+            if m:
+                f[m.group(1)] = m.group(2).strip()
+        shown = " ".join(x for x in (f.get("action_title", ""), f.get("key_message", "")) if x)
+        nums = NUM_ON_SLIDE.findall(shown)
+        ev = f.get("evidence", "")
+        if nums and (not ev or FAKE_EVIDENCE.match(ev)):
+            out.append(f"{head}: {', '.join(nums[:3])} (evidence: {ev[:40] or 'ว่าง'})")
+    return out
+
+
 def deny(reason):
     print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": reason}}, ensure_ascii=False))
     return 0
@@ -34,6 +57,15 @@ def main():
         return 0
     if "/.claude/" in path or "iCE-Skills-Marketplace" in path:
         return 0  # ไฟล์ระบบของทีมเอง ไม่ใช่ spec ของงานลูกค้า
+    # ด่านเนื้อหา (2026.09.06 ซ้อมจริง — user ทัก "80% มีอะไรอ้างอิงหรือ"): ตัวเลขบน action_title/key_message ต้องมี evidence ที่เป็นแหล่งจริง
+    # ถ้ายังไม่มีตัวเลขจริง ห้ามใส่ตัวเลขบนหน้า ให้เขียนช่องว่างรอค่า — ตรวจเฉพาะ content-spec ที่เขียนทั้งไฟล์ (Write) หรือส่วนที่แก้ (Edit)
+    if "content-spec" in path.lower():
+        body = inp.get("content") or inp.get("new_string") or ""
+        bad = _numbers_without_evidence(body)
+        if bad:
+            return deny("ไฟล์กำหนดเนื้อหามีตัวเลขบนหน้าที่ไม่มีแหล่งอ้างอิงจริง: " + " · ".join(bad[:4]) +
+                        " — ตัวเลขทุกตัวที่จะปรากฏบนสไลด์ต้องมี evidence เป็นแหล่งจริง (ไฟล์ลูกค้า ประชุม TOR เอกสารผลิตภัณฑ์) ถ้ายังไม่มี ให้ตัดตัวเลขออกจาก action_title/key_message แล้วเขียนว่ารอค่าจากลูกค้าแทน "
+                        "เหตุผล: user ทักตัวเลข 80% ที่กุขึ้นเป็นตัวอย่างในการซ้อม 2026.09.06 ว่าอวดอ้างเกินจริง")
     session_id = payload.get("session_id") or "unknown"
     st = lib.load_state(session_id)
     if not st.get("required") and not st.get("read_first"):

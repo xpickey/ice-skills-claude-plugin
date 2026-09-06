@@ -21,6 +21,30 @@ CAP = 3
 ARTIFACT = re.compile(r"([\w\-. ()]+\.(?:pptx|docx|xlsx|pdf|md))", re.I)
 
 
+PLACEHOLDER = re.compile(r"\[(?:รอ|NEED FROM USER|TBD|XXX|TODO)[^\]]*\]|รอตัวเลข|ตัวอย่างข้อความ|\bTBD\b|\bXXX\b|lorem ipsum", re.I)
+
+
+def _placeholders_in(path):
+    """คืนรายการข้อความรอเติมที่พบในไฟล์เอกสาร (pptx/docx/md) — ว่าง = ไม่พบ"""
+    texts = []
+    try:
+        if path.endswith(".pptx"):
+            from pptx import Presentation
+            for s in Presentation(path).slides:
+                for sh in s.shapes:
+                    if getattr(sh, "has_text_frame", False):
+                        texts.append(sh.text_frame.text)
+        elif path.endswith(".docx"):
+            from docx import Document
+            d = Document(path)
+            texts = [p.text for p in d.paragraphs] + [c.text for t in d.tables for r in t.rows for c in r.cells]
+        else:
+            texts = [open(path, encoding="utf-8", errors="ignore").read()]
+    except Exception:
+        return []
+    return [m.group(0) for t in texts for m in PLACEHOLDER.finditer(t or "")]
+
+
 def deny(reason):
     print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny", "permissionDecisionReason": reason}}, ensure_ascii=False))
 
@@ -44,6 +68,29 @@ def main():
         base = os.path.basename(names[0]).strip()
         base = re.sub(r"^.*[\s]", "", base) if re.search(r"[\u0e00-\u0e7f]\s", base) else base
         key = re.sub(r"_?V\d\dR\d\d.*$", "", base)
+    # ด่านก่อนส่งตรวจ (2026.09.06 ซ้อมจริง): งานที่ประกาศว่าเป็นฉบับสุดท้ายต้องไม่มีข้อความรอเติม และผลตรวจอัตโนมัติล่าสุดต้องไม่ FAIL
+    # เหตุผล: อริสพบ "[รอตัวเลขจริงจากลูกค้า]" บนสไลด์ของงาน is_final และผู้สร้างส่งต่อทั้งที่ audit เตือน — ทั้งสองอย่างเครื่องกันได้ก่อนเสียรอบตรวจ
+    if re.search(r"is_final\s*:\s*true", prompt, re.I):
+        art = next((a for a in ARTIFACT.findall(prompt) if a.strip().startswith("/") and os.path.isfile(a.strip())), None)
+        if art:
+            art = art.strip()
+            holders = _placeholders_in(art)
+            if holders:
+                deny(f"งานนี้ประกาศว่าเป็นฉบับสุดท้าย (is_final: true) แต่ในไฟล์ยังมีข้อความรอเติม {len(holders)} จุด เช่น {holders[:3]} — "
+                     "ให้เติมค่าจริง หรือตัดข้อความนั้นออก หรือเปลี่ยนเป็น is_final: false ก่อนส่งตรวจ เหตุผล: ผู้ตรวจจะรายงานเรื่องนี้เป็นข้อบกพร่องแน่นอน จึงเสียรอบตรวจเปล่า")
+                return 0
+            rec = os.path.join(os.path.dirname(art), "_build", ".last-built.json")
+            if not os.path.exists(rec):
+                rec = os.path.join(os.path.dirname(art), ".last-built.json")
+            try:
+                aud = json.load(open(rec)).get("_audits", {}).get(os.path.basename(art), {})
+            except Exception:
+                aud = {}
+            bad = [k for k, v in aud.items() if v == "FAIL"]
+            if bad:
+                deny(f"ผลตรวจอัตโนมัติล่าสุดของไฟล์นี้ยังไม่ผ่าน ({', '.join(bad)}) — ให้แก้ให้ผ่านแล้วสร้างใหม่ก่อนส่งตรวจ "
+                     "เหตุผล: ผู้ตรวจไม่ตรวจซ้ำสิ่งที่เครื่องตรวจแล้ว การส่งไฟล์ที่เครื่องบอกว่าไม่ผ่านคือการเสียรอบตรวจเปล่า")
+                return 0
     st = lib.load_state(session_id)
     rounds = st.setdefault("qa_rounds", {})
     n = rounds.get(key, 0)

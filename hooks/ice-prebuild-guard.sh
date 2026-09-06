@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# iCE PRE-BUILD GUARD (V03R03 | 2026.09.06) — DOC-PIPELINE V3 enforcement: "L0 BUILDS, ARIS CHECKS"
+# iCE PRE-BUILD GUARD (V03R04 | 2026.09.06) — DOC-PIPELINE V3 enforcement: "L0 BUILDS, ARIS CHECKS"
 # block เฉพาะ "การสร้าง/แก้" office artifact (.pptx/.docx/.xlsx) — การอ่าน/inspect ผ่านเสมอ
 #
 # V03R02 (2026.09.05): + ด่าน D SKILLS-LOADED — ตรวจสภาพ session (hooks/ice_route_lib.py check) ว่าโหลด skill ตามตารางเส้นทางแล้ว
@@ -44,7 +44,12 @@ esac
 writes_office_file() {
   grep -qE '(^|[[:space:];&|(])python3?([[:space:]]|$)' <<<"$CMD" || return 1
   grep -qiE '(build_[a-z0-9_]*\.py|[a-z0-9_]*_build[a-z0-9_]*\.py)' <<<"$CMD" && return 0
-  grep -qiE '(pptx|docx|xlsx|openpyxl)' <<<"$CMD" && grep -q '\.save(' <<<"$CMD" && return 0
+  # V03R05 (2026.09.06): เดิมนับว่า "เขียนเอกสาร" เมื่อคำสั่งเอ่ยคำว่า pptx ที่ใดก็ได้ บวกกับมี .save( ที่ใดก็ได้
+  # ทำให้คำสั่งที่บันทึกภาพ .png จากไฟล์ชื่อ *.pptx ถูกปฏิเสธ (เกิดจริงตอนทำภาพรวมหน้าในการซ้อม Pass 6)
+  # ตอนนี้ต้องเป็นการบันทึกที่ปลายทางเป็นนามสกุลเอกสารจริง หรือมีการนำเข้าไลบรารีเอกสารในคำสั่งเดียวกัน
+  grep -q '\.save(' <<<"$CMD" || return 1
+  grep -qE '\.save\([^)]*\.(pptx|docx|xlsx)' <<<"$CMD" && return 0
+  grep -qiE '(from|import)[[:space:]]+(pptx|docx|openpyxl)' <<<"$CMD" && return 0
   return 1
 }
 
@@ -56,7 +61,8 @@ edits_system_files() {
   # ~/.claude/agents/_lib/build_pptx.py หลุดด่านทั้งหมด (บทเรียนซ้ำ: ด่านจับข้อความ ไม่ใช่เจตนา)
   # ตอนนี้: ต้องเป็นการ "แก้" ไฟล์ระบบจริง (มีคำสั่งแก้ไฟล์หรือ redirect หรือ heredoc) และถ้าคำสั่งนั้นสร้างไฟล์เอกสารด้วย
   # จะยกเว้นได้เฉพาะเมื่อไฟล์เอกสารปลายทางอยู่ในคลังแม่แบบของ skill (assets/ หรือ masters/) เท่านั้น
-  grep -qE '(\.claude/(hooks|agents|skills|plugins)|_lib/)' <<<"$CMD" || return 1
+  # รวมที่อยู่แบบสัมพัทธ์ในคลัง git ของทีมด้วย (hooks/… · plugins/…) เพราะการดูแลระบบมักรันจากรากคลัง
+  grep -qE '(\.claude/(hooks|agents|skills|plugins)|_lib/|(^|[[:space:]])(hooks|plugins)/|iCE-Skills-Marketplace)' <<<"$CMD" || return 1
   if writes_office_file; then
     grep -qE '(\.claude/skills/[^[:space:]]*/assets/|masters/)[^[:space:]]*\.(pptx|docx|xlsx)' <<<"$CMD" || return 1
   fi
@@ -69,6 +75,22 @@ if [[ "$CMD" == *ICE_BUILD=pipeline* ]] && writes_office_file && ! edits_system_
   # ด่าน C — งานไฟล์นำเสนอต้องผ่านการตั้งโจทย์ออกแบบก่อน
   if grep -qiE '\.pptx|pptx-builder|python-pptx|from pptx' <<<"$CMD" && [[ "$CMD" != *ICE_DESIGN=briefed* ]]; then
     deny "งานไฟล์นำเสนอต้องผ่านการตั้งโจทย์ออกแบบก่อนลงมือสร้าง: เปิดสกิล b2b-slide-designer หัวข้อ 4.11 DESIGN BRIEF ตอบชุดคำถามตั้งโจทย์ เขียนผลลง design spec แล้วจึงเติมคำว่า ICE_DESIGN=briefed ไว้ในคำสั่งนี้ (รายละเอียดของเครื่องหมายนี้อยู่ที่หัวข้อ 4.11.1 ของสกิลนั้น) เหตุผล: งานที่ข้ามขั้นตั้งโจทย์ออกแบบทำให้ต้องกลับมาแก้เรื่องสีและเลย์เอาต์อีกหลายรอบ"
+  fi
+
+  # ด่าน C2 (V03R04 · 2026.09.06 ซ้อมจริง): คำว่า ICE_DESIGN=briefed พิมพ์ได้โดยไม่ได้ทำจริง (เกิดแล้วในการซ้อม: ประกาศแล้ว
+  # แต่ไม่มี design spec → icon ผสมสองสไตล์ · สีต่อหน้าไม่ถูกใช้ · ภาพที่ spec สั่งไม่ได้สร้าง หลุดถึงผู้ตรวจ 3 ประเด็น)
+  # จึงต้องมีไฟล์ design-spec บนดิสก์ในโฟลเดอร์ _build/ ของงานนั้นจริง (ยกเว้นการสร้างแม่แบบลงคลัง assets/masters)
+  if grep -qiE '\.pptx' <<<"$CMD" && ! grep -qE '(assets/|masters/)[^[:space:]]*\.pptx' <<<"$CMD"; then
+    ODIR="$(sed -nE 's/^[[:space:]]*cd[[:space:]]+"?([^"&;|]+)"?[[:space:]]*&&.*/\1/p' <<<"$CMD" | head -1)"
+    ODIR="${ODIR/#\~/$HOME}"; ODIR="${ODIR%"${ODIR##*[![:space:]]}"}"
+    if [[ -z "$ODIR" || ! -d "$ODIR" ]]; then
+      OTOK="$(grep -oE '(/|~/)[^[:space:]"'"'"']+\.pptx' <<<"$CMD" | grep -v 'ICE_BASE=' | tail -1)"; OTOK="${OTOK/#\~/$HOME}"
+      [[ -n "$OTOK" ]] && ODIR="$(dirname "$OTOK")"
+    fi
+    [[ -z "$ODIR" || ! -d "$ODIR" ]] && ODIR="$(jq -r '.cwd // empty' <<<"$IN" 2>/dev/null)"
+    if [[ -n "$ODIR" && -d "$ODIR" ]] && ! ls "$ODIR"/_build/*design-spec*.md >/dev/null 2>&1; then
+      deny "ประกาศว่าตั้งโจทย์ออกแบบแล้ว แต่ไม่พบไฟล์กำหนดรูปแบบ (_build/<ชื่องาน>-design-spec.md) ในโฟลเดอร์ $ODIR — ให้ตอบชุดคำถามตั้งโจทย์ในสกิล b2b-slide-designer หัวข้อ 4.11 แล้วบันทึกผลเป็นไฟล์นั้น (เลย์เอาต์ต่อหน้า · ชุด icon สไตล์เดียว · ชุดสีต่อเรื่อง · ฟอนต์ตามราง) ก่อนสร้างไฟล์ เหตุผล: การซ้อมจริง 2026.09.06 ประกาศคำนี้โดยไม่มีไฟล์ ทำให้ข้อบกพร่องด้านออกแบบ 3 เรื่องหลุดถึงผู้ตรวจ"
+    fi
   fi
 
   # ด่าน A — ต้องประกาศฐานที่ใช้สร้างงานรุ่นนี้
@@ -146,7 +168,7 @@ grep -qE '(^|[[:space:];&|(])python3?([[:space:]]|$)' <<<"$CMD" || exit 0
 
 is_build_script=0; is_office_write=0
 grep -qiE '(build_[a-z0-9_]*\.py|[a-z0-9_]*_build[a-z0-9_]*\.py)' <<<"$CMD" && is_build_script=1
-if grep -qiE '(pptx|docx|xlsx|openpyxl)' <<<"$CMD" && grep -q '\.save(' <<<"$CMD"; then is_office_write=1; fi
+if grep -q '\.save(' <<<"$CMD" && { grep -qE '\.save\([^)]*\.(pptx|docx|xlsx)' <<<"$CMD" || grep -qiE '(from|import)[[:space:]]+(pptx|docx|openpyxl)' <<<"$CMD"; }; then is_office_write=1; fi
 [[ $is_build_script -eq 0 && $is_office_write -eq 0 ]] && exit 0
 edits_system_files && exit 0   # งานดูแลไฟล์ระบบของทีมเอง ไม่ใช่การผลิตเอกสาร
 

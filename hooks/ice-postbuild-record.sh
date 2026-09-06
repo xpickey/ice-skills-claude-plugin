@@ -53,7 +53,7 @@ run_limited() {  # $1 = วินาที · ที่เหลือ = คำ�
   local secs="$1"; shift
   if command -v gtimeout >/dev/null 2>&1; then gtimeout "$secs" "$@"; else "$@"; fi
 }
-first="$(head -1 <<<"$FILES")"
+first="$(ls -t $(printf '%s\n' "$FILES" | tr '\n' ' ') 2>/dev/null | head -1)"   # ไฟล์ที่แตะล่าสุด = ผลลัพธ์ของคำสั่งนี้
 AUDIT="$HOME/.claude/agents/_lib/audit_fonts.py"
 if [[ -f "$AUDIT" ]]; then
   out="$(run_limited 60 python3 "$AUDIT" "$first" 2>&1 | tail -3 | tr '\n' ' ')"
@@ -69,6 +69,26 @@ STYLE="$HOME/.claude/agents/_lib/thai_style_check.py"
 if [[ -f "$STYLE" && ( "$first" == *.pptx || "$first" == *.docx ) ]]; then
   sty="$(run_limited 60 python3 "$STYLE" "$first" 2>&1 | tail -6 | tr '\n' ' ')"
   [[ -n "$sty" ]] && MSG="$MSG · ผลตรวจภาษาแปลและสำนวน AI อัตโนมัติ (ต้องไม่มีข้อต้องแก้ก่อนส่งผู้ตรวจคุณภาพ): $sty"
+fi
+
+# บันทึกผลตรวจอัตโนมัติของไฟล์ล่าสุดลง .last-built.json (ช่อง _audits) ให้ด่านส่งผู้ตรวจคุณภาพอ่านได้
+if [[ -n "$first" ]]; then
+  fd="$(dirname "$first")"; fstore="$fd/_build"; [[ -d "$fstore" ]] || fstore="$fd"
+  python3 - "$fstore/.last-built.json" "$(basename "$first")" "${out:-}" "${lay:-}" "${sty:-}" <<'PY' 2>/dev/null
+import json,sys,os,re
+rec,name,fonts,layout,style=sys.argv[1:6]
+d={}
+if os.path.exists(rec):
+    try: d=json.load(open(rec))
+    except Exception: d={}
+def v(txt,fail_pat,warn_pat=None):
+    if not txt: return "NA"
+    if re.search(fail_pat,txt): return "FAIL"
+    if warn_pat and re.search(warn_pat,txt): return "WARN"
+    return "PASS"
+d.setdefault("_audits",{})[name]={"fonts":v(fonts,r"❌|FAIL"),"layout":v(layout,r"ผล: FAIL",r"ผล: WARN"),"style":v(style,r"ต้องแก้ [1-9]")}
+os.makedirs(os.path.dirname(rec),exist_ok=True); json.dump(d,open(rec,"w"),ensure_ascii=False,indent=1)
+PY
 fi
 
 [[ -z "$MSG" ]] && exit 0

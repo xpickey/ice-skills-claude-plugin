@@ -41,6 +41,8 @@ def main():
     build_ok_markers = f"ICE_BUILD=pipeline ICE_BASE=NEW python3 build_deck.py --out '{DOCX_NEW}'"
 
     bad += case("อ่านอย่างเดียวผ่าน", "python3 -c 'from docx import Document; print(Document(\"a.docx\").paragraphs)'", sid, False)
+    bad += case("บันทึกภาพ .png จากไฟล์ชื่อ .pptx → ผ่าน (ไม่ใช่การเขียนเอกสาร)", "python3 - <<'PY'\nsheet.save('_review/contact-sheet.png')  # จาก Deck_V01R05.pptx\nPY", "none", False)
+    bad += case("python-pptx เขียนไฟล์เอกสารจริงโดยไม่มี marker → ปฏิเสธ", "python3 -c \"from pptx import Presentation; p=Presentation(); p.save('/tmp/a.pptx')\"", "none", True)
     bad += case("build ไม่มี marker → ปฏิเสธ (ตรรกะเดิม)", "python3 build_deck.py", "none", True)
     bad += case("build ผ่านสคริปต์ใน _lib โดยไม่มี marker → ปฏิเสธ (บทเรียน Pass 6)", "cd /tmp/x && python3 ~/.claude/agents/_lib/build_pptx.py _build/spec.json Deck_V01R01.pptx", "none", True)
     bad += case("แก้ไฟล์ระบบใน _lib ด้วย sed → ผ่าน", "sed -i '' 's/a/b/' ~/.claude/agents/_lib/build_pptx.py", "none", False)
@@ -54,7 +56,8 @@ def main():
     lib.save_state(sid, st)
     bad += case("ด่าน D: โหลดครบ → ผ่าน", build_ok_markers, sid, False)
     bad += case("session ไม่มีเส้นทาง → ด่าน D ไม่แตะ", build_ok_markers, "no-route-session", False)
-    bad += case("สคริปต์ใน _lib ที่เขียนไฟล์เอกสารโดยไม่มี marker → ปฏิเสธ (V03R03: เอ่ยถึง path ระบบไม่ใช่ข้อยกเว้นอีกต่อไป)", "python3 ~/.claude/agents/_lib/patch.py pptx .save(", sid, True)
+    bad += case("คำสั่งที่เพียงเอ่ยคำว่า pptx และ .save( แต่ไม่ได้เขียนเอกสารจริง → ผ่าน (V03R05)", "python3 ~/.claude/agents/_lib/patch.py pptx .save(", sid, False)
+    bad += case("สคริปต์ build ใน _lib ที่เขียนเอกสารจริงโดยไม่มี marker → ปฏิเสธ (V03R03)", "python3 ~/.claude/agents/_lib/build_pptx.py spec.json out.pptx", sid, True)
     try:
         os.remove(lib.state_path(sid))
     except OSError:
