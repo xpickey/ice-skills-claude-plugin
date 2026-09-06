@@ -519,6 +519,29 @@ def _title_icon(slide, spec_slide, deck, out_dir):
 
 DARK_LAYOUTS = {"cover", "divider", "closing"}
 
+# ความเข้มของภาพพื้นหลัง (ร้อยละ) — ผลตรวจคุณภาพ 2026.09.06 พบว่าลายที่ความเข้มเต็มวิ่งผ่านหลังข้อความ
+# ในคอลัมน์ขวาและแถบส่วนท้ายหน้า เพราะกริดเนื้อหาของแม่แบบกินความกว้างถึง 12.6 จาก 13.33 นิ้ว
+# ทางแก้ที่ไม่ต้องหดพื้นที่เนื้อหาของทุก deck คือทำให้ลายเป็นลายน้ำจาง ๆ แทนการย้ายข้อความ
+# หน้าพื้นเข้มจางน้อยกว่าเพราะตัวอักษรขาวบนพื้นเข้มมีความต่างสีสูงอยู่แล้ว · ปรับรายเล่มได้ด้วย
+# ช่อง background_opacity_dark และ background_opacity_light ในไฟล์กำหนดเนื้อหา
+BG_OPACITY_DARK = 75
+BG_OPACITY_LIGHT = 40
+
+
+def _fade_picture(pic, percent):
+    """ทำให้ภาพโปร่งลงตามร้อยละที่กำหนด (100 = ทึบเต็ม) โดยเติม alphaModFix ให้กับ blip ของภาพ"""
+    try:
+        pct = max(1, min(100, int(percent)))
+    except (TypeError, ValueError):
+        pct = 100
+    if pct >= 100:
+        return
+    blip = pic._element.blipFill.find(qn("a:blip"))
+    if blip is None:
+        return
+    fx = blip.makeelement(qn("a:alphaModFix"), {"amt": str(pct * 1000)})
+    blip.append(fx)
+
 
 def _check_background_origin(spec, out_path):
     """เตือนเมื่อภาพพื้นหลังไม่ได้สร้างขึ้นสำหรับเอกสารชิ้นนี้
@@ -559,6 +582,9 @@ def _apply_background(prs, slide, layout_name, deck):
     tree.remove(pic._element)
     tree.insert(2, pic._element)      # หลังสุด ก่อนทุก placeholder
     pic._element.nvPicPr.cNvPr.set("name", "Deck Background")
+    _fade_picture(pic, deck.get("background_opacity_dark" if layout_name in DARK_LAYOUTS
+                               else "background_opacity_light",
+                               BG_OPACITY_DARK if layout_name in DARK_LAYOUTS else BG_OPACITY_LIGHT))
 
 
 def _tpl_slide(prs, name, deck=None):
