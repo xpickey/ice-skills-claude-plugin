@@ -65,6 +65,35 @@ if [[ -f "$LAYOUT" && "$first" == *.pptx ]]; then
   [[ -n "$lay" ]] && MSG="$MSG · ผลตรวจเลย์เอาต์อัตโนมัติ (ต้องเป็น PASS ก่อนส่งผู้ตรวจคุณภาพ): $lay"
 fi
 
+WRAP="$HOME/.claude/agents/_lib/thai_wordbreak.py"
+if [[ -f "$WRAP" && ( "$first" == *.pptx || "$first" == *.docx || "$first" == *.xlsx ) ]]; then
+  wr="$(run_limited 60 python3 "$WRAP" --audit "$first" 2>&1 | head -4 | tr '\n' ' ')"
+  [[ -n "$wr" ]] && MSG="$MSG · ผลตรวจการตัดบรรทัดกลางคำภาษาไทย: $wr"
+fi
+
+# ข้อความรอเติมที่หลุดขึ้นหน้างาน (บทเรียนซ้อมจริง 2026.09.06: ผู้ตรวจพบ "รอค่าฐานจากลูกค้า" บนสไลด์สามใบ
+# ทั้งที่รอบก่อนแจ้งว่าแก้แล้ว — เครื่องหาได้เองด้วยคำสั่งเดียว จึงไม่ควรปล่อยให้เป็นงานของคนตรวจ)
+if [[ "$first" == *.pptx || "$first" == *.docx ]]; then
+  ph="$(run_limited 30 python3 - "$first" <<'PY' 2>/dev/null
+import re,sys
+p=sys.argv[1]; t=[]
+try:
+    if p.endswith(".pptx"):
+        from pptx import Presentation
+        t=[sh.text_frame.text for s in Presentation(p).slides for sh in s.shapes if getattr(sh,"has_text_frame",False)]
+    else:
+        from docx import Document
+        d=Document(p); t=[x.text for x in d.paragraphs]+[c.text for tb in d.tables for r in tb.rows for c in r.cells]
+except Exception:
+    sys.exit(0)
+pat=re.compile(r"\[(?:รอ|NEED FROM USER|TBD|XXX|TODO)[^\]]*\]|รอค่า[ก-๙]*|รอตัวเลข[ก-๙]*|ตัวอย่างข้อความ|\bTBD\b|\bXXX\b",re.I)
+hits=sorted({m.group(0) for x in t for m in pat.finditer(x or "")})
+if hits: print("พบข้อความรอเติมบนหน้างาน %d แบบ: %s — ต้องเติมค่าจริงหรือย้ายไปบันทึกผู้บรรยายก่อนส่งตรวจ"%(len(hits),", ".join(hits[:5])))
+PY
+)"
+  [[ -n "$ph" ]] && MSG="$MSG · ⚠ $ph"
+fi
+
 STYLE="$HOME/.claude/agents/_lib/thai_style_check.py"
 if [[ -f "$STYLE" && ( "$first" == *.pptx || "$first" == *.docx ) ]]; then
   sty="$(run_limited 60 python3 "$STYLE" "$first" 2>&1 | tail -6 | tr '\n' ' ')"

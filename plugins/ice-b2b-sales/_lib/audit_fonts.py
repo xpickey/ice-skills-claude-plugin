@@ -313,15 +313,23 @@ def audit_file(path, rail="private", allow=None, fams=None) -> bool:
 
 
 if __name__ == "__main__":
-    argv, rail, allow = sys.argv[1:], "private", set()
-    while len(argv) >= 2 and argv[0] in ("--rail", "--allow-font"):
-        if argv[0] == "--rail":
-            rail = argv[1]
-            if rail not in RAILS:
-                sys.exit(f"--rail ต้องเป็น {'|'.join(RAILS)} (ได้: {rail})")
-        else:
-            allow.add(argv[1])
-        argv = argv[2:]
+    # V02R01 (2026.09.06 · จากการซ้อมจริง Pass 6): เดิมอ่านตัวเลือกได้เฉพาะตอนวางไว้หน้าชื่อไฟล์
+    # ถ้าผู้เรียกพิมพ์ "ไฟล์ --rail private" ตัวเลือกจะถูกมองเป็นชื่อไฟล์ แล้วรายงานผิดพลาดที่อ่านเหมือนพิมพ์ผิด
+    # ตอนนี้ยกตัวเลือกออกมาก่อน ไม่ว่าอยู่ตำแหน่งใดของคำสั่ง
+    raw, argv = sys.argv[1:], []
+    rail, allow, i = "private", set(), 0
+    while i < len(raw):
+        if raw[i] in ("--rail", "--allow-font") and i + 1 < len(raw):
+            if raw[i] == "--rail":
+                rail = raw[i + 1]
+                if rail not in RAILS:
+                    sys.exit(f"--rail ต้องเป็น {'|'.join(RAILS)} (ได้: {rail})")
+            else:
+                allow.add(raw[i + 1])
+            i += 2
+            continue
+        argv.append(raw[i])
+        i += 1
     if not argv:
         print(__doc__.split("Usage:")[1].strip(), file=sys.stderr); sys.exit(2)
     # อาร์กิวเมนต์ที่ขึ้นต้นด้วย -- แต่ไม่รู้จัก = พิมพ์ผิด/quote ผิด — ห้ามเข้าใจเป็นชื่อไฟล์เงียบ ๆ

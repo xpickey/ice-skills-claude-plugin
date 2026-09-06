@@ -25,7 +25,7 @@ Usage:
     python3 thai_wordbreak.py --audit file.xlsx --col C --width 45   # แสดง 12 รายการแรก
     python3 thai_wordbreak.py --audit file.xlsx --all                # แสดงครบทุกรายการ
 """
-import sys, re, unicodedata
+import os, sys, re, unicodedata
 
 ZWSP = "​"
 THAI_RE = re.compile(r"[฀-๿]")
@@ -139,6 +139,87 @@ def audit_xlsx(path: str, col: str = None, width: float = None, show_all: bool =
     return risky
 
 
+def audit_pptx(path: str, width: float = None, show_all: bool = False):
+    """ตรวจการตัดบรรทัดกลางคำในไฟล์นำเสนอ — ประมาณความกว้างเป็นตัวอักษรจากความกว้างกล่องจริงและขนาดฟอนต์
+    (V01R03 · 2026.09.06: เดิม --audit รับเฉพาะ .xlsx ทำให้คำสั่งตรวจ .pptx ที่เขียนไว้ในไฟล์ agent ล้มทุกครั้งโดยไม่มีใครรู้)"""
+    from pptx import Presentation
+    from pptx.util import Emu
+    prs = Presentation(path)
+    total, risky = 0, []
+    for i, slide in enumerate(prs.slides, 1):
+        for sh in slide.shapes:
+            if not getattr(sh, "has_text_frame", False):
+                continue
+            text = sh.text_frame.text
+            if not has_thai(text):
+                continue
+            # ขนาดฟอนต์ที่ใหญ่ที่สุดในกล่อง (ไม่ระบุ = 18pt ตามค่าปริยายของ python-pptx)
+            sizes = [r.font.size.pt for p in sh.text_frame.paragraphs for r in p.runs if r.font.size]
+            pt = max(sizes) if sizes else 18.0
+            inches = Emu(sh.width).inches if sh.width else 0
+            if inches <= 0:
+                continue
+            # ตัวอักษรไทยกว้างราว 0.55 เท่าของขนาดฟอนต์ (จากการวัดกับ IBM Plex Sans Thai Looped)
+            w = width or max(8.0, (inches * 72.0) / (pt * 0.55))
+            total += 1
+            bad = find_bad_breaks(text, w)
+            if bad:
+                risky.append((f"หน้า {i} · {sh.name} (กว้าง {inches:.2f} นิ้ว · {pt:.0f}pt → ราว {w:.0f} ตัวอักษร)", bad[:2]))
+    print(f"THAI-WRAP AUDIT | กล่องข้อความไทย: {total} · เสี่ยงตัดกลางคำ: {len(risky)}")
+    shown = risky if show_all else risky[:AUDIT_SHOW_MAX]
+    for loc, bad in shown:
+        for _, word, l, r in bad:
+            print(f"   {loc}: '{word}' → จะถูกผ่าเป็น '{l}' / '{r}'")
+    if len(risky) > len(shown):
+        print(f"   ⚠ แสดง {len(shown)} จาก {len(risky)} กล่องเสี่ยง — ใช้ --all เพื่อดูครบ")
+    if risky:
+        print("   วิธีแก้: ① ขยายความกว้างกล่อง ② ลดขนาดฟอนต์ ③ ตัดคำในหัวเรื่องให้สั้นลง (ZWSP เป็นทางเลือกสุดท้าย)")
+    return risky
+
+
+def audit_docx(path: str, width: float = None, show_all: bool = False):
+    """ตรวจการตัดบรรทัดกลางคำในเอกสาร Word — ใช้ความกว้างหน้ากระดาษหักขอบเป็นฐาน"""
+    from docx import Document
+    from docx.shared import Emu
+    d = Document(path)
+    sec = d.sections[0]
+    usable = Emu(sec.page_width - sec.left_margin - sec.right_margin).inches
+    paras = [(f"ย่อหน้า {i}", p.text) for i, p in enumerate(d.paragraphs, 1) if has_thai(p.text)]
+    for ti, t in enumerate(d.tables, 1):
+        cols = max(1, len(t.columns))
+        for ri, row in enumerate(t.rows, 1):
+            for ci, c in enumerate(row.cells, 1):
+                if has_thai(c.text):
+                    paras.append((f"ตาราง {ti} แถว {ri} ช่อง {ci} (ราว {usable / cols:.2f} นิ้ว)", c.text))
+    total, risky = 0, []
+    for loc, text in paras:
+        w = width or ((usable * 72.0) / (11.0 * 0.55) if "ตาราง" not in loc else (usable / max(1, len(d.tables[0].columns)) * 72.0) / (11.0 * 0.55))
+        total += 1
+        bad = find_bad_breaks(text, w)
+        if bad:
+            risky.append((loc, bad[:2]))
+    print(f"THAI-WRAP AUDIT | ย่อหน้าและช่องตารางที่มีภาษาไทย: {total} · เสี่ยงตัดกลางคำ: {len(risky)}")
+    shown = risky if show_all else risky[:AUDIT_SHOW_MAX]
+    for loc, bad in shown:
+        for _, word, l, r in bad:
+            print(f"   {loc}: '{word}' → จะถูกผ่าเป็น '{l}' / '{r}'")
+    if len(risky) > len(shown):
+        print(f"   ⚠ แสดง {len(shown)} จาก {len(risky)} จุดเสี่ยง — ใช้ --all เพื่อดูครบ")
+    return risky
+
+
+def audit(path: str, col: str = None, width: float = None, show_all: bool = False):
+    """เลือกตัวตรวจตามนามสกุลไฟล์ — จุดเข้าเดียวของ --audit"""
+    if path.endswith(".xlsx"):
+        return audit_xlsx(path, col, width, show_all)
+    if path.endswith(".pptx"):
+        return audit_pptx(path, width, show_all)
+    if path.endswith(".docx"):
+        return audit_docx(path, width, show_all)
+    print(f"⚠ --audit รองรับ .xlsx .pptx .docx เท่านั้น (ได้รับ: {os.path.basename(path)})")
+    return []
+
+
 if __name__ == "__main__":
     a = sys.argv[1:]
     if not a:
@@ -161,6 +242,6 @@ if __name__ == "__main__":
     elif a[0] == "--audit":
         col = a[a.index("--col") + 1] if "--col" in a else None
         w = float(a[a.index("--width") + 1]) if "--width" in a else None
-        audit_xlsx(a[1], col, w, show_all="--all" in a)
+        audit(a[1], col, w, show_all="--all" in a)
     else:
         print(__doc__)
