@@ -85,7 +85,7 @@ routes:
       any_of: [SuiteScript, Suitelet, RESTlet, SuiteQL, SuiteTalk, "Map/Reduce", "User Event", "N/record", "N/query", "N/search", REST Record API, ย้าย SuiteScript, ตรวจความปลอดภัย SuiteScript, เขียนสคริปต์ NetSuite]
     required: []
     recommended: [netsuite-suitescript-records-reference, netsuite-suitescript-upgrade, netsuite-owasp-secure-coding, netsuite-suitescript-learning]
-    note: "เลือกจากเจตนาของโจทย์ก่อนคิดคำตอบ—โครงสร้าง Record และ API ใช้ records-reference; ย้ายรุ่นใช้ upgrade; ความปลอดภัยใช้ owasp; งานอธิบายหรือเรียนรู้ใช้ learning; ไม่โหลดทั้งชุดโดยไม่จำเป็น"
+    note: "เลือกจากเจตนาของโจทย์ก่อนคิดคำตอบ—โครงสร้าง Record และ API ใช้ records-reference; ย้ายรุ่นใช้ upgrade; ความปลอดภัยใช้ owasp; งานอธิบายหรือเรียนรู้ใช้ learning; ไม่โหลดทั้งชุดโดยไม่จำเป็น · required ว่างเพราะไฟล์ในชุดนี้รวมกันหลายแสนตัวอักษร การบังคับโหลดจะกินบริบทเกินจำเป็น"
 
   - id: netsuite-sdf
     label: งานจัดโครงสร้าง ติดตั้ง ทำเอกสาร หรือแก้สิทธิ์ในโครงการ SuiteCloud Development Framework
@@ -93,7 +93,7 @@ routes:
       any_of: [SDF, SuiteApp, customrole, "deploy.xml", "manifest.xml", permkey, permlevel, UIF, NetSuite role permission, สิทธิ์ใน SDF, โครงการ SDF]
     required: []
     recommended: [netsuite-sdf-safe-guide, netsuite-sdf-project-documentation, netsuite-sdf-roles-and-permissions, netsuite-uif-spa-reference]
-    note: "เลือกจากเจตนาของโจทย์ก่อนคิดคำตอบ—โครงสร้างและความปลอดภัยใช้ safe-guide; เอกสารใช้ project-documentation; role ใช้ roles-and-permissions; หน้าจอ UIF ใช้ uif-spa-reference"
+    note: "เลือกจากเจตนาของโจทย์ก่อนคิดคำตอบ—โครงสร้างและความปลอดภัยใช้ safe-guide; เอกสารใช้ project-documentation; role ใช้ roles-and-permissions; หน้าจอ UIF ใช้ uif-spa-reference · netsuite-sdf-safe-guide เป็นไฟล์ใหญ่ที่สุดใน plugin (ประมาณ 165 กิโลไบต์) และเป็นบ้านของความรู้เรื่องเพดานหน่วยประมวลผลกับการปรับสมรรถนะ จึงเปิดเมื่อโจทย์แตะสองเรื่องนี้จริง ไม่เปิดเพราะเห็นคำว่า SDF ผ่านตา — นี่คือเหตุผลที่ทั้งแถวตั้ง required ว่างไว้"
 
   - id: product-oracle-cloud
     label: งานที่เกี่ยวกับ Oracle Fusion Cloud ERP/EPM
