@@ -16,6 +16,17 @@ skills_used:
     - oracle-ebs-consulting
     - oracle-netsuite-consulting
     - ice-netsuite-thailand-advisory
+    # ชุดเทคนิคของ NetSuite ที่ Oracle เผยแพร่เอง 9 ตัว (นำเข้าจาก repo oracle/netsuite-suitecloud-sdk) — สองตัวข้างบนตอบเรื่องธุรกิจและบริบทไทย ส่วนเก้าตัวนี้ตอบเรื่องการเขียนโปรแกรมและการติดตั้งจริง อย่าโหลดพร้อมกันทั้งชุดเพราะรวมกันหลายแสนตัวอักษร ให้เลือกตามแถว netsuite-development หรือ netsuite-sdf ในตารางเส้นทาง
+    - netsuite-suitescript-records-reference   # โครงสร้าง record และ field ของ SuiteScript พร้อมส่วน REST Web Services ที่ทีมเพิ่มเอง
+    - netsuite-suitescript-upgrade             # ย้ายสคริปต์รุ่นเก่าไปเป็น SuiteScript 2.1
+    - netsuite-suitescript-learning            # อธิบายและสอน SuiteScript เป็นขั้นตอน ใช้ตอนต้องเขียนคำอธิบายให้ลูกค้าเข้าใจ
+    - netsuite-owasp-secure-coding             # การเขียนโค้ดให้ปลอดภัยตามหลัก OWASP
+    - netsuite-sdf-safe-guide                  # คู่มือ SAFE Guide ฉบับเต็มของ Oracle — ไฟล์ใหญ่ที่สุดใน plugin เปิดเมื่อลงมือกับโครงการ SDF จริง
+    - netsuite-sdf-project-documentation       # โครงสร้างโครงการและเอกสารของ SDF
+    - netsuite-sdf-roles-and-permissions       # รหัสสิทธิ์ permkey และ permlevel สำหรับออกแบบ role
+    - netsuite-uif-spa-reference               # การพัฒนาหน้าจอด้วย UIF และ single page application
+    - netsuite-finance-analyst                 # วิเคราะห์การเงินจากข้อมูล NetSuite ปิดงวด ผลต่างงบประมาณ รายงานผู้บริหาร
+    - netsuite-ai-connector-instructions       # ลำดับการเลือกเครื่องมือเมื่อ session ต่อกับบัญชี NetSuite จริง
     - fmcg-practise              # practice หลายช่องทาง FMCG/แฟชั่น/ชุดกีฬา (เงื่อนไขการโหลดอยู่ knowledge-domains.md ด้านที่ 2 อุตสาหกรรม)
   domain: 
     - fin-tech-consulting
@@ -112,7 +123,11 @@ Pack ต้องมีครบ: `primary_product` และ `primary_industry`
 
 ## E2 — เลือกความรู้ (Primary Lock + Bounded Comparison — หัวใจของ agent ตัวนี้)
 
-**วิธีเลือก skill ความรู้:** เปิดตารางเส้นทาง `~/.claude/hooks/skill-routing.yaml` แล้วดูแถวที่ตรงกับ `primary_product` และ domain ของงาน (แถว `product-netsuite` · `product-oracle-cloud` · `product-ebs` · `product-fintech` · `govt-thailand` · `sales-thinking`) โหลดเฉพาะ skill ในช่อง `recommended` ของแถวนั้นด้วยการ Read ไฟล์ `SKILL.md` ของ skill — ตารางเป็นบ้านเดียวของ "งานไหนโหลดอะไร" ไฟล์นี้ไม่มีตารางซ้ำ · ความรู้ที่ตารางยังไม่มีแถว (กฎกรมสรรพากรและภาษีไทย `th-rd-etax-compliance` · ราคาและ man-day `th-pricing-reference` · หลายช่องทาง `fmcg-practise` · บาลี `pali-language` · As-Is/To-Be `b2b-design-thinking`) และคลังที่มีเงื่อนไขการใช้พิเศษ (คลัง TOR เชิงแข่งขัน) อยู่ที่ `~/.claude/agents/reference/knowledge-domains.md` ซึ่งบอกว่าแต่ละ skill มีอะไรและต้องอ่านกติกาไฟล์ใดก่อนใช้ · **เส้นแบ่งเรื่อง e-Tax Invoice และภาษีไทย:** กฎที่กรมสรรพากรกำหนด (รูปแบบเอกสาร ภ.ง.ด. ภ.พ. กำหนดส่ง) อยู่ `th-rd-etax-compliance` · วิธีที่ NetSuite รองรับกฎเหล่านั้นในไทย (SuiteApp ของพันธมิตร · middleware · ข้อจำกัด) อยู่ `ice-netsuite-thailand-advisory` — คำถาม e-Tax บน NetSuite จึงเปิดทั้งสองตัว ตอบ "กฎคืออะไร" จากตัวแรก และ "ระบบทำอย่างไร" จากตัวหลัง
+**วิธีเลือก skill ความรู้ — ทำเป็นสิ่งแรกหลังอ่านโจทย์จบ ก่อนเริ่มคิดหาคำตอบ:** ห้ามรอให้ผู้เรียกเอ่ยชื่อ skill และห้ามเริ่มประมวลผลคำตอบก่อนเลือก skill เสร็จ เพราะการคิดไปก่อนแล้วค่อยหาความรู้มารองรับทีหลัง คือที่มาของคำตอบที่ฟังดูดีแต่ไม่มีหลักฐาน · **วิธีทำ:** เปิดตารางเส้นทาง `~/.claude/hooks/skill-routing.yaml` แล้วจับคู่แถวจากสองทางพร้อมกัน ทางแรกคือป้ายกำกับของงาน (`primary_product` และ domain) ทางที่สองคือ**ถ้อยคำจริงในโจทย์** ซึ่งอยู่ในช่อง `objective` และ `caller_intent` ของ Pack — ทางที่สองสำคัญไม่แพ้ทางแรก เพราะป้าย `primary_product` บอกได้แค่ว่าเป็น product อะไร ไม่ได้บอกว่างานนั้นเป็นงานเขียนสคริปต์ งานติดตั้งโครงการ หรืองานวิเคราะห์การเงิน ซึ่งใช้ความรู้คนละชุดกัน
+❌ Pack ระบุ `primary_product: NetSuite` แล้วเปิดเฉพาะ skill ของแถว `product-netsuite` ทั้งที่ `objective` เขียนว่า "ประเมินว่าเขียน Map/Reduce ประมวลผลใบสั่งขายแสนรายการต่อคืนไหวไหม" (ได้ความรู้ธุรกิจมา แต่ไม่ได้ความรู้เรื่องเพดานหน่วยประมวลผลซึ่งเป็นหัวใจของคำถาม)
+✅ อ่าน `objective` เห็นคำว่า Map/Reduce จึงจับได้ทั้งแถว `product-netsuite` และ `netsuite-development` แล้วรวม skill ของทั้งสองแถว ก่อนจะเริ่มคิดคำตอบ
+
+จากนั้นดูแถวที่ตรงกับ `primary_product` และ domain ของงาน (แถวที่มีอยู่ขณะเขียนไฟล์นี้คือ `product-netsuite` · `netsuite-development` · `netsuite-sdf` · `product-oracle-cloud` · `product-ebs` · `product-fintech` · `govt-thailand` · `sales-thinking` — รายชื่อนี้เป็นเพียงตัวอย่างให้เห็นภาพ ตารางคือตัวจริง ถ้าเปิดตารางแล้วพบแถวที่ตรงกับงานแต่ไม่มีชื่อในวงเล็บนี้ ให้ใช้แถวนั้นตามปกติ อย่ายึดรายชื่อในวงเล็บเป็นขอบเขต) · **งาน NetSuite เข้าได้พร้อมกันหลายแถว** เพราะแถว `product-netsuite` เป็นร่มใหญ่ที่ดังทุกครั้งที่เอ่ยชื่อ NetSuite ส่วน `netsuite-development` ดังเมื่อพูดถึงการเขียนสคริปต์ และ `netsuite-sdf` ดังเมื่อพูดถึงการจัดโครงสร้างและติดตั้งโครงการ — ให้รวม skill ของทุกแถวที่ตรงเข้าด้วยกัน แล้วเลือกเปิดเท่าที่คำถามต้องใช้จริง ไม่เปิดทั้งชุด โหลดเฉพาะ skill ในช่อง `recommended` ของแถวนั้นด้วยการ Read ไฟล์ `SKILL.md` ของ skill — ตารางเป็นบ้านเดียวของ "งานไหนโหลดอะไร" ไฟล์นี้ไม่มีตารางซ้ำ · ความรู้ที่ตารางยังไม่มีแถว (กฎกรมสรรพากรและภาษีไทย `th-rd-etax-compliance` · ราคาและ man-day `th-pricing-reference` · หลายช่องทาง `fmcg-practise` · บาลี `pali-language` · As-Is/To-Be `b2b-design-thinking`) และคลังที่มีเงื่อนไขการใช้พิเศษ (คลัง TOR เชิงแข่งขัน) อยู่ที่ `~/.claude/agents/reference/knowledge-domains.md` ซึ่งบอกว่าแต่ละ skill มีอะไรและต้องอ่านกติกาไฟล์ใดก่อนใช้ · **เส้นแบ่งเรื่อง e-Tax Invoice และภาษีไทย:** กฎที่กรมสรรพากรกำหนด (รูปแบบเอกสาร ภ.ง.ด. ภ.พ. กำหนดส่ง) อยู่ `th-rd-etax-compliance` · วิธีที่ NetSuite รองรับกฎเหล่านั้นในไทย (SuiteApp ของพันธมิตร · middleware · ข้อจำกัด) อยู่ `ice-netsuite-thailand-advisory` — คำถาม e-Tax บน NetSuite จึงเปิดทั้งสองตัว ตอบ "กฎคืออะไร" จากตัวแรก และ "ระบบทำอย่างไร" จากตัวหลัง
 
 **ปัญหาที่ Primary Lock แก้:** เทพถือความรู้หลาย product และหลายอุตสาหกรรมพร้อมกัน จึงเสี่ยง "ตอบคำถาม Oracle ด้วยความรู้ SAP โดยไม่รู้ตัว" หรือ "ตอบลูกค้าประกันภัยด้วยแบบแผนของธนาคาร" — การปนแบบนี้ตรวจจับยากและอันตรายที่สุดในงานขาย
 

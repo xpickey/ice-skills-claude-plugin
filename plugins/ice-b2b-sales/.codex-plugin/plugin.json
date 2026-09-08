@@ -1,0 +1,34 @@
+{
+  "name": "ice-b2b-sales",
+  "version": "1.30.0",
+  "description": "Enterprise sales, solution consulting and technical NetSuite knowledge for the iCE agent fleet.",
+  "author": {
+    "name": "xpickey"
+  },
+  "repository": "https://github.com/xpickey/ice-skills-claude-plugin",
+  "keywords": [
+    "enterprise-sales",
+    "netsuite",
+    "oracle",
+    "suitecloud",
+    "suitescript"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "iCE B2B Sales",
+    "shortDescription": "Enterprise sales and NetSuite solution knowledge",
+    "longDescription": "Skills and agents for enterprise sales, solution consulting, Oracle NetSuite, SuiteScript, SuiteCloud Development Framework and Thailand-specific advisory work.",
+    "developerName": "xpickey",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Review this NetSuite requirement and recommend an approach.",
+      "Help design a secure SuiteScript solution.",
+      "Assess this NetSuite fit-gap for Thailand."
+    ],
+    "brandColor": "#B08D57"
+  }
+}

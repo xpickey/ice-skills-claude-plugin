@@ -71,12 +71,29 @@ routes:
     note: เลือก skill วารสารให้ตรงเล่ม (มจร สังคมศาสตร์ปริทรรศน์ = soc-sci · รัฐศาสตร์ AJPP/JPSPA = jpspa · AGJ = agj) — ไม่แน่ใจเล่มไหน ให้ถาม user ก่อน
 
   - id: product-netsuite
-    label: งานที่เกี่ยวกับ Oracle NetSuite
+    label: งานที่เกี่ยวกับ Oracle NetSuite ในภาพรวม (ขาย ให้คำปรึกษา วิเคราะห์การเงิน)
     when:
       any_of: [NetSuite, SuiteScript, SuiteCloud, SDF, SuiteAnalytics]
       path: ["*NetSuite*", "*/NS-*", "*Netsuite*"]
     required: []
-    recommended: [oracle-netsuite-consulting, ice-netsuite-thailand-advisory]
+    recommended: [oracle-netsuite-consulting, ice-netsuite-thailand-advisory, netsuite-finance-analyst, netsuite-ai-connector-instructions]
+    note: "แถวนี้เป็นร่มใหญ่ ดังทุกครั้งที่เอ่ยถึง NetSuite — งานเขียนสคริปต์และงานโครงสร้างโครงการมีแถวเฉพาะอยู่ถัดลงไป ซึ่งจะดังเพิ่มซ้อนกับแถวนี้ · required ว่างเพราะแถวนี้ดังกว้างมาก การบังคับโหลดเมื่อมีคนเอ่ยชื่อผ่าน ๆ จะกินบริบทโดยไม่จำเป็น"
+
+  - id: netsuite-development
+    label: งานเขียนและแก้ SuiteScript บน NetSuite
+    when:
+      any_of: [SuiteScript, Suitelet, RESTlet, SuiteQL, SuiteTalk, "Map/Reduce", "User Event", "N/record", "N/query", "N/search"]
+    required: []
+    recommended: [netsuite-suitescript-records-reference, netsuite-suitescript-upgrade, netsuite-owasp-secure-coding, netsuite-suitescript-learning]
+    note: "ชุดนี้ครอบเรื่องโครงสร้างข้อมูลของ record การย้ายรุ่นสคริปต์ การเขียนโค้ดให้ปลอดภัย และการอธิบายเนื้อหาให้คนอื่นเข้าใจ · required ว่างเพราะไฟล์ในชุดนี้ใหญ่รวมกันหลายแสนตัวอักษร ผู้ทำงานเลือกเปิดเท่าที่คำถามต้องใช้จริง"
+
+  - id: netsuite-sdf
+    label: งานจัดโครงสร้างและติดตั้งโครงการด้วย SuiteCloud Development Framework
+    when:
+      any_of: [SDF, SuiteApp, customrole, "deploy.xml", "manifest.xml", permkey, permlevel, UIF]
+    required: []
+    recommended: [netsuite-sdf-safe-guide, netsuite-sdf-project-documentation, netsuite-sdf-roles-and-permissions, netsuite-uif-spa-reference]
+    note: "netsuite-sdf-safe-guide เป็นไฟล์ที่ใหญ่ที่สุดใน plugin (ประมาณ 165 กิโลไบต์) จึงตั้งเป็นคำแนะนำไม่ใช่เงื่อนไขบังคับ ผู้ทำงานเปิดเมื่อจะลงมือกับโครงการ SDF จริง"
 
   - id: product-oracle-cloud
     label: งานที่เกี่ยวกับ Oracle Fusion Cloud ERP/EPM
@@ -102,7 +119,10 @@ routes:
   - id: demo-app
     label: สร้างแอปสาธิตหรือ prototype ที่กดได้จริง
     when:
-      any_of: [demo app, prototype, แอปสาธิต, POC, mockup, หน้าจอ, dashboard demo]
+      # 2026.09.08: เดิมมีคำว่า หน้าจอ เดี่ยว ๆ ซึ่งจับแบบข้อความย่อย จึงดังทุกครั้งที่คำนี้โผล่
+      # แม้ในคำอธิบาย skill ที่ผู้ใช้วางมาเฉย ๆ ทำให้ระบบเรียกร้อง ice-demo-builder ผิดงานซ้ำหลายรอบ
+      # จึงเปลี่ยนเป็นวลีที่บอกเจตนาว่าจะสร้างจริง
+      any_of: [demo app, prototype, แอปสาธิต, POC, mockup, สร้างหน้าจอ, ทำหน้าจอ, ออกแบบหน้าจอ, dashboard demo]
     required: [ice-demo-builder]
     recommended: [ice-b2b-enterprise-sale]
     note: กำกวมว่าเป็นเอกสารหรือแอป ให้ถาม user ก่อน ห้ามเดา
