@@ -54,6 +54,11 @@ SKILLS_DIR = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__fil
 # เพิ่มรายการที่นี่ได้ต่อเมื่อความต่างนั้นเป็นของที่ทีมเขียนเองจริงและตรวจแล้ว
 # ห้ามเพิ่มเพื่อกลบผลที่ยังไม่ได้ตรวจ เพราะจุดประสงค์ของทะเบียนคือทำให้ผลที่เหลือน่าเชื่อถือ ไม่ใช่ทำให้ผลผ่าน
 KNOWN_LOCAL_EDITS = {
+    "netsuite-finance-analyst": {
+        "note": "แปล description เป็นภาษาไทย และย้าย compatibility จาก frontmatter มาเป็นข้อความใต้หัวเรื่อง "
+                "เพราะตัวตรวจปลั๊กอินของ Codex รับเฉพาะช่อง metadata ที่กำหนดไว้ เนื้อหาความสามารถเดิมยังอยู่ครบ",
+        "extra_files": [],
+    },
     "netsuite-suitescript-records-reference": {
         "note": "หัวข้อ REST Web Services (SuiteTalk REST) — Record API พร้อมไฟล์ประกอบ references/rest-*.md "
                 "ที่ทีมสกัดจาก REST API Browser รุ่น 2024.2 เมื่อ 2026.08.07 ต้นทางของ Oracle ไม่มีส่วนนี้ "

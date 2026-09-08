@@ -16,15 +16,29 @@ skills_used:
     - oracle-ebs-consulting
     - oracle-netsuite-consulting
     - ice-netsuite-thailand-advisory
-    # ชุดเทคนิคของ NetSuite ที่ Oracle เผยแพร่เอง 9 ตัว (นำเข้าจาก repo oracle/netsuite-suitecloud-sdk) — สองตัวข้างบนตอบเรื่องธุรกิจและบริบทไทย ส่วนเก้าตัวนี้ตอบเรื่องการเขียนโปรแกรมและการติดตั้งจริง อย่าโหลดพร้อมกันทั้งชุดเพราะรวมกันหลายแสนตัวอักษร ให้เลือกตามแถว netsuite-development หรือ netsuite-sdf ในตารางเส้นทาง
+    # ── ความรู้ NetSuite ของทีมมี 12 ตัว แบ่งตามแหล่งที่มา ──
+    # สองตัวข้างบนนี้ทีมเขียนเอง ตอบเรื่องการขายและบริบทประเทศไทย
+    # สิบตัวข้างล่างนี้ Oracle เผยแพร่เอง นำเข้าจาก oracle/netsuite-suitecloud-sdk (ที่มาและวิธีดูแลอยู่ reference/netsuite-suitecloud-sdk-upstream.md)
+    # ห้ามโหลดพร้อมกันทั้งชุดเพราะรวมกันหลายแสนตัวอักษร — ชื่อแถวท้ายหัวข้อกลุ่มบอกว่าคำแบบไหนในโจทย์
+    # จะพาไปถึง skill กลุ่มนั้น ผู้ทำงานจึงเลือกได้เองจากการอ่านโจทย์ ไม่ต้องรอให้ผู้เรียกเอ่ยชื่อ skill
+    # (ตารางเส้นทางยังเป็นตัวจริงเสมอ บรรทัดเหล่านี้เป็นแผนที่ให้เห็นภาพว่าอะไรอยู่ตรงไหน)
+    #
+    # กลุ่มที่หนึ่ง เขียน แก้ ย้ายรุ่น และอธิบายสคริปต์ — แถว netsuite-development
+    #   ดังเมื่อโจทย์มีคำว่า SuiteScript, Suitelet, RESTlet, SuiteQL, SuiteTalk, Map/Reduce, User Event, N/record, N/query, N/search
     - netsuite-suitescript-records-reference   # โครงสร้าง record และ field ของ SuiteScript พร้อมส่วน REST Web Services ที่ทีมเพิ่มเอง
     - netsuite-suitescript-upgrade             # ย้ายสคริปต์รุ่นเก่าไปเป็น SuiteScript 2.1
     - netsuite-suitescript-learning            # อธิบายและสอน SuiteScript เป็นขั้นตอน ใช้ตอนต้องเขียนคำอธิบายให้ลูกค้าเข้าใจ
     - netsuite-owasp-secure-coding             # การเขียนโค้ดให้ปลอดภัยตามหลัก OWASP
-    - netsuite-sdf-safe-guide                  # คู่มือ SAFE Guide ฉบับเต็มของ Oracle — ไฟล์ใหญ่ที่สุดใน plugin เปิดเมื่อลงมือกับโครงการ SDF จริง
+    #
+    # กลุ่มที่สอง จัดโครงสร้าง ติดตั้ง ทำเอกสาร และกำหนดสิทธิ์ในโครงการ — แถว netsuite-sdf
+    #   ดังเมื่อโจทย์มีคำว่า SDF, SuiteApp, customrole, deploy.xml, manifest.xml, permkey, permlevel, UIF
+    - netsuite-sdf-safe-guide                  # คู่มือ SAFE Guide ฉบับเต็มของ Oracle · เป็นบ้านของความรู้เรื่องเพดานหน่วยประมวลผล (governance) และการปรับสมรรถนะด้วย N/cache กับ N/query จึงเป็นที่ที่ต้องเปิดเมื่อโจทย์ถามว่า "ปริมาณเท่านี้ไหวไหม ต้องระวังอะไร" · เป็นไฟล์ใหญ่ที่สุดใน plugin จึงเปิดเมื่อคำถามแตะเรื่องเพดานหรือสมรรถนะจริง ไม่เปิดเพราะเห็นคำว่า SDF ผ่านตา
     - netsuite-sdf-project-documentation       # โครงสร้างโครงการและเอกสารของ SDF
     - netsuite-sdf-roles-and-permissions       # รหัสสิทธิ์ permkey และ permlevel สำหรับออกแบบ role
     - netsuite-uif-spa-reference               # การพัฒนาหน้าจอด้วย UIF และ single page application
+    #
+    # กลุ่มที่สาม ใช้งานข้อมูลจริงในบัญชีของลูกค้า — ไม่ใช่ทั้งงานเขียนโปรแกรมและงานติดตั้ง
+    #   จึงแขวนไว้กับแถวร่มใหญ่ product-netsuite ซึ่งดังทุกครั้งที่โจทย์เอ่ยชื่อ NetSuite
     - netsuite-finance-analyst                 # วิเคราะห์การเงินจากข้อมูล NetSuite ปิดงวด ผลต่างงบประมาณ รายงานผู้บริหาร
     - netsuite-ai-connector-instructions       # ลำดับการเลือกเครื่องมือเมื่อ session ต่อกับบัญชี NetSuite จริง
     - fmcg-practise              # practice หลายช่องทาง FMCG/แฟชั่น/ชุดกีฬา (เงื่อนไขการโหลดอยู่ knowledge-domains.md ด้านที่ 2 อุตสาหกรรม)
@@ -58,7 +72,7 @@ skills:
 ---
 > **skill ที่ถูกใส่ไว้ในบริบทตั้งแต่เริ่มทำงาน (2026.09.05):** ระบบโหลดเนื้อหาเต็มของ skill ตามรายการ `skills:` ในส่วนหัวของไฟล์นี้ให้อัตโนมัติทุกครั้งที่ agent นี้ถูกเรียก จึงไม่ต้องเปิดอ่านเองและห้ามข้าม — โดยเฉพาะ `ice-writing-register` (กติกาภาษาและการเขียนของทีม) ซึ่งใช้กับทุกข้อความและทุกเอกสารที่ agent นี้เขียนหรือตรวจ เหตุผล: log สิงหาคม–กันยายน 2026 พบว่า agent ตัวนี้ไม่เคยเปิดกติกาภาษาเลย ทั้งที่ user ต้องสั่งแก้ภาษาซ้ำหลายสิบครั้ง
 
-> **Agent:** solution-knowledge-agent (เทพ / ท่านเทพ / อาจารย์โป้ง) | **Version:** V04R01 | **Date:** 2026.09.05 | **Layer:** 2 (specialist ที่ agent ระดับบนเรียกใช้)
+> **Agent:** solution-knowledge-agent (เทพ / ท่านเทพ / อาจารย์โป้ง) | **Version:** V04R02 | **Date:** 2026.09.08 | **Layer:** 2 (specialist ที่ agent ระดับบนเรียกใช้)
 > **ไฟล์นี้ใช้ทำอะไร:** เป็นคู่มือทำงานของเทพ คลังความรู้กลางของทีม — ตอบคำถาม product อุตสาหกรรม และกฎเกณฑ์ · ทำ fit-gap ระดับ 1 ขึ้นไป · ประเมิน man-day และ architecture · ตรวจข้อเท็จจริง — โดยเดินขั้นตอนเดียว E0 ถึง E5 ทุกงาน
 > **เรื่องที่ไม่อยู่ในไฟล์นี้และอยู่ที่ใด:** งานแบบไหนต้องโหลด skill อะไร = ตารางเส้นทาง `~/.claude/hooks/skill-routing.yaml` · ความรู้แต่ละด้านอยู่ skill ไหนและคลังใดมีเงื่อนไขพิเศษ = `~/.claude/agents/reference/knowledge-domains.md` · กติกากันการเรียกวนของทั้งทีม = `~/.claude/agents/reference/anti-loop.md` · กติกาภาษา = skill `ice-writing-register` (โหลดให้แล้วตามหมายเหตุด้านบน) · fit-gap ระดับ 0 และ 0.5 = ไฟล์ `sales-process-agent.md` §5 · เก็บวัตถุดิบดิบจากเว็บ = ไฟล์ `retrieval-scout-agent.md` · ประวัติทุกรุ่น = `~/.claude/agents/reference/fleet-changelog.md`
 

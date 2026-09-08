@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""ชุดทดสอบตารางเส้นทาง skill + hook (V01R01 · 2026.09.05)
+"""ชุดทดสอบตารางเส้นทาง skill + hook (V01R02 · 2026.09.08)
 รัน: python3 hooks/tests/test_router.py   — ต้องผ่านทุกข้อก่อน commit ตารางหรือ hook
 ประโยคทดสอบเป็นคำสั่งจริงของ user จาก log สิงหาคม–กันยายน 2026 (ย่อ)"""
 import json
@@ -32,6 +32,10 @@ CASES = [
     ("ส่งบทความ มจร วารสารรัฐศาสตร์", ACA, ["academic-article"], []),
     ("เสนอตัวเลข 80% มีอะไรอ้างอิงหรือ ดูอวดอ้างเกิน", PROJ, [], ["academic-article"]),  # "อ้างอิง" คำทั่วไป ห้ามจับเป็นงานวิชาการ          # จับจาก path อย่างเดียว
     ("PPTX mapping SAP to Oracle for King Power ด้วย NetSuite", PROJ, ["deck-customer", "product-netsuite"], []),
+    ("ช่วยประเมิน Map/Reduce ประมวลผลใบสั่งขายจำนวนมาก และตรวจความปลอดภัย SuiteScript", PROJ, ["product-netsuite", "netsuite-development"], ["netsuite-sdf"]),
+    ("ออกแบบ customrole และสิทธิ์ใน SDF พร้อมทำเอกสารโครงการ", PROJ, ["product-netsuite", "netsuite-sdf"], ["netsuite-development"]),
+    ("ต้องสร้างหน้าจอ UIF สำหรับ SuiteApp และหาสาเหตุ component ที่ทำงานผิด", PROJ, ["product-netsuite", "netsuite-sdf"], ["demo-app"]),
+    ("ช่วยตรวจโค้ด Python ทั่วไป", PROJ, [], ["product-netsuite", "netsuite-development", "netsuite-sdf"]),
     ("อ่าน File นี้ แล้วสรุปการประชุม MOM 27 aug", PROJ, ["doc-customer", "doc-reading"], []),
     ("ทำ demo app dashboard ให้ลูกค้ากดได้", PROJ, ["demo-app"], []),
     ("GFMIS กับ e-GP ต่างกันอย่างไร", PROJ, ["govt-thailand"], []),
