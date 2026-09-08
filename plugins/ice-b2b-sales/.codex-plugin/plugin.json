@@ -1,6 +1,6 @@
 {
   "name": "ice-b2b-sales",
-  "version": "1.30.0",
+  "version": "1.30.1",
   "description": "Enterprise sales, solution consulting and technical NetSuite knowledge for the iCE agent fleet.",
   "author": {
     "name": "xpickey"
@@ -17,7 +17,7 @@
   "interface": {
     "displayName": "iCE B2B Sales",
     "shortDescription": "Enterprise sales and NetSuite solution knowledge",
-    "longDescription": "Skills and agents for enterprise sales, solution consulting, Oracle NetSuite, SuiteScript, SuiteCloud Development Framework and Thailand-specific advisory work.",
+    "longDescription": "Skills and agents for enterprise sales, solution consulting, Oracle NetSuite, SuiteScript, SuiteCloud Development Framework, intent-first routing and Thailand-specific advisory work.",
     "developerName": "xpickey",
     "category": "Productivity",
     "capabilities": [
